@@ -1,0 +1,153 @@
+/**
+ * Header Styles
+ */
+
+.header {
+  background: #0a0e27;
+  border-bottom: 1px solid #2a2f4a;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  background: rgba(10, 14, 39, 0.95);
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  transition: opacity 0.2s;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logoBracket {
+  color: #ff1493;
+  font-weight: 700;
+}
+
+.logoText {
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.logoSubtext {
+  color: #00d9ff;
+  font-size: 0.75em;
+  text-transform: uppercase;
+}
+
+/* Desktop Navigation */
+.navDesktop {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.navLink {
+  color: #a0a0b0;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ff1493;
+  transition: width 0.2s;
+}
+
+.navLink:hover {
+  color: #ffffff;
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+/* Mobile Menu Toggle */
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.menuToggle span {
+  width: 24px;
+  height: 2px;
+  background: #ffffff;
+  transition: all 0.3s;
+}
+
+/* Mobile Navigation */
+.navMobile {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  background: #1a1f3a;
+  border-top: 1px solid #2a2f4a;
+  padding: 1rem 0;
+}
+
+.navLinkMobile {
+  color: #a0a0b0;
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  transition: background 0.2s, color 0.2s;
+  display: block;
+}
+
+.navLinkMobile:hover {
+  background: #2a2f4a;
+  color: #ff1493;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navDesktop {
+    display: none;
+  }
+
+  .menuToggle {
+    display: flex;
+  }
+
+  .container {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .logo {
+    font-size: 1rem;
+  }
+
+  .navMobile {
+    display: flex;
+  }
+}

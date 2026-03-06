@@ -1,0 +1,96 @@
+/**
+ * Explorar Page Styles
+ */
+
+.page {
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Hero */
+.hero {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #1a1f3a 0%, #0a0e27 100%);
+  border-bottom: 1px solid #2a2f4a;
+}
+
+.hero .container {
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #a0a0b0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Section */
+.section {
+  padding: 4rem 0;
+  border-bottom: 1px solid #2a2f4a;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.empty {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #a0a0b0;
+}
+
+.empty p {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero {
+    padding: 2rem 0;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .section {
+    padding: 2rem 0;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

@@ -4,12 +4,12 @@
   "description": "PWA - Hub de Jogos e Experiências Interativas para Pré-Campanha Política",
   "private": true,
   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
     "verify": "node tools/verify.js",
-    "dev": "echo 'Next.js dev server será configurado no tijolo 02'",
-    "build": "echo 'Next.js build será configurado no tijolo 02'",
-    "start": "echo 'Next.js production será configurado no tijolo 02'",
-    "lint": "echo 'ESLint será configurado no tijolo 02'",
-    "type-check": "echo 'TypeScript será configurado no tijolo 02'",
     "report": "node tools/generate-report.js"
   },
   "keywords": [
@@ -25,5 +25,21 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "@types/node": "^25.3.5",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^16.1.6",
+    "@supabase/supabase-js": "^2.98.0",
+    "eslint": "^9.39.3",
+    "eslint-config-next": "^16.1.6",
+    "prettier": "^3.8.1"
   }
 }

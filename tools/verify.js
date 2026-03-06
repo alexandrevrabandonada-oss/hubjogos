@@ -78,6 +78,10 @@ const dirs = [
   { path: 'docs', desc: 'docs/' },
   { path: 'reports', desc: 'reports/' },
   { path: 'tools', desc: 'tools/' },
+  { path: 'app/explorar', desc: 'app/explorar/' },
+  { path: 'app/play', desc: 'app/play/[slug]/' },
+  { path: 'app/sobre', desc: 'app/sobre/' },
+  { path: 'app/participar', desc: 'app/participar/' },
 ];
 
 dirs.forEach(({ path: dir, desc }) => {
@@ -159,18 +163,51 @@ if (fs.existsSync(gitignore)) {
 
 // ============================================================================
 
-logSection('6. NEXT.JS READINESS');
+logSection('6. NEXT.JS & RUNTIME');
 
-warn('Next.js not yet scaffolded (planned for Tijolo 02)');
-warn('TypeScript not yet configured (planned for Tijolo 02)');
-warn('ESLint not yet configured (planned for Tijolo 02)');
+checkFileExists(path.join(process.cwd(), 'next.config.js'), 'next.config.js');
+checkFileExists(path.join(process.cwd(), 'tsconfig.json'), 'tsconfig.json');
+checkFileExists(path.join(process.cwd(), '.eslintrc.json'), '.eslintrc.json');
 
 // ============================================================================
 
-logSection('7. SUPABASE READINESS');
+logSection('7. APPLICATION STRUCTURE');
 
-warn('Supabase client not yet configured (planned for Tijolo 02)');
-warn('Environment variables not yet set (.env.local)');
+const appFiles = [
+  { path: 'app/page.tsx', desc: 'Home page' },
+  { path: 'app/layout.tsx', desc: 'Root layout' },
+  { path: 'app/explorar/page.tsx', desc: 'Explore page' },
+  { path: 'app/sobre/page.tsx', desc: 'About page' },
+  { path: 'app/participar/page.tsx', desc: 'Participate page' },
+  { path: 'app/play/[slug]/page.tsx', desc: 'Dynamic game page' },
+];
+
+appFiles.forEach(({ path: file, desc }) => {
+  checkFileExists(path.join(process.cwd(), file), desc);
+});
+
+// ============================================================================
+
+logSection('8. DESIGN SYSTEM & COMPONENTS');
+
+const componentFiles = [
+  { path: 'lib/design/tokens.ts', desc: 'Design tokens' },
+  { path: 'lib/games/catalog.ts', desc: 'Games catalog' },
+  { path: 'components/layout/Header.tsx', desc: 'Header component' },
+  { path: 'components/hub/GameCard.tsx', desc: 'GameCard component' },
+  { path: 'styles/globals.css', desc: 'Global styles' },
+];
+
+componentFiles.forEach(({ path: file, desc }) => {
+  checkFileExists(path.join(process.cwd(), file), desc);
+});
+
+// ============================================================================
+
+logSection('9. PWA & SUPABASE');
+
+checkFileExists(path.join(process.cwd(), 'public/manifest.json'), 'PWA manifest');
+checkFileExists(path.join(process.cwd(), 'lib/supabase/client.ts'), 'Supabase client');
 
 // ============================================================================
 
