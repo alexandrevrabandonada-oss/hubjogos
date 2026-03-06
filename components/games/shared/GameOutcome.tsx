@@ -1,10 +1,20 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { OutcomeCtaConfig } from '@/lib/games/ctas';
+import { MicroFeedback } from '@/components/ui/MicroFeedback';
+import {
+  trackLinkCopy,
+  trackOutcomeView,
+  trackPrimaryCtaClick,
+  trackSecondaryCtaClick,
+  trackNextGameClick,
+  trackHubReturnClick,
+} from '@/lib/analytics/track';
+import { resolveExperimentVariantClient } from '@/lib/experiments/client';
 import styles from './GameOutcome.module.css';
 
 interface GameOutcomeProps {
@@ -18,6 +28,8 @@ interface GameOutcomeProps {
   onCopySummary?: () => Promise<void>;
   onCopyLink?: () => Promise<void>;
   onCtaClick?: (ctaId: string) => Promise<void>;
+  game: { slug: string; kind: string };
+  resultId?: string;
 }
 
 export function GameOutcome({
@@ -31,8 +43,27 @@ export function GameOutcome({
   onCopySummary,
   onCopyLink,
   onCtaClick,
+  game,
+  resultId,
 }: GameOutcomeProps) {
   const [feedback, setFeedback] = useState('');
+  const [primaryLabel, setPrimaryLabel] = useState(ctas.primary.label);
+
+  useEffect(() => {
+    if (resultId) {
+      trackOutcomeView(game as any, resultId).catch(console.error);
+    }
+  }, [game, resultId]);
+
+  useEffect(() => {
+    const variant = resolveExperimentVariantClient('outcome-primary-cta-copy', 'explore-next');
+    if (variant === 'continue-journey') {
+      setPrimaryLabel('Continuar jornada');
+      return;
+    }
+
+    setPrimaryLabel(ctas.primary.label);
+  }, [ctas.primary.label]);
 
   async function handleCopySummary() {
     try {
@@ -41,9 +72,10 @@ export function GameOutcome({
       } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
         await navigator.clipboard.writeText(summary);
       }
-      setFeedback('Resumo copiado para a área de transferência.');
+      setFeedback('Resumo copiado!');
+      setTimeout(() => setFeedback(''), 3000);
     } catch {
-      setFeedback('Não foi possível copiar o resumo agora.');
+      setFeedback('Falha ao copiar.');
     }
   }
 
@@ -53,18 +85,48 @@ export function GameOutcome({
         await onCopyLink();
       } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
         await navigator.clipboard.writeText(window.location.href);
+        await trackLinkCopy(game as any);
       }
-      setFeedback('Link copiado para a área de transferência.');
+      setFeedback('Link copiado!');
+      setTimeout(() => setFeedback(''), 3000);
     } catch {
-      setFeedback('Não foi possível copiar o link agora.');
+      setFeedback('Falha ao copiar.');
     }
   }
 
-  async function handleCtaClick(ctaId: string) {
-    if (!onCtaClick) {
+  async function trackNavigationByHref(href: string) {
+    if (href.startsWith('/play/')) {
+      const parts = href.split('/').filter(Boolean);
+      const nextSlug = parts.length >= 2 ? parts[1] : 'unknown';
+      await trackNextGameClick(game as any, nextSlug).catch(console.error);
       return;
     }
-    await onCtaClick(ctaId);
+
+    if (href.startsWith('/explorar') || href === '/') {
+      await trackHubReturnClick(game as any, href).catch(console.error);
+    }
+  }
+
+  async function handlePrimaryCtaClick(ctaId: string) {
+    await trackPrimaryCtaClick(game as any, ctaId, {
+      trackingId: ctas.primary.trackingId || ctaId,
+      category: ctas.primary.category || 'exploration',
+    }).catch(console.error);
+    await trackNavigationByHref(ctas.primary.href);
+    if (onCtaClick) {
+      await onCtaClick(ctaId);
+    }
+  }
+
+  async function handleSecondaryCtaClick(ctaId: string) {
+    await trackSecondaryCtaClick(game as any, ctaId, {
+      trackingId: ctas.secondary.trackingId || ctaId,
+      category: ctas.secondary.category || 'related',
+    }).catch(console.error);
+    await trackNavigationByHref(ctas.secondary.href);
+    if (onCtaClick) {
+      await onCtaClick(ctaId);
+    }
   }
 
   return (
@@ -78,8 +140,12 @@ export function GameOutcome({
       </div>
 
       <div className={styles.nextAction}>
-        <strong>Próximo passo</strong>
+        <strong>Próximo passo recomendado</strong>
         <p>{nextAction}</p>
+      </div>
+
+      <div className={styles.feedbackSection}>
+        <MicroFeedback gameSlug={game.slug} engineKind={game.kind} />
       </div>
 
       <div className={styles.summary}>
@@ -91,14 +157,14 @@ export function GameOutcome({
         <Link
           href={ctas.primary.href}
           className={styles.primaryLink}
-          onClick={() => handleCtaClick(ctas.primary.id)}
+          onClick={() => handlePrimaryCtaClick(ctas.primary.id)}
         >
-          {ctas.primary.label}
+          {primaryLabel}
         </Link>
         <Link
           href={ctas.secondary.href}
           className={styles.secondaryLink}
-          onClick={() => handleCtaClick(ctas.secondary.id)}
+          onClick={() => handleSecondaryCtaClick(ctas.secondary.id)}
         >
           {ctas.secondary.label}
         </Link>
@@ -114,7 +180,7 @@ export function GameOutcome({
         </Button>
       </div>
 
-      {feedback ? <p className={styles.feedback}>{feedback}</p> : null}
+      {feedback ? <p className={styles.copyFeedback}>{feedback}</p> : null}
     </Card>
   );
 }

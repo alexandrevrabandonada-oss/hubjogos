@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-03-06T21:05:21.510Z",
+  "source": "supabase",
+  "strictMode": false,
+  "priorityAlert": {
+    "triggered": false,
+    "thresholdHours": 24,
+    "totalPrioritario": 0,
+    "staleCount": 0,
+    "staleIds": []
+  },
+  "auditAlert": {
+    "triggered": false,
+    "thresholdHours": 48,
+    "lastActionAt": "2026-03-06T21:05:19.249483+00:00",
+    "lastActionType": "snapshot_generated",
+    "lastActionAgeHours": 0
+  },
+  "overallLevel": "ok"
+}

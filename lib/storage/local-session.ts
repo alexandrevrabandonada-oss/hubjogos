@@ -49,6 +49,7 @@ const LOCAL_KEYS = {
   sessions: 'hubjogos:session-records',
   results: 'hubjogos:result-records',
   events: 'hubjogos:event-records',
+  feedback: 'hubjogos:feedback-records',
 } as const;
 
 export function getOrCreateAnonymousIdentity(): AnonymousIdentity {

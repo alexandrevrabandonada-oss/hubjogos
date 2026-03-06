@@ -127,8 +127,18 @@ try {
     fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')
   );
 
-  const requiredScripts = ['verify', 'dev', 'build'];
-  
+  const requiredScripts = [
+    'verify',
+    'dev',
+    'build',
+    'test',
+    'test:unit',
+    'test:e2e',
+    'test:ci',
+    'type-check',
+    'lint',
+  ];
+
   requiredScripts.forEach(script => {
     if (packageJson.scripts && packageJson.scripts[script]) {
       pass(`npm script '${script}' defined`);
@@ -204,10 +214,15 @@ componentFiles.forEach(({ path: file, desc }) => {
 
 // ============================================================================
 
-logSection('9. PWA & SUPABASE');
+logSection('9. PWA, SUPABASE & CI/CD');
 
 checkFileExists(path.join(process.cwd(), 'public/manifest.json'), 'PWA manifest');
 checkFileExists(path.join(process.cwd(), 'lib/supabase/client.ts'), 'Supabase client');
+checkFileExists(path.join(process.cwd(), 'lib/share/export-card.ts'), 'Share card export helper');
+checkFileExists(path.join(process.cwd(), 'components/games/share/DownloadCardButton.tsx'), 'DownloadCardButton component');
+checkFileExists(path.join(process.cwd(), '.github/workflows/ci.yml'), 'GitHub Actions CI workflow');
+checkFileExists(path.join(process.cwd(), 'sentry.client.config.ts'), 'Sentry configuration');
+checkFileExists(path.join(process.cwd(), 'tests/e2e/a11y.spec.ts'), 'A11y test specification');
 
 // ============================================================================
 

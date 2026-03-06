@@ -1,0 +1,331 @@
+{
+  "source": "supabase",
+  "generatedAt": "2026-03-06T19:09:17.474Z",
+  "funnel": {
+    "total_sessions": 56,
+    "completions": 12,
+    "starts": 51,
+    "shares": 4,
+    "total_events": 122
+  },
+  "sources": [
+    {
+      "source": "direto/desconhecido",
+      "sessions": 39,
+      "starts": 39,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "source": "google",
+      "sessions": 4,
+      "starts": 2,
+      "completions": 4,
+      "shares": 2,
+      "completion_rate": 100
+    },
+    {
+      "source": "direto",
+      "sessions": 4,
+      "starts": 2,
+      "completions": 2,
+      "shares": 1,
+      "completion_rate": 50
+    },
+    {
+      "source": "experimento",
+      "sessions": 4,
+      "starts": 4,
+      "completions": 3,
+      "shares": 0,
+      "completion_rate": 75
+    },
+    {
+      "source": "twitter",
+      "sessions": 2,
+      "starts": 1,
+      "completions": 2,
+      "shares": 1,
+      "completion_rate": 100
+    },
+    {
+      "source": "facebook",
+      "sessions": 2,
+      "starts": 1,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "source": "newsletter",
+      "sessions": 1,
+      "starts": 1,
+      "completions": 1,
+      "shares": 0,
+      "completion_rate": 100
+    }
+  ],
+  "games": [
+    {
+      "slug": "abandonado",
+      "initiated": 11,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "cidade-real",
+      "initiated": 10,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "transporte-urgente",
+      "initiated": 10,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "tijolo-01",
+      "initiated": 9,
+      "completed": 6,
+      "shares": 1,
+      "completion_rate": 67,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 1
+    },
+    {
+      "slug": "voto-consciente",
+      "initiated": 8,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "tijolo-04",
+      "initiated": 4,
+      "completed": 4,
+      "shares": 2,
+      "completion_rate": 100,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 1
+    },
+    {
+      "slug": "tijolo-06",
+      "initiated": 2,
+      "completed": 2,
+      "shares": 1,
+      "completion_rate": 100,
+      "feedback_positive": 1,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "tijolo-05",
+      "initiated": 2,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 1,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    }
+  ],
+  "engines": [
+    {
+      "engine_kind": "quiz",
+      "sessions": 17,
+      "starts": 15,
+      "completions": 6,
+      "shares": 1,
+      "completion_rate": 35
+    },
+    {
+      "engine_kind": "map",
+      "sessions": 13,
+      "starts": 13,
+      "completions": 2,
+      "shares": 1,
+      "completion_rate": 15
+    },
+    {
+      "engine_kind": "simulation",
+      "sessions": 12,
+      "starts": 11,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "engine_kind": "branching_story",
+      "sessions": 10,
+      "starts": 10,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "engine_kind": "branching",
+      "sessions": 4,
+      "starts": 2,
+      "completions": 4,
+      "shares": 2,
+      "completion_rate": 100
+    }
+  ],
+  "events": [
+    {
+      "event_name": "game_start",
+      "total": 51
+    },
+    {
+      "event_name": "game_view",
+      "total": 28
+    },
+    {
+      "event_name": "step_advance",
+      "total": 18
+    },
+    {
+      "event_name": "page_navigation",
+      "total": 17
+    },
+    {
+      "event_name": "game_complete",
+      "total": 4
+    },
+    {
+      "event_name": "result_copy",
+      "total": 2
+    },
+    {
+      "event_name": "link_copy",
+      "total": 2
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_key": "beta-banner-copy",
+      "variant": "clarity",
+      "sessions": 21,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "beta-banner-copy",
+      "variant": "control",
+      "sessions": 18,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "outcome-cta-style",
+      "variant": "default",
+      "sessions": 20,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "outcome-cta-style",
+      "variant": "buttons",
+      "sessions": 19,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "A",
+      "sessions": 2,
+      "completions": 1,
+      "completion_rate": 50
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "B",
+      "sessions": 2,
+      "completions": 2,
+      "completion_rate": 100
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "v2",
+      "sessions": 2,
+      "completions": 2,
+      "completion_rate": 100
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "v1",
+      "sessions": 1,
+      "completions": 0,
+      "completion_rate": 0
+    }
+  ],
+  "feedback": [
+    {
+      "feedback_id": "fb_1772822088335_80ejomrr0",
+      "session_id": "sess_1772822088335_ddrvtjtsb",
+      "anonymous_id": "anon_wv33g6rart",
+      "slug": "tijolo-01",
+      "engine_kind": "quiz",
+      "rating": "negative",
+      "comment": null,
+      "triage_status": "pending",
+      "triaged_at": null,
+      "created_at": "2026-03-06T18:34:48.335+00:00"
+    },
+    {
+      "feedback_id": "fb_1772822088334_ntghxjd9k",
+      "session_id": "sess_1772822088334_y57gv3k90",
+      "anonymous_id": "anon_sy8ly5k4vue",
+      "slug": "tijolo-04",
+      "engine_kind": "branching",
+      "rating": "negative",
+      "comment": "Senti falta de mais contexto.",
+      "triage_status": "pending",
+      "triaged_at": null,
+      "created_at": "2026-03-06T18:34:48.334+00:00"
+    },
+    {
+      "feedback_id": "fb_1772822088334_tmo5grg5h",
+      "session_id": "sess_1772822088334_93sk7hw3e",
+      "anonymous_id": "anon_cwtvorpo0x8",
+      "slug": "tijolo-05",
+      "engine_kind": "simulation",
+      "rating": "positive",
+      "comment": "Meio chato, mas aprendi algo novo.",
+      "triage_status": "pending",
+      "triaged_at": null,
+      "created_at": "2026-03-06T18:34:48.334+00:00"
+    },
+    {
+      "feedback_id": "fb_1772822088334_w46wv96fs",
+      "session_id": "sess_1772822088334_h81mpsh1j",
+      "anonymous_id": "anon_lqqer0rfup",
+      "slug": "tijolo-06",
+      "engine_kind": "map",
+      "rating": "positive",
+      "comment": "Senti falta de mais contexto.",
+      "triage_status": "reviewed",
+      "triaged_at": null,
+      "created_at": "2026-03-06T18:34:48.334+00:00"
+    }
+  ]
+}

@@ -1,28 +1,44 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { GameCard } from '@/components/hub/GameCard';
 import { CTACluster } from '@/components/ui/CTACluster';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { ShellContainer } from '@/components/ui/ShellContainer';
+import { BetaBanner } from '@/components/ui/BetaBanner';
 import { games } from '@/lib/games/catalog';
+import { resolveExperimentVariantClient } from '@/lib/experiments/client';
 import styles from './page.module.css';
 
 export default function Home() {
   const featured = games.slice(0, 3);
+  const [heroVariant, setHeroVariant] = useState<'explore' | 'discover-now'>('explore');
+
+  useEffect(() => {
+    const variant = resolveExperimentVariantClient('home-hero-cta-copy', 'explore');
+    setHeroVariant(variant === 'discover-now' ? 'discover-now' : 'explore');
+  }, []);
+
+  const primaryHeroLabel = heroVariant === 'discover-now' ? 'Descubra agora' : 'Explorar experiencias';
+  const heroDescription =
+    heroVariant === 'discover-now'
+      ? 'Cada experiência transforma uma pauta real em decisão. Você testa escolhas, vê consequências e sai com um próximo passo político claro.'
+      : 'Cada experiência transforma uma pauta real em decisão. Você testa escolhas, vê consequências e sai com uma leitura política acionável.';
 
   return (
     <>
+      <BetaBanner />
       <PageHero
         eyebrow="Hub político-jogável"
         title="Jogue as contradições da cidade"
-        description="Cada experiência transforma uma pauta real em decisão. Você testa escolhas, vê consequências e sai com uma leitura política acionável."
+        description={heroDescription}
         actions={
           <CTACluster>
             <Link href="/explorar" className={styles.ctaPrimary}>
-              Explorar experiências
+              {primaryHeroLabel}
             </Link>
             <Link href="/play/voto-consciente" className={styles.ctaSecondary}>
               Jogar quiz inaugural

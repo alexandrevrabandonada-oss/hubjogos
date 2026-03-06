@@ -1,83 +1,75 @@
-# Hub de Jogos da Pré-Campanha
+# Hub de Jogos da Pre-Campanha
 
-Produto político-jogável para transformar pauta pública em decisão, consequência e ação.
+Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: **Tijolo 04 concluído** (produto operável).
+Status atual: Tijolo 20 concluido - cockpit temporal operacional, comparacao leve de janelas, beta:ops consolidado e playbook de incidentes.
 
-## O que é real agora
+## Estado do Produto
 
-### Engines reais
+- 4 engines reais publicas em `/play/[slug]`.
+- Operacao de feedback em `/estado/feedback` com rota protegida opcional.
+- Audit log remoto ativo em `ops_audit_log`.
+- Fallback local preservado quando Supabase nao esta disponivel.
 
-1. **Voto Consciente** (`quiz`)
-2. **Transporte Urgente** (`branching_story`)
+## Cockpit Temporal
 
-As duas já rodam em `/play/[slug]` com runtime unificado.
+- `/estado` com leitura por janela (`24h`, `7d`, `30d`, `all`).
+- Severidade visual (`🟢/🟡/🔴`) com sinais acionaveis.
+- Comparacao leve de tendencia (`24h vs 7d` ou `7d vs 30d`).
+- Alertas de "ativo sem trafego" para experimentos/engine/CTA.
 
-### Persistência real
+## Operacao Continua
 
-- localStorage: sempre ativo (fallback padrão)
-- Supabase: opcional e resiliente (não quebra sem env)
-- registros: sessão, eventos e resultado
-
-### Analytics reais
-
-Eventos disponíveis:
-
-- `game_view`
-- `game_start`
-- `step_advance`
-- `game_complete`
-- `result_copy`
-- `link_copy`
-- `cta_click`
-
-### Share mínimo real
-
-- copiar resumo
-- copiar link
-- feedback visual de sucesso/erro
-
-## O que ainda é mock/shell
-
-- engines para parte dos módulos (`simulation`, `map`, etc.)
-- compartilhamento avançado com card dinâmico
-- dashboards de analytics
-
-## Stack
-
-- Next.js 14 + App Router
-- React 18 + TypeScript
-- CSS Modules + design tokens
-- Supabase opcional
-
-## Rodar localmente
+Scripts principais:
 
 ```bash
-npm install
-npm run dev
+npm run beta:ops
+npm run beta:staleness-check
+npm run beta:snapshot
+npm run beta:export
+npm run beta:circulation-report
+npm run ops:check-alerts
+npm run ops:export-audit
 ```
 
-## Variáveis de ambiente
+Automacao (cron):
+- Workflow: `.github/workflows/ops-routine.yml`
+- Frequencia: a cada 6 horas
+- Artefatos:
+  - `reports/snapshots/`
+  - `reports/exports/`
+  - `reports/ops-alerts/`
+  - `reports/ops/`
 
-Copie `.env.example` para `.env.local` e preencha se quiser Supabase.
+## Playbooks e Runbooks
 
-Sem envs, o app continua funcional com persistência local.
+- `docs/runbook-operacional.md`
+- `docs/playbook-incidentes.md`
+- `docs/alertas-severidade.md`
+- `docs/guia-janelas-temporais.md`
 
-## Validação
+## Gate Tecnico
 
 ```bash
 npm run lint
 npm run type-check
+npm run test:unit
 npm run build
 npm run verify
 ```
 
-## Documentação
+Opcional quando estavel:
 
-- [docs/arquitetura.md](docs/arquitetura.md)
-- [docs/roadmap.md](docs/roadmap.md)
-- [docs/tijolos.md](docs/tijolos.md)
-- [docs/identidade-visual.md](docs/identidade-visual.md)
-- [supabase/tijolo-04-minimal-schema.sql](supabase/tijolo-04-minimal-schema.sql)
+```bash
+npm run test:e2e
+```
 
-Última atualização: 2026-03-06
+## Limites de Escopo
+
+Este ciclo nao adiciona:
+- nova engine
+- auth obrigatoria para jogar
+- integracao Slack/email
+- painel admin enterprise
+
+Foco: cockpit temporal, rotina diaria e clareza operacional.

@@ -32,6 +32,13 @@ export async function persistSessionStart(session: SessionRecord) {
       engine_id: session.engineId || null,
       started_at: session.startedAt,
       status: session.status,
+      utm_source: session.utm_source || null,
+      utm_medium: session.utm_medium || null,
+      utm_campaign: session.utm_campaign || null,
+      utm_content: session.utm_content || null,
+      referrer: session.referrer || null,
+      initial_path: session.initialPath || null,
+      experiments: session.experiments || [],
     } as any);
   });
 }
@@ -61,6 +68,7 @@ export async function persistEvent(event: AnalyticsEventPayload) {
       result_id: event.resultId || null,
       cta_id: event.ctaId || null,
       metadata: event.metadata || {},
+      experiments: event.experiments || [],
       created_at: event.createdAt,
     } as any);
   });

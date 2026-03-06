@@ -163,6 +163,16 @@
   margin: 0;
 }
 
+.footerBottom a {
+  color: var(--accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footerBottom a:hover {
+  color: var(--text-primary);
+}
+
 @media (max-width: 768px) {
   .bottomCta {
     padding: var(--space-lg);

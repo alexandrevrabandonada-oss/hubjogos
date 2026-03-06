@@ -1,10 +1,12 @@
 /**
  * @type {import('next').NextConfig}
  */
+const { withSentryConfig } = require("@sentry/nextjs");
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  
+
   /* PWA support */
   headers: async () => {
     return [
@@ -31,4 +33,19 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withSentryConfig(
+  nextConfig,
+  {
+    silent: true,
+    org: "hub-jogos",
+    project: "hub-jogos",
+  },
+  {
+    widenClientFileUpload: true,
+    transpileClientSDK: true,
+    tunnelRoute: "/monitoring",
+    hideSourceMaps: true,
+    disableLogger: true,
+  }
+);
+

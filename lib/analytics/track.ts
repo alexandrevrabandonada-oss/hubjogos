@@ -46,3 +46,67 @@ export async function trackLinkCopy(game: Game) {
 export async function trackCtaClick(game: Game, ctaId: string) {
   await trackEvent({ ...base(game), event: 'cta_click', ctaId });
 }
+
+// Novos eventos de saída - Tijolo 16 (Circulação e Conversão)
+
+export async function trackOutcomeView(game: Game, resultId: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'outcome_view',
+    resultId,
+    metadata: { placement: 'outcome_page' },
+  });
+}
+
+export async function trackPrimaryCtaClick(game: Game, ctaId: string, metadata?: Record<string, string | number>) {
+  await trackEvent({
+    ...base(game),
+    event: 'primary_cta_click',
+    ctaId,
+    metadata: { placement: 'outcome_primary', ...metadata },
+  });
+}
+
+export async function trackSecondaryCtaClick(game: Game, ctaId: string, metadata?: Record<string, string | number>) {
+  await trackEvent({
+    ...base(game),
+    event: 'secondary_cta_click',
+    ctaId,
+    metadata: { placement: 'outcome_secondary', ...metadata },
+  });
+}
+
+export async function trackSharePageView(game: Game, resultId: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'share_page_view',
+    resultId,
+    metadata: { placement: 'share_page' },
+  });
+}
+
+export async function trackShareExportClick(game: Game, resultId: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'share_export_click',
+    resultId,
+    metadata: { action: 'download_png' },
+  });
+}
+
+export async function trackNextGameClick(game: Game, nextGameSlug: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'next_game_click',
+    metadata: { nextGameSlug },
+  });
+}
+
+export async function trackHubReturnClick(game: Game, destination: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'hub_return_click',
+    metadata: { destination },
+  });
+}
+

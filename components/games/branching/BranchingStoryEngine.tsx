@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { MetaChip } from '@/components/ui/MetaChip';
 import { GameOutcome } from '@/components/games/shared/GameOutcome';
+import { EngineIntro } from '@/components/games/shared/EngineIntro';
 import {
   computeBranchingResult,
   getBranchingNode,
@@ -28,6 +29,7 @@ interface BranchingStoryEngineProps {
 }
 
 export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps) {
+  const [showIntro, setShowIntro] = useState(true);
   const [currentNodeId, setCurrentNodeId] = useState(story.startNodeId);
   const [history, setHistory] = useState<Array<{ nodeId: string; choiceId: string }>>([]);
   const [endingId, setEndingId] = useState<string | null>(null);
@@ -87,6 +89,21 @@ export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps)
     setCurrentNodeId(story.startNodeId);
     setHistory([]);
     setEndingId(null);
+    setShowIntro(true);
+  }
+
+  if (showIntro) {
+    return (
+      <EngineIntro
+        engineType="branching_story"
+        title={game.title}
+        description={game.shortDescription}
+        duration={game.duration}
+        whatYouDiscover={story.subtitle}
+        onStart={() => setShowIntro(false)}
+        icon={game.icon}
+      />
+    );
   }
 
   if (result) {
@@ -111,6 +128,7 @@ export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps)
         onCopySummary={() => handleCopySummary(`${ctas.shareLine} ${result.summary}`)}
         onCopyLink={handleCopyLink}
         onCtaClick={(ctaId) => trackCtaClick(game, ctaId)}
+        game={game}
       />
     );
   }
@@ -133,18 +151,21 @@ export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps)
         <MetaChip icon="🧭">Etapa {history.length + 1}</MetaChip>
       </header>
 
-      <section className={styles.node}>
-        <h4>{currentNode.title}</h4>
-        <p>{currentNode.body}</p>
+      <section className={styles.node} aria-labelledby="current-scene">
+        <h4 id="current-scene">{currentNode.title}</h4>
+        <p className={styles.body}>{currentNode.body}</p>
       </section>
 
-      <section className={styles.choices}>
+      <section className={styles.choices} role="radiogroup" aria-label="Suas opções">
         {currentNode.choices.map((choice) => (
           <button
             key={choice.id}
             className={styles.choice}
             type="button"
             onClick={() => handleChoice(choice.id)}
+            role="radio"
+            aria-checked="false"
+            aria-label={`${choice.label}. Consequência: ${choice.consequence}`}
           >
             <strong>{choice.label}</strong>
             <span>{choice.consequence}</span>

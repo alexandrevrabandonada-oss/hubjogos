@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { MetaChip } from '@/components/ui/MetaChip';
 import { GameOutcome } from '@/components/games/shared/GameOutcome';
+import { EngineIntro } from '@/components/games/shared/EngineIntro';
 import { calculateQuizResult } from '@/lib/games/quiz/engine';
 import { QuizDefinition } from '@/lib/games/quiz/types';
 import { Game } from '@/lib/games/catalog';
@@ -28,6 +29,7 @@ function storageKey(quizId: string) {
 }
 
 export function QuizEngine({ quiz, game }: QuizEngineProps) {
+  const [showIntro, setShowIntro] = useState(true);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>(() => {
     if (typeof window === 'undefined') {
@@ -118,7 +120,22 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
     completionTracked.current = false;
     setAnswers(reset);
     setStep(0);
+    setShowIntro(true);
     persist(reset);
+  }
+
+  if (showIntro) {
+    return (
+      <EngineIntro
+        engineType="quiz"
+        title={game.title}
+        description={game.shortDescription}
+        duration={game.duration}
+        whatYouDiscover={quiz.subtitle}
+        onStart={() => setShowIntro(false)}
+        icon={game.icon}
+      />
+    );
   }
 
   if (isFinished) {
@@ -134,6 +151,7 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
         onCopySummary={() => copySummary(`${ctas.shareLine} ${result.summary}`)}
         onCopyLink={copyLink}
         onCtaClick={(ctaId) => trackCtaClick(game, ctaId)}
+        game={game}
       />
     );
   }
@@ -151,14 +169,14 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
         <MetaChip icon="⏱">Etapa {step + 1} de {quiz.questions.length}</MetaChip>
       </header>
 
-      <div className={styles.progressTrack} aria-hidden>
+      <div className={styles.progressTrack} role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={`Progresso: ${progress}%`}>
         <span className={styles.progressFill} style={{ width: `${progress}%` }} />
       </div>
 
-      <section className={styles.questionBlock}>
-        <h4>{currentQuestion.prompt}</h4>
-        {currentQuestion.context ? <p>{currentQuestion.context}</p> : null}
-        <div className={styles.options}>
+      <section className={styles.questionBlock} aria-labelledby="current-question">
+        <h4 id="current-question">{currentQuestion.prompt}</h4>
+        {currentQuestion.context ? <p className={styles.context}>{currentQuestion.context}</p> : null}
+        <div className={styles.options} role="radiogroup" aria-label="Opções de resposta">
           {currentQuestion.options.map((option) => {
             const active = selectedOption === option.id;
             return (
@@ -167,6 +185,9 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
                 className={`${styles.option} ${active ? styles.optionActive : ''}`}
                 onClick={() => handleSelect(option.id)}
                 type="button"
+                role="radio"
+                aria-checked={active}
+                aria-label={option.label}
               >
                 {option.label}
               </button>

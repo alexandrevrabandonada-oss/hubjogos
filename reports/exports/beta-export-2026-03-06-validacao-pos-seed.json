@@ -1,0 +1,8 @@
+
+> hub-jogos-pre-campanha@0.0.1 beta:export
+> node tools/beta-export.js
+
+{
+  "source": "supabase",
+  "outputPath": "C:\\Projetos\\Hub Jogos Pr├® Camp\\reports\\exports\\beta-export-2026-03-06T18-35-27.json"
+}

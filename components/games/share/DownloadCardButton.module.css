@@ -1,0 +1,50 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-accent, #4f46e5);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+  font-family: inherit;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--color-accent-dark, #4338ca);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.icon {
+  font-size: 1.1rem;
+}
+
+.feedback {
+  font-size: 0.875rem;
+  font-weight: 500;
+  min-height: 1.25rem;
+}
+
+.feedbackSuccess {
+  color: #16a34a;
+}
+
+.feedbackError {
+  color: #dc2626;
+}

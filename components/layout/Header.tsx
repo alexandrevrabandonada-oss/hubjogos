@@ -7,6 +7,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { BetaBadge } from '@/components/ui/BetaBadge';
 import styles from './Header.module.css';
 
 export function Header() {
@@ -23,7 +24,10 @@ export function Header() {
       <div className={styles.container}>
         <Link href="/" className={styles.logo}>
           <span className={styles.logoBlock}>HUB</span>
-          <span className={styles.logoText}>de Jogos da Pré-Campanha</span>
+          <div className={styles.logoTextGroup}>
+            <span className={styles.logoText}>de Jogos da Pré-Campanha</span>
+            <BetaBadge className={styles.headerBeta} />
+          </div>
         </Link>
 
         <nav className={styles.navDesktop}>

@@ -1,0 +1,1204 @@
+
+Running 7 tests using 1 worker
+
+  Ô£ÿ  1 [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:5:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ home deve ser acess├¡vel (4.0s)
+  Ô£ÿ  2 [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:11:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ explorar deve ser acess├¡vel (2.7s)
+  Ô£ÿ  3 [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:17:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ quiz deve ser acess├¡vel (2.1s)
+  Ô£ÿ  4 [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:23:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ branching story deve ser acess├¡vel (3.2s)
+  Ô£ÿ  5 [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:29:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ simulation deve ser acess├¡vel (2.9s)
+  Ô£ÿ  6 [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:35:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ map deve ser acess├¡vel (3.0s)
+  Ô£ÿ  7 [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:41:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ share page deve ser acess├¡vel (2.7s)
+
+
+  1) [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:5:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ home deve ser acess├¡vel ÔöÇ
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -   1[39m
+    [31m+ Received  + 220[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure role attribute has an appropriate value for the element",[39m
+    [31m+     "help": "ARIA role should be appropriate for the element",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-allowed-role?application=playwright",[39m
+    [31m+     "id": "aria-allowed-role",[39m
+    [31m+     "impact": "minor",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Array [[39m
+    [31m+               "listitem",[39m
+    [31m+             ],[39m
+    [31m+             "id": "aria-allowed-role",[39m
+    [31m+             "impact": "minor",[39m
+    [31m+             "message": "ARIA role listitem is not allowed for given element",[39m
+    [31m+             "relatedNodes": Array [],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   ARIA role listitem is not allowed for given element",[39m
+    [31m+         "html": "<article class=\"hot-strip-item surface-blade cv-motion cv-hover\" role=\"listitem\">",[39m
+    [31m+         "impact": "minor",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".hot-strip-item.cv-motion.cv-hover:nth-child(1)",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Array [[39m
+    [31m+               "listitem",[39m
+    [31m+             ],[39m
+    [31m+             "id": "aria-allowed-role",[39m
+    [31m+             "impact": "minor",[39m
+    [31m+             "message": "ARIA role listitem is not allowed for given element",[39m
+    [31m+             "relatedNodes": Array [],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   ARIA role listitem is not allowed for given element",[39m
+    [31m+         "html": "<article class=\"hot-strip-item surface-blade cv-motion cv-hover\" role=\"listitem\">",[39m
+    [31m+         "impact": "minor",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".hot-strip-item.cv-motion.cv-hover:nth-child(2)",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.aria",[39m
+    [31m+       "best-practice",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",[39m
+    [31m+     "help": "Elements must meet minimum color contrast ratio thresholds",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",[39m
+    [31m+     "id": "color-contrast",[39m
+    [31m+     "impact": "serious",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "bold",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<strong>Supabase ainda nao configurado.</strong>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > strong",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > span",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "9.8pt (13px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<code>.env.local</code>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "code",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.color",[39m
+    [31m+       "wcag2aa",[39m
+    [31m+       "wcag143",[39m
+    [31m+       "TTv5",[39m
+    [31m+       "TT13.c",[39m
+    [31m+       "EN-301-549",[39m
+    [31m+       "EN-9.1.4.3",[39m
+    [31m+       "ACT",[39m
+    [31m+       "RGAAv4",[39m
+    [31m+       "RGAA-3.2.1",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the complementary landmark or aside is at top level",[39m
+    [31m+     "help": "Aside should not be contained in another landmark",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/landmark-complementary-is-top-level?application=playwright",[39m
+    [31m+     "id": "landmark-complementary-is-top-level",[39m
+    [31m+     "impact": "moderate",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "role": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "landmark-is-top-level",[39m
+    [31m+             "impact": "moderate",[39m
+    [31m+             "message": "The null landmark is contained in another landmark.",[39m
+    [31m+             "relatedNodes": Array [],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   The null landmark is contained in another landmark.",[39m
+    [31m+         "html": "<aside class=\"hero-panel-aside\">",[39m
+    [31m+         "impact": "moderate",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "aside",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.semantics",[39m
+    [31m+       "best-practice",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+       6 |         await page.goto('/');
+       7 |         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    >  8 |         expect(accessibilityScanResults.violations).toEqual([]);
+         |                                                     ^
+       9 |     });
+      10 |
+      11 |     test('explorar deve ser acess├¡vel', async ({ page }) => {
+        at C:\Projetos\Hub Jogos Pr├® Camp\tests\e2e\a11y.spec.ts:8:53
+
+    Error Context: test-results\a11y-Acessibilidade-Baseline-home-deve-ser-acess├¡vel-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\a11y-Acessibilidade-Baseline-home-deve-ser-acess├¡vel-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\a11y-Acessibilidade-Baseline-home-deve-ser-acess├¡vel-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  2) [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:11:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ explorar deve ser acess├¡vel 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -   1[39m
+    [31m+ Received  + 128[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",[39m
+    [31m+     "help": "Elements must meet minimum color contrast ratio thresholds",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",[39m
+    [31m+     "id": "color-contrast",[39m
+    [31m+     "impact": "serious",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "bold",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<strong>Supabase ainda nao configurado.</strong>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > strong",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > span",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "9.8pt (13px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<code>.env.local</code>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "code",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.color",[39m
+    [31m+       "wcag2aa",[39m
+    [31m+       "wcag143",[39m
+    [31m+       "TTv5",[39m
+    [31m+       "TT13.c",[39m
+    [31m+       "EN-301-549",[39m
+    [31m+       "EN-9.1.4.3",[39m
+    [31m+       "ACT",[39m
+    [31m+       "RGAAv4",[39m
+    [31m+       "RGAA-3.2.1",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+      12 |         await page.goto('/explorar');
+      13 |         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    > 14 |         expect(accessibilityScanResults.violations).toEqual([]);
+         |                                                     ^
+      15 |     });
+      16 |
+      17 |     test('quiz deve ser acess├¡vel', async ({ page }) => {
+        at C:\Projetos\Hub Jogos Pr├® Camp\tests\e2e\a11y.spec.ts:14:53
+
+    Error Context: test-results\a11y-Acessibilidade-Baseline-explorar-deve-ser-acess├¡vel-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\a11y-Acessibilidade-Baseline-explorar-deve-ser-acess├¡vel-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\a11y-Acessibilidade-Baseline-explorar-deve-ser-acess├¡vel-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  3) [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:17:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ quiz deve ser acess├¡vel 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -   1[39m
+    [31m+ Received  + 128[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",[39m
+    [31m+     "help": "Elements must meet minimum color contrast ratio thresholds",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",[39m
+    [31m+     "id": "color-contrast",[39m
+    [31m+     "impact": "serious",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "bold",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<strong>Supabase ainda nao configurado.</strong>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > strong",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > span",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "9.8pt (13px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<code>.env.local</code>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "code",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.color",[39m
+    [31m+       "wcag2aa",[39m
+    [31m+       "wcag143",[39m
+    [31m+       "TTv5",[39m
+    [31m+       "TT13.c",[39m
+    [31m+       "EN-301-549",[39m
+    [31m+       "EN-9.1.4.3",[39m
+    [31m+       "ACT",[39m
+    [31m+       "RGAAv4",[39m
+    [31m+       "RGAA-3.2.1",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+      18 |         await page.goto('/play/voto-consciente');
+      19 |         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    > 20 |         expect(accessibilityScanResults.violations).toEqual([]);
+         |                                                     ^
+      21 |     });
+      22 |
+      23 |     test('branching story deve ser acess├¡vel', async ({ page }) => {
+        at C:\Projetos\Hub Jogos Pr├® Camp\tests\e2e\a11y.spec.ts:20:53
+
+    Error Context: test-results\a11y-Acessibilidade-Baseline-quiz-deve-ser-acess├¡vel-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\a11y-Acessibilidade-Baseline-quiz-deve-ser-acess├¡vel-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\a11y-Acessibilidade-Baseline-quiz-deve-ser-acess├¡vel-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  4) [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:23:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ branching story deve ser acess├¡vel 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -   1[39m
+    [31m+ Received  + 128[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",[39m
+    [31m+     "help": "Elements must meet minimum color contrast ratio thresholds",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",[39m
+    [31m+     "id": "color-contrast",[39m
+    [31m+     "impact": "serious",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "bold",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<strong>Supabase ainda nao configurado.</strong>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > strong",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > span",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "9.8pt (13px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<code>.env.local</code>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "code",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.color",[39m
+    [31m+       "wcag2aa",[39m
+    [31m+       "wcag143",[39m
+    [31m+       "TTv5",[39m
+    [31m+       "TT13.c",[39m
+    [31m+       "EN-301-549",[39m
+    [31m+       "EN-9.1.4.3",[39m
+    [31m+       "ACT",[39m
+    [31m+       "RGAAv4",[39m
+    [31m+       "RGAA-3.2.1",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+      24 |         await page.goto('/play/transporte-urgente');
+      25 |         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    > 26 |         expect(accessibilityScanResults.violations).toEqual([]);
+         |                                                     ^
+      27 |     });
+      28 |
+      29 |     test('simulation deve ser acess├¡vel', async ({ page }) => {
+        at C:\Projetos\Hub Jogos Pr├® Camp\tests\e2e\a11y.spec.ts:26:53
+
+    Error Context: test-results\a11y-Acessibilidade-Baseli-83257-ng-story-deve-ser-acess├¡vel-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\a11y-Acessibilidade-Baseli-83257-ng-story-deve-ser-acess├¡vel-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\a11y-Acessibilidade-Baseli-83257-ng-story-deve-ser-acess├¡vel-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  5) [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:29:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ simulation deve ser acess├¡vel 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -   1[39m
+    [31m+ Received  + 128[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",[39m
+    [31m+     "help": "Elements must meet minimum color contrast ratio thresholds",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",[39m
+    [31m+     "id": "color-contrast",[39m
+    [31m+     "impact": "serious",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "bold",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<strong>Supabase ainda nao configurado.</strong>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > strong",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > span",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "9.8pt (13px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<code>.env.local</code>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "code",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.color",[39m
+    [31m+       "wcag2aa",[39m
+    [31m+       "wcag143",[39m
+    [31m+       "TTv5",[39m
+    [31m+       "TT13.c",[39m
+    [31m+       "EN-301-549",[39m
+    [31m+       "EN-9.1.4.3",[39m
+    [31m+       "ACT",[39m
+    [31m+       "RGAAv4",[39m
+    [31m+       "RGAA-3.2.1",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+      30 |         await page.goto('/play/cidade-real');
+      31 |         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    > 32 |         expect(accessibilityScanResults.violations).toEqual([]);
+         |                                                     ^
+      33 |     });
+      34 |
+      35 |     test('map deve ser acess├¡vel', async ({ page }) => {
+        at C:\Projetos\Hub Jogos Pr├® Camp\tests\e2e\a11y.spec.ts:32:53
+
+    Error Context: test-results\a11y-Acessibilidade-Baseline-simulation-deve-ser-acess├¡vel-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\a11y-Acessibilidade-Baseline-simulation-deve-ser-acess├¡vel-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\a11y-Acessibilidade-Baseline-simulation-deve-ser-acess├¡vel-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  6) [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:35:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ map deve ser acess├¡vel ÔöÇ
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -   1[39m
+    [31m+ Received  + 128[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",[39m
+    [31m+     "help": "Elements must meet minimum color contrast ratio thresholds",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",[39m
+    [31m+     "id": "color-contrast",[39m
+    [31m+     "impact": "serious",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "bold",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<strong>Supabase ainda nao configurado.</strong>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > strong",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > span",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "9.8pt (13px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<code>.env.local</code>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "code",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.color",[39m
+    [31m+       "wcag2aa",[39m
+    [31m+       "wcag143",[39m
+    [31m+       "TTv5",[39m
+    [31m+       "TT13.c",[39m
+    [31m+       "EN-301-549",[39m
+    [31m+       "EN-9.1.4.3",[39m
+    [31m+       "ACT",[39m
+    [31m+       "RGAAv4",[39m
+    [31m+       "RGAA-3.2.1",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+      36 |         await page.goto('/play/abandonado');
+      37 |         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    > 38 |         expect(accessibilityScanResults.violations).toEqual([]);
+         |                                                     ^
+      39 |     });
+      40 |
+      41 |     test('share page deve ser acess├¡vel', async ({ page }) => {
+        at C:\Projetos\Hub Jogos Pr├® Camp\tests\e2e\a11y.spec.ts:38:53
+
+    Error Context: test-results\a11y-Acessibilidade-Baseline-map-deve-ser-acess├¡vel-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\a11y-Acessibilidade-Baseline-map-deve-ser-acess├¡vel-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\a11y-Acessibilidade-Baseline-map-deve-ser-acess├¡vel-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  7) [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:41:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ share page deve ser acess├¡vel 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -   1[39m
+    [31m+ Received  + 128[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",[39m
+    [31m+     "help": "Elements must meet minimum color contrast ratio thresholds",[39m
+    [31m+     "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=playwright",[39m
+    [31m+     "id": "color-contrast",[39m
+    [31m+     "impact": "serious",[39m
+    [31m+     "nodes": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "bold",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<strong>Supabase ainda nao configurado.</strong>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > strong",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "12.0pt (16px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           ".env-warning > span",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+       Object {[39m
+    [31m+         "all": Array [],[39m
+    [31m+         "any": Array [[39m
+    [31m+           Object {[39m
+    [31m+             "data": Object {[39m
+    [31m+               "bgColor": "#68676a",[39m
+    [31m+               "contrastRatio": 1.03,[39m
+    [31m+               "expectedContrastRatio": "4.5:1",[39m
+    [31m+               "fgColor": "#b74335",[39m
+    [31m+               "fontSize": "9.8pt (13px)",[39m
+    [31m+               "fontWeight": "normal",[39m
+    [31m+               "messageKey": null,[39m
+    [31m+             },[39m
+    [31m+             "id": "color-contrast",[39m
+    [31m+             "impact": "serious",[39m
+    [31m+             "message": "Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+             "relatedNodes": Array [[39m
+    [31m+               Object {[39m
+    [31m+                 "html": "<div class=\"env-warning\" role=\"status\" aria-live=\"polite\"><strong>Supabase ainda nao configurado.</strong><span>Defina em <code>.env.local</code>: <!-- -->NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY</span></div>",[39m
+    [31m+                 "target": Array [[39m
+    [31m+                   ".env-warning",[39m
+    [31m+                 ],[39m
+    [31m+               },[39m
+    [31m+             ],[39m
+    [31m+           },[39m
+    [31m+         ],[39m
+    [31m+         "failureSummary": "Fix any of the following:[39m
+    [31m+   Element has insufficient color contrast of 1.03 (foreground color: #b74335, background color: #68676a, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",[39m
+    [31m+         "html": "<code>.env.local</code>",[39m
+    [31m+         "impact": "serious",[39m
+    [31m+         "none": Array [],[39m
+    [31m+         "target": Array [[39m
+    [31m+           "code",[39m
+    [31m+         ],[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "tags": Array [[39m
+    [31m+       "cat.color",[39m
+    [31m+       "wcag2aa",[39m
+    [31m+       "wcag143",[39m
+    [31m+       "TTv5",[39m
+    [31m+       "TT13.c",[39m
+    [31m+       "EN-301-549",[39m
+    [31m+       "EN-9.1.4.3",[39m
+    [31m+       "ACT",[39m
+    [31m+       "RGAAv4",[39m
+    [31m+       "RGAA-3.2.1",[39m
+    [31m+     ],[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+      44 |         );
+      45 |         const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+    > 46 |         expect(accessibilityScanResults.violations).toEqual([]);
+         |                                                     ^
+      47 |     });
+      48 | });
+      49 |
+        at C:\Projetos\Hub Jogos Pr├® Camp\tests\e2e\a11y.spec.ts:46:53
+
+    Error Context: test-results\a11y-Acessibilidade-Baseline-share-page-deve-ser-acess├¡vel-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\a11y-Acessibilidade-Baseline-share-page-deve-ser-acess├¡vel-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\a11y-Acessibilidade-Baseline-share-page-deve-ser-acess├¡vel-chromium\trace.zip
+
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  7 failed
+    [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:5:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ home deve ser acess├¡vel ÔöÇÔöÇ
+    [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:11:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ explorar deve ser acess├¡vel 
+    [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:17:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ quiz deve ser acess├¡vel ÔöÇ
+    [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:23:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ branching story deve ser acess├¡vel 
+    [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:29:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ simulation deve ser acess├¡vel 
+    [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:35:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ map deve ser acess├¡vel ÔöÇÔöÇ
+    [chromium] ÔÇ║ tests\e2e\a11y.spec.ts:41:9 ÔÇ║ Acessibilidade (Baseline) ÔÇ║ share page deve ser acess├¡vel 

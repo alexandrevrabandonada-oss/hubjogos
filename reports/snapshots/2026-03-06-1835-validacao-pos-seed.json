@@ -1,0 +1,68 @@
+
+> hub-jogos-pre-campanha@0.0.1 beta:snapshot
+> node tools/beta-snapshot.js --format=json
+
+{
+  "source": "supabase",
+  "generatedAt": "2026-03-06T18:36:49.897Z",
+  "overview": {
+    "totalSessions": 12,
+    "totalStarts": 6,
+    "completedSessions": 8,
+    "totalShares": 4,
+    "completionRate": 67,
+    "shareRate": 50
+  },
+  "feedback": {
+    "total": 4,
+    "positive": 2,
+    "neutral": 0,
+    "negative": 2,
+    "withComments": 3
+  },
+  "topSources": [
+    {
+      "source": "google",
+      "count": 4
+    },
+    {
+      "source": "direto",
+      "count": 4
+    },
+    {
+      "source": "facebook",
+      "count": 2
+    },
+    {
+      "source": "twitter",
+      "count": 2
+    }
+  ],
+  "topGames": [
+    {
+      "slug": "tijolo-01",
+      "initiated": 4,
+      "completed": 2,
+      "completionRate": 50
+    },
+    {
+      "slug": "tijolo-04",
+      "initiated": 4,
+      "completed": 4,
+      "completionRate": 100
+    },
+    {
+      "slug": "tijolo-05",
+      "initiated": 2,
+      "completed": 0,
+      "completionRate": 0
+    },
+    {
+      "slug": "tijolo-06",
+      "initiated": 2,
+      "completed": 2,
+      "completionRate": 100
+    }
+  ],
+  "experiments": []
+}

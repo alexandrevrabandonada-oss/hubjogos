@@ -57,10 +57,22 @@
   border-color: var(--accent);
 }
 
+.feedbackSection {
+  margin-block: 24px;
+}
+
 .actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.copyFeedback {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--accent-strong);
+  font-weight: 600;
+  text-align: center;
 }
 
 .feedback {

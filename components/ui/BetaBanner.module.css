@@ -1,0 +1,50 @@
+.banner {
+    background: linear-gradient(135deg,
+            color-mix(in srgb, var(--accent) 5%, transparent),
+            color-mix(in srgb, var(--surface) 95%, black));
+    border-bottom: 1px solid var(--border);
+    padding-block: var(--space-xl);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    max-width: 60ch;
+    text-align: center;
+}
+
+.eyebrow {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    color: var(--text);
+}
+
+.content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.cta {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.cta:hover {
+    color: var(--text);
+}

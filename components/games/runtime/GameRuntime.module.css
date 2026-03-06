@@ -2,6 +2,27 @@
   min-width: 0;
 }
 
+.loadingCard,
+.errorCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  background: var(--surface-alt);
+  display: grid;
+  gap: 8px;
+}
+
+.loadingCard h3,
+.errorCard h3 {
+  margin: 0;
+}
+
+.loadingCard p,
+.errorCard p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
 .placeholder {
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);

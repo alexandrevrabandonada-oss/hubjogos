@@ -11,12 +11,14 @@ import type {
   ResultRecord,
   SessionRecord,
 } from './events';
+import { captureSourceData } from './source';
 import {
   persistEvent,
   persistResult,
   persistSessionComplete,
   persistSessionStart,
 } from '@/lib/supabase/results';
+import { getActiveExperiments, resolveVariant } from '@/lib/experiments';
 
 interface StartSessionInput {
   slug: string;
@@ -45,6 +47,16 @@ export async function startSession(input: StartSessionInput) {
   const anonymous = getOrCreateAnonymousIdentity();
   const sessionId = generateId('session');
   const startedAt = new Date().toISOString();
+  const source = captureSourceData();
+
+  // Resolver experimentos ativos para esta sessão
+  const activeExperiments = getActiveExperiments();
+  const experiments = activeExperiments
+    .map((exp) => {
+      const resolved = resolveVariant(exp.key, sessionId);
+      return resolved ? { key: exp.key, variant: resolved.variantKey } : null;
+    })
+    .filter((e): e is { key: string; variant: string } => e !== null);
 
   const record: SessionRecord = {
     sessionId,
@@ -54,6 +66,8 @@ export async function startSession(input: StartSessionInput) {
     engineId: input.engineId,
     startedAt,
     status: 'started',
+    ...source,
+    experiments: experiments.length > 0 ? experiments : undefined,
   };
 
   activeSessions.set(sessionMapKey(input), sessionId);
@@ -81,6 +95,7 @@ export async function trackEvent(input: TrackInput) {
   const session = await ensureSession(input);
 
   const event: AnalyticsEventPayload = {
+    experiments: session.experiments, // Herda experimentos da sessão
     sessionId: session.sessionId,
     anonymousId: session.anonymousId,
     event: input.event,

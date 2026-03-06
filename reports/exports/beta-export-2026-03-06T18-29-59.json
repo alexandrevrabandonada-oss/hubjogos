@@ -1,0 +1,17 @@
+{
+  "source": "supabase",
+  "generatedAt": "2026-03-06T18:29:59.993Z",
+  "funnel": {
+    "total_sessions": 0,
+    "completions": 0,
+    "starts": 0,
+    "shares": 0,
+    "total_events": 0
+  },
+  "sources": [],
+  "games": [],
+  "engines": [],
+  "events": [],
+  "experiments": [],
+  "feedback": []
+}

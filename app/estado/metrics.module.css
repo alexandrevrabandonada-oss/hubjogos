@@ -1,0 +1,412 @@
+/** Página de Métricas */
+
+.container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+
+.subtitle strong {
+  font-weight: 600;
+}
+
+.subtitle time {
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+/* Badge de origem dos dados */
+.sourceBadge {
+  display: inline-block;
+  margin: 0.75rem auto 0.5rem;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: var(--bg-secondary, #f0f0f0);
+  border: 1px solid var(--border-color, #ddd);
+  color: var(--text-primary, #1a1a1a);
+}
+
+/* Aviso quando Supabase não está configurado */
+.supabaseWarning {
+  font-size: 0.875rem;
+  color: #78350f;
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0 0;
+  line-height: 1.6;
+}
+
+.supabaseWarning code {
+  font-family: monospace;
+  font-size: 0.8rem;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+.generatedAt {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #888);
+  margin: 0.5rem 0 0;
+}
+
+.generatedAt time {
+  font-family: monospace;
+}
+
+.opsStatus {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.5rem 0 1rem;
+  font-size: 0.85rem;
+}
+
+.statusOk {
+  color: #064e3b;
+  background: #ecfdf5;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.statusOff {
+  color: #1f2937;
+  background: #f3f4f6;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+
+/* Grid de overview cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  min-height: 140px;
+}
+
+.card h3 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0 0 0.75rem 0;
+  color: var(--text-secondary, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.largeNumber {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-primary, #333);
+}
+
+.fullCard {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.fullCard h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--text-primary, #1a1a1a);
+}
+
+/* Events/Engine lists */
+.eventsList,
+.engineList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.eventRow,
+.engineRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--bg-secondary, #f9f9f9);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.eventLabel,
+.engineLabel {
+  font-weight: 500;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.eventCount,
+.engineCount {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary, #333);
+}
+
+/* Table */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th {
+  background: var(--bg-secondary, #f0f0f0);
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a1a);
+  border-bottom: 2px solid var(--border-color, #ddd);
+}
+
+.table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color, #eee);
+  color: var(--text-primary, #1a1a1a);
+}
+
+.table tbody tr:hover {
+  background: var(--bg-secondary, #f9f9f9);
+}
+
+.gameTitle {
+  font-weight: 500;
+}
+
+.numeric {
+  text-align: center;
+  font-family: monospace;
+}
+
+.rateGood {
+  color: var(--color-success, #2c9643);
+  font-weight: 600;
+}
+
+.rateOk {
+  color: var(--color-warning, #d97b22);
+  font-weight: 600;
+}
+
+.rateLow {
+  color: var(--color-alert, #c1272d);
+  font-weight: 600;
+}
+
+.techNote {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
+  margin: 1rem 0 0 0;
+  line-height: 1.5;
+}
+
+.techNote code {
+  background: var(--bg-secondary, #f0f0f0);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+/* Experimentos Section */
+.experimentSection {
+  margin-bottom: 1.5rem;
+}
+
+.experimentSection h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: var(--text-primary, #1a1a1a);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .table {
+    font-size: 0.95rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 1rem;
+  }
+}
+/* Tijolo 18: Window selector and freshness info */
+.windowSelector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: var(--bg-secondary, #f9fafb);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.windowSelector label {
+  font-weight: 500;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.windowSelect {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.windowSelect:focus {
+  outline: 2px solid var(--brand-primary, #2563eb);
+  outline-offset: 2px;
+}
+
+.freshnessInfo {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6b7280);
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--border-color, #d1d5db);
+}
+
+.severityBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.severityOk {
+  color: #065f46;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.severityWarning {
+  color: #78350f;
+  background: #fefce8;
+  border-color: #fde68a;
+}
+
+.severityCritical {
+  color: #7f1d1d;
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.cardTitleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.windowHint {
+  font-size: 0.78rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.signalGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.signalItem {
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: var(--bg-secondary, #fafafa);
+}
+
+.signalLabel {
+  margin: 0;
+  font-size: 0.74rem;
+  color: var(--text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.signalValue {
+  margin: 0.4rem 0;
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+}
+
+.signalNote {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.signalList {
+  margin-top: 0.75rem;
+  border-top: 1px dashed var(--border-color, #d1d5db);
+  padding-top: 0.65rem;
+}
+
+.signalList p {
+  margin: 0.35rem 0;
+  font-size: 0.86rem;
+}

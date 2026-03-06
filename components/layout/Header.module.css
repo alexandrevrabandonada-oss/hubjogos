@@ -46,9 +46,21 @@
 }
 
 .logoText {
+  font-weight: 700;
   color: var(--text);
   font-size: 0.95rem;
-  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.logoTextGroup {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.headerBeta {
+  margin-top: 2px;
+  align-self: flex-start;
 }
 
 .navDesktop {

@@ -8,9 +8,25 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "npm run test:unit",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:a11y": "playwright test tests/e2e/a11y.spec.ts",
+    "test:ci": "npm run test:unit && npm run test:e2e",
     "type-check": "tsc --noEmit",
-    "verify": "node tools/verify.js",
-    "report": "node tools/generate-report.js"
+    "verify": "node tools/verify.js && npm run lint && npm run type-check && npm run test:unit && npm run build",
+    "report": "node tools/generate-report.js",
+    "beta:snapshot": "node tools/beta-snapshot.js",
+    "beta:export": "node tools/beta-export.js",
+    "beta:circulation-report": "node tools/beta-circulation-report.js",
+    "beta:readiness-report": "node tools/beta-readiness-report.js",
+    "beta:staleness-check": "node tools/beta-staleness-check.js",
+    "beta:ops": "node tools/beta-ops.js",
+    "ops:apply-migration": "node tools/apply-tijolo-14-migration.js",
+    "ops:export-config": "node tools/export-experiments-config.js",
+    "ops:check-alerts": "node tools/ops-check-alerts.js",
+    "ops:export-audit": "node tools/ops-export-audit.js"
   },
   "keywords": [
     "pwa",
@@ -27,9 +43,12 @@
     "npm": ">=9.0.0"
   },
   "dependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@sentry/nextjs": "^10.42.0",
     "@types/node": "^25.3.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "html-to-image": "^1.11.13",
     "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -37,9 +56,15 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.35",
+    "@playwright/test": "^1.58.2",
     "@supabase/supabase-js": "^2.98.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",
-    "prettier": "^3.8.1"
+    "jsdom": "^28.1.0",
+    "prettier": "^3.8.1",
+    "vitest": "^4.0.18"
   }
 }

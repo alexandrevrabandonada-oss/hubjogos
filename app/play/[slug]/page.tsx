@@ -1,16 +1,22 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { GameRuntime } from '@/components/games/runtime/GameRuntime';
 import { MetaChip } from '@/components/ui/MetaChip';
 import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { getGameBySlug } from '@/lib/games/catalog';
+import { buildPlayMetadata } from '@/lib/games/metadata';
 import styles from './page.module.css';
 
 interface PlayPageProps {
   params: {
     slug: string;
   };
+}
+
+export function generateMetadata({ params }: PlayPageProps): Metadata {
+  return buildPlayMetadata(params.slug);
 }
 
 export default function PlayPage({ params }: PlayPageProps) {

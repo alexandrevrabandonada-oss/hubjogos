@@ -5,14 +5,17 @@ import '@/styles/globals.css';
 export const metadata: Metadata = {
   title: 'Hub de Jogos da Pré-Campanha',
   description:
-    'Hub político-jogável que transforma pautas urbanas em experiências de escolha, consequência e ação cidadã.',
+    'Hub político-jogável que transforma pautas urbanas em experiências de escolha, consequência e ação cidadã. Beta público aberto.',
   keywords: [
-    'jogos',
-    'política',
-    'campanha',
+    'jogos políticos',
+    'educação política',
+    'pré-campanha',
+    'simulação urbana',
     'interativo',
     'pwa',
-    'educação',
+    'participação cidadã',
+    'orçamento participativo',
+    'mobilidade urbana',
   ],
   authors: [{ name: 'Hub de Jogos Team' }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
     siteName: 'Hub de Jogos da Pré-Campanha',
     title: 'Hub de Jogos da Pré-Campanha',
     description:
-      'Jogue conflitos reais da cidade e descubra leituras políticas acionáveis.',
+      'Jogue conflitos reais da cidade e descubra leituras políticas acionáveis. Beta público aberto.',
     images: [
       {
         url: '/og-image.png',

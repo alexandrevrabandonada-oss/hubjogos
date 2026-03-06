@@ -1,0 +1,105 @@
+name: Ops Routine
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  routine:
+    name: Snapshot + Alerta + Export
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      OPS_ALERT_PRIORITY_HOURS: ${{ vars.OPS_ALERT_PRIORITY_HOURS || '24' }}
+      OPS_ALERT_AUDIT_MAX_AGE_HOURS: ${{ vars.OPS_ALERT_AUDIT_MAX_AGE_HOURS || '48' }}
+      OPS_AUDIT_EXPORT_DAYS: ${{ vars.OPS_AUDIT_EXPORT_DAYS || '7' }}
+      OPS_AUDIT_RETENTION_DAYS: ${{ vars.OPS_AUDIT_RETENTION_DAYS || '90' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare ops directories
+        run: mkdir -p reports/snapshots reports/exports reports/ops-alerts reports/ops
+
+      - name: Generate markdown snapshot
+        run: npm run beta:snapshot
+
+      - name: Generate json snapshot artifact
+        run: |
+          mkdir -p reports/snapshots
+          stamp=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
+          npm run beta:snapshot -- --format=json > reports/snapshots/beta-snapshot-${stamp}.json
+
+      - name: Generate consolidated export
+        run: npm run beta:export
+
+      - name: Export audit log
+        run: npm run ops:export-audit -- --days=${OPS_AUDIT_EXPORT_DAYS} --limit=300 --retention-days=${OPS_AUDIT_RETENTION_DAYS}
+
+      - name: Run lightweight operational alerts
+        run: npm run ops:check-alerts -- --priority-hours=${OPS_ALERT_PRIORITY_HOURS} --audit-hours=${OPS_ALERT_AUDIT_MAX_AGE_HOURS}
+
+      - name: Check data staleness (Tijolo 19)
+        id: staleness
+        run: |
+          npm run beta:staleness-check -- --format=json > reports/ops/staleness-check-latest.json 2>&1 || true
+          npm run beta:staleness-check >> reports/ops/staleness-check-latest.md 2>&1 || true
+        continue-on-error: true
+
+      - name: Upload operational artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ops-routine-artifacts
+          path: |
+            reports/snapshots/
+            reports/exports/
+            reports/ops-alerts/
+            reports/ops/
+          retention-days: 14
+
+      - name: Publish routine summary
+        if: always()
+        run: |
+          {
+            echo "## Ops Routine";
+            echo "- Cron: a cada 6 horas";
+            echo "- Snapshot: npm run beta:snapshot";
+            echo "- Export: npm run beta:export + npm run ops:export-audit";
+            echo "- Alerta leve: npm run ops:check-alerts";
+            echo "- Staleness: npm run beta:staleness-check";
+            echo "";
+            echo "### Cockpit Temporal (resumo curto)";
+            if [ -f reports/ops/staleness-check-latest.json ]; then
+              node -e "const fs=require('fs');const r=JSON.parse(fs.readFileSync('reports/ops/staleness-check-latest.json','utf8'));const sev=r.summary?.critical>0?'🔴 CRITICO':r.summary?.warnings>0?'🟡 WARNING':'🟢 INFO';const last=r.lastEventAt?new Date(r.lastEventAt).toISOString():'n/d';console.log('- Severidade: '+sev);console.log('- Ultimo evento remoto: '+last);console.log('- Alertas: criticos='+(r.summary?.critical||0)+', warnings='+(r.summary?.warnings||0));";
+            else
+              echo "- Severidade: n/d (sem staleness-check-latest.json)";
+            fi
+            echo "";
+            echo "### Alertas Operacionais (ultimo resultado)";
+            if [ -f reports/ops-alerts/latest.md ]; then
+              cat reports/ops-alerts/latest.md;
+            else
+              echo "Sem arquivo latest.md";
+            fi
+            echo "";
+            echo "### Staleness Check (ultimo resultado completo)";
+            if [ -f reports/ops/staleness-check-latest.md ]; then
+              cat reports/ops/staleness-check-latest.md;
+            else
+              echo "Sem staleness-check-latest.md";
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
