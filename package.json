@@ -1,0 +1,29 @@
+{
+  "name": "hub-jogos-pre-campanha",
+  "version": "0.0.1",
+  "description": "PWA - Hub de Jogos e Experiências Interativas para Pré-Campanha Política",
+  "private": true,
+  "scripts": {
+    "verify": "node tools/verify.js",
+    "dev": "echo 'Next.js dev server será configurado no tijolo 02'",
+    "build": "echo 'Next.js build será configurado no tijolo 02'",
+    "start": "echo 'Next.js production será configurado no tijolo 02'",
+    "lint": "echo 'ESLint será configurado no tijolo 02'",
+    "type-check": "echo 'TypeScript será configurado no tijolo 02'",
+    "report": "node tools/generate-report.js"
+  },
+  "keywords": [
+    "pwa",
+    "jogos",
+    "campanha-politica",
+    "next.js",
+    "react",
+    "interactive"
+  ],
+  "author": "Hub de Jogos Pré-Campanha Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
