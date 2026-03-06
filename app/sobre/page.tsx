@@ -66,7 +66,7 @@ export default function SobrePage() {
                 GitHub, pronto para contribuições comunitárias.
               </p>
               <p>
-                Cada "tijolo" de desenvolvimento é incrementalmente entregue,
+                Cada &quot;tijolo&quot; de desenvolvimento é incrementalmente entregue,
                 documentado e testado.
               </p>
             </div>
