@@ -1,109 +1,100 @@
 'use client';
 
 import Link from 'next/link';
+import { Card } from '@/components/ui/Card';
+import { PageHero } from '@/components/ui/PageHero';
+import { Section } from '@/components/ui/Section';
 import styles from './page.module.css';
+
+const channels = [
+  {
+    icon: '💻',
+    title: 'Contribuir com código',
+    description:
+      'Aprimore componentes, engines e infraestrutura em Next.js + TypeScript.',
+    href: 'https://github.com/alexandrevrabandonada-oss/hubjogos',
+    action: 'Repositório',
+  },
+  {
+    icon: '🎨',
+    title: 'Design e linguagem visual',
+    description:
+      'Refine sistema visual, legibilidade política e consistência entre módulos.',
+    href: 'https://github.com/alexandrevrabandonada-oss/hubjogos/issues',
+    action: 'Issues de design',
+  },
+  {
+    icon: '💡',
+    title: 'Sugerir novas pautas',
+    description:
+      'Traga conflitos reais de cidade, trabalho, transporte, orçamento e participação.',
+    href: 'https://github.com/alexandrevrabandonada-oss/hubjogos/discussions',
+    action: 'Abrir discussão',
+  },
+  {
+    icon: '🧪',
+    title: 'Teste e feedback',
+    description:
+      'Jogue, reporte atrito de UX e indique onde a leitura política ficou fraca.',
+    href: 'https://github.com/alexandrevrabandonada-oss/hubjogos/issues',
+    action: 'Reportar feedback',
+  },
+  {
+    icon: '📢',
+    title: 'Circular o conteúdo',
+    description:
+      'Leve os resultados para grupos de bairro, redes e espaços de formação política.',
+    href: '/',
+    action: 'Voltar ao hub',
+  },
+  {
+    icon: '🤝',
+    title: 'Articular comunidade',
+    description:
+      'Proponha rodas de conversa, oficinas e ativações do hub em território.',
+    href: 'https://github.com/alexandrevrabandonada-oss/hubjogos/discussions',
+    action: 'Conectar pessoas',
+  },
+];
 
 export default function ParticiparPage() {
   return (
     <div className={styles.page}>
-      <section className={styles.hero}>
-        <div className={styles.container}>
-          <h1>Participar do Projeto</h1>
-          <p>O Hub de Jogos é código aberto e precisa da sua contribuição.</p>
+      <PageHero
+        eyebrow="Participação"
+        title="Transforme jogo em mobilização"
+        description="Este projeto é aberto: cresce quando mais pessoas conectam código, design e pauta real."
+      />
+
+      <Section
+        eyebrow="Canais"
+        title="Como participar agora"
+        description="Escolha um ponto de entrada e contribua para fortalecer o hub como ferramenta política."
+      >
+        <div className={styles.grid}>
+          {channels.map((channel) => (
+            <Card key={channel.title} className={styles.card} interactive>
+              <span className={styles.icon} aria-hidden>
+                {channel.icon}
+              </span>
+              <h3>{channel.title}</h3>
+              <p>{channel.description}</p>
+              <Link href={channel.href}>{channel.action} →</Link>
+            </Card>
+          ))}
         </div>
-      </section>
 
-      <section className={styles.content}>
-        <div className={styles.container}>
-          <div className={styles.grid}>
-            {/* Code */}
-            <div className={styles.card}>
-              <div className={styles.icon}>💻</div>
-              <h3>Contribuir com Código</h3>
-              <p>
-                Quer desenvolver? O projeto está em Next.js + React + TypeScript.
-                Temos issues marcadas para iniciantes e veteranos.
-              </p>
-              <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos">
-                GitHub Repository →
-              </Link>
-            </div>
-
-            {/* Design */}
-            <div className={styles.card}>
-              <div className={styles.icon}>🎨</div>
-              <h3>Design & Identidade</h3>
-              <p>
-                Queremos designer! Refinar nossa identidade visual, criar
-                componentes, refinasse design system.
-              </p>
-              <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos/issues">
-                Issues de Design →
-              </Link>
-            </div>
-
-            {/* Ideas */}
-            <div className={styles.card}>
-              <div className={styles.icon}>💡</div>
-              <h3>Ideias de Pautas</h3>
-              <p>
-                Qual pauta política deveria virar jogo? Você tem ideias?
-                Abra uma discussão, sugira mecânicas.
-              </p>
-              <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos/discussions">
-                Discussions →
-              </Link>
-            </div>
-
-            {/* Testers */}
-            <div className={styles.card}>
-              <div className={styles.icon}>🧪</div>
-              <h3>Testes & Feedback</h3>
-              <p>
-                Você não precisa saber programar. Teste as experiências, reporte bugs, sugira features.
-              </p>
-              <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos/issues">
-                Reportar Bug →
-              </Link>
-            </div>
-
-            {/* Advocacy */}
-            <div className={styles.card}>
-              <div className={styles.icon}>📢</div>
-              <h3>Divulgação</h3>
-              <p>
-                Ama o projeto? Compartilhe com amigos, redes sociais, grupos
-                políticos. Ajuda no crescimento.
-              </p>
-              <Link href="/">
-                Compartilhar Hub →
-              </Link>
-            </div>
-
-            {/* Community */}
-            <div className={styles.card}>
-              <div className={styles.icon}>🤝</div>
-              <h3>Comunidade</h3>
-              <p>
-                Quer organizar encontros, workshops, eventos sobre jogos e
-                política? Fale com a gente.
-              </p>
-              <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos/discussions">
-                Comece uma Conversa →
-              </Link>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className={styles.finalCTA}>
-            <h2>Pronto para Começar?</h2>
-            <p>Não importa seu nível. Temos espaço para todos.</p>
-            <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos">
-              Acesse o Repositório
-            </Link>
-          </div>
-        </div>
-      </section>
+        <Card className={styles.finalCTA}>
+          <h2>Pronto para começar?</h2>
+          <p>
+            A melhor contribuição é a que conecta experiência jogável com
+            leitura política concreta.
+          </p>
+          <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos">
+            Acessar repositório principal →
+          </Link>
+        </Card>
+      </Section>
     </div>
   );
 }

@@ -2,125 +2,77 @@
  * Game Card Styles
  */
 
-.card {
-  background: #1a1f3a;
-  border: 1px solid #2a2f4a;
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  text-decoration: none;
+.linkWrap {
+  display: block;
+  color: inherit;
 }
 
-.card::before {
-  content: '';
+.card {
+  display: grid;
+  gap: 12px;
+  min-height: 270px;
+}
+
+.accentBar {
   position: absolute;
-  top: 0;
   left: 0;
-  right: 0;
+  top: 0;
+  width: 100%;
   height: 3px;
   background: var(--accent-color);
-  opacity: 0;
-  transition: opacity 0.3s;
 }
 
-.card:hover {
-  border-color: var(--accent-color);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
-    0 0 16px rgba(255, 20, 147, 0.1);
-  transform: translateY(-4px);
-}
-
-.card:hover::before {
-  opacity: 1;
-}
-
-/* Status Badge */
-.statusBadge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.75rem;
-  background: rgba(255, 20, 147, 0.1);
-  border: 1px solid rgba(255, 20, 147, 0.3);
-  border-radius: 99px;
-  color: #ff1493;
-}
-
-/* Icon */
-.icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-/* Title */
-.title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
-}
-
-/* Description */
-.description {
-  color: #a0a0b0;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin: 0 0 1rem 0;
-  flex-grow: 1;
-}
-
-/* Meta */
-.meta {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
-  color: #a0a0b0;
-}
-
-.duration,
-.difficulty {
+.topRow {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-/* CTA */
+.icon {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.title {
+  color: var(--text);
+}
+
+.description {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .cta {
-  color: var(--accent-color);
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.2s;
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
 }
 
-.card:hover .cta {
-  transform: translateX(4px);
+.cta span {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
 }
 
-/* Responsive */
+.cta strong {
+  color: var(--accent-strong);
+  font-size: 0.92rem;
+}
+
 @media (max-width: 768px) {
   .card {
-    padding: 1rem;
-  }
-
-  .icon {
-    font-size: 2rem;
-  }
-
-  .title {
-    font-size: 1.1rem;
-  }
-
-  .description {
-    font-size: 0.85rem;
+    min-height: 240px;
   }
 }

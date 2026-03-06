@@ -1,0 +1,68 @@
+.engine {
+  display: grid;
+  gap: 14px;
+}
+
+.head {
+  display: grid;
+  gap: 8px;
+}
+
+.head p {
+  margin: 0;
+}
+
+.node {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.node p {
+  margin: 0;
+}
+
+.choices {
+  display: grid;
+  gap: 10px;
+}
+
+.choice {
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  padding: 12px;
+  display: grid;
+  gap: 5px;
+}
+
+.choice:hover {
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
+}
+
+.choice strong {
+  font-size: 0.95rem;
+}
+
+.choice span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.history {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}

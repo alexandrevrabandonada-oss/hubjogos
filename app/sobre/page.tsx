@@ -1,25 +1,28 @@
 'use client';
 
 import Link from 'next/link';
+import { Card } from '@/components/ui/Card';
+import { PageHero } from '@/components/ui/PageHero';
+import { Section } from '@/components/ui/Section';
 import styles from './page.module.css';
 
 export default function SobrePage() {
   return (
     <div className={styles.page}>
-      <section className={styles.hero}>
-        <div className={styles.container}>
-          <h1>Sobre o Projeto</h1>
-          <p>
-            Por que transformamos pautas políticas em jogos? E quem fazemos
-            isso?
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Manifesto"
+        title="Por que um hub político-jogável"
+        description="Porque pauta pública não pode continuar restrita ao jargão técnico e ao debate distante do território."
+      />
 
-      <section className={styles.content}>
-        <div className={styles.container}>
-          <div className={styles.grid}>
-            <div className={styles.col}>
+      <Section
+        eyebrow="Fundamentos"
+        title="O projeto em quatro frentes"
+        description="Estrutura política, linguagem jogável, tecnologia aberta e ação coletiva."
+      >
+        <div className={styles.grid}>
+          <Card className={styles.col}>
+            <div>
               <h2>A Ideia</h2>
               <p>
                 A política é complexa. Mas não deveria ser inacessível. O
@@ -38,7 +41,10 @@ export default function SobrePage() {
               </p>
             </div>
 
-            <div className={styles.col}>
+          </Card>
+
+          <Card className={styles.col}>
+            <div>
               <h2>Por Que Jogos?</h2>
               <p>
                 Jogos funcionam. Eles criam envolvimento, geram consequências,
@@ -55,7 +61,10 @@ export default function SobrePage() {
               </p>
             </div>
 
-            <div className={styles.col}>
+          </Card>
+
+          <Card className={styles.col}>
+            <div>
               <h2>Tecnologia</h2>
               <p>
                 Construído em<strong>Next.js + React</strong>, com banco em
@@ -71,7 +80,10 @@ export default function SobrePage() {
               </p>
             </div>
 
-            <div className={styles.col}>
+          </Card>
+
+          <Card className={styles.col}>
+            <div>
               <h2>Design & Visual</h2>
               <p>
                 Inspirado em universos reais urbanos como VR Abandonada e
@@ -86,25 +98,20 @@ export default function SobrePage() {
                 mobile-first em tudo.
               </p>
             </div>
-          </div>
-
-          {/* Team Section */}
-          <div className={styles.teamSection}>
-            <h2>Quem Faz?</h2>
-            <p>
-              Este é um projeto colaborativo de product engineers, designers e
-              ativistas interessados em gamificação de política.
-            </p>
-            <p>
-              Queremos contribuidores. Design, código, ideias de pautas, tudo é
-              bem-vindo.
-            </p>
-            <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos">
-              Contribuir no GitHub
-            </Link>
-          </div>
+          </Card>
         </div>
-      </section>
+
+        <Card className={styles.teamSection}>
+          <h2>Quem faz</h2>
+          <p>
+            Este é um projeto colaborativo de engenharia, design e território.
+            Queremos colaboração em código, pauta e linguagem visual.
+          </p>
+          <Link href="https://github.com/alexandrevrabandonada-oss/hubjogos">
+            Contribuir no GitHub →
+          </Link>
+        </Card>
+      </Section>
     </div>
   );
 }

@@ -1,43 +1,33 @@
 /**
  * Design System Tokens
- * Inspiração: Universo urbano/industrial VR Abandonada, contemporâneo
+ * Eixo visual: urbano/político contemporâneo (asfalto, concreto, ferrugem)
  */
 
 export const tokens = {
-  // Colors
+  // Semantic colors
   colors: {
-    // Primary palette
-    action: '#FF1493', // Rosa quente - CTAs, destaque
-    secondary: '#00D9FF', // Ciano - links, hover
-    accent: '#FFB81C', // Amarelo sinalização - highlights
-
-    // Neutrals
-    dark: {
-      bg: '#0A0E27', // Background principal muito escuro
-      surface: '#1A1F3A', // Cards, modals
-      border: '#2A2F4A', // Bordas
-    },
-    light: {
-      primary: '#FFFFFF', // Texto principal
-      secondary: '#A0A0B0', // Texto secundário
-    },
-
-    // Status (futuro)
-    success: '#00FF88',
-    warning: '#FFB81C',
-    error: '#FF3860',
-    info: '#00D9FF',
+    bg: '#11100e',
+    surface: '#1b1916',
+    surface2: '#26221d',
+    text: '#f2ede4',
+    textMuted: '#b5ad9e',
+    accent: '#d6ac00',
+    accentStrong: '#f0c419',
+    danger: '#a6472d',
+    border: '#3a342b',
+    success: '#738f3d',
+    active: '#c97e2f',
   },
 
   // Spacing scale
   spacing: {
     xs: '4px',
-    sm: '8px',
+    sm: '10px',
     md: '16px',
     lg: '24px',
-    xl: '32px',
-    '2xl': '48px',
-    '3xl': '64px',
+    xl: '36px',
+    '2xl': '52px',
+    '3xl': '72px',
   },
 
   // Border radius
@@ -45,33 +35,33 @@ export const tokens = {
     sm: '4px',
     md: '8px',
     lg: '12px',
-    xl: '16px',
+    xl: '18px',
     full: '9999px',
   },
 
   // Shadows
   shadow: {
-    sm: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    md: '0 4px 12px rgba(0, 0, 0, 0.2)',
-    lg: '0 8px 24px rgba(0, 0, 0, 0.3)',
-    xl: '0 12px 32px rgba(0, 0, 0, 0.4)',
+    sm: '0 2px 4px rgba(0, 0, 0, 0.2)',
+    md: '0 6px 16px rgba(0, 0, 0, 0.28)',
+    lg: '0 12px 28px rgba(0, 0, 0, 0.38)',
+    xl: '0 18px 42px rgba(0, 0, 0, 0.48)',
   },
 
   // Typography
   typography: {
     fontFamily: {
-      sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       mono: '"JetBrains Mono", monospace',
     },
     fontSize: {
       xs: '12px',
-      sm: '14px',
+      sm: '13px',
       md: '16px',
       lg: '18px',
-      xl: '24px',
-      '2xl': '28px',
-      '3xl': '36px',
-      '4xl': '48px',
+      xl: '22px',
+      '2xl': '30px',
+      '3xl': '40px',
+      '4xl': '52px',
     },
     fontWeight: {
       normal: 400,

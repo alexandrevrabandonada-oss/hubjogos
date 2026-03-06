@@ -1,0 +1,26 @@
+.runtimeWrap {
+  min-width: 0;
+}
+
+.placeholder {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  background: var(--surface);
+  display: grid;
+  gap: 10px;
+}
+
+.placeholder p {
+  margin: 0;
+}
+
+.placeholderReason {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+}
+
+.quizLink {
+  color: var(--accent-strong);
+  font-weight: 600;
+}

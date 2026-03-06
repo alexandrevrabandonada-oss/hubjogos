@@ -6,8 +6,8 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0a0e27",
-  "theme_color": "#ff1493",
+  "background_color": "#11100e",
+  "theme_color": "#d6ac00",
   "categories": ["games", "education", "productivity"],
   "screenshots": [
     {

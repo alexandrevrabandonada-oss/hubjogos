@@ -5,7 +5,7 @@ import '@/styles/globals.css';
 export const metadata: Metadata = {
   title: 'Hub de Jogos da Pré-Campanha',
   description:
-    'Plataforma interativa de jogos e experiências que transformam pautas políticas em mecânicas lúdicas, educativas e orientadas para ação cidadã.',
+    'Hub político-jogável que transforma pautas urbanas em experiências de escolha, consequência e ação cidadã.',
   keywords: [
     'jogos',
     'política',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: 'Hub de Jogos da Pré-Campanha',
     title: 'Hub de Jogos da Pré-Campanha',
     description:
-      'Transforme pautas políticas em experiências jogáveis e compartilháveis.',
+      'Jogue conflitos reais da cidade e descubra leituras políticas acionáveis.',
     images: [
       {
         url: '/og-image.png',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hub de Jogos da Pré-Campanha',
     description:
-      'Transforme pautas políticas em experiências jogáveis e compartilháveis.',
+      'Jogue conflitos reais da cidade e descubra leituras políticas acionáveis.',
   },
   manifest: '/manifest.json',
   icons: {
@@ -55,7 +55,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <head>
         {/* PWA */}
-        <meta name="theme-color" content="#0a0e27" />
+        <meta name="theme-color" content="#11100e" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta

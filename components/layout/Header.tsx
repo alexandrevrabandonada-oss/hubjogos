@@ -12,31 +12,28 @@ import styles from './Header.module.css';
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const links = [
+    { href: '/explorar', label: 'Explorar' },
+    { href: '/sobre', label: 'Sobre' },
+    { href: '/participar', label: 'Participar' },
+  ];
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        {/* Logo / Branding */}
         <Link href="/" className={styles.logo}>
-          <span className={styles.logoBracket}>[</span>
-          <span className={styles.logoText}>HUB</span>
-          <span className={styles.logoSubtext}>JOGOS</span>
-          <span className={styles.logoBracket}>]</span>
+          <span className={styles.logoBlock}>HUB</span>
+          <span className={styles.logoText}>de Jogos da Pré-Campanha</span>
         </Link>
 
-        {/* Navigation - Desktop */}
         <nav className={styles.navDesktop}>
-          <Link href="/explorar" className={styles.navLink}>
-            Explorar
-          </Link>
-          <Link href="/sobre" className={styles.navLink}>
-            Sobre
-          </Link>
-          <Link href="/participar" className={styles.navLink}>
-            Participar
-          </Link>
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} className={styles.navLink}>
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
-        {/* Mobile Menu Toggle */}
         <button
           className={styles.menuToggle}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -48,30 +45,18 @@ export function Header() {
         </button>
       </div>
 
-      {/* Navigation - Mobile */}
       {menuOpen && (
         <nav className={styles.navMobile}>
-          <Link
-            href="/explorar"
-            className={styles.navLinkMobile}
-            onClick={() => setMenuOpen(false)}
-          >
-            Explorar
-          </Link>
-          <Link
-            href="/sobre"
-            className={styles.navLinkMobile}
-            onClick={() => setMenuOpen(false)}
-          >
-            Sobre
-          </Link>
-          <Link
-            href="/participar"
-            className={styles.navLinkMobile}
-            onClick={() => setMenuOpen(false)}
-          >
-            Participar
-          </Link>
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={styles.navLinkMobile}
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
       )}
     </header>

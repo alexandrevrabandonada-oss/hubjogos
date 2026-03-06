@@ -1,7 +1,9 @@
-'use client';
-
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { GameRuntime } from '@/components/games/runtime/GameRuntime';
+import { MetaChip } from '@/components/ui/MetaChip';
+import { PageHero } from '@/components/ui/PageHero';
+import { Section } from '@/components/ui/Section';
 import { getGameBySlug } from '@/lib/games/catalog';
 import styles from './page.module.css';
 
@@ -18,157 +20,85 @@ export default function PlayPage({ params }: PlayPageProps) {
     notFound();
   }
 
-  const statusLabels = {
-    live: '🔴 Ao Vivo',
-    beta: '🟡 Beta',
-    coming: '⭕ Em Breve',
-  };
-
-  const difficultyColor = {
-    easy: '#00FF88',
-    medium: '#FFB81C',
-    hard: '#FF3860',
+  const experienceHook: Record<string, string> = {
+    quiz: 'Responda, compare prioridades e revele sua leitura política.',
+    branching_story: 'Siga decisões encadeadas e veja a consequência estrutural de cada rota.',
+    simulation: 'Teste cenários e observe os custos invisíveis das decisões.',
+    narrative: 'Siga os dilemas e veja como estrutura e escolha se cruzam.',
+    map: 'Explore território, memória e conflito em camadas.',
   };
 
   return (
     <div className={styles.page}>
-      {/* Header with Game Info */}
-      <section
-        className={styles.header}
-        style={{'--accent-color': game.color} as any}
-      >
-        <div className={styles.container}>
+      <PageHero
+        eyebrow="Sala de experiência"
+        title={game.title}
+        description={game.shortDescription}
+        actions={
           <Link href="/explorar" className={styles.backLink}>
-            ← Voltar a Explorar
+            ← Voltar ao catálogo
           </Link>
-
-          <div className={styles.headerContent}>
-            <div className={styles.headerIcon}>{game.icon}</div>
-            <h1>{game.title}</h1>
-            <p className={styles.status}>{statusLabels[game.status]}</p>
-          </div>
+        }
+      >
+        <div className={styles.heroAside}>
+          <div className={styles.heroIcon}>{game.icon}</div>
+          <p>{experienceHook[game.kind]}</p>
         </div>
-      </section>
+      </PageHero>
 
-      {/* Game Details */}
-      <section className={styles.details}>
-        <div className={styles.container}>
-          <div className={styles.grid}>
-            {/* Main Content */}
-            <div className={styles.main}>
-              <h2>Sobre Esta Experiência</h2>
-              <p className={styles.description}>{game.description}</p>
+      <Section
+        eyebrow="Contexto"
+        title="Pauta, conflito e ação"
+        description={game.description}
+      >
+        <div className={styles.metaWrap}>
+          <MetaChip icon="⏱">{game.estimatedMinutes} min</MetaChip>
+          <MetaChip icon="🏷">{game.theme}</MetaChip>
+          <MetaChip icon="🧪">{game.status}</MetaChip>
+          <MetaChip icon="🎮">{game.kind}</MetaChip>
+          <MetaChip icon="⚙">{game.runtimeState}</MetaChip>
+        </div>
 
-              {/* Meta Info */}
-              <div className={styles.metaInfo}>
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>Duração</span>
-                  <span>⏱️ {game.duration}</span>
-                </div>
-
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>Dificuldade</span>
-                  <span
-                    style={{
-                      color:
-                        difficultyColor[
-                          game.difficulty as keyof typeof difficultyColor
-                        ],
-                    }}
-                  >
-                    {game.difficulty === 'easy' && '⚪ Fácil'}
-                    {game.difficulty === 'medium' && '🟡 Médio'}
-                    {game.difficulty === 'hard' && '🔴 Difícil'}
-                  </span>
-                </div>
-
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>Tema</span>
-                  <span>{game.theme}</span>
-                </div>
-
-                <div className={styles.metaItem}>
-                  <span className={styles.metaLabel}>Tags</span>
-                  <div className={styles.tags}>
-                    {game.tags.map((tag) => (
-                      <span key={tag} className={styles.tag}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Game Placeholder */}
-              <div className={styles.gamePlaceholder}>
-                <p>
-                  🎮 <strong>Engine do Jogo</strong>
-                </p>
-                <p>
-                  A experiência interativa será implementada nos próximos
-                  tijolos.
-                </p>
-                <p>
-                  Este é o espaço onde você jogará, fará escolhas e gerará um
-                  resultado único.
-                </p>
-              </div>
+        <div className={styles.layout}>
+          <div className={styles.engineWrap}>
+            <GameRuntime game={game} />
+          </div>
+          <aside className={styles.sidePanel}>
+            <div className={styles.callout}>
+              <h3>Relação entre jogo e pauta</h3>
+              <p>
+                O módulo usa escolhas para revelar conflito estrutural. O foco
+                não é acertar respostas “certas”, mas explicitar qual projeto de
+                cidade você prioriza.
+              </p>
             </div>
 
-            {/* Sidebar */}
-            <aside className={styles.sidebar}>
-              {/* CTA */}
-              {game.status === 'live' ? (
-                <div className={styles.ctaCard}>
-                  <h3>Pronto para começar?</h3>
-                  <p>Faça suas escolhas e descubra o resultado.</p>
-                  <button
-                    className={styles.ctaButton}
-                    style={{'--accent-color': game.color} as any}
-                  >
-                    {game.cta}
-                  </button>
-                </div>
-              ) : game.status === 'beta' ? (
-                <div className={styles.ctaCard}>
-                  <h3>Versão Beta</h3>
-                  <p>Esta experiência está em testes. Bem-vindo ao time!</p>
-                  <button
-                    className={styles.ctaButton}
-                    style={{'--accent-color': game.color} as any}
-                  >
-                    {game.cta}
-                  </button>
-                </div>
-              ) : (
-                <div className={styles.ctaCard}>
-                  <h3>Em Desenvolvimento</h3>
-                  <p>Volte em breve para esta experiência!</p>
-                  <button className={styles.ctaButtonDisabled} disabled>
-                    Em Breve
-                  </button>
-                </div>
-              )}
-
-              {/* Share */}
-              <div className={styles.shareCard}>
-                <h4>Compartilhar</h4>
-                <p>Em breve você poderá compartilhar seus resultados!</p>
-              </div>
-            </aside>
-          </div>
+            <div className={styles.callout}>
+              <h3>Próxima ação</h3>
+              <p>
+                Depois da partida, compare seu resultado com propostas reais de
+                candidatura e leve o debate para sua rede.
+              </p>
+              <Link href="/participar" className={styles.quizLink}>
+                Entrar em ação →
+              </Link>
+            </div>
+          </aside>
         </div>
-      </section>
+      </Section>
 
-      {/* Related Games */}
-      <section className={styles.related}>
-        <div className={styles.container}>
-          <h2>Outras Experiências</h2>
-          <Link href="/explorar" className={styles.relatedLink}>
-            Explorar Catálogo Completo →
+      <Section
+        eyebrow="Mais módulos"
+        title="Continue explorando"
+        description="Cada experiência aborda uma dimensão diferente da disputa por cidade."
+      >
+        <div className={styles.relatedBox}>
+          <p>Veja outros jogos no catálogo e compare seus resultados por tema.</p>
+          <Link href="/explorar" className={styles.quizLink}>
+            Explorar catálogo completo →
           </Link>
         </div>
-      </section>
+      </Section>
     </div>
   );
 }

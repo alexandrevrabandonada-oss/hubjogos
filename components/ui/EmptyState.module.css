@@ -1,0 +1,11 @@
+.empty {
+  text-align: center;
+  display: grid;
+  gap: 10px;
+  max-width: 620px;
+  margin-inline: auto;
+}
+
+.empty p {
+  margin: 0;
+}

@@ -1,165 +1,118 @@
 'use client';
 
 import Link from 'next/link';
+import { GameCard } from '@/components/hub/GameCard';
+import { CTACluster } from '@/components/ui/CTACluster';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { PageHero } from '@/components/ui/PageHero';
+import { Section } from '@/components/ui/Section';
+import { ShellContainer } from '@/components/ui/ShellContainer';
+import { games } from '@/lib/games/catalog';
 import styles from './page.module.css';
 
 export default function Home() {
+  const featured = games.slice(0, 3);
+
   return (
     <>
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.container}>
-          <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>
-              ✨ Transforme Pautas em Experiências
-            </div>
-
-            <h1 className={styles.heroTitle}>
-              Cada escolha<span className={styles.highlight}>é política</span>
-            </h1>
-
-            <p className={styles.heroDescription}>
-              No <strong>Hub de Jogos da Pré-Campanha</strong>, você não só
-              aprende sobre pautas reais—você vive, escolhe e descobre. Nossas
-              experiências interativas transformam dilemas políticos em
-              mecânicas lúdicas, educativas e compartilháveis.
-            </p>
-
-            <div className={styles.heroCTA}>
-              <Link href="/explorar" className={styles.ctaPrimary}>
-                Comece a Explorar
-              </Link>
-              <Link href="/sobre" className={styles.ctaSecondary}>
-                Saiba Mais
-              </Link>
-            </div>
-          </div>
-
-          <div className={styles.heroVisual}>
-            <div className={styles.visualBox}>
-              🎮 🏙️ 🗳️ ⚖️ 🧩
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Section */}
-      <section className={styles.featured}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Experiências em Destaque</h2>
-
-          <div className={styles.featuredGrid}>
-            {/* Feature 1 */}
-            <div className={styles.featureBox} style={{'--color': '#FFB81C'} as any}>
-              <div className={styles.featureIcon}>🗳️</div>
-              <h3>Voto Consciente</h3>
-              <p>
-                Descubra suas posições políticas reais respondendo sobre
-                pautas concretas.
-              </p>
-              <span className={styles.status}>🔴 Ao Vivo</span>
-            </div>
-
-            {/* Feature 2 */}
-            <div className={styles.featureBox} style={{'--color': '#FF1493'} as any}>
-              <div className={styles.featureIcon}>⚖️</div>
-              <h3>Escolhas Impossíveis</h3>
-              <p>
-                Diante de dilemas reais do trabalho urbano precário, qual é
-                sua escolha?
-              </p>
-              <span className={styles.status}>⭕ Em Breve</span>
-            </div>
-
-            {/* Feature 3 */}
-            <div className={styles.featureBox} style={{'--color': '#00D9FF'} as any}>
-              <div className={styles.featureIcon}>🏙️</div>
-              <h3>Cidade Real</h3>
-              <p>
-                Simule um orçamento municipal real. Como você distribuiria
-                recursos limitados?
-              </p>
-              <span className={styles.status}>🟡 Beta</span>
-            </div>
-          </div>
-
-          <div className={styles.featuredCTA}>
+      <PageHero
+        eyebrow="Hub político-jogável"
+        title="Jogue as contradições da cidade"
+        description="Cada experiência transforma uma pauta real em decisão. Você testa escolhas, vê consequências e sai com uma leitura política acionável."
+        actions={
+          <CTACluster>
             <Link href="/explorar" className={styles.ctaPrimary}>
-              Ver Todas as Experiências
+              Explorar experiências
+            </Link>
+            <Link href="/play/voto-consciente" className={styles.ctaSecondary}>
+              Jogar quiz inaugural
+            </Link>
+          </CTACluster>
+        }
+      >
+        <div className={styles.heroPanel}>
+          <h3>Fluxo do hub</h3>
+          <ol>
+            <li>Pauta real</li>
+            <li>Escolha jogável</li>
+            <li>Conflito revelado</li>
+            <li>Próxima ação</li>
+          </ol>
+        </div>
+      </PageHero>
+
+      <Section
+        eyebrow="Em destaque"
+        title="Portas de entrada para consciência e ação"
+        description="Não é entretenimento vazio: cada módulo expõe disputas de orçamento, trabalho, território e participação."
+      >
+        {featured.length ? (
+          <div className={styles.grid}>
+            {featured.map((game) => (
+              <GameCard key={game.id} game={game} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Sem experiências em destaque"
+            description="O catálogo está sendo atualizado."
+          />
+        )}
+      </Section>
+
+      <Section
+        eyebrow="Dramaturgia"
+        title="Do jogo para a leitura política"
+        description="Cada partida conecta quatro camadas: estrutura social, conflito, escolha possível e ação concreta no território."
+      >
+        <div className={styles.pillars}>
+          <article className={styles.pillar}>
+            <h4>Entender contradições</h4>
+            <p>Simular política pública torna visível o que o discurso costuma esconder.</p>
+          </article>
+          <article className={styles.pillar}>
+            <h4>Visualizar estruturas</h4>
+            <p>O foco sai do indivíduo isolado e aponta para regras, orçamento e território.</p>
+          </article>
+          <article className={styles.pillar}>
+            <h4>Compartilhar leitura</h4>
+            <p>Resultados do jogo viram linguagem comum para conversa política nas redes.</p>
+          </article>
+          <article className={styles.pillar}>
+            <h4>Entrar em ação</h4>
+            <p>Cada módulo termina com uma ação de continuidade: pressão pública, debate local ou mobilização.</p>
+          </article>
+        </div>
+      </Section>
+
+      <Section>
+        <ShellContainer className={styles.bottomCtaWrap}>
+          <div className={styles.bottomCta}>
+            <h3>Comece pelo quiz “Voto Consciente”</h3>
+            <p>Uma experiência real, já jogável, para mapear prioridades políticas sem simplificação panfletária.</p>
+            <Link href="/play/voto-consciente" className={styles.ctaPrimary}>
+              Jogar agora
             </Link>
           </div>
-        </div>
-      </section>
+        </ShellContainer>
+      </Section>
 
-      {/* Why This Matters Section */}
-      <section className={styles.whyMatters}>
-        <div className={styles.container}>
-          <h2 className={styles.sectionTitle}>Por Que Isso Importa</h2>
-
-          <div className={styles.pillarsGrid}>
-            <div className={styles.pillar}>
-              <h4>Educação Política</h4>
-              <p>
-                Pautas reais em mecânicas lúdicas. Você não aprende sobre
-                política—você vive dilemas políticos.
-              </p>
-            </div>
-
-            <div className={styles.pillar}>
-              <h4>Consciência + Ação</h4>
-              <p>
-                Cada experiência é orientada para que você saia não só
-                consciente, mas pronto pra agir.
-              </p>
-            </div>
-
-            <div className={styles.pillar}>
-              <h4>Compartilhável</h4>
-              <p>
-                Suas escolhas, seus resultados. Cada jogo gera um resultado
-                único e compartilhável nas redes.
-              </p>
-            </div>
-
-            <div className={styles.pillar}>
-              <h4>Urbano & Contemporâneo</h4>
-              <p>
-                Sem templates genéricos. Design inspirado em universos reais
-                de resistência e abandono urbano.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className={styles.finalCTA}>
-        <div className={styles.container}>
-          <h2>Pronto pra começar?</h2>
-          <p>A próxima experiência aguarda sua escolha.</p>
-          <Link href="/explorar" className={styles.ctaPrimary}>
-            Explorar Agora
-          </Link>
-        </div>
-      </section>
-
-      {/* Footer */}
       <footer className={styles.footer}>
-        <div className={styles.container}>
+        <ShellContainer>
           <div className={styles.footerContent}>
             <div className={styles.footerSection}>
-              <h4>Hub de Jogos</h4>
-              <p>Transforme pautas em experiências. Escolha. Aprenda. Aja.</p>
+              <h4>Hub de Jogos da Pré-Campanha</h4>
+              <p>Um universo político-jogável feito para ler a cidade e agir sobre ela.</p>
             </div>
 
             <div className={styles.footerSection}>
-              <h4>Explore</h4>
+              <h4>Rotas</h4>
               <ul>
                 <li>
-                  <Link href="/explorar">Todas as Experiências</Link>
+                  <Link href="/explorar">Explorar experiências</Link>
                 </li>
                 <li>
-                  <Link href="/sobre">Sobre o Projeto</Link>
+                  <Link href="/sobre">Sobre o projeto</Link>
                 </li>
                 <li>
                   <Link href="/participar">Participar</Link>
@@ -168,8 +121,8 @@ export default function Home() {
             </div>
 
             <div className={styles.footerSection}>
-              <h4>Social</h4>
-              <p>Em desenvolvimento. Compartilhe suas experiências.</p>
+              <h4>Próximo passo</h4>
+              <p>Jogue, compare resultado e leve a discussão para o seu território.</p>
             </div>
           </div>
 
@@ -182,7 +135,7 @@ export default function Home() {
               .
             </p>
           </div>
-        </div>
+        </ShellContainer>
       </footer>
     </>
   );

@@ -1,14 +1,16 @@
 'use client';
 
 import Link from 'next/link';
+import { Section } from '@/components/ui/Section';
+import { ShellContainer } from '@/components/ui/ShellContainer';
 import styles from './not-found.module.css';
 
 export default function NotFound() {
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
+    <Section>
+      <ShellContainer className={styles.wrap}>
         <div className={styles.content}>
-          <h1>404</h1>
+          <span className="eyebrow">404</span>
           <h2>Experiência não encontrada</h2>
           <p>
             A pauta que você procura não existe ou ainda está em
@@ -39,7 +41,7 @@ export default function NotFound() {
             </ul>
           </div>
         </div>
-      </div>
-    </div>
+      </ShellContainer>
+    </Section>
   );
 }
