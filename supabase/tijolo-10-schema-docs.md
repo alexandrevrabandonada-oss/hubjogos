@@ -1,6 +1,6 @@
 # Schema do Supabase – Tijolo 08
 
-Documentação das tabelas utilizadas para persistência remota de analytics do Hub de Jogos da Pré-Campanha.
+Documentação das tabelas utilizadas para persistência remota de analytics do Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado.
 
 O SQL de criação está em [`tijolo-04-minimal-schema.sql`](./tijolo-04-minimal-schema.sql) e é aplicado manualmente no console do Supabase.
 

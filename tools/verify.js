@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Verify Script - Hub de Jogos da Pré-Campanha
+ * Verify Script - Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado
  * 
  * Executa verificações essenciais do projeto
  * Objetivo: Validar estado da fundação antes de prosseguir

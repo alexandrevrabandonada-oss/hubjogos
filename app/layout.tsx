@@ -3,13 +3,13 @@ import { Header } from '@/components/layout/Header';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Hub de Jogos da Pré-Campanha',
+  title: 'Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado',
   description:
     'Hub político-jogável que transforma pautas urbanas em experiências de escolha, consequência e ação cidadã. Beta público aberto.',
   keywords: [
     'jogos políticos',
     'educação política',
-    'pré-campanha',
+    'pré-campanha de Alexandre Fonseca para Deputado',
     'simulação urbana',
     'interativo',
     'pwa',
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pt_BR',
     url: '/',
-    siteName: 'Hub de Jogos da Pré-Campanha',
-    title: 'Hub de Jogos da Pré-Campanha',
+    siteName: 'Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado',
+    title: 'Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado',
     description:
       'Jogue conflitos reais da cidade e descubra leituras políticas acionáveis. Beta público aberto.',
     images: [
@@ -32,13 +32,13 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Hub de Jogos da Pré-Campanha',
+        alt: 'Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Hub de Jogos da Pré-Campanha',
+    title: 'Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado',
     description:
       'Jogue conflitos reais da cidade e descubra leituras políticas acionáveis.',
   },

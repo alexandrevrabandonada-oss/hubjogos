@@ -51,7 +51,7 @@ const fallbackCta: OutcomeCtaConfig = {
     href: '/participar',
   },
   shareLine:
-    'Terminei uma experiência no Hub de Jogos da Pré-Campanha e descobri um recorte político importante para a cidade.',
+    'Terminei uma experiência no Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado e descobri um recorte político importante para a cidade.',
 };
 
 const byGame: Record<string, OutcomeCtaConfig> = {

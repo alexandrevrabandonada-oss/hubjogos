@@ -26,7 +26,7 @@ export default function SobrePage() {
               <h2>A Ideia</h2>
               <p>
                 A política é complexa. Mas não deveria ser inacessível. O
-                <strong>Hub de Jogos da Pré-Campanha</strong> acredita que
+                <strong>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</strong> acredita que
                 educação política pode ser lúdica, compartilhável e
                 transformadora.
               </p>

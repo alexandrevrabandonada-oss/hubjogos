@@ -47,7 +47,7 @@ export function buildPlayMetadata(slug: string): Metadata {
   const url = `${getSiteUrl()}/play/${slug}`;
 
   return {
-    title: `${game.title} - Hub de Jogos da Pré-Campanha`,
+    title: `${game.title} - Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado`,
     description: game.description,
     alternates: {
       canonical: url,
@@ -63,7 +63,7 @@ export function buildPlayMetadata(slug: string): Metadata {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: `${game.title} - Hub de Jogos da Pré-Campanha`,
+          alt: `${game.title} - Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado`,
         },
       ],
     },
@@ -108,7 +108,7 @@ export function buildShareMetadata({
       description: resolvedSummary,
       type: 'website',
       url: `${getSiteUrl()}/share/${gameSlug}/${resultId}`,
-      siteName: 'Hub de Jogos da Pré-Campanha',
+      siteName: 'Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado',
       images: [
         {
           url: imageUrl,

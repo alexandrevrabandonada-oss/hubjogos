@@ -25,7 +25,7 @@ export function Header() {
         <Link href="/" className={styles.logo}>
           <span className={styles.logoBlock}>HUB</span>
           <div className={styles.logoTextGroup}>
-            <span className={styles.logoText}>de Jogos da Pré-Campanha</span>
+            <span className={styles.logoText}>de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</span>
             <BetaBadge className={styles.headerBeta} />
           </div>
         </Link>

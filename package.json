@@ -1,7 +1,7 @@
 {
   "name": "hub-jogos-pre-campanha",
   "version": "0.0.1",
-  "description": "PWA - Hub de Jogos e Experiências Interativas para Pré-Campanha Política",
+  "description": "PWA - Hub de Jogos e Experiências Interativas para Pré-Campanha de Alexandre Fonseca para Deputado",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -36,7 +36,7 @@
     "react",
     "interactive"
   ],
-  "author": "Hub de Jogos Pré-Campanha Team",
+  "author": "Hub de Jogos Pré-Campanha de Alexandre Fonseca para Deputado Team",
   "license": "MIT",
   "engines": {
     "node": "20.x",

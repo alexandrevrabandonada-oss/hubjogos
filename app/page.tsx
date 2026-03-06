@@ -117,7 +117,7 @@ export default function Home() {
         <ShellContainer>
           <div className={styles.footerContent}>
             <div className={styles.footerSection}>
-              <h4>Hub de Jogos da Pré-Campanha</h4>
+              <h4>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</h4>
               <p>Um universo político-jogável feito para ler a cidade e agir sobre ela.</p>
             </div>
 
@@ -144,7 +144,7 @@ export default function Home() {
 
           <div className={styles.footerBottom}>
             <p>
-              © 2026 Hub de Jogos da Pré-Campanha. Código aberto em{' '}
+              © 2026 Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado. Código aberto em{' '}
               <a href="https://github.com/alexandrevrabandonada-oss/hubjogos">
                 GitHub
               </a>

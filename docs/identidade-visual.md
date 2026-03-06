@@ -1,4 +1,4 @@
-# Identidade Visual - Hub de Jogos da Pré-Campanha
+# Identidade Visual - Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado
 
 ## Direção (Tijolo 03)
 

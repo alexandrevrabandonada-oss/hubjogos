@@ -21,7 +21,7 @@ interface SharePageProps {
 
 export async function generateMetadata({ params, searchParams }: SharePageProps): Promise<Metadata> {
   const { game: gameSlug, result } = await params;
-  const { title = 'Resultado', summary = 'Completei uma experiência política no Hub de Jogos da Pré-Campanha' } = await searchParams;
+  const { title = 'Resultado', summary = 'Completei uma experiência política no Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado' } = await searchParams;
 
   return buildShareMetadata({
     gameSlug,

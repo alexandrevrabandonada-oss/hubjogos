@@ -1,8 +1,8 @@
-# Briefing - Hub de Jogos da Pré-Campanha
+# Briefing - Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado
 
 ## 📌 Definição de Produto
 
-**Nome:** Hub de Jogos da Pré-Campanha  
+**Nome:** Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado  
 **Tipo:** PWA (Progressive Web App)  
 **Plataforma:** Mobile-first, Web responsivo  
 **Status:** Fundação - Tijolo 01  
@@ -79,7 +79,7 @@ Detalhes em [identidade-visual.md](identidade-visual.md).
 
 - **Voto Consciente:** Quiz sobre propostas
 - **Cidade Real:** Puzzle sobre orçamento municipal
-- **Pré-Campanha:** Mini-game sobre campanhas
+- **Pré-Campanha de Alexandre Fonseca para Deputado:** Mini-game sobre campanhas
 - **Fact-Check:** Jogo de identificar fake news
 - (Mais de acordo com necessidades de pauta)
 

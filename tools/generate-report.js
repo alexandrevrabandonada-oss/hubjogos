@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Generate Report Script - Hub de Jogos da Pré-Campanha
+ * Generate Report Script - Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado
  * 
  * Gera relatório automático de Estado da Nação
  * Salva em reports/YYYY-MM-DD-HHMM-status.md
@@ -65,7 +65,7 @@ try {
   console.error('Could not read package.json');
 }
 
-const report = `# Estado da Nação - Hub de Jogos da Pré-Campanha
+const report = `# Estado da Nação - Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado
 
 **Data:** ${display}  
 **Status:** 🟡 Tijolo 01 - Estrutura Base em Andamento  

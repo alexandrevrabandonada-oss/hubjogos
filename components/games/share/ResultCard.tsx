@@ -28,7 +28,7 @@ export function ResultCard({ gameSlug, resultTitle, resultId, summary }: ResultC
         <div className={styles.gameIcon}>{game.icon}</div>
         <div className={styles.gameInfo}>
           <h2 className={styles.gameTitle}>{game.title}</h2>
-          <p className={styles.subtitle}>Hub de Jogos da Pré-Campanha</p>
+          <p className={styles.subtitle}>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</p>
         </div>
       </div>
 

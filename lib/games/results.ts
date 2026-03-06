@@ -73,7 +73,7 @@ export function resolveGameResultById(
 export function resolveDefaultResultSummary(gameSlug: string): string {
   const game = getGameBySlug(gameSlug);
   if (!game) {
-    return 'Completei uma experiência política no Hub de Jogos da Pré-Campanha';
+    return 'Completei uma experiência política no Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado';
   }
 
   if (game.kind === 'quiz') {

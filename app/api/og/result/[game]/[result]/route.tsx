@@ -50,7 +50,7 @@ export async function GET(
             fontFamily: 'Inter, system-ui, sans-serif',
           }}
         >
-          <div style={{ fontSize: 28, opacity: 0.85 }}>Hub de Jogos da Pré-Campanha</div>
+          <div style={{ fontSize: 28, opacity: 0.85 }}>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</div>
           <div style={{ fontSize: 58, lineHeight: 1.1, fontWeight: 700 }}>{title}</div>
           <div style={{ fontSize: 28, opacity: 0.85 }}>{truncate(summary)}</div>
         </div>

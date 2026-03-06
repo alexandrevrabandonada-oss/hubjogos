@@ -35,7 +35,7 @@ export async function GET(
             fontFamily: 'Inter, system-ui, sans-serif',
           }}
         >
-          <div style={{ fontSize: 28, opacity: 0.85 }}>Hub de Jogos da Pré-Campanha</div>
+          <div style={{ fontSize: 28, opacity: 0.85 }}>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</div>
           <div style={{ fontSize: 64, lineHeight: 1.1, fontWeight: 700 }}>Jogo não encontrado</div>
           <div style={{ fontSize: 30, opacity: 0.8 }}>Explore outros jogos em /explorar</div>
         </div>
@@ -61,7 +61,7 @@ export async function GET(
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: 28, opacity: 0.9 }}>Hub de Jogos da Pré-Campanha</div>
+          <div style={{ fontSize: 28, opacity: 0.9 }}>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</div>
           <div style={{ fontSize: 42 }}>{game.icon}</div>
         </div>
 
