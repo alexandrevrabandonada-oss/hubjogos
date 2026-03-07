@@ -59,6 +59,33 @@
   gap: 14px;
 }
 
+.seriesGrid,
+.territoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.seriesCard {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.seriesCard:hover {
+  border-color: var(--accent);
+}
+
+.seriesCard h4,
+.seriesCard p {
+  margin: 0;
+}
+
 .pillars {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));

@@ -6,6 +6,15 @@ export type AnalyticsEventName =
   | 'result_copy'
   | 'link_copy'
   | 'cta_click'
+  | 'first_interaction_time'
+  | 'replay_click'
+  | 'alternate_path_click'
+  | 'outcome_replay_intent'
+  | 'share_page_play_click'
+  | 'campaign_mark_click'
+  | 'series_click'
+  | 'next_series_experience_click'
+  | 'return_to_hub_after_outcome'
   // Eventos de saída granulares (Tijolo 16)
   | 'outcome_view'
   | 'primary_cta_click'
@@ -13,7 +22,13 @@ export type AnalyticsEventName =
   | 'share_page_view'
   | 'share_export_click'
   | 'next_game_click'
-  | 'hub_return_click';
+  | 'hub_return_click'
+  // Eventos de card final e avatar (Tijolo 22)
+  | 'final_card_view'
+  | 'final_card_download'
+  | 'final_card_share_click'
+  | 'campaign_avatar_view'
+  | 'campaign_cta_click_after_game';
 
 export interface AnalyticsEventPayload {
   sessionId: string;

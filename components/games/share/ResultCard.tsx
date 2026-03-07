@@ -1,11 +1,13 @@
 /**
  * Share Card Component
  * Card visual para compartilhamento de resultado
+ * Agora usa o sistema universal FinalShareCard
  */
 
 'use client';
 
 import { games } from '@/lib/games/catalog';
+import { FinalShareCard } from '@/components/campaign/FinalShareCard';
 import styles from './ResultCard.module.css';
 
 interface ResultCardProps {
@@ -23,28 +25,12 @@ export function ResultCard({ gameSlug, resultTitle, resultId, summary }: ResultC
   }
 
   return (
-    <div className={styles.card}>
-      <div className={styles.header}>
-        <div className={styles.gameIcon}>{game.icon}</div>
-        <div className={styles.gameInfo}>
-          <h2 className={styles.gameTitle}>{game.title}</h2>
-          <p className={styles.subtitle}>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</p>
-        </div>
-      </div>
-
-      <div className={styles.result}>
-        <h3 className={styles.resultTitle}>{resultTitle}</h3>
-        <p className={styles.summary}>{summary}</p>
-      </div>
-
-      <div className={styles.footer}>
-        <p className={styles.cta}>{game.cta}</p>
-        <p className={styles.attribution}>Experimente em jogo.precamp.com</p>
-      </div>
-
-      <div className={styles.watermark}>
-        Resultado #{resultId.slice(0, 8)}
-      </div>
-    </div>
+    <FinalShareCard
+      game={game}
+      resultTitle={resultTitle}
+      resultSummary={summary}
+      resultId={resultId}
+      showAvatar={true}
+    />
   );
 }

@@ -1,4 +1,4 @@
-import { Game } from './catalog';
+import { GAME_SERIES_LABELS, Game, getNextGameInSeries } from './catalog';
 
 export interface OutcomeAction {
   id: string;
@@ -146,7 +146,23 @@ const byGame: Record<string, OutcomeCtaConfig> = {
  * Retorna fallback se jogo não tiver CTA customizado
  */
 export function getOutcomeCta(game: Game): OutcomeCtaConfig {
-  return byGame[game.slug] || fallbackCta;
+  const baseCta = byGame[game.slug] || fallbackCta;
+  const nextInSeries = getNextGameInSeries(game);
+
+  if (!nextInSeries) {
+    return baseCta;
+  }
+
+  return {
+    ...baseCta,
+    secondary: {
+      id: `proxima-serie-${game.series}`,
+      label: `Próxima da série: ${GAME_SERIES_LABELS[game.series]}`,
+      href: `/play/${nextInSeries.slug}`,
+      category: 'related',
+      trackingId: 'cta_next_series',
+    },
+  };
 }
 
 /**

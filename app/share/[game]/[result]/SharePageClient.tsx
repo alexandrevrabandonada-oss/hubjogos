@@ -10,7 +10,16 @@ import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
 import { ResultCard } from '@/components/games/share/ResultCard';
 import { DownloadCardButton } from '@/components/games/share/DownloadCardButton';
-import { trackSharePageView, trackShareExportClick, trackNextGameClick, trackHubReturnClick } from '@/lib/analytics/track';
+import { CampaignMark } from '@/components/campaign/CampaignMark';
+import {
+  trackSharePageView,
+  trackShareExportClick,
+  trackNextGameClick,
+  trackHubReturnClick,
+  trackReplayClick,
+  trackSharePagePlayClick,
+  trackFinalCardView,
+} from '@/lib/analytics/track';
 import { resolveExperimentVariantClient } from '@/lib/experiments/client';
 import { games } from '@/lib/games/catalog';
 import styles from './share.module.css';
@@ -33,6 +42,7 @@ export function SharePageClient({ game, result, title, summary }: SharePageClien
     const gameObj = games.find((g) => g.slug === game);
     if (gameObj) {
       trackSharePageView(gameObj, result).catch(console.error);
+      trackFinalCardView(gameObj, result).catch(console.error);
     }
   }, [game, result]);
 
@@ -47,6 +57,8 @@ export function SharePageClient({ game, result, title, summary }: SharePageClien
     const gameObj = games.find((g) => g.slug === game);
     if (gameObj) {
       await trackNextGameClick(gameObj, game).catch(console.error);
+      await trackReplayClick(gameObj, 'share').catch(console.error);
+      await trackSharePagePlayClick(gameObj, game).catch(console.error);
     }
   };
 
@@ -78,6 +90,7 @@ export function SharePageClient({ game, result, title, summary }: SharePageClien
       />
 
       <div className={styles.instructions}>
+        <CampaignMark compact />
         <h3>Como compartilhar este resultado</h3>
         <ol>
           <li>
@@ -93,15 +106,18 @@ export function SharePageClient({ game, result, title, summary }: SharePageClien
 
         <div className={styles.reentryActions}>
           <Link href={`/play/${game}`} className={styles.reentryPrimary} onClick={handlePlayNowClick}>
-            {reentryVariant === 'strong-call' ? 'Jogar agora esta experiência' : 'Jogar novamente'}
+            {reentryVariant === 'strong-call' ? 'Voltar para jogar agora' : 'Testar outra rodada'}
           </Link>
           <Link href="/explorar" className={styles.reentrySecondary} onClick={handleExploreClick}>
-            Explorar outra experiência
+            Comparar com outro jogo
           </Link>
         </div>
 
         <p className={styles.reentryHint}>
-          Tempo estimado: 3-6 min. Tema: decisão política com consequência prática.
+          Tempo estimado: 3-6 min. Cada nova rodada muda sua leitura final.
+        </p>
+        <p className={styles.reentryHint}>
+          Jogue, compare, compartilhe e conheça a pré-campanha de Alexandre Fonseca para Deputado.
         </p>
       </div>
     </>

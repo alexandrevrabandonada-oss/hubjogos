@@ -8,10 +8,17 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { BetaBadge } from '@/components/ui/BetaBadge';
+import { CampaignMark } from '@/components/campaign/CampaignMark';
+import { trackCampaignMarkClick } from '@/lib/analytics/track';
 import styles from './Header.module.css';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const campaignTrackingGame = { slug: 'hub', kind: 'quiz', engineId: 'campaign-mark' } as any;
+
+  async function handleCampaignClick() {
+    await trackCampaignMarkClick(campaignTrackingGame, 'header').catch(console.error);
+  }
 
   const links = [
     { href: '/explorar', label: 'Explorar' },
@@ -25,10 +32,12 @@ export function Header() {
         <Link href="/" className={styles.logo}>
           <span className={styles.logoBlock}>HUB</span>
           <div className={styles.logoTextGroup}>
-            <span className={styles.logoText}>de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</span>
+            <span className={styles.logoText}>de Jogos</span>
             <BetaBadge className={styles.headerBeta} />
           </div>
         </Link>
+
+        <CampaignMark compact className={styles.campaignMarkInline} onClick={handleCampaignClick} />
 
         <nav className={styles.navDesktop}>
           {links.map((link) => (

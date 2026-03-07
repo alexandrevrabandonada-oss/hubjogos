@@ -141,6 +141,11 @@ Exibido antes de cada engine, explica:
 
 Aplicado nas 4 engines reais para reduzir fragmentação de UX.
 
+Ajuste recente de game feel:
+
+- bloco de inicio rapido para reduzir tempo ate a primeira acao;
+- CTA de entrada padronizada em `Jogar agora`.
+
 ## Outcome, CTA e share avançado
 
 Componente comum: `components/games/shared/GameOutcome.tsx`
@@ -174,6 +179,121 @@ Dashboard de métricas: `app/estado/page.tsx`
 - copiar link
 
 Modelo de CTA: `lib/games/ctas.ts`
+
+## Camada de replay e assinatura de campanha
+
+- `components/campaign/CampaignMark.tsx`: assinatura reutilizavel da pre-campanha.
+- `components/games/shared/GameOutcome.tsx`: incentivo explicito a replay e comparacao de rota.
+- `app/share/[game]/[result]/SharePageClient.tsx`: reentrada de share para play instrumentada.
+
+Eventos adicionais de produto:
+
+- `first_interaction_time`
+- `replay_click`
+- `outcome_replay_intent`
+- `share_page_play_click`
+- `campaign_mark_click`
+- `return_to_hub_after_outcome`
+
+## Linha editorial e escala territorial (Tijolo 21)
+
+O catalogo agora carrega metadados estruturais para suportar crescimento:
+
+- `pace`: `quick`, `session`, `deep`, `future-flagship`
+- `line`: denuncia, orcamento/cuidado, memoria/territorio, trabalho, mobilidade, organizacao popular, estado-rj
+- `series`: colecoes oficiais da campanha
+- `territoryScope`: volta-redonda, sul-fluminense, baixada, capital, estado-rj
+
+Uso pratico:
+
+- Home e Explorar exibem series e escada de formato.
+- Game cards e play pages exibem taxonomia e escopo.
+- `/estado` agrega leitura por serie, territorio e tipo de jogo.
+
+## Avatar oficial e card final universal (Tijolo 22)
+
+Sistema visual de campanha para crescimento organizado:
+
+### Avatar oficial
+
+- Documento mestre: `docs/avatar-oficial-alexandre-fonseca.md`
+- Asset base: `public/campaign/avatar/base.svg`
+- Componente: `components/campaign/CampaignAvatar.tsx`
+
+O avatar representa Alexandre Fonseca em linguagem estilizada de jogo, não fotografia crua.
+
+Tamanhos suportados:
+- `small` (48px) - tokens, chips
+- `medium` (80px) - cards
+- `large` (120px) - outcomes, share
+- `hero` (200px) - hero sections
+
+Variantes:
+- `portrait` - circular, padrão
+- `icon` - quadrado arredondado
+- `busto` - retangular arredondado
+
+### Card final universal
+
+- Componente: `components/campaign/FinalShareCard.tsx`
+- Frame base: `public/campaign/share/frame-base.svg`
+
+Todo jogo termina com card compartilhável consistente que inclui:
+- Avatar oficial
+- Título e descrição do jogo
+- Resultado do jogador
+- Taxonomia (série, território, pace)
+- Marca da pré-campanha
+- CTA de compartilhamento
+
+Integração:
+- `ResultCard` agora usa `FinalShareCard` internamente
+- Share pages exibem o card universal
+- Outcomes podem opcionalmente exibir preview do card
+
+### Pipeline de assets
+
+Estrutura organizada:
+```
+public/campaign/
+  avatar/
+    base.svg          # Avatar base SVG editável
+  share/
+    frame-base.svg    # Moldura padrão de share card
+```
+
+Documentação: `docs/assets/README.md`
+
+### Tracking
+
+Novos eventos de produto:
+- `final_card_view`
+- `final_card_download`
+- `final_card_share_click`
+- `campaign_avatar_view`
+- `campaign_cta_click_after_game`
+
+Leitura no `/estado`:
+- Seção dedicada "Card Final e Presença de Campanha"
+- Acompanhamento de adoção e engajamento
+
+### Limitações atuais
+
+Versão V1 (Tijolo 22):
+- Asset base é placeholder técnico estilizado
+- Representa conceito e estrutura, ainda precisa refinamento profissional
+- Componentes funcionais e prontos para substituição de asset final
+
+- `pace`: `quick`, `session`, `deep`, `future-flagship`
+- `line`: denuncia, orcamento/cuidado, memoria/territorio, trabalho, mobilidade, organizacao popular, estado-rj
+- `series`: colecoes oficiais da campanha
+- `territoryScope`: volta-redonda, sul-fluminense, baixada, capital, estado-rj
+
+Uso pratico:
+
+- Home e Explorar exibem series e escada de formato.
+- Game cards e play pages exibem taxonomia e escopo.
+- `/estado` agrega leitura por serie, territorio e tipo de jogo.
 
 ## OG dinâmico real (Tijolo 07)
 

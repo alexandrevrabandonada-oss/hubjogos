@@ -9,31 +9,72 @@ import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { ShellContainer } from '@/components/ui/ShellContainer';
 import { BetaBanner } from '@/components/ui/BetaBanner';
-import { games } from '@/lib/games/catalog';
+import { CampaignMark } from '@/components/campaign/CampaignMark';
+import {
+  games,
+  GAME_PACE_LABELS,
+  GAME_SERIES_LABELS,
+  TERRITORY_SCOPE_LABELS,
+  type GameSeries,
+} from '@/lib/games/catalog';
+import { trackCampaignMarkClick, trackSeriesClick } from '@/lib/analytics/track';
 import { resolveExperimentVariantClient } from '@/lib/experiments/client';
 import styles from './page.module.css';
 
 export default function Home() {
   const featured = games.slice(0, 3);
+  const referenceGame = games[0];
   const [heroVariant, setHeroVariant] = useState<'explore' | 'discover-now'>('explore');
+
+  const seriesEntries = Object.entries(GAME_SERIES_LABELS).map(([seriesKey, label]) => {
+    const seriesGames = games.filter((game) => game.series === seriesKey);
+    return {
+      key: seriesKey as GameSeries,
+      label,
+      count: seriesGames.length,
+      quick: seriesGames.filter((game) => game.pace === 'quick').length,
+      session: seriesGames.filter((game) => game.pace === 'session').length,
+      deep: seriesGames.filter((game) => game.pace === 'deep').length,
+      territories: Array.from(new Set(seriesGames.map((game) => game.territoryScope))),
+    };
+  });
+
+  const territoryEntries = Object.entries(TERRITORY_SCOPE_LABELS).map(([scope, label]) => ({
+    scope,
+    label,
+    count: games.filter((game) => game.territoryScope === scope).length,
+  }));
+
+  async function handleCampaignClick() {
+    await trackCampaignMarkClick({ slug: 'home', kind: 'quiz', engineId: 'campaign-mark' } as any, 'home-hero').catch(
+      console.error,
+    );
+  }
+
+  async function handleSeriesClick(series: GameSeries, placement: string) {
+    if (!referenceGame) {
+      return;
+    }
+    await trackSeriesClick(referenceGame as any, series, 'estado-rj', placement).catch(console.error);
+  }
 
   useEffect(() => {
     const variant = resolveExperimentVariantClient('home-hero-cta-copy', 'explore');
     setHeroVariant(variant === 'discover-now' ? 'discover-now' : 'explore');
   }, []);
 
-  const primaryHeroLabel = heroVariant === 'discover-now' ? 'Descubra agora' : 'Explorar experiencias';
+  const primaryHeroLabel = heroVariant === 'discover-now' ? 'Descubra agora' : 'Explorar experiências';
   const heroDescription =
     heroVariant === 'discover-now'
-      ? 'Cada experiência transforma uma pauta real em decisão. Você testa escolhas, vê consequências e sai com um próximo passo político claro.'
-      : 'Cada experiência transforma uma pauta real em decisão. Você testa escolhas, vê consequências e sai com uma leitura política acionável.';
+      ? 'Escolha, jogue e compare caminhos em poucos minutos. Cada experiência transforma pauta real em decisão concreta.'
+      : 'Diversão primeiro: você testa escolhas, vê consequências e sai com uma leitura política acionável.';
 
   return (
     <>
       <BetaBanner />
       <PageHero
-        eyebrow="Hub político-jogável"
-        title="Jogue as contradições da cidade"
+        eyebrow="Hub de Jogos da Pré-Campanha"
+        title="Jogue, compare, compartilhe: Missões eleitorais do RJ"
         description={heroDescription}
         actions={
           <CTACluster>
@@ -41,26 +82,50 @@ export default function Home() {
               {primaryHeroLabel}
             </Link>
             <Link href="/play/voto-consciente" className={styles.ctaSecondary}>
-              Jogar quiz inaugural
+              Jogar missão inaugural
             </Link>
           </CTACluster>
         }
       >
         <div className={styles.heroPanel}>
-          <h3>Fluxo do hub</h3>
+          <h3>Manifesto curto</h3>
           <ol>
-            <li>Pauta real</li>
-            <li>Escolha jogável</li>
-            <li>Conflito revelado</li>
-            <li>Próxima ação</li>
+            <li>Diversão primeiro, sermão nunca.</li>
+            <li>Volta Redonda como laboratório vivo.</li>
+            <li>Escala progressiva para todo o estado do RJ.</li>
+            <li>Pré-campanha de Alexandre Fonseca presente em cada rodada.</li>
           </ol>
+          <CampaignMark compact onClick={handleCampaignClick} />
         </div>
       </PageHero>
 
       <Section
+        eyebrow="Séries da campanha"
+        title="Não são jogos soltos. São coleções com continuidade."
+        description="Cada série organiza conflitos eleitorais em blocos jogáveis para fortalecer memória de marca e retorno recorrente."
+      >
+        <div className={styles.seriesGrid}>
+          {seriesEntries.map((entry) => (
+            <Link
+              key={entry.key}
+              href={`/explorar?serie=${entry.key}`}
+              className={styles.seriesCard}
+              onClick={() => handleSeriesClick(entry.key, 'home-series-grid')}
+            >
+              <h4>{entry.label}</h4>
+              <p>{entry.count} jogos no catálogo</p>
+              <p>
+                {entry.quick} quick • {entry.session} session • {entry.deep} deep
+              </p>
+            </Link>
+          ))}
+        </div>
+      </Section>
+
+      <Section
         eyebrow="Em destaque"
-        title="Portas de entrada para consciência e ação"
-        description="Não é entretenimento vazio: cada módulo expõe disputas de orçamento, trabalho, território e participação."
+        title="Portas de entrada para engajamento eleitoral"
+        description="Jogue rápido, compartilhe resultado e leve o nome de Alexandre Fonseca para o debate político local."
       >
         {featured.length ? (
           <div className={styles.grid}>
@@ -77,26 +142,37 @@ export default function Home() {
       </Section>
 
       <Section
-        eyebrow="Dramaturgia"
-        title="Do jogo para a leitura política"
-        description="Cada partida conecta quatro camadas: estrutura social, conflito, escolha possível e ação concreta no território."
+        eyebrow="Escala territorial"
+        title="Do laboratório local ao estado do Rio"
+        description="A arquitetura editorial já separa escopos para evoluir de Volta Redonda para Sul Fluminense, Baixada, Capital e Estado do RJ."
+      >
+        <div className={styles.territoryGrid}>
+          {territoryEntries.map((entry) => (
+            <article key={entry.scope} className={styles.pillar}>
+              <h4>{entry.label}</h4>
+              <p>{entry.count} jogos mapeados neste escopo.</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        eyebrow="Escada de produto"
+        title="Do minigame ao flagship"
+        description="Este ciclo prepara a progressão: jogos rápidos agora, jogos médios seriados em seguida, formatos maiores no futuro."
       >
         <div className={styles.pillars}>
           <article className={styles.pillar}>
-            <h4>Entender contradições</h4>
-            <p>Simular política pública torna visível o que o discurso costuma esconder.</p>
+            <h4>Jogos rápidos</h4>
+            <p>{GAME_PACE_LABELS.quick}: entrada instantânea para descoberta e compartilhamento.</p>
           </article>
           <article className={styles.pillar}>
-            <h4>Visualizar estruturas</h4>
-            <p>O foco sai do indivíduo isolado e aponta para regras, orçamento e território.</p>
+            <h4>Jogos médios seriados</h4>
+            <p>{GAME_PACE_LABELS.session}: continuidade por série para aumentar replay e retenção.</p>
           </article>
           <article className={styles.pillar}>
-            <h4>Compartilhar leitura</h4>
-            <p>Resultados do jogo viram linguagem comum para conversa política nas redes.</p>
-          </article>
-          <article className={styles.pillar}>
-            <h4>Entrar em ação</h4>
-            <p>Cada módulo termina com uma ação de continuidade: pressão pública, debate local ou mobilização.</p>
+            <h4>Flagships futuros</h4>
+            <p>{GAME_PACE_LABELS['future-flagship']}: plataforma, RPG e tycoon como horizonte de campanha.</p>
           </article>
         </div>
       </Section>
@@ -105,7 +181,7 @@ export default function Home() {
         <ShellContainer className={styles.bottomCtaWrap}>
           <div className={styles.bottomCta}>
             <h3>Comece pelo quiz “Voto Consciente”</h3>
-            <p>Uma experiência real, já jogável, para mapear prioridades políticas sem simplificação panfletária.</p>
+            <p>Uma rodada rápida para mapear prioridades e abrir conversa política sem tom de sermão.</p>
             <Link href="/play/voto-consciente" className={styles.ctaPrimary}>
               Jogar agora
             </Link>

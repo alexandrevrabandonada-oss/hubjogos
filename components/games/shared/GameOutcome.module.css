@@ -5,7 +5,8 @@
 
 .revelation,
 .nextAction,
-.summary {
+.summary,
+.replayCue {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface-2);
@@ -16,8 +17,14 @@
 
 .revelation p,
 .nextAction p,
-.summary p {
+.summary p,
+.replayCue p {
   margin: 0;
+}
+
+.replayCue {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
 }
 
 .links {

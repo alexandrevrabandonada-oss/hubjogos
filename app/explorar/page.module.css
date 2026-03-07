@@ -33,8 +33,48 @@
 }
 
 .grid {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 14px;
+}
+
+.seriesGrid,
+.taxonomyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.seriesCard {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent-primary) 8%, var(--bg-primary));
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.seriesCard:hover {
+  border-color: var(--accent-primary);
+}
+
+.seriesCardActive {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-primary) 35%, transparent) inset;
+}
+
+.seriesCard h4,
+.seriesCard p {
+  margin: 0;
+}
+
+.seriesCard span {
+  margin-top: var(--space-xs);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--accent-primary);
 }
 
 .engineTypes {

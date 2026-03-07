@@ -1,0 +1,36 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Frame base para share cards do Hub de Jogos da Pré-Campanha -->
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FFFCF5"/>
+  
+  <!-- Border accent -->
+  <rect x="0" y="0" width="1200" height="8" fill="#FFB81C"/>
+  <rect x="0" y="622" width="1200" height="8" fill="#FFB81C"/>
+  
+  <!-- Moldura interna -->
+  <rect x="30" y="30" width="1140" height="570" stroke="#E5D5B8" stroke-width="2" fill="none" rx="8"/>
+  
+  <!-- Pattern de fundo leve -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="#FFB81C" opacity="0.05"/>
+    </pattern>
+  </defs>
+  <rect x="30" y="30" width="1140" height="570" fill="url(#grid)"/>
+  
+  <!-- Área de conteúdo (placeholder) -->
+  <rect x="60" y="60" width="1080" height="510" fill="transparent"/>
+  
+  <!-- Footer area -->
+  <rect x="60" y="540" width="1080" height="60" fill="#FFF9ED"/>
+  
+  <!-- Texto padrão footer -->
+  <text x="600" y="575" font-family="Inter, sans-serif" font-size="20" font-weight="600" fill="#2D2416" text-anchor="middle">
+    Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado
+  </text>
+  
+  <!-- Badge corner -->
+  <circle cx="1120" cy="80" r="40" fill="#FFB81C"/>
+  <text x="1120" y="92" font-family="Inter, sans-serif" font-size="28" font-weight="700" fill="#1a1508" text-anchor="middle">AF</text>
+</svg>

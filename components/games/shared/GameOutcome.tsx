@@ -4,12 +4,18 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { CampaignMark } from '@/components/campaign/CampaignMark';
 import { OutcomeCtaConfig } from '@/lib/games/ctas';
 import { MicroFeedback } from '@/components/ui/MicroFeedback';
 import {
   trackLinkCopy,
+  trackCampaignMarkClick,
   trackOutcomeView,
+  trackOutcomeReplayIntent,
+  trackNextSeriesExperienceClick,
   trackPrimaryCtaClick,
+  trackReplayClick,
+  trackReturnToHubAfterOutcome,
   trackSecondaryCtaClick,
   trackNextGameClick,
   trackHubReturnClick,
@@ -99,11 +105,13 @@ export function GameOutcome({
       const parts = href.split('/').filter(Boolean);
       const nextSlug = parts.length >= 2 ? parts[1] : 'unknown';
       await trackNextGameClick(game as any, nextSlug).catch(console.error);
+      await trackOutcomeReplayIntent(game as any, 'alternate_route').catch(console.error);
       return;
     }
 
     if (href.startsWith('/explorar') || href === '/') {
       await trackHubReturnClick(game as any, href).catch(console.error);
+      await trackReturnToHubAfterOutcome(game as any, href).catch(console.error);
     }
   }
 
@@ -124,15 +132,39 @@ export function GameOutcome({
       category: ctas.secondary.category || 'related',
     }).catch(console.error);
     await trackNavigationByHref(ctas.secondary.href);
+
+    if (ctaId.startsWith('proxima-serie-') && ctas.secondary.href.startsWith('/play/')) {
+      const parts = ctas.secondary.href.split('/').filter(Boolean);
+      const targetSlug = parts.length >= 2 ? parts[1] : 'unknown';
+      await trackNextSeriesExperienceClick(
+        game as any,
+        (game as any).series || 'unknown',
+        targetSlug,
+        (game as any).territoryScope || 'unknown',
+      ).catch(console.error);
+    }
+
     if (onCtaClick) {
       await onCtaClick(ctaId);
     }
+  }
+
+  async function handleRestart() {
+    await trackReplayClick(game as any, 'outcome').catch(console.error);
+    await trackOutcomeReplayIntent(game as any, 'replay').catch(console.error);
+    onRestart();
   }
 
   return (
     <Card className={styles.outcome}>
       <span className="eyebrow">{eyebrow}</span>
       <h3>{title}</h3>
+      <CampaignMark
+        compact
+        onClick={() => {
+          void trackCampaignMarkClick(game as any, 'outcome-card');
+        }}
+      />
 
       <div className={styles.revelation}>
         <strong>Leitura política</strong>
@@ -153,6 +185,11 @@ export function GameOutcome({
         <p>{summary}</p>
       </div>
 
+      <div className={styles.replayCue}>
+        <strong>Quer testar outra estratégia?</strong>
+        <p>Troque uma decisão-chave e veja como o resultado muda.</p>
+      </div>
+
       <div className={styles.links}>
         <Link
           href={ctas.primary.href}
@@ -171,7 +208,7 @@ export function GameOutcome({
       </div>
 
       <div className={styles.actions}>
-        <Button onClick={onRestart}>Reiniciar</Button>
+        <Button onClick={handleRestart}>Jogar de novo</Button>
         <Button onClick={handleCopySummary} variant="ghost">
           Copiar resumo
         </Button>

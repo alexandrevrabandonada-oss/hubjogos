@@ -1,13 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Game } from '@/lib/games/catalog';
 import { GameOutcome } from '@/components/games/shared/GameOutcome';
 import { EngineIntro } from '@/components/games/shared/EngineIntro';
 import { getOutcomeCta } from '@/lib/games/ctas';
-import { trackStepAdvance, trackGameComplete, trackCtaClick } from '@/lib/analytics/track';
+import {
+  trackStepAdvance,
+  trackGameComplete,
+  trackCtaClick,
+  trackFirstInteractionTime,
+} from '@/lib/analytics/track';
 import {
   createInitialSimulationState,
   updateBudgetCategory,
@@ -29,6 +34,8 @@ export function SimulationEngine({ definition, game }: SimulationEngineProps) {
   const [showIntro, setShowIntro] = useState(true);
   const [state, setState] = useState<SimulationState | null>(null);
   const [feedback, setFeedback] = useState('');
+  const introClosedAt = useRef<number | null>(null);
+  const firstInteractionTracked = useRef(false);
 
   // Inicializa
   useEffect(() => {
@@ -48,7 +55,10 @@ export function SimulationEngine({ definition, game }: SimulationEngineProps) {
         description={game.shortDescription}
         duration={game.duration}
         whatYouDiscover={definition.subtitle}
-        onStart={() => setShowIntro(false)}
+        onStart={() => {
+          introClosedAt.current = Date.now();
+          setShowIntro(false);
+        }}
         icon={game.icon}
       />
     );
@@ -63,6 +73,8 @@ export function SimulationEngine({ definition, game }: SimulationEngineProps) {
       setState(initial);
       setFeedback('');
       setShowIntro(true);
+      firstInteractionTracked.current = false;
+      introClosedAt.current = null;
     };
 
     return (
@@ -85,6 +97,12 @@ export function SimulationEngine({ definition, game }: SimulationEngineProps) {
   const progress = getProgressPercent(state, definition);
 
   const handleAllocate = (categoryKey: keyof typeof state.budget, amount: number) => {
+    if (!firstInteractionTracked.current) {
+      firstInteractionTracked.current = true;
+      const elapsed = introClosedAt.current ? Date.now() - introClosedAt.current : 0;
+      void trackFirstInteractionTime(game, elapsed, 'budget_adjust');
+    }
+
     const updated = updateBudgetCategory(state, categoryKey, amount);
     setState(updated);
   };

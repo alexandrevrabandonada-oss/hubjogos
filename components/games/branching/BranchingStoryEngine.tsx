@@ -16,6 +16,7 @@ import { Game } from '@/lib/games/catalog';
 import { getOutcomeCta } from '@/lib/games/ctas';
 import {
   trackCtaClick,
+  trackFirstInteractionTime,
   trackGameComplete,
   trackLinkCopy,
   trackResultCopy,
@@ -34,6 +35,8 @@ export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps)
   const [history, setHistory] = useState<Array<{ nodeId: string; choiceId: string }>>([]);
   const [endingId, setEndingId] = useState<string | null>(null);
   const completedRef = useRef(false);
+  const introClosedAt = useRef<number | null>(null);
+  const firstInteractionTracked = useRef(false);
 
   const currentNode = getBranchingNode(story, currentNodeId);
   const ctas = getOutcomeCta(game);
@@ -48,6 +51,12 @@ export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps)
   async function handleChoice(choiceId: string) {
     if (!currentNode) {
       return;
+    }
+
+    if (!firstInteractionTracked.current) {
+      firstInteractionTracked.current = true;
+      const elapsed = introClosedAt.current ? Date.now() - introClosedAt.current : 0;
+      await trackFirstInteractionTime(game, elapsed, 'branch_choice').catch(console.error);
     }
 
     const step = history.length + 1;
@@ -86,6 +95,8 @@ export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps)
 
   function restart() {
     completedRef.current = false;
+    firstInteractionTracked.current = false;
+    introClosedAt.current = null;
     setCurrentNodeId(story.startNodeId);
     setHistory([]);
     setEndingId(null);
@@ -100,7 +111,10 @@ export function BranchingStoryEngine({ story, game }: BranchingStoryEngineProps)
         description={game.shortDescription}
         duration={game.duration}
         whatYouDiscover={story.subtitle}
-        onStart={() => setShowIntro(false)}
+        onStart={() => {
+          introClosedAt.current = Date.now();
+          setShowIntro(false);
+        }}
         icon={game.icon}
       />
     );

@@ -1,13 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Game } from '@/lib/games/catalog';
 import { GameOutcome } from '@/components/games/shared/GameOutcome';
 import { EngineIntro } from '@/components/games/shared/EngineIntro';
 import { getOutcomeCta } from '@/lib/games/ctas';
-import { trackStepAdvance, trackGameComplete, trackCtaClick } from '@/lib/analytics/track';
+import {
+  trackStepAdvance,
+  trackGameComplete,
+  trackCtaClick,
+  trackFirstInteractionTime,
+} from '@/lib/analytics/track';
 import {
   createInitialMapState,
   visitPoint,
@@ -36,6 +41,8 @@ export function MapEngine({ definition, game }: MapEngineProps) {
   const [showIntro, setShowIntro] = useState(true);
   const [state, setState] = useState<MapState | null>(null);
   const [selectedPointId, setSelectedPointId] = useState<string | null>(null);
+  const introClosedAt = useRef<number | null>(null);
+  const firstInteractionTracked = useRef(false);
 
   useEffect(() => {
     const initial = createInitialMapState(definition);
@@ -54,7 +61,10 @@ export function MapEngine({ definition, game }: MapEngineProps) {
         description={game.shortDescription}
         duration={game.duration}
         whatYouDiscover={definition.description}
-        onStart={() => setShowIntro(false)}
+        onStart={() => {
+          introClosedAt.current = Date.now();
+          setShowIntro(false);
+        }}
         icon={game.icon}
       />
     );
@@ -68,6 +78,8 @@ export function MapEngine({ definition, game }: MapEngineProps) {
       setState(initial);
       setSelectedPointId(null);
       setShowIntro(true);
+      firstInteractionTracked.current = false;
+      introClosedAt.current = null;
     };
 
     return (
@@ -92,6 +104,12 @@ export function MapEngine({ definition, game }: MapEngineProps) {
   const handlePointClick = async (pointId: string) => {
     const point = state.points[pointId];
     if (!point) return;
+
+    if (!firstInteractionTracked.current) {
+      firstInteractionTracked.current = true;
+      const elapsed = introClosedAt.current ? Date.now() - introClosedAt.current : 0;
+      await trackFirstInteractionTime(game, elapsed, 'map_point_open').catch(console.error);
+    }
 
     setSelectedPointId(pointId);
 

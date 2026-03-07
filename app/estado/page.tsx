@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { games } from '@/lib/games/catalog';
+import { GAME_SERIES_LABELS, TERRITORY_SCOPE_LABELS, games } from '@/lib/games/catalog';
 import { collectBestAvailableMetrics } from '@/lib/analytics/metrics';
 import type { MetricsSnapshot } from '@/lib/analytics/metrics';
 import type { TimeWindow } from '@/lib/analytics/windowing';
@@ -315,6 +315,72 @@ export default function EstadoPage() {
       ? Math.round((metrics.completedSessions / metrics.totalSessions) * 100)
       : 0;
 
+  const firstInteractionCount = metrics.eventsByType.first_interaction_time || 0;
+  const replayClickCount = metrics.eventsByType.replay_click || 0;
+  const replayIntentCount = metrics.eventsByType.outcome_replay_intent || 0;
+  const sharePlayClickCount = metrics.eventsByType.share_page_play_click || 0;
+  const campaignMarkClickCount = metrics.eventsByType.campaign_mark_click || 0;
+  const returnHubAfterOutcomeCount = metrics.eventsByType.return_to_hub_after_outcome || 0;
+
+  const firstInteractionCoverage =
+    metrics.funnel.starts > 0 ? Math.round((firstInteractionCount / metrics.funnel.starts) * 100) : 0;
+  const replayIntentRate =
+    metrics.funnel.completions > 0
+      ? Math.round(((replayClickCount + replayIntentCount) / metrics.funnel.completions) * 100)
+      : 0;
+  const shareReentryPlayRate =
+    metrics.circulation.shareReentry.sharePageViews > 0
+      ? Math.round((sharePlayClickCount / metrics.circulation.shareReentry.sharePageViews) * 100)
+      : 0;
+
+  const gameBySlug = new Map(games.map((game) => [game.slug, game]));
+
+  const seriesSummary = Object.entries(GAME_SERIES_LABELS).map(([series, label]) => {
+    const inSeries = metrics.gamesSorted.filter((row) => gameBySlug.get(row.slug)?.series === series);
+    const initiated = inSeries.reduce((sum, row) => sum + row.initiated, 0);
+    const completed = inSeries.reduce((sum, row) => sum + row.completed, 0);
+    const shares = inSeries.reduce((sum, row) => sum + row.shares, 0);
+    return {
+      series,
+      label,
+      initiated,
+      completed,
+      shares,
+      completionRate: initiated > 0 ? Math.round((completed / initiated) * 100) : 0,
+    };
+  });
+
+  const territorySummary = Object.entries(TERRITORY_SCOPE_LABELS).map(([scope, label]) => {
+    const inScope = metrics.gamesSorted.filter((row) => gameBySlug.get(row.slug)?.territoryScope === scope);
+    const initiated = inScope.reduce((sum, row) => sum + row.initiated, 0);
+    const completed = inScope.reduce((sum, row) => sum + row.completed, 0);
+    const shares = inScope.reduce((sum, row) => sum + row.shares, 0);
+    return {
+      scope,
+      label,
+      initiated,
+      completed,
+      shares,
+      completionRate: initiated > 0 ? Math.round((completed / initiated) * 100) : 0,
+    };
+  });
+
+  const replayByKind = Object.entries(metrics.gamesSorted.reduce<Record<string, { initiated: number; completed: number; shares: number }>>((acc, row) => {
+    const kind = gameBySlug.get(row.slug)?.kind || 'unknown';
+    if (!acc[kind]) {
+      acc[kind] = { initiated: 0, completed: 0, shares: 0 };
+    }
+    acc[kind].initiated += row.initiated;
+    acc[kind].completed += row.completed;
+    acc[kind].shares += row.shares;
+    return acc;
+  }, {})).map(([kind, data]) => ({
+    kind,
+    initiated: data.initiated,
+    replaySignal:
+      data.initiated > 0 ? Math.round(((data.completed + data.shares) / data.initiated) * 100) : 0,
+  }));
+
   const sourceLabel = isSupabaseConfigured
     ? metrics.source === 'hybrid'
       ? '🔵 híbrido (local + remoto)'
@@ -615,7 +681,53 @@ export default function EstadoPage() {
             <h3>Eventos Capturados</h3>
             <p className={styles.largeNumber}>{metrics.totalEvents}</p>
           </Card>
+
+          <Card className={styles.card}>
+            <h3>Cobertura de 1ª interação</h3>
+            <p className={styles.largeNumber}>{firstInteractionCoverage}%</p>
+          </Card>
+
+          <Card className={styles.card}>
+            <h3>Intenção de replay</h3>
+            <p className={styles.largeNumber}>{replayIntentRate}%</p>
+          </Card>
+
+          <Card className={styles.card}>
+            <h3>Share → jogar</h3>
+            <p className={styles.largeNumber}>{shareReentryPlayRate}%</p>
+          </Card>
+
+          <Card className={styles.card}>
+            <h3>Cliques na assinatura</h3>
+            <p className={styles.largeNumber}>{campaignMarkClickCount}</p>
+          </Card>
         </div>
+
+        <Card className={styles.fullCard}>
+          <h3>Sinais de Diversão e Replay</h3>
+          <div className={styles.eventsList}>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>first_interaction_time</span>
+              <span className={styles.eventCount}>{firstInteractionCount}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>replay_click</span>
+              <span className={styles.eventCount}>{replayClickCount}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>outcome_replay_intent</span>
+              <span className={styles.eventCount}>{replayIntentCount}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>share_page_play_click</span>
+              <span className={styles.eventCount}>{sharePlayClickCount}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>return_to_hub_after_outcome</span>
+              <span className={styles.eventCount}>{returnHubAfterOutcomeCount}</span>
+            </div>
+          </div>
+        </Card>
 
         {/* Top Origens */}
         <Card className={styles.fullCard}>
@@ -701,6 +813,112 @@ export default function EstadoPage() {
               </tbody>
             </table>
           </div>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Editorial da Campanha: Séries</h3>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Série</th>
+                  <th>Acessos</th>
+                  <th>Compartilhamentos</th>
+                  <th>Conversão</th>
+                </tr>
+              </thead>
+              <tbody>
+                {seriesSummary
+                  .sort((a, b) => b.initiated - a.initiated)
+                  .map((row) => (
+                    <tr key={row.series}>
+                      <td className={styles.gameTitle}>{row.label}</td>
+                      <td className={styles.numeric}>{row.initiated}</td>
+                      <td className={styles.numeric}>{row.shares}</td>
+                      <td className={styles.numeric}>{row.completionRate}%</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Conversão por Escopo Territorial</h3>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Escopo</th>
+                  <th>Acessos</th>
+                  <th>Compartilhamentos</th>
+                  <th>Conversão</th>
+                </tr>
+              </thead>
+              <tbody>
+                {territorySummary
+                  .sort((a, b) => b.initiated - a.initiated)
+                  .map((row) => (
+                    <tr key={row.scope}>
+                      <td className={styles.gameTitle}>{row.label}</td>
+                      <td className={styles.numeric}>{row.initiated}</td>
+                      <td className={styles.numeric}>{row.shares}</td>
+                      <td className={styles.numeric}>{row.completionRate}%</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Replay por Tipo de Jogo (sinal leve)</h3>
+          <p className={styles.techNote}>
+            Indicador proxy: (conclusões + shares) / acessos por tipo.
+          </p>
+          <div className={styles.eventsList}>
+            {replayByKind
+              .sort((a, b) => b.replaySignal - a.replaySignal)
+              .map((row) => (
+                <div key={row.kind} className={styles.eventRow}>
+                  <span className={styles.eventLabel}>{row.kind}</span>
+                  <span className={styles.eventCount}>{row.replaySignal}%</span>
+                </div>
+              ))}
+          </div>
+        </Card>
+
+        {/* === CARD FINAL E PRESENÇA DE CAMPANHA (Tijolo 22) === */}
+        <Card className={styles.fullCard}>
+          <h3>Card Final e Presença de Campanha</h3>
+          <p className={styles.techNote}>
+            Sinais de adoção do card final universal e avatar oficial (Tijolo 22).
+          </p>
+          <div className={styles.eventsList}>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>final_card_view</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['final_card_view'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>final_card_download</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['final_card_download'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>final_card_share_click</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['final_card_share_click'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>campaign_avatar_view</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['campaign_avatar_view'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>campaign_cta_click_after_game</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['campaign_cta_click_after_game'] || 0}</span>
+            </div>
+          </div>
+          <p className={styles.techNote}>
+            Valores baixos são normais no início. Acompanhar tendência nas próximas janelas.
+          </p>
         </Card>
 
         {/* === NOVAS SEÇÕES: COORTES === */}

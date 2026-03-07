@@ -10,6 +10,7 @@ import { Game } from '@/lib/games/catalog';
 import { Card } from '@/components/ui/Card';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { MetaChip } from '@/components/ui/MetaChip';
+import { trackSeriesClick } from '@/lib/analytics/track';
 import styles from './GameCard.module.css';
 
 interface GameCardProps {
@@ -17,8 +18,12 @@ interface GameCardProps {
 }
 
 export function GameCard({ game }: GameCardProps) {
+  async function handleCardClick() {
+    await trackSeriesClick(game as any, game.series, game.territoryScope, 'game-card').catch(console.error);
+  }
+
   return (
-    <Link href={`/play/${game.slug}`} className={styles.linkWrap}>
+    <Link href={`/play/${game.slug}`} className={styles.linkWrap} onClick={handleCardClick}>
       <Card interactive className={styles.card}>
         <div
           className={styles.accentBar}
@@ -37,7 +42,10 @@ export function GameCard({ game }: GameCardProps) {
 
         <div className={styles.meta}>
           <MetaChip icon="⏱">{game.estimatedMinutes} min</MetaChip>
+          <MetaChip icon="⚡">{game.pace}</MetaChip>
           <MetaChip icon="📌">{game.theme}</MetaChip>
+          <MetaChip icon="🗺">{game.territoryScope}</MetaChip>
+          <MetaChip icon="🧱">{game.series.replace('serie-', '')}</MetaChip>
           <MetaChip icon="🧭">{game.kind}</MetaChip>
           <MetaChip icon={game.runtimeState === 'real' ? '✅' : '🧱'}>
             {game.runtimeState === 'real' ? 'engine real' : 'shell'}

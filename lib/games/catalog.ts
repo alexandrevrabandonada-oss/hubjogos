@@ -13,6 +13,60 @@ export type GameKind =
   | 'map';
 
 export type RuntimeState = 'real' | 'shell';
+export type GamePace = 'quick' | 'session' | 'deep' | 'future-flagship';
+export type GameLine =
+  | 'denuncia'
+  | 'orcamento-cuidado'
+  | 'memoria-territorio'
+  | 'trabalho'
+  | 'mobilidade'
+  | 'organizacao-popular'
+  | 'estado-rj';
+export type TerritoryScope =
+  | 'volta-redonda'
+  | 'sul-fluminense'
+  | 'baixada'
+  | 'capital'
+  | 'estado-rj';
+export type GameSeries =
+  | 'serie-volta-redonda'
+  | 'serie-trabalho-sobrevivencia'
+  | 'serie-cidade-abandonada'
+  | 'serie-rio-de-janeiro'
+  | 'serie-campanha-missoes-estado';
+
+export const GAME_PACE_LABELS: Record<GamePace, string> = {
+  quick: '30s-2min',
+  session: '2-6min',
+  deep: '6min+',
+  'future-flagship': 'formato futuro',
+};
+
+export const GAME_LINE_LABELS: Record<GameLine, string> = {
+  denuncia: 'Denuncia',
+  'orcamento-cuidado': 'Orcamento e Cuidado',
+  'memoria-territorio': 'Memoria e Territorio',
+  trabalho: 'Trabalho',
+  mobilidade: 'Mobilidade',
+  'organizacao-popular': 'Organizacao Popular',
+  'estado-rj': 'Estado do RJ',
+};
+
+export const GAME_SERIES_LABELS: Record<GameSeries, string> = {
+  'serie-volta-redonda': 'Serie Volta Redonda',
+  'serie-trabalho-sobrevivencia': 'Serie Trabalho e Sobrevivencia',
+  'serie-cidade-abandonada': 'Serie Cidade Abandonada',
+  'serie-rio-de-janeiro': 'Serie Rio de Janeiro',
+  'serie-campanha-missoes-estado': 'Serie Campanha / Missoes do Estado',
+};
+
+export const TERRITORY_SCOPE_LABELS: Record<TerritoryScope, string> = {
+  'volta-redonda': 'Volta Redonda',
+  'sul-fluminense': 'Sul Fluminense',
+  baixada: 'Baixada',
+  capital: 'Capital',
+  'estado-rj': 'Estado do Rio de Janeiro',
+};
 
 export interface Game {
   id: string;
@@ -34,6 +88,10 @@ export interface Game {
   color: string;
   kind: GameKind;
   engineId?: string;
+  pace: GamePace;
+  line: GameLine;
+  territoryScope: TerritoryScope;
+  series: GameSeries;
 }
 
 export const games: Game[] = [
@@ -58,6 +116,10 @@ export const games: Game[] = [
     color: '#C97E2F',
     kind: 'simulation',
     engineId: 'cidade-real-v1',
+    pace: 'deep',
+    line: 'orcamento-cuidado',
+    territoryScope: 'volta-redonda',
+    series: 'serie-volta-redonda',
   },
   {
     id: 'abandonado',
@@ -80,6 +142,10 @@ export const games: Game[] = [
     color: '#7A6A52',
     kind: 'map',
     engineId: 'abandonado-v1',
+    pace: 'deep',
+    line: 'memoria-territorio',
+    territoryScope: 'volta-redonda',
+    series: 'serie-cidade-abandonada',
   },
   {
     id: 'trabalho-impossivel',
@@ -102,6 +168,10 @@ export const games: Game[] = [
     color: '#A6472D',
     kind: 'narrative',
     engineId: 'trabalho-impossivel-v1',
+    pace: 'session',
+    line: 'trabalho',
+    territoryScope: 'sul-fluminense',
+    series: 'serie-trabalho-sobrevivencia',
   },
   {
     id: 'voto-consciente',
@@ -124,6 +194,10 @@ export const games: Game[] = [
     color: '#FFB81C',
     kind: 'quiz',
     engineId: 'voto-consciente',
+    pace: 'session',
+    line: 'organizacao-popular',
+    territoryScope: 'estado-rj',
+    series: 'serie-campanha-missoes-estado',
   },
   {
     id: 'memoria-coletiva',
@@ -146,6 +220,10 @@ export const games: Game[] = [
     color: '#99845B',
     kind: 'narrative',
     engineId: 'memoria-coletiva-v1',
+    pace: 'session',
+    line: 'memoria-territorio',
+    territoryScope: 'volta-redonda',
+    series: 'serie-cidade-abandonada',
   },
   {
     id: 'transporte-urgente',
@@ -168,6 +246,10 @@ export const games: Game[] = [
     color: '#8F5C2A',
     kind: 'branching_story',
     engineId: 'transporte-urgente',
+    pace: 'session',
+    line: 'mobilidade',
+    territoryScope: 'volta-redonda',
+    series: 'serie-volta-redonda',
   },
 ];
 
@@ -181,6 +263,19 @@ export function getGamesByTheme(theme: GameTheme): Game[] {
 
 export function getGamesByStatus(status: GameStatus): Game[] {
   return games.filter((game) => game.status === status);
+}
+
+export function getGamesBySeries(series: GameSeries): Game[] {
+  return games.filter((game) => game.series === series);
+}
+
+export function getGamesByTerritory(scope: TerritoryScope): Game[] {
+  return games.filter((game) => game.territoryScope === scope);
+}
+
+export function getNextGameInSeries(game: Game): Game | undefined {
+  const inSeries = games.filter((entry) => entry.series === game.series && entry.slug !== game.slug);
+  return inSeries[0];
 }
 
 export function getLiveGames(): Game[] {

@@ -47,6 +47,89 @@ export async function trackCtaClick(game: Game, ctaId: string) {
   await trackEvent({ ...base(game), event: 'cta_click', ctaId });
 }
 
+export async function trackFirstInteractionTime(game: Game, msSinceStart: number, interactionType: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'first_interaction_time',
+    metadata: {
+      msSinceStart: Math.max(0, Math.round(msSinceStart)),
+      interactionType,
+    },
+  });
+}
+
+export async function trackReplayClick(game: Game, context: 'outcome' | 'engine' | 'share') {
+  await trackEvent({
+    ...base(game),
+    event: 'replay_click',
+    metadata: { context },
+  });
+}
+
+export async function trackAlternatePathClick(game: Game, context: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'alternate_path_click',
+    metadata: { context },
+  });
+}
+
+export async function trackOutcomeReplayIntent(game: Game, intent: 'replay' | 'alternate_route' | 'compare') {
+  await trackEvent({
+    ...base(game),
+    event: 'outcome_replay_intent',
+    metadata: { intent },
+  });
+}
+
+export async function trackCampaignMarkClick(game: Game, placement: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'campaign_mark_click',
+    metadata: { placement },
+  });
+}
+
+export async function trackSeriesClick(
+  game: Game,
+  series: string,
+  territoryScope: string,
+  placement: string,
+) {
+  await trackEvent({
+    ...base(game),
+    event: 'series_click',
+    metadata: {
+      series,
+      territoryScope,
+      gameType: game.kind,
+      pace: (game as any).pace || 'unknown',
+      estimatedMinutes: game.estimatedMinutes,
+      placement,
+    },
+  });
+}
+
+export async function trackNextSeriesExperienceClick(
+  game: Game,
+  series: string,
+  targetSlug: string,
+  territoryScope: string,
+) {
+  await trackEvent({
+    ...base(game),
+    event: 'next_series_experience_click',
+    metadata: {
+      series,
+      targetSlug,
+      territoryScope,
+      gameType: game.kind,
+      pace: (game as any).pace || 'unknown',
+      estimatedMinutes: game.estimatedMinutes,
+    },
+  });
+}
+
 // Novos eventos de saída - Tijolo 16 (Circulação e Conversão)
 
 export async function trackOutcomeView(game: Game, resultId: string) {
@@ -107,6 +190,68 @@ export async function trackHubReturnClick(game: Game, destination: string) {
     ...base(game),
     event: 'hub_return_click',
     metadata: { destination },
+  });
+}
+
+export async function trackSharePagePlayClick(game: Game, destinationSlug: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'share_page_play_click',
+    metadata: { destinationSlug },
+  });
+}
+
+export async function trackReturnToHubAfterOutcome(game: Game, destination: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'return_to_hub_after_outcome',
+    metadata: { destination },
+  });
+}
+
+// Novos eventos de card final e avatar - Tijolo 22
+
+export async function trackFinalCardView(game: Game, resultId: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'final_card_view',
+    resultId,
+    metadata: { placement: 'share_page' },
+  });
+}
+
+export async function trackFinalCardDownload(game: Game, resultId: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'final_card_download',
+    resultId,
+    metadata: { action: 'download' },
+  });
+}
+
+export async function trackFinalCardShareClick(game: Game, resultId: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'final_card_share_click',
+    resultId,
+    metadata: { action: 'share_intent' },
+  });
+}
+
+export async function trackCampaignAvatarView(game: Game, variant: string, size: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'campaign_avatar_view',
+    metadata: { variant, size },
+  });
+}
+
+export async function trackCampaignCtaClickAfterGame(game: Game, ctaId: string, placement: string) {
+  await trackEvent({
+    ...base(game),
+    event: 'campaign_cta_click_after_game',
+    ctaId,
+    metadata: { placement },
   });
 }
 

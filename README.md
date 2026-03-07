@@ -2,11 +2,14 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: Tijolo 20 concluido - cockpit temporal operacional, comparacao leve de janelas, beta:ops consolidado e playbook de incidentes.
+Status atual: Tijolo 22 concluido - avatar oficial de Alexandre Fonseca, card final universal compartilhavel e pipeline de assets organizado para crescimento da campanha.
 
 ## Estado do Produto
 
 - 4 engines reais publicas em `/play/[slug]`.
+- Avatar oficial de Alexandre Fonseca como personagem principal recorrente.
+- Card final universal compartilhavel em todos os jogos.
+- Pipeline de assets de campanha organizado (`public/campaign/`, `docs/assets/`).
 - Operacao de feedback em `/estado/feedback` com rota protegida opcional.
 - Audit log remoto ativo em `ops_audit_log`.
 - Fallback local preservado quando Supabase nao esta disponivel.
@@ -17,6 +20,34 @@ Status atual: Tijolo 20 concluido - cockpit temporal operacional, comparacao lev
 - Severidade visual (`🟢/🟡/🔴`) com sinais acionaveis.
 - Comparacao leve de tendencia (`24h vs 7d` ou `7d vs 30d`).
 - Alertas de "ativo sem trafego" para experimentos/engine/CTA.
+
+## Game Feel e Replay
+
+- Intro curta nas engines com foco em primeira decisao rapida.
+- Outcome com convite explicito para jogar de novo.
+- Share page com CTA de reentrada para nova rodada.
+- Assinatura de campanha reutilizavel e discreta em pontos de descoberta.
+
+Documento guia: `docs/game-feel-e-diversao.md`
+
+## Linha de Jogos da Campanha
+
+- Documento mestre: `docs/linha-de-jogos-campanha.md`.
+- Avatar oficial: `docs/avatar-oficial-alexandre-fonseca.md`.
+- Pipeline de assets: `docs/assets/README.md`.
+- Taxonomia oficial por tempo (`quick`, `session`, `deep`, `future-flagship`).
+- Linhas editoriais e series para navegacao de campanha.
+- Escala territorial planejada: Volta Redonda -> Sul Fluminense -> Baixada -> Capital -> Estado do RJ.
+
+Componentes visuais de campanha:
+- `CampaignAvatar`: avatar oficial reutilizavel de Alexandre Fonseca
+- `FinalShareCard`: sistema universal de card final compartilhavel
+- `CampaignMark`: assinatura de campanha discreta
+
+Blueprints futuros (sem implementacao neste ciclo):
+- `docs/formato-plataforma.md`
+- `docs/formato-rpg.md`
+- `docs/formato-tycoon.md`
 
 ## Operacao Continua
 
@@ -61,11 +92,12 @@ npm run verify
 Opcional quando estavel:
 
 ```bash
-npm run test:e2e
-```
+npRPG/plataforma/tycoon completo implementado
+- auth obrigatoria para jogar
+- integracao Slack/email
+- painel admin enterprise
 
-## Limites de Escopo
-
+Foco: avatar oficial, card final universal, pipeline de assets e crescimento visual organizado da campanha
 Este ciclo nao adiciona:
 - nova engine
 - auth obrigatoria para jogar

@@ -18,6 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.9rem;
 }
 
 .logo {
@@ -61,6 +62,10 @@
 .headerBeta {
   margin-top: 2px;
   align-self: flex-start;
+}
+
+.campaignMarkInline {
+  max-width: min(46vw, 360px);
 }
 
 .navDesktop {
@@ -159,6 +164,10 @@
 
   .logoText {
     font-size: 0.82rem;
+  }
+
+  .campaignMarkInline {
+    display: none;
   }
 
   .navMobile {

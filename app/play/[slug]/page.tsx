@@ -5,7 +5,12 @@ import { GameRuntime } from '@/components/games/runtime/GameRuntime';
 import { MetaChip } from '@/components/ui/MetaChip';
 import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
-import { getGameBySlug } from '@/lib/games/catalog';
+import {
+  GAME_PACE_LABELS,
+  GAME_SERIES_LABELS,
+  TERRITORY_SCOPE_LABELS,
+  getGameBySlug,
+} from '@/lib/games/catalog';
 import { buildPlayMetadata } from '@/lib/games/metadata';
 import styles from './page.module.css';
 
@@ -27,11 +32,11 @@ export default function PlayPage({ params }: PlayPageProps) {
   }
 
   const experienceHook: Record<string, string> = {
-    quiz: 'Responda, compare prioridades e revele sua leitura política.',
-    branching_story: 'Siga decisões encadeadas e veja a consequência estrutural de cada rota.',
-    simulation: 'Teste cenários e observe os custos invisíveis das decisões.',
-    narrative: 'Siga os dilemas e veja como estrutura e escolha se cruzam.',
-    map: 'Explore território, memória e conflito em camadas.',
+    quiz: 'Responda rápido, compare prioridades e veja seu perfil político.',
+    branching_story: 'Escolha rotas em sequência e acompanhe a virada de cenário.',
+    simulation: 'Teste distribuição de recursos e sinta os custos de cada decisão.',
+    narrative: 'Acompanhe dilemas e veja como estrutura e escolha se cruzam.',
+    map: 'Explore o território em camadas e descubra padrões ocultos.',
   };
 
   return (
@@ -62,6 +67,9 @@ export default function PlayPage({ params }: PlayPageProps) {
           <MetaChip icon="🏷">{game.theme}</MetaChip>
           <MetaChip icon="🧪">{game.status}</MetaChip>
           <MetaChip icon="🎮">{game.kind}</MetaChip>
+          <MetaChip icon="⚡">{GAME_PACE_LABELS[game.pace]}</MetaChip>
+          <MetaChip icon="🧱">{GAME_SERIES_LABELS[game.series]}</MetaChip>
+          <MetaChip icon="🗺">{TERRITORY_SCOPE_LABELS[game.territoryScope]}</MetaChip>
           <MetaChip icon="⚙">{game.runtimeState}</MetaChip>
         </div>
 
@@ -82,8 +90,11 @@ export default function PlayPage({ params }: PlayPageProps) {
             <div className={styles.callout}>
               <h3>Próxima ação</h3>
               <p>
-                Depois da partida, compare seu resultado com propostas reais de
-                candidatura e leve o debate para sua rede.
+                Termine a rodada, teste uma rota diferente e compare qual visão
+                de cidade aparece em cada resultado.
+              </p>
+              <p>
+                Esta experiência integra o Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado.
               </p>
               <Link href="/participar" className={styles.quizLink}>
                 Entrar em ação →

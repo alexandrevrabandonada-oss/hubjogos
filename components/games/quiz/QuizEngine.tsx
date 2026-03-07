@@ -12,6 +12,7 @@ import { Game } from '@/lib/games/catalog';
 import { getOutcomeCta } from '@/lib/games/ctas';
 import {
   trackCtaClick,
+  trackFirstInteractionTime,
   trackGameComplete,
   trackLinkCopy,
   trackResultCopy,
@@ -51,6 +52,8 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
   });
 
   const completionTracked = useRef(false);
+  const introClosedAt = useRef<number | null>(null);
+  const firstInteractionTracked = useRef(false);
   const isFinished = step >= quiz.questions.length;
 
   const result = useMemo(() => {
@@ -81,6 +84,12 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
   }
 
   function handleSelect(optionId: string) {
+    if (!firstInteractionTracked.current) {
+      firstInteractionTracked.current = true;
+      const elapsed = introClosedAt.current ? Date.now() - introClosedAt.current : 0;
+      void trackFirstInteractionTime(game, elapsed, 'answer_select');
+    }
+
     const next = [...answers];
     next[step] = optionId;
     setAnswers(next);
@@ -118,6 +127,8 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
   function restart() {
     const reset = Array(quiz.questions.length).fill('');
     completionTracked.current = false;
+    firstInteractionTracked.current = false;
+    introClosedAt.current = null;
     setAnswers(reset);
     setStep(0);
     setShowIntro(true);
@@ -132,7 +143,10 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
         description={game.shortDescription}
         duration={game.duration}
         whatYouDiscover={quiz.subtitle}
-        onStart={() => setShowIntro(false)}
+        onStart={() => {
+          introClosedAt.current = Date.now();
+          setShowIntro(false);
+        }}
         icon={game.icon}
       />
     );

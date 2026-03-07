@@ -46,6 +46,20 @@
   margin: 0;
 }
 
+.fastStart {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent-highlight) 16%, white);
+  border: 1px solid color-mix(in srgb, var(--accent-warning) 30%, transparent);
+  color: color-mix(in srgb, var(--accent-warning) 85%, var(--text-primary));
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.fastStart strong {
+  font-weight: 700;
+}
+
 .meta {
   display: flex;
   flex-direction: column;

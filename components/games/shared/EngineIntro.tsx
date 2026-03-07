@@ -21,10 +21,10 @@ const ENGINE_LABELS: Record<EngineIntroProps['engineType'], string> = {
 };
 
 const ENGINE_HOW_IT_WORKS: Record<EngineIntroProps['engineType'], string> = {
-  quiz: 'Responda perguntas e compare prioridades políticas.',
-  branching_story: 'Escolha caminhos e veja as consequências estruturais.',
-  simulation: 'Teste cenários e observe custos invisíveis de cada decisão.',
-  map: 'Explore pontos no território e descubra padrões espaciais.',
+  quiz: 'Escolha rápido, compare prioridades e siga.',
+  branching_story: 'Decida em segundos e veja a virada da rota.',
+  simulation: 'Distribua agora e sinta o impacto no próximo passo.',
+  map: 'Toque em um ponto e a cidade revela camadas escondidas.',
 };
 
 export function EngineIntro({
@@ -49,6 +49,10 @@ export function EngineIntro({
       <div className={styles.content}>
         <p className={styles.description}>{description}</p>
 
+        <div className={styles.fastStart}>
+          <strong>Começo rápido:</strong> primeira decisão em menos de 15 segundos.
+        </div>
+
         <div className={styles.meta}>
           <div className={styles.metaItem}>
             <h3>Como funciona</h3>
@@ -69,7 +73,7 @@ export function EngineIntro({
 
       <div className={styles.footer}>
         <Button onClick={onStart} variant="primary" fullWidth>
-          Começar experiência
+          Jogar agora
         </Button>
       </div>
     </Card>
