@@ -63,6 +63,9 @@ npm run test:e2e
 - Tijolo 30 ✅ consolidacao da linha arcade com 2 jogos reais e game feel aprimorado
 - Tijolo 31 ✅ reposicionamento arcade-first e leitura front-stage da conversao
 - Tijolo 32 ✅ superfície impulsiva, preview vivo e replay/reentrada fortalecidos
+- Tijolo 33 ✅ run efetiva e distribuição guiada
+- Tijolo 34 ✅ efetividade em operação de campanha
+- Tijolo 35A ✅ fundação visual profissional do primeiro arcade
 
 ## Tijolo 20 - Cockpit Temporal ✅
 
@@ -555,3 +558,101 @@ Transformar efetividade em orientação operacional semanal de distribuição se
 - Executar rotina semanal de distribuição por 14 dias completos com plano de efetividade.
 - Validar se scorecards atingem `directional_signal` ou `useful_signal` de forma consistente.
 - Consideração de formato médio (Tijolo 29 retomado) apenas após confirmação de narrativa central com massa crítica de run real.
+
+## Tijolo 35A - Fundação visual profissional do primeiro arcade ✅
+
+### Objetivo
+
+Transformar "Tarifa Zero RJ — Corredor do Povo" de vertical slice funcional em fundação profissional de jogo: direção de arte coerente com a campanha, visual forte e legível, HUD recompensador, feedback visual claro e experiência sólida em mobile e desktop — sem expandir escopo de gameplay.
+
+### Entregues
+
+**Direção de arte e pipeline:**
+- Documento completo de direção de arte (`docs/tarifa-zero-rj-art-direction.md`):
+  - Paleta de cores oficial alinhada com identidade da campanha (#f9cf4a amarelo, #123d59 azul, #7ce0ae verde, #f45f5f vermelho).
+  - Shape language definido: círculos para positivos, quadrado para bloqueio, estrela para chance rara.
+  - Especificações de escala e tamanho (mobile-first, 360px mínimo).
+  - Guidelines de feedback visual e integração com campanha.
+- Pipeline de assets estruturado (`public/arcade/tarifa-zero/`):
+  - Diretórios organizados (player/, pickups/, obstacles/, ui/, bg/).
+  - README.md com convenções de nomenclatura, workflow de criação, prioridades (SVG > PNG > canvas).
+
+**Refatoração visual do jogo:**
+- Canvas com proporções melhores (9:16 mobile feel, adaptável a desktop, máx 640px largura).
+- Background com gradiente profissional (azul profundo campanha).
+- Lanes com highlight visual da lane do player (amarelo 15% alpha).
+- Entidades renderizadas com:
+  - Gradientes radiais para profundidade.
+  - Bordas e sombras para melhor legibilidade.
+  - Tamanhos aumentados e otimizados para mobile.
+  - Cores da paleta oficial aplicadas.
+- Player destacado: amarelo campanha (#f9cf4a), tamanho maior (18px raio), glow sutil, borda branca.
+- Feedback visual aprimorado:
+  - Flash de dano com vermelho translúcido.
+  - Indicador "CHANCE!" com shadow/glow.
+  - Combo ativo com banner destacado.
+
+**HUD profissional:**
+- HUD externo (fora do canvas):
+  - Score destacado com label/valor separados.
+  - Status do jogo (pausado/em jogo).
+  - Layout em card com background sutil e bordas.
+- HUD interno (dentro do canvas):
+  - Barra de progresso no topo com gradiente verde.
+  - Meter coletivo lateral vertical com gradiente amarelo.
+  - Stats box no canto inferior esquerdo (apoios, mutirões, bloqueios).
+  - Combo indicator central quando ativo.
+- Controles touch melhorados:
+  - Botões maiores com gradientes e sombras.
+  - Ícones + labels claros.
+  - Feedback hover/active.
+  - Layout responsivo.
+
+**Telas de entrada/saída melhoradas:**
+- Intro screen:
+  - Brief mais claro e direto.
+  - Features visuais com ícones e descrições.
+  - Layout profissional com cards de features.
+- Result screen:
+  - Score final destacado com amarelo campanha.
+  - Stats em card com background sutil.
+  - Botões e links com estilo consistente.
+
+### Validação técnica
+
+```bash
+✅ npm run lint (0 warnings/errors)
+✅ npm run type-check (sem erros TypeScript)
+✅ npm run build (compilação Next.js 14 sucesso)
+```
+
+### Decisões de escopo
+
+**Dentro do escopo (fundação profissional):**
+- Direção de arte completa e alinhada com campanha.
+- Refatoração visual do canvas (escala, cores, formas, feedback).
+- HUD profissional interno e externo.
+- Controles touch aprimorados.
+- Telas de entrada/saída mais claras.
+
+**Fora do escopo (não é polimento final):**
+- Assets SVG/PNG customizados (ficam com canvas drawing profissional).
+- Novos jogos ou engines.
+- Novas mecânicas de gameplay.
+- Animações complexas ou particles.
+- Som e música.
+- Novas features de tracking.
+
+### Guardrails mantidos
+
+- Gameplay funcional preservado 100% (mesma lógica de colisão, scoring, combo).
+- Performance estável (60fps, mesmas otimizações).
+- Tracking e analytics inalterados.
+- Sem regressão em funcionalidades existentes.
+
+### Próximo
+
+- Observar runs reais para validar clareza visual em mobile/desktop.
+- Considerar assets SVG customizados apenas após validação de fundação.
+- Tijolo 35B (opcional): instrumentation arcade estendido se necessário.
+- Manter foco em consolidação de efetividade (Tijolo 34) como prioridade operacional.

@@ -2,15 +2,15 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: Tijolo 34 concluído - operação de distribuição por efetividade real ativa, guiada por run real, replay efetivo e cross-game sem expandir escopo de produto.
+Status atual: Tijolo 35A concluído - fundação visual profissional do primeiro arcade (Tarifa Zero RJ) com direção de arte coerente, HUD forte, feedback visual claro e experiência sólida mobile/desktop, mantendo operação de distribuição por efetividade ativa.
 
 ## Estado do Produto
 
 - 4 engines reais publicas em `/play/[slug]` (quiz, branching, simulation, map).
 - 2 runtimes arcade reais em `/arcade/[slug]` com canvas loop reutilizavel:
-  - `tarifa-zero-corredor` (55s, lane-based collect/avoid, tarifa zero + apoio coletivo)
+  - `tarifa-zero-corredor` (55s, lane-based collect/avoid, tarifa zero + apoio coletivo) - **fundação visual profissional** com direção de arte campanha, HUD forte e feedback claro
   - `passe-livre-nacional` (90s, positioning/coordination, sindicato + transporte público)
-- 2 vertical slices arcade jogáveis com game feel melhorado (smooth meter, combo feedback, visual clarity).
+- Fundação visual arcade estabelecida: paleta oficial (#f9cf4a, #123d59, #7ce0ae, #f45f5f), shape language, pipeline de assets.
 - Avatar oficial da campanha como personagem recorrente.
 - Card final universal compartilhavel em todos os jogos.
 - Card final com QR code dinamico para reentrada.

@@ -83,9 +83,21 @@ function getCanvasSize() {
   }
 
   const vw = window.innerWidth;
-  const maxWidth = Math.min(560, vw - 20);
-  const width = Math.max(300, maxWidth);
-  const height = Math.max(500, Math.round(width * 1.35));
+  const vh = window.innerHeight;
+  
+  // Target ratio ~9:16 (portrait mobile feel) but adaptable
+  const targetRatio = 9 / 16;
+  
+  // Desktop: max 640px width for good feel
+  // Mobile: use most of viewport width with padding
+  const maxWidth = vw > 768 ? 640 : Math.min(480, vw - 24);
+  const width = Math.max(360, maxWidth);
+  
+  // Height: prefer ratio, but cap at viewport minus controls/HUD space
+  const idealHeight = Math.round(width / targetRatio);
+  const maxHeight = vh - 280; // Leave space for HUD outside + controls
+  const height = Math.min(idealHeight, Math.max(540, maxHeight));
+  
   return { width, height };
 }
 
@@ -301,24 +313,31 @@ export function ArcadeCanvasRuntime<State>({
 
   return (
     <div className={styles.runtime} ref={wrapperRef}>
-      <div className={styles.hudRow}>
-        <span>Score: {score}</span>
-        <span>{paused ? 'Pausado' : 'Em corrida'}</span>
+      <div className={styles.hudTop}>
+        <div className={styles.hudScore}>
+          <span className={styles.hudLabel}>Score</span>
+          <span className={styles.hudValue}>{score}</span>
+        </div>
+        <div className={styles.hudStatus}>
+          {paused ? '⏸ Pausado' : '▶ Em jogo'}
+        </div>
       </div>
       <canvas ref={canvasRef} className={styles.canvas} aria-label="Jogo arcade Tarifa Zero" />
       <div className={styles.touchControls}>
         <button type="button" onClick={triggerMoveLeft} className={styles.controlButton} aria-label="Mover para esquerda">
-          ← esquerda
+          <span className={styles.controlIcon}>←</span>
+          <span className={styles.controlLabel}>Esquerda</span>
         </button>
-        <button type="button" onClick={triggerPause} className={styles.controlButton} aria-label="Pausar jogo">
-          {paused ? 'retomar' : 'pausar'}
+        <button type="button" onClick={triggerPause} className={`${styles.controlButton} ${styles.controlPause}`} aria-label="Pausar jogo">
+          {paused ? '▶' : '⏸'}
         </button>
         <button type="button" onClick={triggerMoveRight} className={styles.controlButton} aria-label="Mover para direita">
-          direita →
+          <span className={styles.controlIcon}>→</span>
+          <span className={styles.controlLabel}>Direita</span>
         </button>
       </div>
       <p className={styles.hint}>
-        Toque nas faixas ou use teclado (A/D ou setas). P pausa. R reinicia a corrida.
+        Toque nos cards ou use teclado (A/D, setas) • P pausa • R reinicia
       </p>
     </div>
   );

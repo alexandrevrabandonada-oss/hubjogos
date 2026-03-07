@@ -100,20 +100,41 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
     return (
       <Card className={styles.wrap}>
         <span className="eyebrow">Linha arcade da campanha</span>
-        <h3>Tarifa Zero RJ - Corredor do Povo</h3>
-        <p>
-          Runs curtas (30s-3min): desvie bloqueios, puxe apoio popular e ative mutirão para abrir
-          corredor com tarifa zero.
+        <h2>Tarifa Zero RJ — Corredor do Povo</h2>
+        <p className={styles.introBrief}>
+          Desvie o bloqueio, colete apoio popular e ative mutirão. 
+          O coletivo forte vale mais pontos e estabiliza a corrida — 
+          atalhos individualistas dão ponto rápido, mas sabotam o comum.
         </p>
-        <ul className={styles.bullets}>
-          <li>Coletivo forte vale mais ponto e estabiliza a corrida.</li>
-          <li>Atalhos individualistas dão ponto rápido, mas sabotam o comum.</li>
-          <li>Funciona em toque, mouse e teclado (A/D ou setas).</li>
-        </ul>
+        
+        <div className={styles.introFeatures}>
+          <div className={styles.feature}>
+            <span className={styles.featureIcon}>✊</span>
+            <div>
+              <strong>Coleta Coletiva</strong>
+              <p>Apoio + Mutirão aumentam seu medidor coletivo</p>
+            </div>
+          </div>
+          <div className={styles.feature}>
+            <span className={styles.featureIcon}>🚧</span>
+            <div>
+              <strong>Evite Bloqueios</strong>
+              <p>Desvie obstáculos que reduzem seu coletivo</p>
+            </div>
+          </div>
+          <div className={styles.feature}>
+            <span className={styles.featureIcon}>🎮</span>
+            <div>
+              <strong>Controle Simples</strong>
+              <p>Toque, mouse ou teclado (A/D, setas)</p>
+            </div>
+          </div>
+        </div>
+        
         <div className={styles.actions}>
           <Button onClick={startRun}>Começar corrida</Button>
           <Link href="/explorar" className={styles.linkGhost}>
-            Voltar ao catálogo
+            ← Voltar ao catálogo
           </Link>
         </div>
       </Card>
