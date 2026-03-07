@@ -133,14 +133,39 @@ Foco executado:
 7. bloco "O que distribuir agora" em `/estado`
 8. branding eleitoral reforçado em todos os materiais de distribuicao
 
-## Proximo ciclo (Tijolo 29)
+## Tijolo 29 (concluido)
+
+Foco executado:
+1. abertura da linha arcade com runtime reutilizavel em canvas/html5
+2. nova rota dedicada `/arcade/[slug]` sem quebrar a linha quick
+3. primeiro vertical slice jogavel: `Tarifa Zero RJ - Corredor do Povo`
+4. integracao de campanha no loop (avatar, marca, CTA, card final universal com QR)
+5. telemetria dedicada da linha arcade + leitura em `/estado`
+6. comparativo quick vs arcade para orientar priorizacao do proximo ciclo
+
+## Tijolo 30 (concluido)
+
+Foco executado:
+1. consolidacao da linha arcade com 2 jogos reais diferenciados em loop:
+	- `Tarifa Zero RJ` (lane-based 55s. collect/avoid)
+	- `Passe Livre Nacional` (positioning 90s, coordination/defense)
+2. melhorias de game feel em Tarifa Zero:
+	- smooth meter transitions (visao continua vs oscilante)
+	- combo indicator ativo em tela
+	- nova entidade rara "chance" nos ultimos 15s
+	- feedback visual aprimorado em coleta/bloqueio
+3. segundo arcade completo com mecanica distinta e telemetria integrada
+4. documentacao de game feel com 8 dimensoes mensuráveis (`docs/game-feel-arcade.md`)
+5. comparacao per-arcade em `/estado` com breakdown de runs, replay rate, first input, score avg
+6. validacao tecnica completa: lint, type-check, test:unit, build, verify - todos passando
+
+## Proximo ciclo (Tijolo 31)
 
 Foco sugerido:
-1. executar distribuicao por 7-14 dias seguindo `docs/operacao-semanal-distribuicao.md`
-2. consolidar amostra minima comparavel (80+ sessoes/territorio, 60+ sessoes/quick)
-3. decidir de forma honesta qual serie deve virar prioridade (aguardando amostra real)
-4. tensionar territorio lider com criativo dedicado
-5. preparar blueprint de formato medio a partir da serie quick mais grudenta
-6. manter disciplina de evidencias sem abrir auth/CMS/admin ainda
+1. validar por evidencia real: qual arcade loop tem maior replay/completion?
+2. iterar segunda rodada de arcade se houver sinais positivos (mais um jogo novo)
+3. ou pivotar para formato medio (2-6min) dependendo de dados
+4. expandir comparativos quick vs arcade vs futuro medio por territorio e serie
+5. manter disciplina: sem auth/CMS/admin, sem RPG/plataforma/tycoon grande
 
-Ultima atualizacao: 2026-03-07 (Tijolo 28)
+Ultima atualizacao: 2026-03-07 (Tijolo 30)

@@ -50,6 +50,22 @@ interface QuickRow {
   stickyScore: number;
 }
 
+interface ArcadeRow {
+  slug: string;
+  title: string;
+  runs: number;
+  runEnds: number;
+  scoreCount: number;
+  scoreAverage: number;
+  replayClicks: number;
+  firstInputCount: number;
+  firstInputAvgMs: number;
+  campaignCtaClicks: number;
+  powerupCollects: number;
+  runEndRate: number;
+  replayRate: number;
+}
+
 interface CollectionTargets {
   quick: {
     sessions: number;
@@ -241,6 +257,23 @@ export interface MetricsSnapshot {
     };
     warnings: string[];
   };
+  arcadeInsights: {
+    overview: {
+      runs: number;
+      runEnds: number;
+      runEndRate: number;
+      scoreAverage: number;
+      replayClicks: number;
+      replayRate: number;
+      firstInputAvgMs: number;
+      campaignCtaClicks: number;
+      powerupCollects: number;
+      quickStarts: number;
+      quickReplays: number;
+      quickReplayRate: number;
+    };
+    byArcadeGame: ArcadeRow[];
+  };
   generatedAt: string;
 }
 
@@ -280,7 +313,7 @@ function normalizeExperimentsPayload(value: unknown): Array<{ key: string; varia
 }
 
 function getQuickInsights(
-  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string; kind?: string }>,
   sessions: SessionWithExperiments[],
   events: NormalizedEvent[],
   window: TimeWindow = 'all',
@@ -647,6 +680,143 @@ function getQuickInsights(
   };
 }
 
+function getArcadeInsights(
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string; kind?: string }>,
+  events: NormalizedEvent[],
+): MetricsSnapshot['arcadeInsights'] {
+  const arcadeGames = gamesCatalog.filter((game) => game.kind === 'arcade');
+  const arcadeSlugs = new Set(arcadeGames.map((game) => game.slug));
+  const quickSlugs = new Set(gamesCatalog.filter((game) => game.pace === 'quick').map((game) => game.slug));
+
+  const rowsBySlug: Record<string, ArcadeRow> = {};
+  for (const game of arcadeGames) {
+    rowsBySlug[game.slug] = {
+      slug: game.slug,
+      title: game.title,
+      runs: 0,
+      runEnds: 0,
+      scoreCount: 0,
+      scoreAverage: 0,
+      replayClicks: 0,
+      firstInputCount: 0,
+      firstInputAvgMs: 0,
+      campaignCtaClicks: 0,
+      powerupCollects: 0,
+      runEndRate: 0,
+      replayRate: 0,
+    };
+  }
+
+  const scoreSums: Record<string, number> = {};
+  const firstInputSums: Record<string, number> = {};
+
+  let quickStarts = 0;
+  let quickReplays = 0;
+
+  for (const event of events) {
+    if (quickSlugs.has(event.slug) && event.eventName === 'game_start') {
+      quickStarts += 1;
+    }
+    if (
+      quickSlugs.has(event.slug) &&
+      (event.eventName === 'quick_minigame_replay' ||
+        event.eventName === 'replay_click' ||
+        event.eventName === 'outcome_replay_intent')
+    ) {
+      quickReplays += 1;
+    }
+
+    if (!arcadeSlugs.has(event.slug) || !rowsBySlug[event.slug]) {
+      continue;
+    }
+
+    const row = rowsBySlug[event.slug];
+
+    if (event.eventName === 'arcade_run_start') {
+      row.runs += 1;
+    }
+
+    if (event.eventName === 'arcade_run_end') {
+      row.runEnds += 1;
+    }
+
+    if (event.eventName === 'arcade_replay_click') {
+      row.replayClicks += 1;
+    }
+
+    if (event.eventName === 'arcade_campaign_cta_click') {
+      row.campaignCtaClicks += 1;
+    }
+
+    if (event.eventName === 'arcade_powerup_collect') {
+      row.powerupCollects += 1;
+    }
+
+    if (event.eventName === 'arcade_score') {
+      const score = Number(event.metadata?.score || 0);
+      if (Number.isFinite(score) && score >= 0) {
+        scoreSums[row.slug] = (scoreSums[row.slug] || 0) + score;
+        row.scoreCount += 1;
+      }
+    }
+
+    if (event.eventName === 'arcade_first_input_time') {
+      const ms = Number(event.metadata?.msSinceStart || 0);
+      if (Number.isFinite(ms) && ms >= 0) {
+        firstInputSums[row.slug] = (firstInputSums[row.slug] || 0) + ms;
+        row.firstInputCount += 1;
+      }
+    }
+  }
+
+  const byArcadeGame = Object.values(rowsBySlug)
+    .map((row) => {
+      const scoreAverage = row.scoreCount > 0 ? Math.round((scoreSums[row.slug] || 0) / row.scoreCount) : 0;
+      const firstInputAvgMs =
+        row.firstInputCount > 0 ? Math.round((firstInputSums[row.slug] || 0) / row.firstInputCount) : 0;
+      const runEndRate = row.runs > 0 ? Math.round((row.runEnds / row.runs) * 100) : 0;
+      const replayRate = row.runEnds > 0 ? Math.round((row.replayClicks / row.runEnds) * 100) : 0;
+
+      return {
+        ...row,
+        scoreAverage,
+        firstInputAvgMs,
+        runEndRate,
+        replayRate,
+      };
+    })
+    .sort((a, b) => b.runs - a.runs);
+
+  const runs = byArcadeGame.reduce((sum, row) => sum + row.runs, 0);
+  const runEnds = byArcadeGame.reduce((sum, row) => sum + row.runEnds, 0);
+  const replayClicks = byArcadeGame.reduce((sum, row) => sum + row.replayClicks, 0);
+  const campaignCtaClicks = byArcadeGame.reduce((sum, row) => sum + row.campaignCtaClicks, 0);
+  const powerupCollects = byArcadeGame.reduce((sum, row) => sum + row.powerupCollects, 0);
+
+  const scoreWeightedSum = byArcadeGame.reduce((sum, row) => sum + row.scoreAverage * row.scoreCount, 0);
+  const scoreCount = byArcadeGame.reduce((sum, row) => sum + row.scoreCount, 0);
+  const firstInputWeightedSum = byArcadeGame.reduce((sum, row) => sum + row.firstInputAvgMs * row.firstInputCount, 0);
+  const firstInputCount = byArcadeGame.reduce((sum, row) => sum + row.firstInputCount, 0);
+
+  return {
+    overview: {
+      runs,
+      runEnds,
+      runEndRate: runs > 0 ? Math.round((runEnds / runs) * 100) : 0,
+      scoreAverage: scoreCount > 0 ? Math.round(scoreWeightedSum / scoreCount) : 0,
+      replayClicks,
+      replayRate: runEnds > 0 ? Math.round((replayClicks / runEnds) * 100) : 0,
+      firstInputAvgMs: firstInputCount > 0 ? Math.round(firstInputWeightedSum / firstInputCount) : 0,
+      campaignCtaClicks,
+      powerupCollects,
+      quickStarts,
+      quickReplays,
+      quickReplayRate: quickStarts > 0 ? Math.round((quickReplays / quickStarts) * 100) : 0,
+    },
+    byArcadeGame,
+  };
+}
+
 function safeHostname(referrer?: string | null) {
   if (!referrer) {
     return 'direto/desconhecido';
@@ -884,7 +1054,7 @@ function buildScorecardsFromSnapshot(
 }
 
 export function collectLocalMetrics(
-  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string; kind?: string }>,
   window: TimeWindow = 'all',
 ): MetricsSnapshot {
   const sessions = getLocalArray<SessionRecord>('sessions');
@@ -1088,6 +1258,7 @@ export function collectLocalMetrics(
     normalizedEvents,
     window,
   );
+  const arcadeInsights = getArcadeInsights(gamesCatalog, normalizedEvents);
 
   return {
     source: 'local',
@@ -1116,6 +1287,7 @@ export function collectLocalMetrics(
     readingCriteria: buildReadingCriteria(circulation, { bySource: cohortsBySource, byGame: cohortsByGame, byEngine: cohortsByEngine }, experimentScorecards),
     experimentScorecards,
     quickInsights,
+    arcadeInsights,
     generatedAt: new Date().toISOString(),
   };
 }
@@ -1192,7 +1364,7 @@ interface RemoteRawSessionRow {
 }
 
 async function collectRemoteMetrics(
-  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string; kind?: string }>,
   window: TimeWindow = 'all',
 ): Promise<MetricsSnapshot | null> {
   if (!isSupabaseConfigured) {
@@ -1226,6 +1398,13 @@ async function collectRemoteMetrics(
         .select('session_id,event_name,slug,engine_kind,cta_id,metadata,created_at')
         .in('event_name', [
           'game_start',
+          'arcade_run_start',
+          'arcade_run_end',
+          'arcade_score',
+          'arcade_first_input_time',
+          'arcade_replay_click',
+          'arcade_powerup_collect',
+          'arcade_campaign_cta_click',
           'outcome_view',
           'primary_cta_click',
           'secondary_cta_click',
@@ -1391,6 +1570,7 @@ async function collectRemoteMetrics(
 
     const experimentScorecards = buildScorecardsFromSnapshot(experiments, window, resolvedLastEventAt);
     const quickInsights = getQuickInsights(gamesCatalog, sessions, normalizedEvents, window);
+    const arcadeInsights = getArcadeInsights(gamesCatalog, normalizedEvents);
 
     return {
       source: 'supabase',
@@ -1419,6 +1599,7 @@ async function collectRemoteMetrics(
       readingCriteria: buildReadingCriteria(circulation, { bySource: cohortsBySource, byGame: cohortsByGame, byEngine: cohortsByEngine }, experimentScorecards),
       experimentScorecards,
       quickInsights,
+      arcadeInsights,
       generatedAt: new Date().toISOString(),
     };
   } catch {
@@ -1427,7 +1608,7 @@ async function collectRemoteMetrics(
 }
 
 export async function collectBestAvailableMetrics(
-  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string; kind?: string }>,
   window: TimeWindow = 'all',
 ): Promise<MetricsSnapshot> {
   const remote = await collectRemoteMetrics(gamesCatalog, window);

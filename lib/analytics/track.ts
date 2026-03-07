@@ -259,3 +259,110 @@ export async function trackIdeologicalAxisSignal(
     }),
   );
 }
+
+export async function trackArcadeRunStart(
+  game: Game,
+  metadata: { arcadeSlug: string; runId: string },
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_run_start',
+      metadata,
+    }),
+  );
+}
+
+export async function trackArcadeRunEnd(
+  game: Game,
+  metadata: {
+    arcadeSlug: string;
+    runId: string;
+    score: number;
+    durationMs: number;
+    collectiveRate: number;
+    apoio: number;
+    mutiroes: number;
+    bloqueios: number;
+    individualismos: number;
+  },
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_run_end',
+      metadata,
+    }),
+  );
+}
+
+export async function trackArcadeScore(
+  game: Game,
+  score: number,
+  metadata?: { collectiveRate?: number; durationMs?: number },
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_score',
+      metadata: {
+        score,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackArcadeFirstInputTime(
+  game: Game,
+  msSinceStart: number,
+  interactionType: string,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_first_input_time',
+      metadata: {
+        msSinceStart: Math.max(0, Math.round(msSinceStart)),
+        interactionType,
+      },
+    }),
+  );
+}
+
+export async function trackArcadeReplayClick(game: Game, arcadeSlug: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_replay_click',
+      metadata: { arcadeSlug },
+    }),
+  );
+}
+
+export async function trackArcadePowerupCollect(
+  game: Game,
+  powerupId: string,
+  metadata?: Record<string, string | number>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_powerup_collect',
+      metadata: {
+        powerupId,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackArcadeCampaignCtaClick(
+  game: Game,
+  arcadeSlug: string,
+  placement: string,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_campaign_cta_click',
+      metadata: {
+        arcadeSlug,
+        placement,
+      },
+    }),
+  );
+}

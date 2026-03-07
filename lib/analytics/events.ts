@@ -36,7 +36,15 @@ export type AnalyticsEventName =
   | 'avatar_expression_rendered'
   | 'quick_minigame_completion'
   | 'quick_minigame_replay'
-  | 'ideological_axis_signal';
+  | 'ideological_axis_signal'
+  // Linha arcade (Tijolo 29)
+  | 'arcade_run_start'
+  | 'arcade_run_end'
+  | 'arcade_score'
+  | 'arcade_first_input_time'
+  | 'arcade_replay_click'
+  | 'arcade_powerup_collect'
+  | 'arcade_campaign_cta_click';
 
 export interface AnalyticsEventPayload {
   sessionId: string;

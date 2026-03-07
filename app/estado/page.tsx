@@ -424,6 +424,10 @@ export default function EstadoPage() {
   const quickQrClicks = metrics.eventsByType['final_card_qr_click'] || 0;
   const quickQrCtr = quickQrViews > 0 ? Math.round((quickQrClicks / quickQrViews) * 100) : 0;
 
+  const arcadeOverview = metrics.arcadeInsights.overview;
+  const arcadeVsQuickRunDelta = arcadeOverview.runs - arcadeOverview.quickStarts;
+  const arcadeVsQuickReplayDelta = arcadeOverview.replayRate - arcadeOverview.quickReplayRate;
+
   const trackedQuickSlugs = ['custo-de-viver', 'quem-paga-a-conta', 'cidade-em-comum'];
   const quickComparison = metrics.quickInsights.quickComparison
     .filter((row) => trackedQuickSlugs.includes(row.slug))
@@ -939,6 +943,103 @@ export default function EstadoPage() {
               <span className={styles.eventCount}>{returnHubAfterOutcomeCount}</span>
             </div>
           </div>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Linha Arcade: visão rápida</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Runs iniciadas</p>
+              <p className={styles.signalValue}>{arcadeOverview.runs}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Runs concluídas</p>
+              <p className={styles.signalValue}>{arcadeOverview.runEnds}</p>
+              <p className={styles.signalNote}>Run end rate: {arcadeOverview.runEndRate}%</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Score médio</p>
+              <p className={styles.signalValue}>{arcadeOverview.scoreAverage}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>First input médio</p>
+              <p className={styles.signalValue}>{arcadeOverview.firstInputAvgMs}ms</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Replay pós-run</p>
+              <p className={styles.signalValue}>{arcadeOverview.replayClicks}</p>
+              <p className={styles.signalNote}>Taxa: {arcadeOverview.replayRate}%</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>CTA pós-run</p>
+              <p className={styles.signalValue}>{arcadeOverview.campaignCtaClicks}</p>
+              <p className={styles.signalNote}>Power-ups coletivos: {arcadeOverview.powerupCollects}</p>
+            </div>
+          </div>
+          <p className={styles.techNote}>
+            Eventos dedicados: arcade_run_start, arcade_run_end, arcade_score, arcade_first_input_time, arcade_replay_click, arcade_powerup_collect, arcade_campaign_cta_click.
+          </p>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Quick vs Arcade (comparativo leve)</h3>
+          <div className={styles.eventsList}>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>Starts quick</span>
+              <span className={styles.eventCount}>{arcadeOverview.quickStarts}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>Runs arcade</span>
+              <span className={styles.eventCount}>{arcadeOverview.runs}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>Delta runs - quick starts</span>
+              <span className={styles.eventCount}>{arcadeVsQuickRunDelta}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>Replay rate quick</span>
+              <span className={styles.eventCount}>{arcadeOverview.quickReplayRate}%</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>Replay rate arcade</span>
+              <span className={styles.eventCount}>{arcadeOverview.replayRate}%</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>Delta replay arcade - quick</span>
+              <span className={styles.eventCount}>{arcadeVsQuickReplayDelta}%</span>
+            </div>
+          </div>
+
+          {metrics.arcadeInsights.byArcadeGame.length > 0 && (
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Arcade</th>
+                    <th>Runs</th>
+                    <th>RunEnd%</th>
+                    <th>Score médio</th>
+                    <th>Replay%</th>
+                    <th>First input</th>
+                    <th>CTA pós-run</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {metrics.arcadeInsights.byArcadeGame.map((row) => (
+                    <tr key={row.slug}>
+                      <td className={styles.gameTitle}>{row.title}</td>
+                      <td className={styles.numeric}>{row.runs}</td>
+                      <td className={styles.numeric}>{row.runEndRate}%</td>
+                      <td className={styles.numeric}>{row.scoreAverage}</td>
+                      <td className={styles.numeric}>{row.replayRate}%</td>
+                      <td className={styles.numeric}>{row.firstInputAvgMs}ms</td>
+                      <td className={styles.numeric}>{row.campaignCtaClicks}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </Card>
 
         {/* Top Origens */}

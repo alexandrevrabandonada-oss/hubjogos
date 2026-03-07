@@ -43,6 +43,7 @@ export default function ExplorarPage() {
     simulation: 'Simulações',
     map: 'Mapas',
     narrative: 'Narrativas',
+    arcade: 'Arcades',
   };
 
   const engineTypeDescriptions: Record<string, string> = {
@@ -50,6 +51,7 @@ export default function ExplorarPage() {
     branching_story: 'Explore consequências estruturais de escolhas encadeadas',
     simulation: 'Teste cenários e observe custos invisíveis de decisões',
     map: 'Descubra padrões territoriais através de exploração espacial',
+    arcade: 'Runs curtas com loop de ação e replay imediato em celular e PC',
   };
 
   const seriesEntries = Object.entries(GAME_SERIES_LABELS).map(([seriesKey, label]) => {
@@ -118,6 +120,9 @@ export default function ExplorarPage() {
         description="Linha oficial de jogos da pre-campanha: rapida para entrar, forte para compartilhar e pronta para escalar no RJ."
         actions={
           <CTACluster>
+            <Link href="/arcade/tarifa-zero-corredor" className={styles.ctaPrimary}>
+              Jogar agora: Tarifa Zero RJ
+            </Link>
             <Link href="/play/voto-consciente" className={styles.ctaPrimary}>
               Jogar agora: Voto Consciente
             </Link>

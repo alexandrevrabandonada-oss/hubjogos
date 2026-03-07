@@ -1,0 +1,55 @@
+export type ArcadeInputKind = 'keyboard' | 'touch' | 'mouse' | 'virtual';
+
+export interface ArcadeInputSnapshot {
+  moveLeft: boolean;
+  moveRight: boolean;
+  moveLeftPressed: boolean;
+  moveRightPressed: boolean;
+  pausePressed: boolean;
+  restartPressed: boolean;
+  pointerLane: number | null;
+  lastInputKind: ArcadeInputKind | null;
+}
+
+export interface ArcadeRuntimeContext {
+  dtMs: number;
+  elapsedMs: number;
+  width: number;
+  height: number;
+}
+
+export type ArcadeRuntimeEvent =
+  | {
+      type: 'powerup_collect';
+      powerupId: string;
+    };
+
+export interface ArcadeTickResult<State> {
+  state: State;
+  events?: ArcadeRuntimeEvent[];
+}
+
+export interface ArcadeRunResult {
+  score: number;
+  title: string;
+  summary: string;
+  campaignLine: string;
+  resultId: string;
+  stats: {
+    apoio: number;
+    mutiroes: number;
+    bloqueios: number;
+    individualismos: number;
+    collectiveRate: number;
+    durationMs: number;
+  };
+}
+
+export interface ArcadeGameLogic<State> {
+  createInitialState: (ctx: { width: number; height: number }) => State;
+  update: (state: State, input: ArcadeInputSnapshot, ctx: ArcadeRuntimeContext) => ArcadeTickResult<State>;
+  render: (ctx: CanvasRenderingContext2D, state: State, view: { width: number; height: number }) => void;
+  isFinished: (state: State, ctx: { elapsedMs: number }) => boolean;
+  buildResult: (state: State) => ArcadeRunResult;
+  getScore: (state: State) => number;
+}

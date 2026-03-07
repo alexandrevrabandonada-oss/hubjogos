@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Páginas dinâmicas de jogos (apenas jogos live/beta)
     const liveGames = getLiveGames();
     const gameRoutes = liveGames.map((game) => ({
-        url: `${baseUrl}/play/${game.slug}`,
+        url: `${baseUrl}/${game.kind === 'arcade' ? 'arcade' : 'play'}/${game.slug}`,
         lastModified: new Date(),
         changeFrequency: 'monthly' as const,
         priority: 0.9, // Aumentando prioridade para páginas de experiências

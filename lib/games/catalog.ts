@@ -10,7 +10,8 @@ export type GameKind =
   | 'branching_story'
   | 'narrative'
   | 'simulation'
-  | 'map';
+  | 'map'
+  | 'arcade';
 
 export type RuntimeState = 'real' | 'shell';
 export type GamePace = 'quick' | 'session' | 'deep' | 'future-flagship';
@@ -139,6 +140,66 @@ export interface Game {
 }
 
 export const games: Game[] = [
+  {
+    id: 'tarifa-zero-corredor',
+    slug: 'tarifa-zero-corredor',
+    title: 'Tarifa Zero RJ - Corredor do Povo',
+    description:
+      'Arcade lane-based de corrida coletiva. Controle o avatar do Alexandre, libere o corredor do povo com mutirões, colete apoio e desvie bloqueios da tarifa. Sessões curtas com replay imediato para mobile e PC.',
+    shortDescription: 'Arcade real de corrida coletiva com tarifa zero',
+    theme: 'city',
+    icon: '🚌',
+    cover: '/games/tarifa-zero-corredor.jpg',
+    status: 'live',
+    runtimeState: 'real',
+    estimatedMinutes: 3,
+    duration: '30s-3 min',
+    participants: 1,
+    difficulty: 'easy',
+    tags: ['arcade', 'tarifa zero', 'mobilidade', 'coletivo', 'quick replay'],
+    cta: 'Correr',
+    color: '#1F6E8C',
+    kind: 'arcade',
+    engineId: 'tarifa-zero-corredor-v1',
+    pace: 'quick',
+    line: 'mobilidade',
+    territoryScope: 'estado-rj',
+    series: 'serie-solucoes-coletivas',
+    politicalAxis: 'poder-popular',
+    collectiveSolutionType: 'tarifa-zero',
+    commonVsMarket: 'comum',
+    campaignFrame: 'defesa-dos-comuns',
+  },
+  {
+    id: 'passe-livre-nacional',
+    slug: 'passe-livre-nacional',
+    title: 'Passe Livre Nacional - Sindicato em Movimento',
+    description:
+      'Arcade de posicionamento coletivo. Coordene uma rede de transporte gratuita by moving between city stops, picking up passengers, and defending against privatization. Build solidarity through organization.',
+    shortDescription: 'Arcade real de coordenação e defesa do transporte coletivo',
+    theme: 'labor',
+    icon: '⚡',
+    cover: '/games/passe-livre-nacional.jpg',
+    status: 'live',
+    runtimeState: 'real',
+    estimatedMinutes: 3,
+    duration: '1-3 min',
+    participants: 1,
+    difficulty: 'medium',
+    tags: ['arcade', 'passe livre', 'mobilidade', 'sindicato', 'coordenação'],
+    cta: 'Organizar',
+    color: '#1B6E0D',
+    kind: 'arcade',
+    engineId: 'passe-livre-nacional-v1',
+    pace: 'quick',
+    line: 'organizacao-popular',
+    territoryScope: 'estado-rj',
+    series: 'serie-solucoes-coletivas',
+    politicalAxis: 'poder-popular',
+    collectiveSolutionType: 'autogestao',
+    commonVsMarket: 'comum',
+    campaignFrame: 'comunidade-em-luta',
+  },
   {
     id: 'cidade-real',
     slug: 'cidade-real',

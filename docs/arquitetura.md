@@ -24,6 +24,18 @@ Validação final do Tijolo 12 (2026-03-06):
 - `/estado` e `/estado/feedback` validados em browser com leitura remota ativa.
 - Hardening mínimo de policy aplicado para triagem de feedback.
 
+## Atualização Tijolo 29 (2026-03-07)
+
+Nova linha de jogos de verdade aberta sem regressão da quick line:
+
+- Runtime arcade dedicado em `components/games/arcade/ArcadeCanvasRuntime.tsx`.
+- Vertical slice real `Tarifa Zero RJ - Corredor do Povo` em `components/games/arcade/TarifaZeroArcadeGame.tsx`.
+- Rota própria `/arcade/[slug]` para separar quick e arcade no produto.
+- Redirecionamento seguro de `/play/[slug]` quando `kind === 'arcade'`.
+- Catálogo ampliado com `kind: arcade` e primeiro jogo live.
+- Tracking dedicado da linha arcade (run, score, replay, power-up, CTA pós-run).
+- `/estado` com bloco leve de leitura arcade e comparação quick vs arcade.
+
 ## Stack
 
 - Next.js 14 (App Router)

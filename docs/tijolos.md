@@ -58,6 +58,8 @@ npm run test:e2e
 - Tijolo 25 ✅ motor ideologico + 3o quick + leitura por eixo politico
 - Tijolo 26 ✅ scorecard de grude + comparacao quick por serie/territorio + priorizacao estrategica
 - Tijolo 27 ✅ operacao disciplinada de distribuicao e coleta para linha quick
+- Tijolo 28 ✅ operacao pratica de distribuicao e campanha
+- Tijolo 29 ✅ linha arcade real + primeiro vertical slice jogavel
 
 ## Tijolo 20 - Cockpit Temporal ✅
 
@@ -158,8 +160,6 @@ Criar base visual reutilizavel para crescimento organizado do hub: avatar oficia
 - RPG/plataforma/tycoon completo
 - auth/CMS/admin
 - asset final profissional refinado (fica para V2)
-
-## Proximo
 
 ## Tijolo 23 - Avatar V2, QR e throughput quick ✅
 
@@ -342,4 +342,44 @@ Transformar o plano de distribuicao do Tijolo 27 em operacao pratica de campanha
 
 ## Proximo
 
-- Tijolo 29: executar distribuicao por 7-14 dias, consolidar amostra minima comparavel (80+ sessoes/territorio, 60+ sessoes/quick), decidir serie lider com evidencia honesta, preparar blueprint de formato medio.
+- Tijolo30 - Consolidacao da linha arcade com game feel melhorado e segundo jogo ✅
+
+### Objetivo
+
+Consolidar a linha arcade com dois jogos reais, melhorias de game feel baseadas em metricas e comparacao entre diferentes loops arcade.
+
+### Entregues
+
+- **Game feel melhorado no Tarifa Zero**:
+  - Suavizacao do meter comum via interpolacao (visao continua, nao oscilante)
+  - Indicador visual de combo ativo em tela (feedback de estado)
+  - Novo tipo de entidade rara: "chance" nos ultimos 15s (recompensa tardia, +50 score)
+  - HUD melhorado com mensagem de combo e feedback visual de sucesso
+  - Resposta visual aprimorada em coleta/bloqueio
+- **Segundo arcade real**: `Passe Livre Nacional - Sindicato em Movimento`
+  - Loop diferente: positioning/coordination (90s) vs lane-based (55s)
+  - Mecanica central: transportar passageiros entre paradas, defender contra privatizacao, organizar sindicato
+  - Mecanica de coletividade: defesa sindicato + cobertura de rede vs ameaca de privatizacao
+  - Telemetria integrada a pipeline arcade existente
+- **Documentacao de Game Feel**:
+  - `docs/game-feel-arcade.md` com framework de 8 dimensoes de qualidade ludica
+  - Criterios de sucesso mensuráveis (time-to-fun, feedback latency, clareza risco/recompensa, etc)
+  - Comparacao Tarifa Zero vs Passe Livre em termos de loop e mecanica politica
+- **Comparacao entre arcades no `/estado`**:
+  - Breakdown per-game (runs, replay rate, first input, score avg)
+  - Sinalizacao de qual loop tem maior engajamento
+  - Base de dados para decidir qual line cresce ou iteracoes futuras
+- **Integracao completa**: ambos os arcades no catalogo com metadados, serie, eixo politico e CTA de campanha.
+- **Validacao tecnica**: lint, type-check, test:unit, build, verify - todos passando sem regressoes.
+
+### Nao inclui
+
+- Terceiro arcade (fica para futuro)
+- RPG/plataforma/tycoon grande
+- Leaderboard global ou persistencia de score individual
+- Animacoes sofisticadas ou engine de particula complexa
+- Mobile app wrapper ou deep linking
+
+## Proximo
+
+- Tijolo 31: validacao por dados reais, iteracao de segunda rodada arcade se indicado, ou pivot para formato medio (2-6min).

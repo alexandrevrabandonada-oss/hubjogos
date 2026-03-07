@@ -1,0 +1,21 @@
+.page {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 10px;
+  border: 1px solid #143d5c;
+  color: #143d5c;
+  padding: 0.52rem 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.heroCopy {
+  max-width: 56ch;
+  margin: 0;
+  color: #2a4e67;
+}

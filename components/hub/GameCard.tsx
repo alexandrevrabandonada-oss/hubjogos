@@ -23,12 +23,14 @@ interface GameCardProps {
 }
 
 export function GameCard({ game }: GameCardProps) {
+  const destination = game.kind === 'arcade' ? `/arcade/${game.slug}` : `/play/${game.slug}`;
+
   async function handleCardClick() {
     await trackSeriesClick(game as any, game.series, game.territoryScope, 'game-card').catch(console.error);
   }
 
   return (
-    <Link href={`/play/${game.slug}`} className={styles.linkWrap} onClick={handleCardClick}>
+    <Link href={destination} className={styles.linkWrap} onClick={handleCardClick}>
       <Card interactive className={styles.card}>
         <div
           className={styles.accentBar}

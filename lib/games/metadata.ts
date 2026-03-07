@@ -10,6 +10,7 @@ const engineLabels: Record<string, string> = {
   simulation: 'Simulação de decisões',
   map: 'Exploração territorial',
   narrative: 'Narrativa interativa',
+  arcade: 'Arcade de ação política',
 };
 
 function getSiteUrl() {

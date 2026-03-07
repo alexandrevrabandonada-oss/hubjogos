@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { GameRuntime } from '@/components/games/runtime/GameRuntime';
 import { MetaChip } from '@/components/ui/MetaChip';
@@ -33,6 +33,10 @@ export default function PlayPage({ params }: PlayPageProps) {
 
   if (!game) {
     notFound();
+  }
+
+  if (game.kind === 'arcade') {
+    redirect(`/arcade/${game.slug}`);
   }
 
   const experienceHook: Record<string, string> = {

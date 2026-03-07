@@ -2,11 +2,15 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: Tijolo 28 concluido - operacao pratica de distribuicao por canal/territorio, links rastreaveis, pacotes prontos, brief semanal, cockpit acionavel em `/estado`.
+Status atual: Tijolo 30 concluido - linha arcade consolidada com 2 jogos reais, game feel melhorado, comparacao entre arcades ativa.
 
 ## Estado do Produto
 
-- 4 engines reais publicas em `/play/[slug]`.
+- 4 engines reais publicas em `/play/[slug]` (quiz, branching, simulation, map).
+- 2 runtimes arcade reais em `/arcade/[slug]` com canvas loop reutilizavel:
+  - `tarifa-zero-corredor` (55s, lane-based collect/avoid, tarifa zero + apoio coletivo)
+  - `passe-livre-nacional` (90s, positioning/coordination, sindicato + transporte público)
+- 2 vertical slices arcade jogáveis com game feel melhorado (smooth meter, combo feedback, visual clarity).
 - Avatar oficial da campanha como personagem recorrente.
 - Card final universal compartilhavel em todos os jogos.
 - Card final com QR code dinamico para reentrada.
@@ -60,7 +64,30 @@ Documento operacional: `docs/plano-distribuicao-quick.md`
 - Share page com CTA de reentrada para nova rodada.
 - Assinatura de campanha reutilizavel e discreta em pontos de descoberta.
 
-Documento guia: `docs/game-feel-e-diversao.md`
+DocumentoArcade (Tijolo 29)
+
+- Documento mestre: `docs/linha-arcade-da-campanha.md`.
+- Runtime arcade reutilizavel em `components/games/arcade/ArcadeCanvasRuntime.tsx`.
+- Vertical slice `Tarifa Zero RJ - Corredor do Povo` em `components/games/arcade/TarifaZeroArcadeGame.tsx`.
+- Nova rota dedicada `/arcade/[slug]` para separar quick line e arcade line sem quebrar o hub.
+- Telemetria dedicada:
+  - `arcade_run_start`
+  - `arcade_run_end`
+  - `arcade_score`
+  - `arcade_first_input_time`
+  - `arcade_replay_click`
+  - `arcade_powerup_collect`
+  - `arcade_campaign_cta_click`
+- Blocos novos em `/estado`:
+  - linha arcade
+  - runs
+  - score medio
+  - replay
+  - first input time
+  - CTA pos-run
+  - comparacao quick vs arcade
+
+## Linha  guia: `docs/game-feel-e-diversao.md`
 
 ## Linha de Jogos da Campanha
 
