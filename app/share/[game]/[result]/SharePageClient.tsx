@@ -19,6 +19,10 @@ import {
   trackReplayClick,
   trackSharePagePlayClick,
   trackFinalCardView,
+  trackFinalCardQRView,
+  trackFinalCardQRClick,
+  trackAvatarV2Rendered,
+  trackAvatarExpressionRendered,
 } from '@/lib/analytics/track';
 import { resolveExperimentVariantClient } from '@/lib/experiments/client';
 import { games } from '@/lib/games/catalog';
@@ -34,17 +38,37 @@ interface SharePageClientProps {
 export function SharePageClient({ game, result, title, summary }: SharePageClientProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [reentryVariant, setReentryVariant] = useState<'soft-call' | 'strong-call'>('soft-call');
+  const [showQR, setShowQR] = useState<boolean>(true);
 
   useEffect(() => {
     const variant = resolveExperimentVariantClient('share-page-reentry-cta', 'soft-call');
     setReentryVariant(variant === 'strong-call' ? 'strong-call' : 'soft-call');
 
+    // Tijolo 24: Experiment A/B de QR no card final
+    const qrVariant = resolveExperimentVariantClient('final-card-qr-code', 'with-qr');
+    setShowQR(qrVariant === 'with-qr');
+
     const gameObj = games.find((g) => g.slug === game);
     if (gameObj) {
       trackSharePageView(gameObj, result).catch(console.error);
       trackFinalCardView(gameObj, result).catch(console.error);
+      
+      // Só trackeia QR view se QR está visível
+      if (qrVariant === 'with-qr') {
+        trackFinalCardQRView(gameObj, result).catch(console.error);
+      }
+      
+      trackAvatarV2Rendered(gameObj, 'smile', 'auto').catch(console.error);
+      trackAvatarExpressionRendered(gameObj, 'smile').catch(console.error);
     }
   }, [game, result]);
+
+  const handleQrClick = async () => {
+    const gameObj = games.find((g) => g.slug === game);
+    if (gameObj) {
+      await trackFinalCardQRClick(gameObj, result).catch(console.error);
+    }
+  };
 
   const handleExportClick = async () => {
     const gameObj = games.find((g) => g.slug === game);
@@ -78,6 +102,8 @@ export function SharePageClient({ game, result, title, summary }: SharePageClien
             resultId={result}
             resultTitle={title}
             summary={summary}
+            onQrClick={handleQrClick}
+            showQR={showQR}
           />
         </div>
       </div>

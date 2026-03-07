@@ -1,0 +1,616 @@
+{
+  "source": "supabase",
+  "generatedAt": "2026-03-07T02:50:45.433Z",
+  "funnel": {
+    "total_sessions": 263,
+    "completions": 12,
+    "starts": 243,
+    "shares": 4,
+    "total_events": 661
+  },
+  "sources": [
+    {
+      "source": "direto/desconhecido",
+      "sessions": 246,
+      "starts": 230,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "source": "direto",
+      "sessions": 4,
+      "starts": 2,
+      "completions": 2,
+      "shares": 1,
+      "completion_rate": 50
+    },
+    {
+      "source": "experimento",
+      "sessions": 4,
+      "starts": 4,
+      "completions": 3,
+      "shares": 0,
+      "completion_rate": 75
+    },
+    {
+      "source": "google",
+      "sessions": 4,
+      "starts": 2,
+      "completions": 4,
+      "shares": 2,
+      "completion_rate": 100
+    },
+    {
+      "source": "twitter",
+      "sessions": 2,
+      "starts": 1,
+      "completions": 2,
+      "shares": 1,
+      "completion_rate": 100
+    },
+    {
+      "source": "facebook",
+      "sessions": 2,
+      "starts": 1,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "source": "newsletter",
+      "sessions": 1,
+      "starts": 1,
+      "completions": 1,
+      "shares": 0,
+      "completion_rate": 100
+    }
+  ],
+  "games": [
+    {
+      "slug": "abandonado",
+      "initiated": 69,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "cidade-real",
+      "initiated": 62,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "transporte-urgente",
+      "initiated": 58,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "voto-consciente",
+      "initiated": 57,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "tijolo-01",
+      "initiated": 9,
+      "completed": 6,
+      "shares": 1,
+      "completion_rate": 67,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 1
+    },
+    {
+      "slug": "tijolo-04",
+      "initiated": 4,
+      "completed": 4,
+      "shares": 2,
+      "completion_rate": 100,
+      "feedback_positive": 0,
+      "feedback_neutral": 0,
+      "feedback_negative": 1
+    },
+    {
+      "slug": "tijolo-05",
+      "initiated": 2,
+      "completed": 0,
+      "shares": 0,
+      "completion_rate": 0,
+      "feedback_positive": 1,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    },
+    {
+      "slug": "tijolo-06",
+      "initiated": 2,
+      "completed": 2,
+      "shares": 1,
+      "completion_rate": 100,
+      "feedback_positive": 1,
+      "feedback_neutral": 0,
+      "feedback_negative": 0
+    }
+  ],
+  "engines": [
+    {
+      "engine_kind": "map",
+      "sessions": 71,
+      "starts": 69,
+      "completions": 2,
+      "shares": 1,
+      "completion_rate": 3
+    },
+    {
+      "engine_kind": "quiz",
+      "sessions": 66,
+      "starts": 51,
+      "completions": 6,
+      "shares": 1,
+      "completion_rate": 9
+    },
+    {
+      "engine_kind": "simulation",
+      "sessions": 64,
+      "starts": 63,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "engine_kind": "branching_story",
+      "sessions": 58,
+      "starts": 58,
+      "completions": 0,
+      "shares": 0,
+      "completion_rate": 0
+    },
+    {
+      "engine_kind": "branching",
+      "sessions": 4,
+      "starts": 2,
+      "completions": 4,
+      "shares": 2,
+      "completion_rate": 100
+    }
+  ],
+  "events": [
+    {
+      "event_name": "game_start",
+      "total": 243
+    },
+    {
+      "event_name": "game_view",
+      "total": 173
+    },
+    {
+      "event_name": "step_advance",
+      "total": 107
+    },
+    {
+      "event_name": "share_page_view",
+      "total": 24
+    },
+    {
+      "event_name": "game_complete",
+      "total": 24
+    },
+    {
+      "event_name": "first_interaction_time",
+      "total": 21
+    },
+    {
+      "event_name": "page_navigation",
+      "total": 17
+    },
+    {
+      "event_name": "final_card_view",
+      "total": 12
+    },
+    {
+      "event_name": "final_card_qr_view",
+      "total": 12
+    },
+    {
+      "event_name": "avatar_v2_rendered",
+      "total": 12
+    },
+    {
+      "event_name": "avatar_expression_rendered",
+      "total": 12
+    },
+    {
+      "event_name": "link_copy",
+      "total": 2
+    },
+    {
+      "event_name": "result_copy",
+      "total": 2
+    }
+  ],
+  "experiments": [
+    {
+      "experiment_key": "beta-banner-copy",
+      "variant": "control",
+      "sessions": 127,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "beta-banner-copy",
+      "variant": "clarity",
+      "sessions": 119,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "final-card-qr-code",
+      "variant": "without-qr",
+      "sessions": 9,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "final-card-qr-code",
+      "variant": "with-qr",
+      "sessions": 6,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "home-hero-cta-copy",
+      "variant": "discover-now",
+      "sessions": 103,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "home-hero-cta-copy",
+      "variant": "explore",
+      "sessions": 70,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "outcome-cta-style",
+      "variant": "buttons",
+      "sessions": 40,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "outcome-cta-style",
+      "variant": "default",
+      "sessions": 33,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "outcome-primary-cta-copy",
+      "variant": "continue-journey",
+      "sessions": 95,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "outcome-primary-cta-copy",
+      "variant": "explore-next",
+      "sessions": 78,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "share-page-reentry-cta",
+      "variant": "strong-call",
+      "sessions": 87,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "share-page-reentry-cta",
+      "variant": "soft-call",
+      "sessions": 86,
+      "completions": 0,
+      "completion_rate": 0
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "A",
+      "sessions": 2,
+      "completions": 1,
+      "completion_rate": 50
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "B",
+      "sessions": 2,
+      "completions": 2,
+      "completion_rate": 100
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "v2",
+      "sessions": 2,
+      "completions": 2,
+      "completion_rate": 100
+    },
+    {
+      "experiment_key": "ui_variant",
+      "variant": "v1",
+      "sessions": 1,
+      "completions": 0,
+      "completion_rate": 0
+    }
+  ],
+  "scorecards": [
+    {
+      "key": "beta-banner-copy",
+      "name": "Beta Banner Copy",
+      "primaryMetric": "completion_rate",
+      "affectedSurface": "global/beta-banner",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "outcome-primary-cta-copy",
+      "name": "Outcome Primary CTA Copy",
+      "primaryMetric": "ctr",
+      "affectedSurface": "outcome/common-primary-cta",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "share-page-reentry-cta",
+      "name": "Share Page Reentry CTA",
+      "primaryMetric": "share_reentry_rate",
+      "affectedSurface": "share/[game]/[result]-reentry",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "home-hero-cta-copy",
+      "name": "Home Hero CTA Copy",
+      "primaryMetric": "ctr",
+      "affectedSurface": "home/hero-cta",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "final-card-qr-code",
+      "name": "Final Card QR Code",
+      "primaryMetric": "qr_scan_rate",
+      "affectedSurface": "share/final-card-qr",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    }
+  ],
+  "readingCriteria": {
+    "thresholds": {
+      "minViewsPerVariant": 40,
+      "minClicksPerPlacement": 25,
+      "minSessionsPerSource": 20,
+      "minShareViewsForReentry": 30,
+      "directionalLiftPct": 15,
+      "candidateLiftPct": 25
+    },
+    "checks": {
+      "ctrComparable": false,
+      "shareReentryReadable": false,
+      "sourceCohortsReadable": true,
+      "experimentReadable": false
+    },
+    "warnings": [
+      "CTR cedo demais: 0/25 clicks mínimos.",
+      "Share→reentry cedo demais: 24/30 share views.",
+      "Experimentos sem amostra mínima por variante."
+    ]
+  },
+  "circulation": {
+    "ctrByPlacement": {},
+    "topCtas": [],
+    "shareReentry": {
+      "sharePageViews": 24,
+      "nextGameClicks": 0,
+      "hubReturnClicks": 0,
+      "reentryActions": 0,
+      "reentryRate": 0
+    },
+    "exitsBySource": {},
+    "exitsByGame": {},
+    "exitsByEngine": {}
+  },
+  "circulationSummary": {
+    "topCtas": [],
+    "topExitSources": [],
+    "topExitGames": [],
+    "topExitEngines": []
+  },
+  "quickInsights": {
+    "quickComparison": [],
+    "bySeries": {},
+    "byTerritory": {},
+    "byPoliticalAxis": {},
+    "byCommonVsMarket": {},
+    "topStickyGame": null
+  },
+  "qrExperimentSummary": {
+    "with-qr": {
+      "sessions": 6,
+      "completions": 0,
+      "qrViews": 0,
+      "qrClicks": 0,
+      "finalCardViews": 0,
+      "completionRate": 0,
+      "qrCtr": 0
+    },
+    "without-qr": {
+      "sessions": 9,
+      "completions": 0,
+      "qrViews": 0,
+      "qrClicks": 0,
+      "finalCardViews": 0,
+      "completionRate": 0,
+      "qrCtr": 0
+    }
+  },
+  "feedback": [
+    {
+      "feedback_id": "test-fallback-1772829188197",
+      "session_id": "test-session-fallback",
+      "anonymous_id": "test-anon",
+      "slug": "tijolo-14-test-fallback",
+      "engine_kind": "branching",
+      "rating": "negative",
+      "comment": "Teste de fallback sem token",
+      "triage_status": "pending",
+      "triaged_at": null,
+      "created_at": "2026-03-06T20:33:08.197+00:00"
+    },
+    {
+      "feedback_id": "fb_1772822088335_80ejomrr0",
+      "session_id": "sess_1772822088335_ddrvtjtsb",
+      "anonymous_id": "anon_wv33g6rart",
+      "slug": "tijolo-01",
+      "engine_kind": "quiz",
+      "rating": "negative",
+      "comment": null,
+      "triage_status": "pending",
+      "triaged_at": null,
+      "created_at": "2026-03-06T18:34:48.335+00:00"
+    },
+    {
+      "feedback_id": "fb_1772822088334_tmo5grg5h",
+      "session_id": "sess_1772822088334_93sk7hw3e",
+      "anonymous_id": "anon_cwtvorpo0x8",
+      "slug": "tijolo-05",
+      "engine_kind": "simulation",
+      "rating": "positive",
+      "comment": "Meio chato, mas aprendi algo novo.",
+      "triage_status": "pending",
+      "triaged_at": null,
+      "created_at": "2026-03-06T18:34:48.334+00:00"
+    },
+    {
+      "feedback_id": "fb_1772822088334_w46wv96fs",
+      "session_id": "sess_1772822088334_h81mpsh1j",
+      "anonymous_id": "anon_lqqer0rfup",
+      "slug": "tijolo-06",
+      "engine_kind": "map",
+      "rating": "positive",
+      "comment": "Senti falta de mais contexto.",
+      "triage_status": "reviewed",
+      "triaged_at": null,
+      "created_at": "2026-03-06T18:34:48.334+00:00"
+    },
+    {
+      "feedback_id": "fb_1772822088334_ntghxjd9k",
+      "session_id": "sess_1772822088334_y57gv3k90",
+      "anonymous_id": "anon_sy8ly5k4vue",
+      "slug": "tijolo-04",
+      "engine_kind": "branching",
+      "rating": "negative",
+      "comment": "Senti falta de mais contexto.",
+      "triage_status": "reviewed",
+      "triaged_at": "2026-03-06T20:33:06.387+00:00",
+      "created_at": "2026-03-06T18:34:48.334+00:00"
+    }
+  ],
+  "audit": {
+    "recent": [
+      {
+        "action_type": "snapshot_generated",
+        "target_id": "supabase",
+        "actor_label": "ops-routine",
+        "actor_source": "ops-local",
+        "created_at": "2026-03-07T02:50:17.928657+00:00"
+      },
+      {
+        "action_type": "snapshot_generated",
+        "target_id": "supabase",
+        "actor_label": "ops-routine",
+        "actor_source": "ops-local",
+        "created_at": "2026-03-07T02:27:30.517263+00:00"
+      },
+      {
+        "action_type": "snapshot_generated",
+        "target_id": "supabase",
+        "actor_label": "ops-routine",
+        "actor_source": "ops-local",
+        "created_at": "2026-03-06T22:02:10.738136+00:00"
+      },
+      {
+        "action_type": "snapshot_generated",
+        "target_id": "supabase",
+        "actor_label": "ops-routine",
+        "actor_source": "ops-local",
+        "created_at": "2026-03-06T21:05:19.249483+00:00"
+      },
+      {
+        "action_type": "feedback_triage",
+        "target_id": "fb_1772822088334_ntghxjd9k",
+        "actor_label": "ops-admin",
+        "actor_source": "ops-api",
+        "created_at": "2026-03-06T20:33:07.402838+00:00"
+      }
+    ],
+    "summary": {
+      "total": 5,
+      "byActionType": {
+        "feedback_triage": 1,
+        "snapshot_generated": 4
+      },
+      "byDay": {
+        "2026-03-07": 2,
+        "2026-03-06": 3
+      },
+      "lastAction": {
+        "action_type": "snapshot_generated",
+        "target_id": "supabase",
+        "actor_label": "ops-routine",
+        "actor_source": "ops-local",
+        "created_at": "2026-03-07T02:50:17.928657+00:00"
+      }
+    }
+  }
+}

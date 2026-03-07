@@ -33,7 +33,19 @@ export type GameSeries =
   | 'serie-trabalho-sobrevivencia'
   | 'serie-cidade-abandonada'
   | 'serie-rio-de-janeiro'
-  | 'serie-campanha-missoes-estado';
+  | 'serie-campanha-missoes-estado'
+  | 'serie-solucoes-coletivas';
+
+export type PoliticalAxis = 'mercado' | 'reforma-estatal' | 'poder-popular';
+export type CollectiveSolutionType =
+  | 'nao-definido'
+  | 'tarifa-zero'
+  | 'cooperativismo'
+  | 'ajuda-mutua'
+  | 'autogestao'
+  | 'controle-popular';
+export type CommonVsMarket = 'mercado' | 'misto' | 'comum';
+export type CampaignFrame = 'projeto-coletivo' | 'comunidade-em-luta' | 'defesa-dos-comuns';
 
 export const GAME_PACE_LABELS: Record<GamePace, string> = {
   quick: '30s-2min',
@@ -58,6 +70,34 @@ export const GAME_SERIES_LABELS: Record<GameSeries, string> = {
   'serie-cidade-abandonada': 'Serie Cidade Abandonada',
   'serie-rio-de-janeiro': 'Serie Rio de Janeiro',
   'serie-campanha-missoes-estado': 'Serie Campanha / Missoes do Estado',
+  'serie-solucoes-coletivas': 'Serie Solucoes Coletivas',
+};
+
+export const POLITICAL_AXIS_LABELS: Record<PoliticalAxis, string> = {
+  mercado: 'Mercado',
+  'reforma-estatal': 'Reforma Estatal',
+  'poder-popular': 'Poder Popular',
+};
+
+export const COLLECTIVE_SOLUTION_LABELS: Record<CollectiveSolutionType, string> = {
+  'nao-definido': 'Nao definido',
+  'tarifa-zero': 'Tarifa Zero',
+  cooperativismo: 'Cooperativismo',
+  'ajuda-mutua': 'Ajuda Mutua',
+  autogestao: 'Autogestao',
+  'controle-popular': 'Controle Popular',
+};
+
+export const COMMON_VS_MARKET_LABELS: Record<CommonVsMarket, string> = {
+  mercado: 'Mercado',
+  misto: 'Misto',
+  comum: 'Comum',
+};
+
+export const CAMPAIGN_FRAME_LABELS: Record<CampaignFrame, string> = {
+  'projeto-coletivo': 'Projeto Coletivo',
+  'comunidade-em-luta': 'Comunidade em Luta',
+  'defesa-dos-comuns': 'Defesa dos Comuns',
 };
 
 export const TERRITORY_SCOPE_LABELS: Record<TerritoryScope, string> = {
@@ -92,6 +132,10 @@ export interface Game {
   line: GameLine;
   territoryScope: TerritoryScope;
   series: GameSeries;
+  politicalAxis: PoliticalAxis;
+  collectiveSolutionType: CollectiveSolutionType;
+  commonVsMarket: CommonVsMarket;
+  campaignFrame: CampaignFrame;
 }
 
 export const games: Game[] = [
@@ -120,6 +164,10 @@ export const games: Game[] = [
     line: 'orcamento-cuidado',
     territoryScope: 'volta-redonda',
     series: 'serie-volta-redonda',
+    politicalAxis: 'reforma-estatal',
+    collectiveSolutionType: 'controle-popular',
+    commonVsMarket: 'misto',
+    campaignFrame: 'projeto-coletivo',
   },
   {
     id: 'abandonado',
@@ -146,6 +194,10 @@ export const games: Game[] = [
     line: 'memoria-territorio',
     territoryScope: 'volta-redonda',
     series: 'serie-cidade-abandonada',
+    politicalAxis: 'poder-popular',
+    collectiveSolutionType: 'autogestao',
+    commonVsMarket: 'comum',
+    campaignFrame: 'comunidade-em-luta',
   },
   {
     id: 'trabalho-impossivel',
@@ -172,6 +224,10 @@ export const games: Game[] = [
     line: 'trabalho',
     territoryScope: 'sul-fluminense',
     series: 'serie-trabalho-sobrevivencia',
+    politicalAxis: 'mercado',
+    collectiveSolutionType: 'nao-definido',
+    commonVsMarket: 'mercado',
+    campaignFrame: 'projeto-coletivo',
   },
   {
     id: 'voto-consciente',
@@ -198,6 +254,10 @@ export const games: Game[] = [
     line: 'organizacao-popular',
     territoryScope: 'estado-rj',
     series: 'serie-campanha-missoes-estado',
+    politicalAxis: 'reforma-estatal',
+    collectiveSolutionType: 'controle-popular',
+    commonVsMarket: 'misto',
+    campaignFrame: 'defesa-dos-comuns',
   },
   {
     id: 'memoria-coletiva',
@@ -224,6 +284,10 @@ export const games: Game[] = [
     line: 'memoria-territorio',
     territoryScope: 'volta-redonda',
     series: 'serie-cidade-abandonada',
+    politicalAxis: 'poder-popular',
+    collectiveSolutionType: 'ajuda-mutua',
+    commonVsMarket: 'comum',
+    campaignFrame: 'comunidade-em-luta',
   },
   {
     id: 'transporte-urgente',
@@ -250,8 +314,103 @@ export const games: Game[] = [
     line: 'mobilidade',
     territoryScope: 'volta-redonda',
     series: 'serie-volta-redonda',
+    politicalAxis: 'reforma-estatal',
+    collectiveSolutionType: 'tarifa-zero',
+    commonVsMarket: 'misto',
+    campaignFrame: 'projeto-coletivo',
+  },
+  {
+    id: 'custo-de-viver',
+    slug: 'custo-de-viver',
+    title: 'Custo de Viver',
+    description:
+      'Um quiz relâmpago sobre realidade econômica. Quanto custa viver bem em Volta Redonda? Responda 5 perguntas rápidas e descubra qual é o seu "custo de viver" real.',
+    shortDescription: 'Quiz sobre custo de vida em VR',
+    theme: 'labor',
+    icon: '💰',
+    cover: '/games/custo-de-viver.jpg',
+    status: 'beta',
+    runtimeState: 'real',
+    estimatedMinutes: 2,
+    duration: '1-2 min',
+    participants: 1,
+    difficulty: 'easy',
+    tags: ['custo de vida', 'economia', 'realidade', 'quick'],
+    cta: 'Calcular',
+    color: '#C97E2F',
+    kind: 'quiz',
+    engineId: 'custo-de-viver',
+    pace: 'quick',
+    line: 'trabalho',
+    territoryScope: 'volta-redonda',
+    series: 'serie-trabalho-sobrevivencia',
+    politicalAxis: 'reforma-estatal',
+    collectiveSolutionType: 'cooperativismo',
+    commonVsMarket: 'misto',
+    campaignFrame: 'projeto-coletivo',
+  },
+  {
+    id: 'quem-paga-a-conta',
+    slug: 'quem-paga-a-conta',
+    title: 'Quem Paga a Conta?',
+    description:
+      'Um quiz relâmpago sobre responsabilidade fiscal. Quem deve pagar pelos serviços essenciais do RJ? Responda 5 perguntas rápidas sobre transporte, saúde, moradia, educação e segurança.',
+    shortDescription: 'Quiz sobre quem deve pagar serviços públicos',
+    theme: 'rights',
+    icon: '💸',
+    cover: '/games/quem-paga-a-conta.jpg',
+    status: 'beta',
+    runtimeState: 'real',
+    estimatedMinutes: 2,
+    duration: '1-2 min',
+    participants: 1,
+    difficulty: 'easy',
+    tags: ['responsabilidade', 'serviços públicos', 'Estado', 'quick'],
+    cta: 'Responder',
+    color: '#FFB81C',
+    kind: 'quiz',
+    engineId: 'quem-paga-a-conta',
+    pace: 'quick',
+    line: 'organizacao-popular',
+    territoryScope: 'estado-rj',
+    series: 'serie-campanha-missoes-estado',
+    politicalAxis: 'reforma-estatal',
+    collectiveSolutionType: 'controle-popular',
+    commonVsMarket: 'misto',
+    campaignFrame: 'defesa-dos-comuns',
+  },
+  {
+    id: 'cidade-em-comum',
+    slug: 'cidade-em-comum',
+    title: 'Cidade em Comum',
+    description:
+      'Quiz relampago sobre saidas coletivas para o cotidiano: tarifa zero, cooperativas, mutirao e autogestao. Em 5 perguntas, descubra qual caminho de organizacao popular mais combina com sua leitura da cidade.',
+    shortDescription: 'Qual solucao coletiva voce prioriza para a cidade?',
+    theme: 'rights',
+    icon: '🤝',
+    cover: '/games/cidade-em-comum.jpg',
+    status: 'beta',
+    runtimeState: 'real',
+    estimatedMinutes: 2,
+    duration: '1-2 min',
+    participants: 1,
+    difficulty: 'easy',
+    tags: ['organizacao popular', 'comum', 'quick', 'solucoes coletivas'],
+    cta: 'Construir',
+    color: '#2E7D5B',
+    kind: 'quiz',
+    engineId: 'cidade-em-comum',
+    pace: 'quick',
+    line: 'organizacao-popular',
+    territoryScope: 'estado-rj',
+    series: 'serie-solucoes-coletivas',
+    politicalAxis: 'poder-popular',
+    collectiveSolutionType: 'autogestao',
+    commonVsMarket: 'comum',
+    campaignFrame: 'defesa-dos-comuns',
   },
 ];
+
 
 export function getGameBySlug(slug: string): Game | undefined {
   return games.find((game) => game.slug === slug);
@@ -271,6 +430,14 @@ export function getGamesBySeries(series: GameSeries): Game[] {
 
 export function getGamesByTerritory(scope: TerritoryScope): Game[] {
   return games.filter((game) => game.territoryScope === scope);
+}
+
+export function getGamesByPoliticalAxis(axis: PoliticalAxis): Game[] {
+  return games.filter((game) => game.politicalAxis === axis);
+}
+
+export function getGamesByCollectiveSolution(solution: CollectiveSolutionType): Game[] {
+  return games.filter((game) => game.collectiveSolutionType === solution);
 }
 
 export function getNextGameInSeries(game: Game): Game | undefined {

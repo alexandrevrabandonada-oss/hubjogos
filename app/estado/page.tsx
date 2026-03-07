@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GAME_SERIES_LABELS, TERRITORY_SCOPE_LABELS, games } from '@/lib/games/catalog';
+import {
+  COLLECTIVE_SOLUTION_LABELS,
+  COMMON_VS_MARKET_LABELS,
+  GAME_SERIES_LABELS,
+  POLITICAL_AXIS_LABELS,
+  TERRITORY_SCOPE_LABELS,
+  games,
+} from '@/lib/games/catalog';
 import { collectBestAvailableMetrics } from '@/lib/analytics/metrics';
 import type { MetricsSnapshot } from '@/lib/analytics/metrics';
 import type { TimeWindow } from '@/lib/analytics/windowing';
@@ -364,6 +371,211 @@ export default function EstadoPage() {
       completionRate: initiated > 0 ? Math.round((completed / initiated) * 100) : 0,
     };
   });
+
+  const politicalAxisSummary = Object.entries(POLITICAL_AXIS_LABELS).map(([axis, label]) => {
+    const inAxis = metrics.gamesSorted.filter((row) => gameBySlug.get(row.slug)?.politicalAxis === axis);
+    const initiated = inAxis.reduce((sum, row) => sum + row.initiated, 0);
+    const completed = inAxis.reduce((sum, row) => sum + row.completed, 0);
+    const shares = inAxis.reduce((sum, row) => sum + row.shares, 0);
+    return {
+      axis,
+      label,
+      initiated,
+      completed,
+      shares,
+      completionRate: initiated > 0 ? Math.round((completed / initiated) * 100) : 0,
+    };
+  });
+
+  const collectiveSolutionSummary = Object.entries(COLLECTIVE_SOLUTION_LABELS)
+    .filter(([key]) => key !== 'nao-definido')
+    .map(([solution, label]) => {
+      const inSolution = metrics.gamesSorted.filter((row) => gameBySlug.get(row.slug)?.collectiveSolutionType === solution);
+      const initiated = inSolution.reduce((sum, row) => sum + row.initiated, 0);
+      const completed = inSolution.reduce((sum, row) => sum + row.completed, 0);
+      const shares = inSolution.reduce((sum, row) => sum + row.shares, 0);
+      return {
+        solution,
+        label,
+        initiated,
+        completed,
+        shares,
+        completionRate: initiated > 0 ? Math.round((completed / initiated) * 100) : 0,
+      };
+    });
+
+  const commonVsMarketSummary = Object.entries(COMMON_VS_MARKET_LABELS).map(([frame, label]) => {
+    const inFrame = metrics.gamesSorted.filter((row) => gameBySlug.get(row.slug)?.commonVsMarket === frame);
+    const initiated = inFrame.reduce((sum, row) => sum + row.initiated, 0);
+    const completed = inFrame.reduce((sum, row) => sum + row.completed, 0);
+    return {
+      frame,
+      label,
+      initiated,
+      completed,
+      completionRate: initiated > 0 ? Math.round((completed / initiated) * 100) : 0,
+    };
+  });
+
+  const ideologicalSignals = metrics.eventsByType['ideological_axis_signal'] || 0;
+
+  const quickReplayEvents = metrics.eventsByType['quick_minigame_replay'] || 0;
+  const quickQrViews = metrics.eventsByType['final_card_qr_view'] || 0;
+  const quickQrClicks = metrics.eventsByType['final_card_qr_click'] || 0;
+  const quickQrCtr = quickQrViews > 0 ? Math.round((quickQrClicks / quickQrViews) * 100) : 0;
+
+  const trackedQuickSlugs = ['custo-de-viver', 'quem-paga-a-conta', 'cidade-em-comum'];
+  const quickComparison = metrics.quickInsights.quickComparison
+    .filter((row) => trackedQuickSlugs.includes(row.slug))
+    .sort((a, b) => b.sessions - a.sessions);
+  const quickRanking = metrics.quickInsights.rankingByStickiness.filter((row) => trackedQuickSlugs.includes(row.slug));
+
+  const quickBySeries = Object.values(
+    quickComparison.reduce<Record<string, {
+      key: string;
+      label: string;
+      sessions: number;
+      starts: number;
+      completions: number;
+      shares: number;
+      replays: number;
+      postGameCtaClicks: number;
+      sharePagePlayClicks: number;
+      stickyTotal: number;
+      games: number;
+    }>>((acc, row) => {
+      const game = gameBySlug.get(row.slug);
+      const key = game?.series || 'serie-nao-definida';
+      const label = GAME_SERIES_LABELS[key as keyof typeof GAME_SERIES_LABELS] || key;
+      if (!acc[key]) {
+        acc[key] = {
+          key,
+          label,
+          sessions: 0,
+          starts: 0,
+          completions: 0,
+          shares: 0,
+          replays: 0,
+          postGameCtaClicks: 0,
+          sharePagePlayClicks: 0,
+          stickyTotal: 0,
+          games: 0,
+        };
+      }
+      acc[key].sessions += row.sessions;
+      acc[key].starts += row.starts;
+      acc[key].completions += row.completions;
+      acc[key].shares += row.shares;
+      acc[key].replays += row.replays;
+      acc[key].postGameCtaClicks += row.postGameCtaClicks;
+      acc[key].sharePagePlayClicks += row.sharePagePlayClicks;
+      acc[key].stickyTotal += row.stickyScore;
+      acc[key].games += 1;
+      return acc;
+    }, {}),
+  )
+    .map((row) => ({
+      ...row,
+      completionRate: row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0,
+      replayRate: row.completions > 0 ? Math.round((row.replays / row.completions) * 100) : 0,
+      shareRate: row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0,
+      stickyScore: row.games > 0 ? Math.round(row.stickyTotal / row.games) : 0,
+    }))
+    .sort((a, b) => b.stickyScore - a.stickyScore);
+
+  const quickByTerritory = Object.values(
+    quickComparison.reduce<Record<string, {
+      key: string;
+      label: string;
+      sessions: number;
+      shares: number;
+      replays: number;
+      completions: number;
+      stickyTotal: number;
+      games: number;
+      topGameSlug: string;
+      topGameSessions: number;
+    }>>((acc, row) => {
+      const game = gameBySlug.get(row.slug);
+      const key = game?.territoryScope || 'estado-rj';
+      const label = TERRITORY_SCOPE_LABELS[key as keyof typeof TERRITORY_SCOPE_LABELS] || key;
+      if (!acc[key]) {
+        acc[key] = {
+          key,
+          label,
+          sessions: 0,
+          shares: 0,
+          replays: 0,
+          completions: 0,
+          stickyTotal: 0,
+          games: 0,
+          topGameSlug: row.slug,
+          topGameSessions: row.sessions,
+        };
+      }
+      acc[key].sessions += row.sessions;
+      acc[key].shares += row.shares;
+      acc[key].replays += row.replays;
+      acc[key].completions += row.completions;
+      acc[key].stickyTotal += row.stickyScore;
+      acc[key].games += 1;
+      if (row.sessions > acc[key].topGameSessions) {
+        acc[key].topGameSlug = row.slug;
+        acc[key].topGameSessions = row.sessions;
+      }
+      return acc;
+    }, {}),
+  )
+    .map((row) => ({
+      ...row,
+      shareRate: row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0,
+      replayRate: row.completions > 0 ? Math.round((row.replays / row.completions) * 100) : 0,
+      stickyScore: row.games > 0 ? Math.round(row.stickyTotal / row.games) : 0,
+      topGameTitle: gameBySlug.get(row.topGameSlug)?.title || row.topGameSlug,
+    }))
+    .sort((a, b) => b.stickyScore - a.stickyScore);
+
+  const quickByAxis = Object.values(
+    quickComparison.reduce<Record<string, {
+      key: string;
+      label: string;
+      sessions: number;
+      completions: number;
+      shares: number;
+      stickyTotal: number;
+      games: number;
+    }>>((acc, row) => {
+      const game = gameBySlug.get(row.slug);
+      const key = game?.politicalAxis || 'reforma-estatal';
+      const label = POLITICAL_AXIS_LABELS[key as keyof typeof POLITICAL_AXIS_LABELS] || key;
+      if (!acc[key]) {
+        acc[key] = {
+          key,
+          label,
+          sessions: 0,
+          completions: 0,
+          shares: 0,
+          stickyTotal: 0,
+          games: 0,
+        };
+      }
+      acc[key].sessions += row.sessions;
+      acc[key].completions += row.completions;
+      acc[key].shares += row.shares;
+      acc[key].stickyTotal += row.stickyScore;
+      acc[key].games += 1;
+      return acc;
+    }, {}),
+  )
+    .map((row) => ({
+      ...row,
+      completionRate: row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0,
+      shareRate: row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0,
+      stickyScore: row.games > 0 ? Math.round(row.stickyTotal / row.games) : 0,
+    }))
+    .sort((a, b) => b.stickyScore - a.stickyScore);
+
+  const quickSampleWarning = quickComparison.some((row) => row.sessions < metrics.quickInsights.heuristic.minSampleSessions);
 
   const replayByKind = Object.entries(metrics.gamesSorted.reduce<Record<string, { initiated: number; completed: number; shares: number }>>((acc, row) => {
     const kind = gameBySlug.get(row.slug)?.kind || 'unknown';
@@ -872,6 +1084,467 @@ export default function EstadoPage() {
         </Card>
 
         <Card className={styles.fullCard}>
+          <h3>Leitura Ideologica da Linha</h3>
+          <p className={styles.techNote}>
+            Recorte por eixo politico, tipo de solucao coletiva e disputa comum vs mercado.
+          </p>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Eixo politico</th>
+                  <th>Acessos</th>
+                  <th>Conclusoes</th>
+                  <th>Shares</th>
+                  <th>Conv%</th>
+                </tr>
+              </thead>
+              <tbody>
+                {politicalAxisSummary
+                  .sort((a, b) => b.initiated - a.initiated)
+                  .map((row) => (
+                    <tr key={row.axis}>
+                      <td className={styles.gameTitle}>{row.label}</td>
+                      <td className={styles.numeric}>{row.initiated}</td>
+                      <td className={styles.numeric}>{row.completed}</td>
+                      <td className={styles.numeric}>{row.shares}</td>
+                      <td className={styles.numeric}>{row.completionRate}%</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className={styles.eventsList}>
+            {collectiveSolutionSummary.map((row) => (
+              <div key={row.solution} className={styles.eventRow}>
+                <span className={styles.eventLabel}>{row.label}</span>
+                <span className={styles.eventCount}>
+                  {row.initiated} acessos · {row.completionRate}% conv
+                </span>
+              </div>
+            ))}
+            {commonVsMarketSummary.map((row) => (
+              <div key={row.frame} className={styles.eventRow}>
+                <span className={styles.eventLabel}>Disputa {row.label}</span>
+                <span className={styles.eventCount}>{row.initiated} acessos</span>
+              </div>
+            ))}
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>ideological_axis_signal</span>
+              <span className={styles.eventCount}>{ideologicalSignals}</span>
+            </div>
+          </div>
+        </Card>
+
+        {/* === PRIORIZAÇÃO ESTRATÉGICA QUICK (Tijolo 26) === */}
+        <Card className={styles.fullCard}>
+          <h3>Linha Quick: Comparação real entre jogos</h3>
+          <p className={styles.techNote}>
+            Heurística de grude (explícita): completion 30%, replay 20%, share 20%, CTA pós-jogo 15%, share→play 10%, tempo até 1ª interação 5%.
+          </p>
+          {quickComparison.length > 0 ? (
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Quick</th>
+                    <th>Views</th>
+                    <th>Starts</th>
+                    <th>Completions</th>
+                    <th>Replay%</th>
+                    <th>Share%</th>
+                    <th>CTA pós-jogo</th>
+                    <th>Card final</th>
+                    <th>Share→Play</th>
+                    <th>QR CTR</th>
+                    <th>TFI médio</th>
+                    <th>Grude</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {quickComparison.map((row) => (
+                    <tr key={row.slug}>
+                      <td className={styles.gameTitle}>{row.title}</td>
+                      <td className={styles.numeric}>{row.sessions}</td>
+                      <td className={styles.numeric}>{row.starts}</td>
+                      <td className={styles.numeric}>{row.completions}</td>
+                      <td className={styles.numeric}>{row.replayRate}%</td>
+                      <td className={styles.numeric}>{row.shareRate}%</td>
+                      <td className={styles.numeric}>{row.postGameCtaClicks}</td>
+                      <td className={styles.numeric}>{row.finalCardInteractions}</td>
+                      <td className={styles.numeric}>{row.reentryRate}%</td>
+                      <td className={styles.numeric}>{row.qrCtr}%</td>
+                      <td className={styles.numeric}>{row.firstInteractionAvgMs}ms</td>
+                      <td className={styles.numeric}><strong>{row.stickyScore}</strong></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className={styles.techNote}>Sem amostra quick suficiente para comparação lado a lado.</p>
+          )}
+          <p className={styles.techNote}>
+            Sinais globais da linha quick: replay events = {quickReplayEvents}, QR views = {quickQrViews}, QR clicks = {quickQrClicks}, QR CTR = {quickQrCtr}%, ideological signals = {ideologicalSignals}.
+          </p>
+          {(quickSampleWarning || metrics.quickInsights.warnings.length > 0) && (
+            <p className={styles.supabaseWarning}>
+              ⚠️ Leitura ainda em consolidação. {metrics.quickInsights.warnings.join(' ')}
+            </p>
+          )}
+        </Card>
+
+        {/* === O QUE DISTRIBUIR AGORA (Tijolo 28) === */}
+        <Card className={styles.fullCard}>
+          <h3>📢 O que distribuir agora — Operação de Campanha</h3>
+          <p className={styles.techNote}>
+            Recomendações baseadas no status de coleta e nas metas operacionais da semana.
+          </p>
+          
+          {(() => {
+            const quicksInsuficientes = Object.entries(metrics.quickInsights.collectionStatus.byQuick || {})
+              .filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento')
+              .sort((a, b) => (a[1].progressPct || 0) - (b[1].progressPct || 0));
+            
+            const territoriosInsuficientes = Object.entries(metrics.quickInsights.collectionStatus.byTerritory || {})
+              .filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento')
+              .sort((a, b) => (a[1].progressPct || 0) - (b[1].progressPct || 0));
+            
+            const seriesInsuficientes = Object.entries(metrics.quickInsights.collectionStatus.bySeries || {})
+              .filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento')
+              .sort((a, b) => (a[1].progressPct || 0) - (b[1].progressPct || 0));
+            
+            const allReady = quicksInsuficientes.length === 0 && territoriosInsuficientes.length === 0 && seriesInsuficientes.length === 0;
+            
+            if (allReady) {
+              return (
+                <div style={{ padding: '1rem', background: '#e8f5e9', borderRadius: '4px' }}>
+                  <p style={{ margin: 0, color: '#2e7d32', fontWeight: 'bold' }}>
+                    ✅ Metas de coleta atingidas! Pronto para decisão sobre formato médio (Tijolo 29).
+                  </p>
+                </div>
+              );
+            }
+            
+            return (
+              <div>
+                {quicksInsuficientes.length > 0 && (
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <h4 style={{ fontSize: '0.95rem', marginBottom: '0.5rem' }}>🎮 Quick prioritário</h4>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.9rem' }}>
+                      <strong>{quicksInsuficientes[0][0]}</strong> — {quicksInsuficientes[0][1].progressPct}% da meta
+                    </p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: '#666' }}>
+                      Distribuir nos canais: Instagram, WhatsApp, TikTok
+                    </p>
+                  </div>
+                )}
+                
+                {territoriosInsuficientes.length > 0 && (
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <h4 style={{ fontSize: '0.95rem', marginBottom: '0.5rem' }}>🗺️ Território prioritário</h4>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.9rem' }}>
+                      <strong>{territoriosInsuficientes[0][0]}</strong> — {territoriosInsuficientes[0][1].progressPct}% da meta
+                    </p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: '#666' }}>
+                      Pacote: <code>reports/distribution/packages/territorio-{territoriosInsuficientes[0][0]}.md</code>
+                    </p>
+                  </div>
+                )}
+                
+                {seriesInsuficientes.length > 0 && (
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <h4 style={{ fontSize: '0.95rem', marginBottom: '0.5rem' }}>📚 Série prioritária</h4>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.9rem' }}>
+                      <strong>{seriesInsuficientes[0][0]}</strong> — {seriesInsuficientes[0][1].progressPct}% da meta
+                    </p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: '#666' }}>
+                      Empurrar quicks desta série primeiro
+                    </p>
+                  </div>
+                )}
+                
+                {(metrics.quickInsights.collectionStatus.qrExperiment?.status === 'coleta-insuficiente' || 
+                  metrics.quickInsights.collectionStatus.qrExperiment?.status === 'coleta-em-andamento') && (
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <h4 style={{ fontSize: '0.95rem', marginBottom: '0.5rem' }}>🔬 Experimento QR precisa atenção</h4>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: '#666' }}>
+                      Garantir exposição balanceada entre variantes
+                    </p>
+                  </div>
+                )}
+                
+                <div style={{ padding: '0.75rem', background: '#fff3cd', borderRadius: '4px', marginTop: '1rem' }}>
+                  <p style={{ margin: 0, fontSize: '0.85rem' }}>
+                    💡 <strong>Próximos passos:</strong> Consultar <code>docs/operacao-semanal-distribuicao.md</code> para roteiro completo.
+                  </p>
+                </div>
+              </div>
+            );
+          })()}
+        </Card>
+
+        {/* === STATUS DE COLETA (Tijolo 27) === */}
+        <Card className={styles.fullCard}>
+          <h3>Status de Coleta - Distribuição Quick (Tijolo 27)</h3>
+          <p className={styles.techNote}>
+            Metas mínimas de coleta para janela {windowLabel(window).toLowerCase()}: quick {metrics.quickInsights.collectionTargets.quick.sessions} sessões / série {metrics.quickInsights.collectionTargets.series.sessions} sessões / território {metrics.quickInsights.collectionTargets.territory.sessions} sessões / QR {metrics.quickInsights.collectionTargets.qrVariant.sessions} sessões/variante.
+          </p>
+          
+          {/* Status por quick */}
+          {Object.keys(metrics.quickInsights.collectionStatus.byQuick).length > 0 && (
+            <>
+              <h4 style={{ marginTop: '1.5rem', fontSize: '1rem' }}>Por quick game</h4>
+              <div className={styles.tableWrap}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Quick</th>
+                      <th>Status</th>
+                      <th>Progresso</th>
+                      <th>Sessões</th>
+                      <th>Starts</th>
+                      <th>Completions</th>
+                      <th>Shares</th>
+                      <th>Replays</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(metrics.quickInsights.collectionStatus.byQuick).map(([slug, status]) => {
+                      const quickTitle = quickComparison.find((q) => q.slug === slug)?.title || slug;
+                      const statusBadge = 
+                        status.status === 'pronto-para-priorizacao' ? '✅ Pronto' :
+                        status.status === 'coleta-minima-atingida' ? '🟢 Meta atingida' :
+                        status.status === 'coleta-em-andamento' ? '🟡 Em andamento' :
+                        '🔴 Insuficiente';
+                      const targets = metrics.quickInsights.collectionTargets.quick;
+                      return (
+                        <tr key={slug}>
+                          <td className={styles.gameTitle}>{quickTitle}</td>
+                          <td className={styles.numeric}>{statusBadge}</td>
+                          <td className={styles.numeric}>{status.progressPct}%</td>
+                          <td className={styles.numeric}>{status.progress.sessions}/{targets.sessions}</td>
+                          <td className={styles.numeric}>{status.progress.starts}/{targets.starts}</td>
+                          <td className={styles.numeric}>{status.progress.completions}/{targets.completions}</td>
+                          <td className={styles.numeric}>{status.progress.shares}/{targets.shares}</td>
+                          <td className={styles.numeric}>{status.progress.replays}/{targets.replays}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {/* Status por série */}
+          {Object.keys(metrics.quickInsights.collectionStatus.bySeries).length > 0 && (
+            <>
+              <h4 style={{ marginTop: '1.5rem', fontSize: '1rem' }}>Por série</h4>
+              <div className={styles.tableWrap}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Série</th>
+                      <th>Status</th>
+                      <th>Progresso</th>
+                      <th>Sessões</th>
+                      <th>Starts</th>
+                      <th>Completions</th>
+                      <th>Shares</th>
+                      <th>Jogos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(metrics.quickInsights.collectionStatus.bySeries).map(([serieKey, status]) => {
+                      const serieLabel = quickBySeries.find((s) => s.key === serieKey)?.label || serieKey;
+                      const statusBadge = 
+                        status.status === 'pronto-para-priorizacao' ? '✅ Pronto' :
+                        status.status === 'coleta-minima-atingida' ? '🟢 Meta atingida' :
+                        status.status === 'coleta-em-andamento' ? '🟡 Em andamento' :
+                        '🔴 Insuficiente';
+                      const targets = metrics.quickInsights.collectionTargets.series;
+                      return (
+                        <tr key={serieKey}>
+                          <td className={styles.gameTitle}>{serieLabel}</td>
+                          <td className={styles.numeric}>{statusBadge}</td>
+                          <td className={styles.numeric}>{status.progressPct}%</td>
+                          <td className={styles.numeric}>{status.progress.sessions}/{targets.sessions}</td>
+                          <td className={styles.numeric}>{status.progress.starts}/{targets.starts}</td>
+                          <td className={styles.numeric}>{status.progress.completions}/{targets.completions}</td>
+                          <td className={styles.numeric}>{status.progress.shares}/{targets.shares}</td>
+                          <td className={styles.numeric}>{status.gamesInSeries.length}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {/* Status por território */}
+          {Object.keys(metrics.quickInsights.collectionStatus.byTerritory).length > 0 && (
+            <>
+              <h4 style={{ marginTop: '1.5rem', fontSize: '1rem' }}>Por território</h4>
+              <div className={styles.tableWrap}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Território</th>
+                      <th>Status</th>
+                      <th>Progresso</th>
+                      <th>Sessões</th>
+                      <th>Starts</th>
+                      <th>Completions</th>
+                      <th>Shares</th>
+                      <th>Jogos</th>
+                      <th>Jogo forte</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(metrics.quickInsights.collectionStatus.byTerritory).map(([territoryKey, status]) => {
+                      const territoryLabel = quickByTerritory.find((t) => t.key === territoryKey)?.label || territoryKey;
+                      const statusBadge = 
+                        status.status === 'pronto-para-priorizacao' ? '✅ Pronto' :
+                        status.status === 'coleta-minima-atingida' ? '🟢 Meta atingida' :
+                        status.status === 'coleta-em-andamento' ? '🟡 Em andamento' :
+                        '🔴 Insuficiente';
+                      const targets = metrics.quickInsights.collectionTargets.territory;
+                      const topGameTitle = status.topGameSlug ? (quickComparison.find((q) => q.slug === status.topGameSlug)?.title || status.topGameSlug) : 'n/d';
+                      return (
+                        <tr key={territoryKey}>
+                          <td className={styles.gameTitle}>{territoryLabel}</td>
+                          <td className={styles.numeric}>{statusBadge}</td>
+                          <td className={styles.numeric}>{status.progressPct}%</td>
+                          <td className={styles.numeric}>{status.progress.sessions}/{targets.sessions}</td>
+                          <td className={styles.numeric}>{status.progress.starts}/{targets.starts}</td>
+                          <td className={styles.numeric}>{status.progress.completions}/{targets.completions}</td>
+                          <td className={styles.numeric}>{status.progress.shares}/{targets.shares}</td>
+                          <td className={styles.numeric}>{status.gamesInTerritory.length}</td>
+                          <td className={styles.gameTitle}>{topGameTitle}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+
+          {/* Status experimento QR */}
+          <h4 style={{ marginTop: '1.5rem', fontSize: '1rem' }}>Experimento QR A/B</h4>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Status geral</p>
+              <p className={styles.signalValue}>
+                {metrics.quickInsights.collectionStatus.qrExperiment.status === 'pronto-para-priorizacao' ? '✅ Pronto' :
+                 metrics.quickInsights.collectionStatus.qrExperiment.status === 'coleta-minima-atingida' ? '🟢 Meta atingida' :
+                 metrics.quickInsights.collectionStatus.qrExperiment.status === 'coleta-em-andamento' ? '🟡 Em andamento' :
+                 '🔴 Insuficiente'}
+              </p>
+            </div>
+            {Object.entries(metrics.quickInsights.collectionStatus.qrExperiment.progressByVariant).map(([variant, progress]) => {
+              const targets = metrics.quickInsights.collectionTargets.qrVariant;
+              return (
+                <div key={variant} className={styles.signalItem}>
+                  <p className={styles.signalLabel}>{variant}</p>
+                  <p className={styles.signalValue}>{progress.progressPct}% da meta</p>
+                  <p className={styles.signalNote}>
+                    {progress.sessions}/{targets.sessions} sessões • {progress.qrViews}/{targets.qrViews} views • {progress.qrClicks}/{targets.qrClicks} clicks
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {metrics.quickInsights.warnings.length > 0 && (
+            <p className={styles.supabaseWarning} style={{ marginTop: '1rem' }}>
+              ⚠️ {metrics.quickInsights.warnings.join(' ')}
+            </p>
+          )}
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Scorecard de Grude: Rankings</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Ranking quick</p>
+              {quickRanking.map((row, index) => (
+                <p key={row.slug} className={styles.signalNote}>{index + 1}. {row.title} ({row.stickyScore})</p>
+              ))}
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Ranking série (quick)</p>
+              {quickBySeries.map((row, index) => (
+                <p key={row.key} className={styles.signalNote}>{index + 1}. {row.label} ({row.stickyScore})</p>
+              ))}
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Ranking território (quick)</p>
+              {quickByTerritory.map((row, index) => (
+                <p key={row.key} className={styles.signalNote}>{index + 1}. {row.label} ({row.stickyScore})</p>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Série, Eixo e Território mais vivos (quick)</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Série líder</p>
+              <p className={styles.signalValue}>{quickBySeries[0]?.label || 'n/d'}</p>
+              <p className={styles.signalNote}>Conv {quickBySeries[0]?.completionRate || 0}% • Share {quickBySeries[0]?.shareRate || 0}%</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Eixo político líder</p>
+              <p className={styles.signalValue}>{quickByAxis[0]?.label || 'n/d'}</p>
+              <p className={styles.signalNote}>Conv {quickByAxis[0]?.completionRate || 0}% • Share {quickByAxis[0]?.shareRate || 0}%</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Território mais responsivo</p>
+              <p className={styles.signalValue}>{quickByTerritory[0]?.label || 'n/d'}</p>
+              <p className={styles.signalNote}>Jogo mais forte: {quickByTerritory[0]?.topGameTitle || 'n/d'}</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>QR Experiment Readout (Tijolo 26)</h3>
+          <p className={styles.techNote}>Estado do experimento por variante: cedo demais, monitorando ou sinal direcional.</p>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Variante</th>
+                  <th>Amostra</th>
+                  <th>Conclusão</th>
+                  <th>QR Views</th>
+                  <th>QR Clicks</th>
+                  <th>QR CTR</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(metrics.quickInsights.qrExperimentSummary).map(([variant, row]) => (
+                  <tr key={variant}>
+                    <td className={styles.gameTitle}>{variant}</td>
+                    <td className={styles.numeric}>{row.sessions}</td>
+                    <td className={styles.numeric}>{row.completionRate}%</td>
+                    <td className={styles.numeric}>{row.qrViews}</td>
+                    <td className={styles.numeric}>{row.qrClicks}</td>
+                    <td className={styles.numeric}>{row.qrCtr}%</td>
+                    <td className={styles.numeric}>{row.status}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+
+        <Card className={styles.fullCard}>
           <h3>Replay por Tipo de Jogo (sinal leve)</h3>
           <p className={styles.techNote}>
             Indicador proxy: (conclusões + shares) / acessos por tipo.
@@ -892,7 +1565,7 @@ export default function EstadoPage() {
         <Card className={styles.fullCard}>
           <h3>Card Final e Presença de Campanha</h3>
           <p className={styles.techNote}>
-            Sinais de adoção do card final universal e avatar oficial (Tijolo 22).
+            Sinais de adoção do card final universal, avatar V2 e QR de reentrada (Tijolos 22/23).
           </p>
           <div className={styles.eventsList}>
             <div className={styles.eventRow}>
@@ -914,6 +1587,30 @@ export default function EstadoPage() {
             <div className={styles.eventRow}>
               <span className={styles.eventLabel}>campaign_cta_click_after_game</span>
               <span className={styles.eventCount}>{metrics.eventsByType['campaign_cta_click_after_game'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>final_card_qr_view</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['final_card_qr_view'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>final_card_qr_click</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['final_card_qr_click'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>avatar_v2_rendered</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['avatar_v2_rendered'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>avatar_expression_rendered</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['avatar_expression_rendered'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>quick_minigame_completion</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['quick_minigame_completion'] || 0}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>quick_minigame_replay</span>
+              <span className={styles.eventCount}>{metrics.eventsByType['quick_minigame_replay'] || 0}</span>
             </div>
           </div>
           <p className={styles.techNote}>

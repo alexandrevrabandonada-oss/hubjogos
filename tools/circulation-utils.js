@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const scorecardThresholds = {
   minViewsPerVariant: 40,
   minClicksPerPlacement: 25,
@@ -374,6 +377,520 @@ function toTopRows(record, limit = 5) {
     .map(([key, value]) => ({ key, value }));
 }
 
+function loadCatalogMetadata() {
+  const catalogPath = path.join(__dirname, '..', 'lib', 'games', 'catalog.ts');
+  if (!fs.existsSync(catalogPath)) {
+    return {};
+  }
+
+  const content = fs.readFileSync(catalogPath, 'utf-8');
+  const map = {};
+
+  // Parse básico dos blocos do catálogo para alimentar snapshots/export sem acoplamento TS runtime.
+  const gameRegex = /\{[\s\S]*?slug:\s*'([^']+)'[\s\S]*?title:\s*'([^']+)'[\s\S]*?pace:\s*'([^']+)'[\s\S]*?line:\s*'([^']+)'[\s\S]*?territoryScope:\s*'([^']+)'[\s\S]*?series:\s*'([^']+)'[\s\S]*?politicalAxis:\s*'([^']+)'[\s\S]*?collectiveSolutionType:\s*'([^']+)'[\s\S]*?commonVsMarket:\s*'([^']+)'[\s\S]*?campaignFrame:\s*'([^']+)'[\s\S]*?\},/g;
+  let match;
+  while ((match = gameRegex.exec(content)) !== null) {
+    map[match[1]] = {
+      slug: match[1],
+      title: match[2],
+      pace: match[3],
+      line: match[4],
+      territoryScope: match[5],
+      series: match[6],
+      politicalAxis: match[7],
+      collectiveSolutionType: match[8],
+      commonVsMarket: match[9],
+      campaignFrame: match[10],
+    };
+  }
+
+  return map;
+}
+
+function buildQuickLineInsights(sessions, events, catalogMap, window = 'all') {
+  const safeSessions = sessions || [];
+  const safeEvents = events || [];
+  const metadata = catalogMap || {};
+
+  const quickEntries = Object.values(metadata).filter((item) => item.pace === 'quick');
+  const quickSlugs = new Set(quickEntries.map((item) => item.slug));
+
+  const bySlug = {};
+
+  for (const session of safeSessions) {
+    const slug = session.slug;
+    if (!quickSlugs.has(slug)) {
+      continue;
+    }
+
+    if (!bySlug[slug]) {
+      bySlug[slug] = {
+        slug,
+        title: metadata[slug]?.title || slug,
+        series: metadata[slug]?.series || 'unknown',
+        territoryScope: metadata[slug]?.territoryScope || 'unknown',
+        politicalAxis: metadata[slug]?.politicalAxis || 'unknown',
+        collectiveSolutionType: metadata[slug]?.collectiveSolutionType || 'unknown',
+        commonVsMarket: metadata[slug]?.commonVsMarket || 'unknown',
+        sessions: 0,
+        starts: 0,
+        completions: 0,
+        shares: 0,
+        replays: 0,
+        postGameCtaClicks: 0,
+        finalCardInteractions: 0,
+        sharePagePlayClicks: 0,
+        firstInteractionCount: 0,
+        firstInteractionAvgMs: 0,
+        qrViews: 0,
+        qrClicks: 0,
+      };
+    }
+
+    bySlug[slug].sessions += 1;
+    if (session.status === 'completed') {
+      bySlug[slug].completions += 1;
+    }
+  }
+
+  const firstInteractionSums = {};
+
+  for (const event of safeEvents) {
+    const eventName = event.event_name || event.event;
+    const slug = event.slug;
+    if (!quickSlugs.has(slug) || !bySlug[slug]) {
+      continue;
+    }
+
+    if (eventName === 'result_copy' || eventName === 'link_copy' || eventName === 'final_card_share_click') {
+      bySlug[slug].shares += 1;
+    }
+
+    if (eventName === 'game_start') {
+      bySlug[slug].starts += 1;
+    }
+
+    if (eventName === 'quick_minigame_replay' || eventName === 'replay_click' || eventName === 'outcome_replay_intent') {
+      bySlug[slug].replays += 1;
+    }
+
+    if (eventName === 'primary_cta_click' || eventName === 'secondary_cta_click' || eventName === 'campaign_cta_click_after_game') {
+      bySlug[slug].postGameCtaClicks += 1;
+    }
+
+    if (
+      eventName === 'final_card_view' ||
+      eventName === 'final_card_download' ||
+      eventName === 'final_card_share_click' ||
+      eventName === 'final_card_qr_click'
+    ) {
+      bySlug[slug].finalCardInteractions += 1;
+    }
+
+    if (eventName === 'share_page_play_click') {
+      bySlug[slug].sharePagePlayClicks += 1;
+    }
+
+    if (eventName === 'final_card_qr_view') {
+      bySlug[slug].qrViews += 1;
+    }
+
+    if (eventName === 'final_card_qr_click') {
+      bySlug[slug].qrClicks += 1;
+    }
+
+    if (eventName === 'first_interaction_time') {
+      const value = Number(event?.metadata?.msSinceStart || 0);
+      if (!firstInteractionSums[slug]) {
+        firstInteractionSums[slug] = { totalMs: 0, count: 0 };
+      }
+      if (value > 0) {
+        firstInteractionSums[slug].totalMs += value;
+        firstInteractionSums[slug].count += 1;
+      }
+      bySlug[slug].firstInteractionCount += 1;
+    }
+  }
+
+  const baseQuick = Object.values(bySlug).map((row) => {
+    const firstInteraction = firstInteractionSums[row.slug];
+    const completionRate = row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0;
+    const replayRate = row.completions > 0 ? Math.round((row.replays / row.completions) * 100) : 0;
+    const shareRate = row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0;
+    const postGameCtaRate = row.completions > 0 ? Math.round((row.postGameCtaClicks / row.completions) * 100) : 0;
+    const reentryRate = row.shares > 0 ? Math.round((row.sharePagePlayClicks / row.shares) * 100) : 0;
+    const qrCtr = row.qrViews > 0 ? Math.round((row.qrClicks / row.qrViews) * 100) : 0;
+
+    return {
+      ...row,
+      completionRate,
+      replayRate,
+      shareRate,
+      postGameCtaRate,
+      reentryRate,
+      qrCtr,
+      firstInteractionAvgMs:
+        firstInteraction && firstInteraction.count > 0
+          ? Math.round(firstInteraction.totalMs / firstInteraction.count)
+          : 0,
+    };
+  });
+
+  const maxFirstInteraction = Math.max(0, ...baseQuick.map((row) => row.firstInteractionAvgMs));
+  const heuristic = {
+    weights: {
+      completionRate: 0.3,
+      replayRate: 0.2,
+      shareRate: 0.2,
+      postGameCtaRate: 0.15,
+      reentryRate: 0.1,
+      firstInteractionScore: 0.05,
+    },
+    minSampleSessions: 12,
+    minQrVariantSessions: 30,
+    directionalLiftPct: 15,
+  };
+
+  const quickComparison = baseQuick
+    .map((row) => {
+      const firstInteractionScore =
+        maxFirstInteraction > 0 && row.firstInteractionAvgMs > 0
+          ? Math.round((1 - (row.firstInteractionAvgMs / maxFirstInteraction)) * 100)
+          : 0;
+      const stickyScore = Math.round(
+        (row.completionRate * heuristic.weights.completionRate) +
+        (row.replayRate * heuristic.weights.replayRate) +
+        (row.shareRate * heuristic.weights.shareRate) +
+        (row.postGameCtaRate * heuristic.weights.postGameCtaRate) +
+        (row.reentryRate * heuristic.weights.reentryRate) +
+        (firstInteractionScore * heuristic.weights.firstInteractionScore),
+      );
+
+      return {
+        ...row,
+        firstInteractionScore,
+        stickyScore,
+      };
+    })
+    .sort((a, b) => b.sessions - a.sessions);
+
+  const bySeries = {};
+  const byTerritory = {};
+  const byPoliticalAxis = {};
+  const byCommonVsMarket = {};
+  for (const row of quickComparison) {
+    if (!bySeries[row.series]) {
+      bySeries[row.series] = { sessions: 0, starts: 0, completions: 0, shares: 0, replays: 0, stickyTotal: 0, games: 0 };
+    }
+    if (!byTerritory[row.territoryScope]) {
+      byTerritory[row.territoryScope] = { sessions: 0, completions: 0, shares: 0, replays: 0, stickyTotal: 0, games: 0, topGameSlug: row.slug, topGameSessions: row.sessions };
+    }
+    if (!byPoliticalAxis[row.politicalAxis]) {
+      byPoliticalAxis[row.politicalAxis] = { sessions: 0, completions: 0, shares: 0, replays: 0, stickyTotal: 0, games: 0 };
+    }
+    if (!byCommonVsMarket[row.commonVsMarket]) {
+      byCommonVsMarket[row.commonVsMarket] = { sessions: 0, completions: 0, shares: 0, replays: 0 };
+    }
+
+    bySeries[row.series].starts += row.starts;
+    bySeries[row.series].sessions += row.sessions;
+    bySeries[row.series].completions += row.completions;
+    bySeries[row.series].shares += row.shares;
+    bySeries[row.series].replays += row.replays;
+    bySeries[row.series].stickyTotal += row.stickyScore;
+    bySeries[row.series].games += 1;
+
+    byTerritory[row.territoryScope].sessions += row.sessions;
+    byTerritory[row.territoryScope].completions += row.completions;
+    byTerritory[row.territoryScope].shares += row.shares;
+    byTerritory[row.territoryScope].replays += row.replays;
+    byTerritory[row.territoryScope].stickyTotal += row.stickyScore;
+    byTerritory[row.territoryScope].games += 1;
+    if (row.sessions > byTerritory[row.territoryScope].topGameSessions) {
+      byTerritory[row.territoryScope].topGameSessions = row.sessions;
+      byTerritory[row.territoryScope].topGameSlug = row.slug;
+    }
+
+    byPoliticalAxis[row.politicalAxis].sessions += row.sessions;
+    byPoliticalAxis[row.politicalAxis].completions += row.completions;
+    byPoliticalAxis[row.politicalAxis].shares += row.shares;
+    byPoliticalAxis[row.politicalAxis].replays += row.replays;
+    byPoliticalAxis[row.politicalAxis].stickyTotal += row.stickyScore;
+    byPoliticalAxis[row.politicalAxis].games += 1;
+
+    byCommonVsMarket[row.commonVsMarket].sessions += row.sessions;
+    byCommonVsMarket[row.commonVsMarket].completions += row.completions;
+    byCommonVsMarket[row.commonVsMarket].shares += row.shares;
+    byCommonVsMarket[row.commonVsMarket].replays += row.replays;
+  }
+
+  const rankedSeries = Object.entries(bySeries)
+    .map(([key, row]) => ({
+      key,
+      ...row,
+      completionRate: row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0,
+      replayRate: row.completions > 0 ? Math.round((row.replays / row.completions) * 100) : 0,
+      shareRate: row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0,
+      stickyScore: row.games > 0 ? Math.round(row.stickyTotal / row.games) : 0,
+    }))
+    .sort((a, b) => b.stickyScore - a.stickyScore);
+
+  const rankedTerritory = Object.entries(byTerritory)
+    .map(([key, row]) => ({
+      key,
+      ...row,
+      shareRate: row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0,
+      replayRate: row.completions > 0 ? Math.round((row.replays / row.completions) * 100) : 0,
+      stickyScore: row.games > 0 ? Math.round(row.stickyTotal / row.games) : 0,
+      topGameTitle: metadata[row.topGameSlug]?.title || row.topGameSlug,
+    }))
+    .sort((a, b) => b.stickyScore - a.stickyScore);
+
+  const rankedPoliticalAxis = Object.entries(byPoliticalAxis)
+    .map(([key, row]) => ({
+      key,
+      ...row,
+      completionRate: row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0,
+      shareRate: row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0,
+      stickyScore: row.games > 0 ? Math.round(row.stickyTotal / row.games) : 0,
+    }))
+    .sort((a, b) => b.stickyScore - a.stickyScore);
+
+  const qrSummary = {
+    'with-qr': { sessions: 0, completions: 0, qrViews: 0, qrClicks: 0 },
+    'without-qr': { sessions: 0, completions: 0, qrViews: 0, qrClicks: 0 },
+  };
+  const qrVariantBySession = {};
+
+  for (const session of safeSessions) {
+    const list = Array.isArray(session.experiments)
+      ? session.experiments
+      : typeof session.experiments === 'string'
+        ? (() => {
+            try {
+              const parsed = JSON.parse(session.experiments);
+              return Array.isArray(parsed) ? parsed : [];
+            } catch {
+              return [];
+            }
+          })()
+        : [];
+    const hit = list.find((item) => item && item.key === 'final-card-qr-code' && typeof item.variant === 'string');
+    if (hit && qrSummary[hit.variant]) {
+      qrVariantBySession[session.session_id || session.sessionId] = hit.variant;
+      qrSummary[hit.variant].sessions += 1;
+      if (session.status === 'completed') {
+        qrSummary[hit.variant].completions += 1;
+      }
+    }
+  }
+
+  for (const event of safeEvents) {
+    const variant = qrVariantBySession[event.session_id || event.sessionId];
+    if (!variant || !qrSummary[variant]) {
+      continue;
+    }
+
+    const eventName = event.event_name || event.event;
+    if (eventName === 'final_card_qr_view') {
+      qrSummary[variant].qrViews += 1;
+    }
+    if (eventName === 'final_card_qr_click') {
+      qrSummary[variant].qrClicks += 1;
+    }
+  }
+
+  const withQrCtr = qrSummary['with-qr'].qrViews > 0 ? (qrSummary['with-qr'].qrClicks / qrSummary['with-qr'].qrViews) * 100 : 0;
+  const withoutQrCtr = qrSummary['without-qr'].qrViews > 0 ? (qrSummary['without-qr'].qrClicks / qrSummary['without-qr'].qrViews) * 100 : 0;
+  const qrDelta = Number((withQrCtr - withoutQrCtr).toFixed(2));
+  const qrMinSample = Math.min(qrSummary['with-qr'].sessions, qrSummary['without-qr'].sessions);
+
+  const qrReadout = Object.fromEntries(
+    Object.entries(qrSummary).map(([variant, row]) => {
+      const completionRate = row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0;
+      const qrCtr = row.qrViews > 0 ? Math.round((row.qrClicks / row.qrViews) * 100) : 0;
+      const status = qrMinSample < heuristic.minQrVariantSessions
+        ? 'cedo-demais'
+        : Math.abs(qrDelta) >= heuristic.directionalLiftPct
+          ? 'sinal-direcional'
+          : 'monitorando';
+      return [variant, { ...row, completionRate, qrCtr, status, deltaVsBaselinePct: qrDelta }];
+    }),
+  );
+
+  const warnings = [];
+  if (quickComparison.length === 0) {
+    warnings.push('Sem sessões quick na janela atual para comparação entre jogos.');
+  }
+  const lowSampleQuick = quickComparison.filter((row) => row.sessions < heuristic.minSampleSessions).map((row) => row.title);
+  if (lowSampleQuick.length > 0) {
+    warnings.push(`Amostra baixa por quick (min ${heuristic.minSampleSessions} sessões): ${lowSampleQuick.join(', ')}.`);
+  }
+  if (qrMinSample < heuristic.minQrVariantSessions) {
+    warnings.push(`QR A/B cedo demais (${qrMinSample}/${heuristic.minQrVariantSessions} sessões mínimas por variante).`);
+  }
+
+  const topStickyGame = quickComparison.slice().sort((a, b) => b.stickyScore - a.stickyScore)[0] || null;
+
+  // Tijolo 27: Metas mínimas de coleta baseadas na janela temporal
+  const collectionTargets = window === '7d'
+    ? {
+      quick: { sessions: 60, starts: 50, completions: 15, shares: 5, replays: 3 },
+      series: { sessions: 100, starts: 80, completions: 25, shares: 8 },
+      territory: { sessions: 80, starts: 60, completions: 20, shares: 6 },
+      qrVariant: { sessions: 60, qrViews: 20, qrClicks: 8 },
+    }
+    : window === '30d'
+      ? {
+        quick: { sessions: 150, starts: 120, completions: 40, shares: 12, replays: 8 },
+        series: { sessions: 250, starts: 200, completions: 60, shares: 20 },
+        territory: { sessions: 200, starts: 150, completions: 50, shares: 15 },
+        qrVariant: { sessions: 150, qrViews: 50, qrClicks: 20 },
+      }
+      : {
+        quick: { sessions: 200, starts: 150, completions: 50, shares: 15, replays: 10 },
+        series: { sessions: 300, starts: 250, completions: 80, shares: 25 },
+        territory: { sessions: 250, starts: 200, completions: 60, shares: 20 },
+        qrVariant: { sessions: 200, qrViews: 60, qrClicks: 25 },
+      };
+
+  function getCollectionStatus(current, target) {
+    const pct = target > 0 ? (current / target) * 100 : 0;
+    if (pct < 50) return 'coleta-insuficiente';
+    if (pct < 100) return 'coleta-em-andamento';
+    return 'coleta-minima-atingida';
+  }
+
+  // Status por quick
+  const byQuickStatus = {};
+  for (const row of quickComparison) {
+    const progressValues = [
+      row.sessions / collectionTargets.quick.sessions,
+      row.starts / collectionTargets.quick.starts,
+      row.completions / collectionTargets.quick.completions,
+      row.shares / collectionTargets.quick.shares,
+      row.replays / collectionTargets.quick.replays,
+    ];
+    const avgProgress = (progressValues.reduce((sum, val) => sum + val, 0) / progressValues.length) * 100;
+    byQuickStatus[row.slug] = {
+      status: getCollectionStatus(row.sessions, collectionTargets.quick.sessions),
+      progress: {
+        sessions: row.sessions,
+        starts: row.starts,
+        completions: row.completions,
+        shares: row.shares,
+        replays: row.replays,
+      },
+      progressPct: Math.round(avgProgress),
+    };
+  }
+
+  // Status por série
+  const bySeriesStatus = {};
+  for (const row of rankedSeries) {
+    const progressValues = [
+      row.sessions / collectionTargets.series.sessions,
+      row.starts / collectionTargets.series.starts,
+      row.completions / collectionTargets.series.completions,
+      row.shares / collectionTargets.series.shares,
+    ];
+    const avgProgress = (progressValues.reduce((sum, val) => sum + val, 0) / progressValues.length) * 100;
+    const gamesInSeries = quickComparison.filter((q) => q.series === row.key).map((q) => q.slug);
+    const allGamesReady = gamesInSeries.every((slug) => byQuickStatus[slug]?.status === 'coleta-minima-atingida');
+    bySeriesStatus[row.key] = {
+      status: allGamesReady && row.sessions >= collectionTargets.series.sessions
+        ? 'pronto-para-priorizacao'
+        : getCollectionStatus(row.sessions, collectionTargets.series.sessions),
+      progress: {
+        sessions: row.sessions,
+        starts: row.starts,
+        completions: row.completions,
+        shares: row.shares,
+      },
+      progressPct: Math.round(avgProgress),
+      gamesInSeries,
+    };
+  }
+
+  // Status por território
+  const byTerritoryStatus = {};
+  for (const row of rankedTerritory) {
+    const progressValues = [
+      row.sessions / collectionTargets.territory.sessions,
+      row.starts / collectionTargets.territory.starts,
+      row.completions / collectionTargets.territory.completions,
+      row.shares / collectionTargets.territory.shares,
+    ];
+    const avgProgress = (progressValues.reduce((sum, val) => sum + val, 0) / progressValues.length) * 100;
+    const gamesInTerritory = quickComparison.filter((q) => q.territoryScope === row.key).map((q) => q.slug);
+    const allGamesReady = gamesInTerritory.every((slug) => byQuickStatus[slug]?.status === 'coleta-minima-atingida');
+    byTerritoryStatus[row.key] = {
+      status: allGamesReady && row.sessions >= collectionTargets.territory.sessions
+        ? 'pronto-para-priorizacao'
+        : getCollectionStatus(row.sessions, collectionTargets.territory.sessions),
+      progress: {
+        sessions: row.sessions,
+        starts: row.starts,
+        completions: row.completions,
+        shares: row.shares,
+      },
+      progressPct: Math.round(avgProgress),
+      gamesInTerritory,
+      topGameSlug: row.topGameSlug || null,
+      topGameSessions: row.topGameSessions || 0,
+    };
+  }
+
+  // Status QR Experiment
+  const qrProgressByVariant = {};
+  for (const [variant, data] of Object.entries(qrSummary)) {
+    const progressValues = [
+      data.sessions / collectionTargets.qrVariant.sessions,
+      data.qrViews / collectionTargets.qrVariant.qrViews,
+      data.qrClicks / collectionTargets.qrVariant.qrClicks,
+    ];
+    const avgProgress = (progressValues.reduce((sum, val) => sum + val, 0) / progressValues.length) * 100;
+    qrProgressByVariant[variant] = {
+      sessions: data.sessions,
+      qrViews: data.qrViews,
+      qrClicks: data.qrClicks,
+      progressPct: Math.round(avgProgress),
+    };
+  }
+
+  const qrMinSessionsVariant = Math.min(
+    qrProgressByVariant['with-qr']?.sessions || 0,
+    qrProgressByVariant['without-qr']?.sessions || 0,
+  );
+  const qrExperimentStatus = getCollectionStatus(qrMinSessionsVariant, collectionTargets.qrVariant.sessions);
+
+  return {
+    quickComparison,
+    quickRanking: quickComparison.slice().sort((a, b) => b.stickyScore - a.stickyScore),
+    bySeries,
+    byTerritory,
+    byPoliticalAxis,
+    byCommonVsMarket,
+    rankedSeries,
+    rankedTerritory,
+    rankedPoliticalAxis,
+    heuristic,
+    qrReadout,
+    collectionTargets,
+    collectionStatus: {
+      byQuick: byQuickStatus,
+      bySeries: bySeriesStatus,
+      byTerritory: byTerritoryStatus,
+      qrExperiment: {
+        status: qrExperimentStatus,
+        progressByVariant: qrProgressByVariant,
+      },
+    },
+    warnings,
+    topStickyGame,
+  };
+}
+
 module.exports = {
   scorecardThresholds,
   safeHostname,
@@ -385,4 +902,6 @@ module.exports = {
   toTopRows,
   getWindowStartDate,
   isInWindow,
+  loadCatalogMetadata,
+  buildQuickLineInsights,
 };

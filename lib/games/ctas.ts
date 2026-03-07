@@ -42,16 +42,16 @@ export type CtaSituationContext =
 const fallbackCta: OutcomeCtaConfig = {
   primary: {
     id: 'explorar-experiencias',
-    label: 'Explorar outras experiências',
+    label: 'Explorar outras experiencias',
     href: '/explorar',
   },
   secondary: {
-    id: 'participar-hub',
-    label: 'Participar da construção do hub',
+    id: 'organizar-no-territorio',
+    label: 'Organizar no territorio',
     href: '/participar',
   },
   shareLine:
-    'Terminei uma experiência no Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado e descobri um recorte político importante para a cidade.',
+    'Terminei uma experiencia no Hub e descobri um caminho de acao coletiva para a cidade.',
 };
 
 const byGame: Record<string, OutcomeCtaConfig> = {
@@ -62,12 +62,12 @@ const byGame: Record<string, OutcomeCtaConfig> = {
       href: '/explorar',
     },
     secondary: {
-      id: 'participar-hub',
-      label: 'Participar da construção',
+      id: 'organizar-no-territorio',
+      label: 'Organizar no territorio',
       href: '/participar',
     },
     shareLine:
-      'Meu resultado no Voto Consciente mostrou quais prioridades políticas eu coloco no centro da cidade.',
+      'Meu resultado no Voto Consciente mostrou quais prioridades politicas eu coloco no centro da cidade.',
   },
   'transporte-urgente': {
     primary: {
@@ -76,12 +76,12 @@ const byGame: Record<string, OutcomeCtaConfig> = {
       href: '/explorar',
     },
     secondary: {
-      id: 'participar-hub',
-      label: 'Participar da construção',
+      id: 'organizar-no-territorio',
+      label: 'Organizar no territorio',
       href: '/participar',
     },
     shareLine:
-      'No Transporte Urgente, cada escolha mostrou o custo político da mobilidade precária no cotidiano.',
+      'No Transporte Urgente, cada escolha mostrou o custo politico da mobilidade precaria no cotidiano.',
   },
   'cidade-real': {
     primary: {
@@ -90,8 +90,8 @@ const byGame: Record<string, OutcomeCtaConfig> = {
       href: '/explorar',
     },
     secondary: {
-      id: 'participar-hub',
-      label: 'Participar da construção',
+      id: 'organizar-no-territorio',
+      label: 'Organizar no territorio',
       href: '/participar',
     },
     shareLine:
@@ -104,8 +104,8 @@ const byGame: Record<string, OutcomeCtaConfig> = {
       href: '/explorar',
     },
     secondary: {
-      id: 'participar-hub',
-      label: 'Participar da construção',
+      id: 'organizar-no-territorio',
+      label: 'Organizar no territorio',
       href: '/participar',
     },
     shareLine:
@@ -118,8 +118,8 @@ const byGame: Record<string, OutcomeCtaConfig> = {
       href: '/explorar',
     },
     secondary: {
-      id: 'participar-hub',
-      label: 'Participar da construção',
+      id: 'organizar-no-territorio',
+      label: 'Organizar no territorio',
       href: '/participar',
     },
     shareLine:
@@ -132,12 +132,30 @@ const byGame: Record<string, OutcomeCtaConfig> = {
       href: '/explorar',
     },
     secondary: {
-      id: 'participar-hub',
-      label: 'Participar da construção',
+      id: 'organizar-no-territorio',
+      label: 'Organizar no territorio',
       href: '/participar',
     },
     shareLine:
       'Joguei Memória Coletiva e reconectei com momentos políticos e urbanos importantes.',
+  },
+  'cidade-em-comum': {
+    primary: {
+      id: 'comparar-solucoes-coletivas',
+      label: 'Comparar solucoes coletivas',
+      href: '/explorar?serie=serie-solucoes-coletivas',
+      category: 'exploration',
+      trackingId: 'cta_collective_compare',
+    },
+    secondary: {
+      id: 'montar-comite-local',
+      label: 'Montar comite local',
+      href: '/participar',
+      category: 'participation',
+      trackingId: 'cta_collective_organize',
+    },
+    shareLine:
+      'No Cidade em Comum, meu resultado apontou uma rota de organizacao popular para enfrentar problemas reais.',
   },
 };
 
@@ -190,7 +208,7 @@ export function getOutcomeCtaWithVariant(
       },
       secondary: {
         ...baseCta.secondary,
-        label: 'Ajudar a construir o hub',
+        label: 'Entrar na organizacao local',
       },
     };
   }

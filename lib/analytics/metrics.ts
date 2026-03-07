@@ -23,6 +23,60 @@ interface ExitAggregate {
   exitRate: number;
 }
 
+type CollectionStatus = 'coleta-insuficiente' | 'coleta-em-andamento' | 'coleta-minima-atingida' | 'pronto-para-priorizacao';
+
+interface QuickRow {
+  slug: string;
+  title: string;
+  sessions: number;
+  starts: number;
+  completions: number;
+  replays: number;
+  shares: number;
+  postGameCtaClicks: number;
+  finalCardInteractions: number;
+  sharePagePlayClicks: number;
+  firstInteractionCount: number;
+  firstInteractionAvgMs: number;
+  qrViews: number;
+  qrClicks: number;
+  completionRate: number;
+  replayRate: number;
+  shareRate: number;
+  postGameCtaRate: number;
+  reentryRate: number;
+  qrCtr: number;
+  firstInteractionScore: number;
+  stickyScore: number;
+}
+
+interface CollectionTargets {
+  quick: {
+    sessions: number;
+    starts: number;
+    completions: number;
+    shares: number;
+    replays: number;
+  };
+  series: {
+    sessions: number;
+    starts: number;
+    completions: number;
+    shares: number;
+  };
+  territory: {
+    sessions: number;
+    starts: number;
+    completions: number;
+    shares: number;
+  };
+  qrVariant: {
+    sessions: number;
+    qrViews: number;
+    qrClicks: number;
+  };
+}
+
 export interface MetricsSnapshot {
   source: 'local' | 'supabase' | 'hybrid';
   environment: DataEnvironment; // Tijolo 18
@@ -111,6 +165,82 @@ export interface MetricsSnapshot {
     warnings: string[];
   };
   experimentScorecards: ReturnType<typeof buildExperimentScorecard>[];
+  quickInsights: {
+    quickComparison: QuickRow[];
+    rankingByStickiness: QuickRow[];
+    qrExperimentSummary: Record<string, {
+      sessions: number;
+      completions: number;
+      completionRate: number;
+      finalCardViews: number;
+      qrViews: number;
+      qrClicks: number;
+      qrCtr: number;
+      status: 'cedo-demais' | 'monitorando' | 'sinal-direcional';
+      deltaVsBaselinePct: number;
+    }>;
+    heuristic: {
+      weights: {
+        completionRate: number;
+        replayRate: number;
+        shareRate: number;
+        postGameCtaRate: number;
+        reentryRate: number;
+        firstInteractionScore: number;
+      };
+      minSampleSessions: number;
+      minQrVariantSessions: number;
+      directionalLiftPct: number;
+    };
+    collectionTargets: CollectionTargets;
+    collectionStatus: {
+      byQuick: Record<string, {
+        status: CollectionStatus;
+        progress: {
+          sessions: number;
+          starts: number;
+          completions: number;
+          shares: number;
+          replays: number;
+        };
+        progressPct: number;
+      }>;
+      bySeries: Record<string, {
+        status: CollectionStatus;
+        progress: {
+          sessions: number;
+          starts: number;
+          completions: number;
+          shares: number;
+        };
+        progressPct: number;
+        gamesInSeries: string[];
+      }>;
+      byTerritory: Record<string, {
+        status: CollectionStatus;
+        progress: {
+          sessions: number;
+          starts: number;
+          completions: number;
+          shares: number;
+        };
+        progressPct: number;
+        gamesInTerritory: string[];
+        topGameSlug?: string;
+        topGameSessions?: number;
+      }>;
+      qrExperiment: {
+        status: CollectionStatus;
+        progressByVariant: Record<string, {
+          sessions: number;
+          qrViews: number;
+          qrClicks: number;
+          progressPct: number;
+        }>;
+      };
+    };
+    warnings: string[];
+  };
   generatedAt: string;
 }
 
@@ -121,6 +251,400 @@ interface NormalizedEvent {
   engineKind: string;
   ctaId?: string | null;
   metadata?: Record<string, unknown>;
+}
+
+type SessionWithExperiments = Pick<SessionRecord, 'sessionId' | 'slug' | 'status'> & {
+  experiments?: unknown;
+};
+
+function normalizeExperimentsPayload(value: unknown): Array<{ key: string; variant: string }> {
+  if (Array.isArray(value)) {
+    return value.filter(
+      (item): item is { key: string; variant: string } =>
+        typeof item === 'object' &&
+        item !== null &&
+        typeof (item as { key?: unknown }).key === 'string' &&
+        typeof (item as { variant?: unknown }).variant === 'string',
+    );
+  }
+
+  if (typeof value === 'string') {
+    try {
+      return normalizeExperimentsPayload(JSON.parse(value));
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+}
+
+function getQuickInsights(
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
+  sessions: SessionWithExperiments[],
+  events: NormalizedEvent[],
+  window: TimeWindow = 'all',
+): MetricsSnapshot['quickInsights'] {
+  const quickGames = gamesCatalog.filter((game) => game.pace === 'quick');
+  const quickSlugs = new Set(quickGames.map((game) => game.slug));
+  const titleBySlug = new Map(quickGames.map((game) => [game.slug, game.title]));
+
+  const rows: Record<string, Omit<QuickRow, 'completionRate' | 'replayRate' | 'shareRate' | 'postGameCtaRate' | 'reentryRate' | 'qrCtr' | 'firstInteractionScore' | 'stickyScore'>> = {};
+  const firstInteractionSums: Record<string, { total: number; count: number }> = {};
+
+  for (const slug of quickSlugs) {
+    rows[slug] = {
+      slug,
+      title: titleBySlug.get(slug) || slug,
+      sessions: 0,
+      starts: 0,
+      completions: 0,
+      replays: 0,
+      shares: 0,
+      postGameCtaClicks: 0,
+      finalCardInteractions: 0,
+      sharePagePlayClicks: 0,
+      firstInteractionCount: 0,
+      firstInteractionAvgMs: 0,
+      qrViews: 0,
+      qrClicks: 0,
+    };
+  }
+
+  for (const session of sessions) {
+    if (!quickSlugs.has(session.slug) || !rows[session.slug]) {
+      continue;
+    }
+    rows[session.slug].sessions += 1;
+    if (session.status === 'completed') {
+      rows[session.slug].completions += 1;
+    }
+  }
+
+  for (const event of events) {
+    const slug = event.slug;
+    if (!quickSlugs.has(slug) || !rows[slug]) {
+      continue;
+    }
+
+    if (event.eventName === 'game_start') {
+      rows[slug].starts += 1;
+    }
+
+    if (event.eventName === 'quick_minigame_replay' || event.eventName === 'replay_click' || event.eventName === 'outcome_replay_intent') {
+      rows[slug].replays += 1;
+    }
+
+    if (event.eventName === 'result_copy' || event.eventName === 'link_copy' || event.eventName === 'final_card_share_click') {
+      rows[slug].shares += 1;
+    }
+
+    if (event.eventName === 'primary_cta_click' || event.eventName === 'secondary_cta_click' || event.eventName === 'campaign_cta_click_after_game') {
+      rows[slug].postGameCtaClicks += 1;
+    }
+
+    if (
+      event.eventName === 'final_card_view' ||
+      event.eventName === 'final_card_download' ||
+      event.eventName === 'final_card_share_click' ||
+      event.eventName === 'final_card_qr_click'
+    ) {
+      rows[slug].finalCardInteractions += 1;
+    }
+
+    if (event.eventName === 'share_page_play_click') {
+      rows[slug].sharePagePlayClicks += 1;
+    }
+
+    if (event.eventName === 'final_card_qr_view') {
+      rows[slug].qrViews += 1;
+    }
+
+    if (event.eventName === 'final_card_qr_click') {
+      rows[slug].qrClicks += 1;
+    }
+
+    if (event.eventName === 'first_interaction_time') {
+      rows[slug].firstInteractionCount += 1;
+      const value = Number(event.metadata?.msSinceStart || 0);
+      if (value > 0) {
+        const bucket = firstInteractionSums[slug] || { total: 0, count: 0 };
+        bucket.total += value;
+        bucket.count += 1;
+        firstInteractionSums[slug] = bucket;
+      }
+    }
+  }
+
+  const enrichedRows = Object.values(rows).map((row) => {
+    const first = firstInteractionSums[row.slug];
+    return {
+      ...row,
+      firstInteractionAvgMs: first && first.count > 0 ? Math.round(first.total / first.count) : 0,
+      completionRate: row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0,
+      replayRate: row.completions > 0 ? Math.round((row.replays / row.completions) * 100) : 0,
+      shareRate: row.completions > 0 ? Math.round((row.shares / row.completions) * 100) : 0,
+      postGameCtaRate: row.completions > 0 ? Math.round((row.postGameCtaClicks / row.completions) * 100) : 0,
+      reentryRate: row.shares > 0 ? Math.round((row.sharePagePlayClicks / row.shares) * 100) : 0,
+      qrCtr: row.qrViews > 0 ? Math.round((row.qrClicks / row.qrViews) * 100) : 0,
+      firstInteractionScore: 0,
+      stickyScore: 0,
+    };
+  });
+
+  const maxFirstInteraction = Math.max(0, ...enrichedRows.map((row) => row.firstInteractionAvgMs));
+  const weights = {
+    completionRate: 0.3,
+    replayRate: 0.2,
+    shareRate: 0.2,
+    postGameCtaRate: 0.15,
+    reentryRate: 0.1,
+    firstInteractionScore: 0.05,
+  };
+
+  const scoredRows = enrichedRows.map((row) => {
+    const firstInteractionScore =
+      maxFirstInteraction > 0 && row.firstInteractionAvgMs > 0
+        ? Math.round((1 - (row.firstInteractionAvgMs / maxFirstInteraction)) * 100)
+        : 0;
+
+    const stickyScore = Math.round(
+      (row.completionRate * weights.completionRate) +
+      (row.replayRate * weights.replayRate) +
+      (row.shareRate * weights.shareRate) +
+      (row.postGameCtaRate * weights.postGameCtaRate) +
+      (row.reentryRate * weights.reentryRate) +
+      (firstInteractionScore * weights.firstInteractionScore),
+    );
+
+    return {
+      ...row,
+      firstInteractionScore,
+      stickyScore,
+    };
+  });
+
+  const qrByVariant: Record<string, {
+    sessions: number;
+    completions: number;
+    finalCardViews: number;
+    qrViews: number;
+    qrClicks: number;
+  }> = {
+    'with-qr': { sessions: 0, completions: 0, finalCardViews: 0, qrViews: 0, qrClicks: 0 },
+    'without-qr': { sessions: 0, completions: 0, finalCardViews: 0, qrViews: 0, qrClicks: 0 },
+  };
+
+  const variantBySession: Record<string, string> = {};
+  for (const session of sessions) {
+    const experiments = normalizeExperimentsPayload(session.experiments);
+    const qrExperiment = experiments.find((item) => item.key === 'final-card-qr-code');
+    if (!qrExperiment || !qrByVariant[qrExperiment.variant]) {
+      continue;
+    }
+    variantBySession[session.sessionId] = qrExperiment.variant;
+    qrByVariant[qrExperiment.variant].sessions += 1;
+    if (session.status === 'completed') {
+      qrByVariant[qrExperiment.variant].completions += 1;
+    }
+  }
+
+  for (const event of events) {
+    const variant = variantBySession[event.sessionId];
+    if (!variant || !qrByVariant[variant]) {
+      continue;
+    }
+
+    if (event.eventName === 'final_card_view') {
+      qrByVariant[variant].finalCardViews += 1;
+    }
+    if (event.eventName === 'final_card_qr_view') {
+      qrByVariant[variant].qrViews += 1;
+    }
+    if (event.eventName === 'final_card_qr_click') {
+      qrByVariant[variant].qrClicks += 1;
+    }
+  }
+
+  const minQrVariantSessions = 30;
+  const directionalLiftPct = 15;
+  const withQrCtr = qrByVariant['with-qr'].qrViews > 0
+    ? (qrByVariant['with-qr'].qrClicks / qrByVariant['with-qr'].qrViews) * 100
+    : 0;
+  const withoutQrCtr = qrByVariant['without-qr'].qrViews > 0
+    ? (qrByVariant['without-qr'].qrClicks / qrByVariant['without-qr'].qrViews) * 100
+    : 0;
+  const deltaVsBaselinePct = Number((withQrCtr - withoutQrCtr).toFixed(2));
+
+  const qrExperimentSummary = Object.fromEntries(
+    Object.entries(qrByVariant).map(([variant, row]) => {
+      const completionRate = row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0;
+      const qrCtr = row.qrViews > 0 ? Math.round((row.qrClicks / row.qrViews) * 100) : 0;
+      const minSample = Math.min(qrByVariant['with-qr'].sessions, qrByVariant['without-qr'].sessions);
+      const status: 'cedo-demais' | 'monitorando' | 'sinal-direcional' =
+        minSample < minQrVariantSessions
+          ? 'cedo-demais'
+          : Math.abs(deltaVsBaselinePct) >= directionalLiftPct
+            ? 'sinal-direcional'
+            : 'monitorando';
+
+      return [
+        variant,
+        {
+          sessions: row.sessions,
+          completions: row.completions,
+          completionRate,
+          finalCardViews: row.finalCardViews,
+          qrViews: row.qrViews,
+          qrClicks: row.qrClicks,
+          qrCtr,
+          status,
+          deltaVsBaselinePct,
+        },
+      ];
+    }),
+  );
+
+  const minSampleSessions = 12;
+  const warnings: string[] = [];
+  if (scoredRows.length === 0) {
+    warnings.push('Sem sessões quick na janela atual para comparação entre jogos.');
+  }
+  const lowSampleRows = scoredRows.filter((row) => row.sessions < minSampleSessions).map((row) => row.title);
+  if (lowSampleRows.length > 0) {
+    warnings.push(`Amostra baixa por quick (min ${minSampleSessions} sessões): ${lowSampleRows.join(', ')}.`);
+  }
+
+  const qrMinSample = Math.min(qrByVariant['with-qr'].sessions, qrByVariant['without-qr'].sessions);
+  if (qrMinSample < minQrVariantSessions) {
+    warnings.push(`QR A/B ainda cedo: ${qrMinSample}/${minQrVariantSessions} sessões mínimas por variante.`);
+  }
+
+  // Tijolo 27: Metas mínimas de coleta baseadas na janela temporal
+  const collectionTargets: CollectionTargets = window === '7d'
+    ? {
+      quick: { sessions: 60, starts: 50, completions: 15, shares: 5, replays: 3 },
+      series: { sessions: 100, starts: 80, completions: 25, shares: 8 },
+      territory: { sessions: 80, starts: 60, completions: 20, shares: 6 },
+      qrVariant: { sessions: 60, qrViews: 20, qrClicks: 8 },
+    }
+    : window === '30d'
+      ? {
+        quick: { sessions: 150, starts: 120, completions: 40, shares: 12, replays: 8 },
+        series: { sessions: 250, starts: 200, completions: 60, shares: 20 },
+        territory: { sessions: 200, starts: 150, completions: 50, shares: 15 },
+        qrVariant: { sessions: 150, qrViews: 50, qrClicks: 20 },
+      }
+      : {
+        quick: { sessions: 200, starts: 150, completions: 50, shares: 15, replays: 10 },
+        series: { sessions: 300, starts: 250, completions: 80, shares: 25 },
+        territory: { sessions: 250, starts: 200, completions: 60, shares: 20 },
+        qrVariant: { sessions: 200, qrViews: 60, qrClicks: 25 },
+      };
+
+  // Função auxiliar para calcular status de coleta
+  function getCollectionStatus(current: number, target: number): CollectionStatus {
+    const pct = target > 0 ? (current / target) * 100 : 0;
+    if (pct < 50) {
+      return 'coleta-insuficiente';
+    }
+    if (pct < 100) {
+      return 'coleta-em-andamento';
+    }
+    return 'coleta-minima-atingida';
+  }
+
+  // Status por quick
+  const byQuick: Record<string, {
+    status: CollectionStatus;
+    progress: { sessions: number; starts: number; completions: number; shares: number; replays: number };
+    progressPct: number;
+  }> = {};
+
+  for (const row of scoredRows) {
+    const progressValues = [
+      row.sessions / collectionTargets.quick.sessions,
+      row.starts / collectionTargets.quick.starts,
+      row.completions / collectionTargets.quick.completions,
+      row.shares / collectionTargets.quick.shares,
+      row.replays / collectionTargets.quick.replays,
+    ];
+    const avgProgress = (progressValues.reduce((sum, val) => sum + val, 0) / progressValues.length) * 100;
+    byQuick[row.slug] = {
+      status: getCollectionStatus(row.sessions, collectionTargets.quick.sessions),
+      progress: {
+        sessions: row.sessions,
+        starts: row.starts,
+        completions: row.completions,
+        shares: row.shares,
+        replays: row.replays,
+      },
+      progressPct: Math.round(avgProgress),
+    };
+  }
+
+  // Status por série (agrupando quicks)
+  // Por ora, vou assumir que o catálogo não está disponível aqui com série/território.
+  // Vamos deixar isso vazio por enquanto e implementar no circulation-utils.js que tem acesso ao catalog completo.
+  const bySeries: Record<string, {
+    status: CollectionStatus;
+    progress: { sessions: number; starts: number; completions: number; shares: number };
+    progressPct: number;
+    gamesInSeries: string[];
+  }> = {};
+
+  const byTerritory: Record<string, {
+    status: CollectionStatus;
+    progress: { sessions: number; starts: number; completions: number; shares: number };
+    progressPct: number;
+    gamesInTerritory: string[];
+  }> = {};
+
+  // Status QR Experiment
+  const qrProgressByVariant: Record<string, { sessions: number; qrViews: number; qrClicks: number; progressPct: number }> = {};
+  for (const [variant, data] of Object.entries(qrByVariant)) {
+    const progressValues = [
+      data.sessions / collectionTargets.qrVariant.sessions,
+      data.qrViews / collectionTargets.qrVariant.qrViews,
+      data.qrClicks / collectionTargets.qrVariant.qrClicks,
+    ];
+    const avgProgress = (progressValues.reduce((sum, val) => sum + val, 0) / progressValues.length) * 100;
+    qrProgressByVariant[variant] = {
+      sessions: data.sessions,
+      qrViews: data.qrViews,
+      qrClicks: data.qrClicks,
+      progressPct: Math.round(avgProgress),
+    };
+  }
+
+  const qrMinSessionsVariant = Math.min(
+    qrProgressByVariant['with-qr']?.sessions || 0,
+    qrProgressByVariant['without-qr']?.sessions || 0,
+  );
+  const qrExperimentStatus = getCollectionStatus(qrMinSessionsVariant, collectionTargets.qrVariant.sessions);
+
+  return {
+    quickComparison: scoredRows.sort((a, b) => b.sessions - a.sessions),
+    rankingByStickiness: [...scoredRows].sort((a, b) => b.stickyScore - a.stickyScore),
+    qrExperimentSummary,
+    heuristic: {
+      weights,
+      minSampleSessions,
+      minQrVariantSessions,
+      directionalLiftPct,
+    },
+    collectionTargets,
+    collectionStatus: {
+      byQuick,
+      bySeries,
+      byTerritory,
+      qrExperiment: {
+        status: qrExperimentStatus,
+        progressByVariant: qrProgressByVariant,
+      },
+    },
+    warnings,
+  };
 }
 
 function safeHostname(referrer?: string | null) {
@@ -360,7 +884,7 @@ function buildScorecardsFromSnapshot(
 }
 
 export function collectLocalMetrics(
-  gamesCatalog: Array<{ slug: string; title: string }>,
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
   window: TimeWindow = 'all',
 ): MetricsSnapshot {
   const sessions = getLocalArray<SessionRecord>('sessions');
@@ -558,6 +1082,12 @@ export function collectLocalMetrics(
 
   const completedSessions = filteredSessions.filter((session) => session.status === 'completed').length;
   const experimentScorecards = buildScorecardsFromSnapshot(experimentsData, window, lastEventAt);
+  const quickInsights = getQuickInsights(
+    gamesCatalog,
+    filteredSessions as SessionWithExperiments[],
+    normalizedEvents,
+    window,
+  );
 
   return {
     source: 'local',
@@ -585,6 +1115,7 @@ export function collectLocalMetrics(
     circulation,
     readingCriteria: buildReadingCriteria(circulation, { bySource: cohortsBySource, byGame: cohortsByGame, byEngine: cohortsByEngine }, experimentScorecards),
     experimentScorecards,
+    quickInsights,
     generatedAt: new Date().toISOString(),
   };
 }
@@ -646,6 +1177,7 @@ interface RemoteRawEventRow {
   engine_kind: string;
   cta_id?: string;
   metadata?: Record<string, unknown>;
+  created_at?: string;
 }
 
 interface RemoteRawSessionRow {
@@ -655,10 +1187,12 @@ interface RemoteRawSessionRow {
   status: 'started' | 'completed';
   utm_source?: string | null;
   referrer?: string | null;
+  experiments?: Array<{ key: string; variant: string }> | string | null;
+  started_at?: string;
 }
 
 async function collectRemoteMetrics(
-  gamesCatalog: Array<{ slug: string; title: string }>,
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
   window: TimeWindow = 'all',
 ): Promise<MetricsSnapshot | null> {
   if (!isSupabaseConfigured) {
@@ -689,12 +1223,33 @@ async function collectRemoteMetrics(
       (supabase as any).from('experiment_performance').select('*').limit(300),
       (supabase as any)
         .from('game_events')
-        .select('session_id,event_name,slug,engine_kind,cta_id,metadata')
-        .in('event_name', ['outcome_view', 'primary_cta_click', 'secondary_cta_click', 'share_page_view', 'next_game_click', 'hub_return_click'])
+        .select('session_id,event_name,slug,engine_kind,cta_id,metadata,created_at')
+        .in('event_name', [
+          'game_start',
+          'outcome_view',
+          'primary_cta_click',
+          'secondary_cta_click',
+          'campaign_cta_click_after_game',
+          'share_page_view',
+          'share_page_play_click',
+          'next_game_click',
+          'hub_return_click',
+          'result_copy',
+          'link_copy',
+          'final_card_view',
+          'final_card_download',
+          'final_card_share_click',
+          'final_card_qr_view',
+          'final_card_qr_click',
+          'quick_minigame_replay',
+          'replay_click',
+          'outcome_replay_intent',
+          'first_interaction_time',
+        ])
         .limit(10000),
       (supabase as any)
         .from('game_sessions')
-        .select('session_id,slug,engine_kind,status,utm_source,referrer')
+        .select('session_id,slug,engine_kind,status,utm_source,referrer,experiments,started_at')
         .limit(10000),
     ]);
 
@@ -715,9 +1270,10 @@ async function collectRemoteMetrics(
       slug: row.slug,
       engineKind: row.engine_kind,
       status: row.status,
-      startedAt: '',
+      startedAt: row.started_at || new Date().toISOString(),
       utm_source: row.utm_source || undefined,
       referrer: row.referrer || undefined,
+      experiments: normalizeExperimentsPayload(row.experiments),
     }));
 
     const sourceSessionsCount: Record<string, number> = {};
@@ -731,7 +1287,8 @@ async function collectRemoteMetrics(
       engineSessionsCount[session.engineKind] = (engineSessionsCount[session.engineKind] || 0) + 1;
     }
 
-    const normalizedEvents = ((rawEventsRes.data || []) as RemoteRawEventRow[]).map<NormalizedEvent>((row) => ({
+    const rawEventRows = (rawEventsRes.data || []) as RemoteRawEventRow[];
+    const normalizedEvents = rawEventRows.map<NormalizedEvent>((row) => ({
       sessionId: row.session_id,
       eventName: row.event_name,
       slug: row.slug,
@@ -826,18 +1383,20 @@ async function collectRemoteMetrics(
       engineSessionsCount,
     );
 
-    // Calculate lastEventAt from raw events if available
-    // For simplicity, we'll use 'now' as a placeholder if we can't determine from data
-    // In production, you might query created_at from game_events directly
-    const lastEventAt = normalizedEvents.length > 0 ? new Date() : null;
+    const lastEventAt = rawEventRows
+      .map((row) => (row.created_at ? new Date(row.created_at).getTime() : 0))
+      .filter((value) => value > 0)
+      .reduce((max, value) => (value > max ? value : max), 0);
+    const resolvedLastEventAt = lastEventAt > 0 ? new Date(lastEventAt) : null;
 
-    const experimentScorecards = buildScorecardsFromSnapshot(experiments, window, lastEventAt);
+    const experimentScorecards = buildScorecardsFromSnapshot(experiments, window, resolvedLastEventAt);
+    const quickInsights = getQuickInsights(gamesCatalog, sessions, normalizedEvents, window);
 
     return {
       source: 'supabase',
       environment: determineEnvironment('supabase', true),
       window,
-      lastEventAt,
+      lastEventAt: resolvedLastEventAt,
       totalSessions: Number(funnel.total_sessions || 0),
       completedSessions: Number(funnel.completions || 0),
       totalEvents: Number(funnel.total_events || 0),
@@ -859,6 +1418,7 @@ async function collectRemoteMetrics(
       circulation,
       readingCriteria: buildReadingCriteria(circulation, { bySource: cohortsBySource, byGame: cohortsByGame, byEngine: cohortsByEngine }, experimentScorecards),
       experimentScorecards,
+      quickInsights,
       generatedAt: new Date().toISOString(),
     };
   } catch {
@@ -867,7 +1427,7 @@ async function collectRemoteMetrics(
 }
 
 export async function collectBestAvailableMetrics(
-  gamesCatalog: Array<{ slug: string; title: string }>,
+  gamesCatalog: Array<{ slug: string; title: string; pace?: string }>,
   window: TimeWindow = 'all',
 ): Promise<MetricsSnapshot> {
   const remote = await collectRemoteMetrics(gamesCatalog, window);

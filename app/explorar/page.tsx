@@ -7,10 +7,13 @@ import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { CTACluster } from '@/components/ui/CTACluster';
 import {
+  COLLECTIVE_SOLUTION_LABELS,
+  COMMON_VS_MARKET_LABELS,
   games,
   GAME_SERIES_LABELS,
   GAME_LINE_LABELS,
   GAME_PACE_LABELS,
+  POLITICAL_AXIS_LABELS,
   TERRITORY_SCOPE_LABELS,
   type GameSeries,
 } from '@/lib/games/catalog';
@@ -75,6 +78,20 @@ export default function ExplorarPage() {
     })
     .join(' • ');
 
+  const axisSummary = Object.entries(POLITICAL_AXIS_LABELS).map(([axis, label]) => ({
+    axis,
+    label,
+    count: games.filter((game) => game.politicalAxis === axis).length,
+  }));
+
+  const solutionSummary = Object.entries(COLLECTIVE_SOLUTION_LABELS)
+    .filter(([key]) => key !== 'nao-definido')
+    .map(([key, label]) => ({
+      key,
+      label,
+      count: games.filter((game) => game.collectiveSolutionType === key).length,
+    }));
+
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -98,7 +115,7 @@ export default function ExplorarPage() {
       <PageHero
         eyebrow="Catálogo vivo"
         title="Escolha um conflito e jogue agora"
-        description="Linha oficial de jogos da pré-campanha de Alexandre Fonseca para Deputado: rápida para entrar, forte para compartilhar e pronta para escalar no RJ."
+        description="Linha oficial de jogos da pre-campanha: rapida para entrar, forte para compartilhar e pronta para escalar no RJ."
         actions={
           <CTACluster>
             <Link href="/play/voto-consciente" className={styles.ctaPrimary}>
@@ -173,6 +190,27 @@ export default function ExplorarPage() {
           </div>
         </Section>
       )}
+
+      <Section
+        eyebrow="Taxonomia ideologica"
+        title="Eixo politico e solucao coletiva"
+        description={`Comum vs mercado: ${COMMON_VS_MARKET_LABELS.comum} como horizonte de campanha`}
+      >
+        <div className={styles.taxonomyGrid}>
+          {axisSummary.map((item) => (
+            <article key={item.axis} className={styles.engineType}>
+              <h4>{item.label}</h4>
+              <p>{item.count} jogos neste eixo politico.</p>
+            </article>
+          ))}
+          {solutionSummary.map((item) => (
+            <article key={item.key} className={styles.engineType}>
+              <h4>{item.label}</h4>
+              <p>{item.count} jogos priorizando esta solucao coletiva.</p>
+            </article>
+          ))}
+        </div>
+      </Section>
 
       <Section
         eyebrow="Taxonomia oficial"

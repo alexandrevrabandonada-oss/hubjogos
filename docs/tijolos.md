@@ -53,6 +53,11 @@ npm run test:e2e
 - Tijolo 20 ✅ cockpit temporal, clareza operacional e camada de game feel/replay
 - Tijolo 21 ✅ identidade eleitoral + linha de jogos + escala RJ
 - Tijolo 22 ✅ avatar oficial + card final universal + pipeline de assets
+- Tijolo 23 ✅ avatar V2 + card com QR + minigame quick
+- Tijolo 24 ✅ validacao disciplinada da linha quick
+- Tijolo 25 ✅ motor ideologico + 3o quick + leitura por eixo politico
+- Tijolo 26 ✅ scorecard de grude + comparacao quick por serie/territorio + priorizacao estrategica
+- Tijolo 27 ✅ operacao disciplinada de distribuicao e coleta para linha quick
 
 ## Tijolo 20 - Cockpit Temporal ✅
 
@@ -156,4 +161,185 @@ Criar base visual reutilizavel para crescimento organizado do hub: avatar oficia
 
 ## Proximo
 
-- Tijolo 23: refinar asset do avatar com designer profissional, variacoes de expressao, primeiro minigame quick novo validando throughput com avatar, QR code no card final.
+## Tijolo 23 - Avatar V2, QR e throughput quick ✅
+
+### Objetivo
+
+Evoluir o avatar oficial de V1 placeholder para V2 reconhecivel, fortalecer conversao no card final com QR e validar o pipeline com um novo minigame quick.
+
+### Entregues
+
+- Avatar V2 com expressoes e variante de oculos:
+  - `public/campaign/avatar/v2/portrait-neutral.svg`
+  - `public/campaign/avatar/v2/portrait-smile.svg`
+  - `public/campaign/avatar/v2/portrait-determined.svg`
+  - `public/campaign/avatar/v2/portrait-glasses.svg`
+
+- `CampaignAvatar` evoluido:
+  - suporte a `expression` (`neutral|smile|determined`)
+  - suporte a `glasses` (`auto|on|off`)
+  - contrato `fullBody` preparado para etapa futura
+
+- Card final universal fortalecido:
+  - `FinalShareCard` com QR code dinamico
+  - QR com destino de reentrada (`/share/...` ou `/play/...`)
+  - tracking de `final_card_qr_view` e `final_card_qr_click`
+
+- Novo minigame quick real:
+  - slug: `custo-de-viver`
+  - tempo: ~1-2 min
+  - formato quiz relampago e rejogavel
+  - integrado ao catalogo e runtime real
+
+- Tracking ampliado:
+  - `avatar_v2_rendered`
+  - `avatar_expression_rendered`
+  - `quick_minigame_completion`
+  - `quick_minigame_replay`
+
+- `/estado` com leitura dos novos sinais de avatar/QR/quick.
+
+### Nao inclui
+
+- RPG/plataforma/tycoon completo
+- auth/CMS/admin
+- pacote full-body final do avatar (fica para Tijolo 24)
+
+## Tijolo 24 - Validacao disciplinada da linha quick ✅
+
+### Objetivo
+
+Validar se a linha quick da campanha diverte, circula e compartilha com comparacao real entre jogos curtos e experimento controlado no card final.
+
+### Entregues
+
+- Segundo minigame quick real:
+  - slug: `quem-paga-a-conta`
+  - perfil contrastante com `custo-de-viver`
+  - tempo 1-2 min, rejogavel e compartilhavel
+
+- Experimento A/B real no card final:
+  - `final-card-qr-code`
+  - variante A: `with-qr`
+  - variante B: `without-qr`
+  - aplicacao em share pages
+
+- Refino operacional e leitura:
+  - `/estado` com bloco da linha quick e comparacao entre quick games
+  - snapshots/exports/circulation report com quick vs quick
+  - resumo de experimento QR e cortes por serie/territorio
+  - SQL de apoio em `supabase/tijolo-24-quick-line-validation.sql`
+
+### Nao inclui
+
+- auth/CMS/admin
+- jogo grande novo
+- full-body final do avatar
+
+## Tijolo 25 - Motor ideologico e linha quick coletiva ✅
+
+### Objetivo
+
+Formalizar o motor ideologico dos jogos, integrar taxonomia politica ao catalogo e testar a linha quick com terceira experiencia de solucoes coletivas.
+
+### Entregues
+
+- Documento mestre: `docs/motor-ideologico-dos-jogos.md`.
+- Taxonomia ideologica no dominio dos jogos:
+  - `politicalAxis`
+  - `collectiveSolutionType`
+  - `commonVsMarket`
+  - `campaignFrame`
+- 3o quick game real: `cidade-em-comum`.
+- Outcome/CTA com foco em organizacao coletiva e enquadramento nao personalista.
+- Tracking com metadata ideologica em todos os eventos e sinal dedicado `ideological_axis_signal`.
+- `/estado` com bloco ideologico (eixo, solucao coletiva, comum vs mercado).
+- Snapshot/export/circulation com recorte ideologico da linha quick.
+
+### Nao inclui
+
+- auth/CMS/admin
+- nova engine alem das atuais
+- pacote full-body final do avatar
+
+## Tijolo 26 - Priorizacao estrategica da linha quick ✅
+
+### Objetivo
+
+Parar decisao por feeling e consolidar leitura comparativa por jogo, serie, eixo e territorio para decidir qual linha quick evolui primeiro para formato medio.
+
+### Entregues
+
+- Scorecard de grude com heuristica explicita (completion/replay/share/CTA/share-play/TFI).
+- Ranking legivel por quick game, por serie e por territorio.
+- Leitura de eixo politico mais vivo e territorio mais responsivo no `/estado`.
+- Readout do experimento QR com estado de amostra (`cedo-demais`, `monitorando`, `sinal-direcional`).
+- `beta:snapshot`, `beta:export` e `beta:circulation-report` com blocos de priorizacao e avisos de baixa amostra.
+- Reforco visual territorial leve em card/play (ponte territorial local -> estado).
+
+### Nao inclui
+
+- formato medio novo (RPG/plataforma/tycoon)
+- auth/CMS/admin
+- novas engines alem das atuais
+
+## Tijolo 27 - Operacao disciplinada de distribuicao e coleta ✅
+
+### Objetivo
+
+Transformar a linha quick em algo realmente decidivel, criando operacao disciplinada de distribuicao e coleta de amostra por serie, territorio e variante, sem abrir novo escopo de produto antes da hora.
+
+### Entregues
+
+- Plano operacional de distribuicao em `docs/plano-distribuicao-quick.md`.
+- Metas minimas de amostra por janela (7d, 30d, all) para quick/serie/territorio/QR.
+- Status de coleta (`coleta-insuficiente`, `coleta-em-andamento`, `coleta-minima-atingida`, `pronto-para-priorizacao`) aplicado em quick/serie/territorio/QR.
+- Report de distribuicao operacional (`npm run beta:distribution-report`) com progresso por quick/serie/territorio e recomendacoes acionaveis.
+- `/estado` ampliado com status de coleta, barra de progresso visual e avisos de insuficiencia.
+- Criterio formal de "pronto para Tijolo 28" baseado em amostra minima por quick/serie/territorio.
+- Documentacao atualizada com metas, status de coleta e criterios de decisao.
+
+### Nao inclui
+
+- formato medio novo (RPG/plataforma/tycoon)
+- auth/CMS/admin
+- novas engines alem das atuais
+- inflacao operacional interna
+
+## Tijolo 28 - Operacao pratica de distribuicao e campanha ✅
+
+### Objetivo
+
+Transformar o plano de distribuicao do Tijolo 27 em operacao pratica de campanha, criando ferramentas simples e rastreaveis para distribuir quick games por canal, territorio e serie sem abrir novo escopo de produto.
+
+### Entregues
+
+- Sistema de links de campanha com UTMs em `lib/campaign-links/` (types, builder, packages).
+- Script `npm run campaign:links` para gerar links prontos de campanha em markdown/json.
+- Pacotes de distribuicao por canal (`reports/distribution/packages/instagram-geral.md`, `whatsapp-geral.md`, `tiktok-geral.md`).
+- Pacotes por territorio (`territorio-estado-rj.md`, `territorio-volta-redonda.md`) com metas operacionais e ordem de prioridade.
+- Operacao semanal documentada em `docs/operacao-semanal-distribuicao.md` (roteiro de 14 dias).
+- Script `npm run campaign:brief` para gerar resumo executivo semanal da campanha em `reports/distribution/briefs/`.
+- Melhorias no `beta:distribution-report` com secao "O que distribuir esta semana" e recomendacoes operacionais especificas.
+- Bloco "O que distribuir agora" em `/estado` com quick/territorio/serie prioritarios e alertas visuais.
+- Documentacao de distribuicao em `docs/distribuicao-links.md`.
+- Branding eleitoral "Pre-Campanha de Alexandre Fonseca para Deputado" reforçado em todos os materiais.
+
+### Nao inclui
+
+- nova engine
+- formato medio
+- auth/CMS/admin
+- integracao Slack/email
+- painel enterprise
+
+### Guardrails respeitados
+
+- 4 engines + 3 quick games continuam funcionando sem regressao
+- sistema de rastreamento UTM/source funcional
+- cockpit `/estado` acionavel e leve
+- operacao de campanha clara, rastreavel e idiota-proof
+
+## Proximo
+
+- Tijolo 29: executar distribuicao por 7-14 dias, consolidar amostra minima comparavel (80+ sessoes/territorio, 60+ sessoes/quick), decidir serie lider com evidencia honesta, preparar blueprint de formato medio.

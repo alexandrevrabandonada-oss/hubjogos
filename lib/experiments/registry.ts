@@ -141,6 +141,29 @@ export const experiments: Record<string, ExperimentDefinition> = {
       },
     ],
   },
+
+  // === TIJOLO 24: VALIDAÇÃO QUICK LINE ===
+
+  'final-card-qr-code': {
+    key: 'final-card-qr-code',
+    name: 'Final Card QR Code',
+    description: 'Testar presença de QR code no card final para medir impacto na reentrada real.',
+    enabled: true,
+    primaryMetric: 'qr_scan_rate',
+    affectedSurface: 'share/final-card-qr',
+    variants: [
+      {
+        key: 'with-qr',
+        weight: 50,
+        name: 'Com QR - Card com QR de reentrada',
+      },
+      {
+        key: 'without-qr',
+        weight: 50,
+        name: 'Sem QR - Card sem QR (controle)',
+      },
+    ],
+  },
 };
 
 /**

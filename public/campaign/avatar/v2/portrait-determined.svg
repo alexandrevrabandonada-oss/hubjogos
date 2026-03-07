@@ -1,0 +1,91 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Avatar V2 - Alexandre Fonseca - Expressão Determinada -->
+  <!-- Baseado em referências fotográficas reais -->
+  <!-- Sobrancelhas convergidas, boca firme, olho intenso -->
+  
+  <defs>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="400" height="400" fill="#f5f5f5" opacity="0"/>
+  
+  <g filter="url(#shadow)">
+    <!-- Pescoço -->
+    <rect x="160" y="280" width="80" height="40" fill="#c9a878" rx="8"/>
+    
+    <!-- Camisa/Camiseta base -->
+    <path d="M 130 310 L 140 330 L 260 330 L 270 310 L 240 310 L 240 360 L 160 360 L 160 310 Z" fill="#1a1a1a"/>
+    
+    <!-- Cabeça -->
+    <ellipse cx="200" cy="160" rx="75" ry="95" fill="#d4a882"/>
+    
+    <!-- Cabelo -->
+    <path d="M 130 140 Q 120 120 130 90 Q 150 70 180 65 Q 200 62 220 65 Q 250 70 270 90 Q 280 120 270 140" fill="#1a1a1a"/>
+    <path d="M 127 130 L 125 170 Q 128 200 135 210 Q 140 205 142 170 Z" fill="#1a1a1a"/>
+    <path d="M 273 130 L 275 170 Q 272 200 265 210 Q 260 205 258 170 Z" fill="#1a1a1a"/>
+    
+    <!-- Sobrancelhas - convergidas na direção do nariz, expressão de determinação -->
+    <path d="M 150 148 Q 165 152 180 160" stroke="#2a2a2a" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+    <path d="M 220 160 Q 235 152 250 148" stroke="#2a2a2a" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Ruga entre sobrancelhas (determinação) -->
+    <path d="M 198 145 L 202 145" stroke="#8b6f47" stroke-width="2" opacity="0.6"/>
+    <path d="M 197 150 L 203 150" stroke="#8b6f47" stroke-width="1.5" opacity="0.5"/>
+    
+    <!-- Olhos - mais focados, intensos -->
+    <ellipse cx="160" cy="170" rx="13" ry="17" fill="#3d2817"/>
+    <ellipse cx="240" cy="170" rx="13" ry="17" fill="#3d2817"/>
+    <circle cx="162" cy="166" r="5" fill="#ffffff" opacity="0.8"/>
+    <circle cx="242" cy="166" r="5" fill="#ffffff" opacity="0.8"/>
+    
+    <!-- Pálpebras superiores mais visíveis -->
+    <path d="M 148 160 Q 160 155 172 157" stroke="#2a2a2a" stroke-width="1.5" opacity="0.5" fill="none"/>
+    <path d="M 228 157 Q 240 155 252 160" stroke="#2a2a2a" stroke-width="1.5" opacity="0.5" fill="none"/>
+    
+    <!-- Nariz -->
+    <path d="M 200 165 L 200 215" stroke="#8b6f47" stroke-width="3" opacity="0.6" stroke-linecap="round"/>
+    <path d="M 195 210 Q 200 218 205 210" stroke="#8b6f47" stroke-width="2.5" opacity="0.6" fill="none" stroke-linecap="round"/>
+    
+    <!-- Barba -->
+    <path d="M 130 230 Q 150 250 175 260 Q 200 265 225 260 Q 250 250 270 230" fill="#4a3728" opacity="0.8"/>
+    <ellipse cx="170" cy="245" rx="25" ry="12" fill="#5a4738" opacity="0.4"/>
+    <ellipse cx="230" cy="245" rx="25" ry="12" fill="#5a4738" opacity="0.4"/>
+    <path d="M 135 260 Q 200 280 265 260" stroke="#a5886d" stroke-width="2" fill="none" opacity="0.5"/>
+    
+    <!-- Boca - linha firme, contração leve nos lados -->
+    <path d="M 165 258 Q 200 263 235 258" stroke="#3d2817" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    
+    <!-- Contração ao lado da boca (determinação) -->
+    <path d="M 155 260 Q 160 268 158 275" stroke="#8b6f47" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+    <path d="M 245 260 Q 240 268 242 275" stroke="#8b6f47" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
+    
+    <!-- Orelhas -->
+    <ellipse cx="115" cy="170" rx="18" ry="30" fill="#c9a878"/>
+    <ellipse cx="285" cy="170" rx="18" ry="30" fill="#c9a878"/>
+    <ellipse cx="118" cy="170" rx="8" ry="15" fill="#a5886d" opacity="0.6"/>
+    <ellipse cx="282" cy="170" rx="8" ry="15" fill="#a5886d" opacity="0.6"/>
+    
+    <!-- Sombras faciais - mais pronunciadas para dar intensidade -->
+    <ellipse cx="200" cy="210" rx="65" ry="55" fill="#8b6f47" opacity="0.12"/>
+    
+    <!-- Badge AF -->
+    <g id="badge" transform="translate(290, 30)">
+      <circle cx="0" cy="0" r="18" fill="#FFB81C"/>
+      <circle cx="0" cy="0" r="16" fill="#ffffff"/>
+      <text x="-8" y="8" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#FFB81C" text-anchor="middle">AF</text>
+    </g>
+    
+  </g>
+  
+  <line x1="100" y1="390" x2="300" y2="390" stroke="#FFB81C" stroke-width="2" opacity="0.6"/>
+</svg>

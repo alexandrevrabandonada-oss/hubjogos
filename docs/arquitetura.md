@@ -203,6 +203,10 @@ O catalogo agora carrega metadados estruturais para suportar crescimento:
 - `line`: denuncia, orcamento/cuidado, memoria/territorio, trabalho, mobilidade, organizacao popular, estado-rj
 - `series`: colecoes oficiais da campanha
 - `territoryScope`: volta-redonda, sul-fluminense, baixada, capital, estado-rj
+- `politicalAxis`: mercado, reforma-estatal, poder-popular
+- `collectiveSolutionType`: tarifa-zero, cooperativismo, ajuda-mutua, autogestao, controle-popular
+- `commonVsMarket`: mercado, misto, comum
+- `campaignFrame`: projeto-coletivo, comunidade-em-luta, defesa-dos-comuns
 
 Uso pratico:
 
@@ -284,16 +288,95 @@ Versão V1 (Tijolo 22):
 - Representa conceito e estrutura, ainda precisa refinamento profissional
 - Componentes funcionais e prontos para substituição de asset final
 
+## Evolução V2 e QR (Tijolo 23)
+
+Evoluções aplicadas sobre a base do Tijolo 22:
+
+- Avatar V2 reconhecível em `public/campaign/avatar/v2/` com expressões:
+  - `portrait-neutral.svg`
+  - `portrait-smile.svg`
+  - `portrait-determined.svg`
+  - `portrait-glasses.svg`
+
+- `CampaignAvatar` agora suporta:
+  - `expression: neutral | smile | determined`
+  - `glasses: auto | on | off`
+  - `fullBody` (contrato preparado para evolução futura)
+
+- `FinalShareCard` recebeu QR code dinâmico de reentrada com tracking:
+  - `final_card_qr_view`
+  - `final_card_qr_click`
+
+- Novo minigame quick real para validar throughput:
+  - `custo-de-viver` (quiz 1-2 min)
+  - tracking de `quick_minigame_completion` e `quick_minigame_replay`
+
 - `pace`: `quick`, `session`, `deep`, `future-flagship`
 - `line`: denuncia, orcamento/cuidado, memoria/territorio, trabalho, mobilidade, organizacao popular, estado-rj
 - `series`: colecoes oficiais da campanha
 - `territoryScope`: volta-redonda, sul-fluminense, baixada, capital, estado-rj
+- `politicalAxis`: mercado, reforma-estatal, poder-popular
+- `collectiveSolutionType`: tarifa-zero, cooperativismo, ajuda-mutua, autogestao, controle-popular
+- `commonVsMarket`: mercado, misto, comum
+- `campaignFrame`: projeto-coletivo, comunidade-em-luta, defesa-dos-comuns
 
 Uso pratico:
 
 - Home e Explorar exibem series e escada de formato.
 - Game cards e play pages exibem taxonomia e escopo.
 - `/estado` agrega leitura por serie, territorio e tipo de jogo.
+
+## Validacao da linha quick (Tijolo 24)
+
+Evolucoes aplicadas sobre o Tijolo 23 para validar throughput com baixo risco:
+
+- Segundo quick game real integrado:
+  - `quem-paga-a-conta` (quiz 1-2 min)
+  - contraste editorial com `custo-de-viver` para comparacao quick vs quick
+
+- Experimento A/B real no card final:
+  - experimento: `final-card-qr-code`
+
+## Motor ideologico e quick coletivo (Tijolo 25)
+
+- Documento de referencia: `docs/motor-ideologico-dos-jogos.md`.
+- Terceiro quick game real integrado: `cidade-em-comum` (quiz 1-2 min).
+- Tracking com metadata ideologica em todos os eventos de analytics.
+- Novo evento `ideological_axis_signal` emitido no resultado dos quizzes.
+- `/estado` com leitura por eixo politico, solucao coletiva e comum vs mercado.
+- Snapshot/export/circulation com cortes ideologicos da linha quick.
+  - variantes: `with-qr` e `without-qr`
+  - aplicacao em share page com fallback seguro
+
+- Card final refinado para experimento:
+  - `FinalShareCard` com copy condicional para cenarios com e sem QR
+  - assinatura de campanha e avatar V2 preservados em ambas variantes
+
+- Operacao e leitura ampliadas:
+  - `supabase/tijolo-24-quick-line-validation.sql` com views de quick throughput e QR
+  - `tools/beta-snapshot.js`, `tools/beta-export.js`, `tools/beta-circulation-report.js` com blocos quick/serie/territorio/QR experiment
+  - `/estado` com secao dedicada para comparacao da linha quick
+
+## Priorizacao estrategica quick (Tijolo 26)
+
+- `lib/analytics/metrics.ts` passou a expor `quickInsights` no snapshot de metricas:
+  - comparacao lado a lado dos 3 quick games (`custo-de-viver`, `quem-paga-a-conta`, `cidade-em-comum`)
+  - scorecard de grude com heuristica explicita
+  - ranking por quick, serie, territorio e eixo politico
+  - readout de experimento QR com estado de amostra
+
+- `/estado` ganhou blocos de decisao:
+  - quick comparado com views/starts/completions/replay/share/CTA/card-final/share-play/TFI/QR
+  - score de grude e liderancas (serie, eixo, territorio)
+  - warning de baixa amostra para evitar conclusao forte cedo demais
+
+- `tools/circulation-utils.js` centraliza os agregados de priorizacao usados por:
+  - `tools/beta-snapshot.js`
+  - `tools/beta-export.js`
+  - `tools/beta-circulation-report.js`
+
+- Reforco territorial leve no produto:
+  - `GameCard` e `/play/[slug]` explicitam ponte territorial local -> estado para legibilidade de escala.
 
 ## OG dinâmico real (Tijolo 07)
 

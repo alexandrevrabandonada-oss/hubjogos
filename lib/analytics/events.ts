@@ -28,7 +28,15 @@ export type AnalyticsEventName =
   | 'final_card_download'
   | 'final_card_share_click'
   | 'campaign_avatar_view'
-  | 'campaign_cta_click_after_game';
+  | 'campaign_cta_click_after_game'
+  // Eventos de QR code e avatar V2 (Tijolo 23)
+  | 'final_card_qr_view'
+  | 'final_card_qr_click'
+  | 'avatar_v2_rendered'
+  | 'avatar_expression_rendered'
+  | 'quick_minigame_completion'
+  | 'quick_minigame_replay'
+  | 'ideological_axis_signal';
 
 export interface AnalyticsEventPayload {
   sessionId: string;

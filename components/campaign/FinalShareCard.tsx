@@ -1,5 +1,6 @@
 import { CampaignAvatar } from './CampaignAvatar';
 import { CampaignMark } from './CampaignMark';
+import { GameQRCode } from './GameQRCode';
 import type { Game } from '@/lib/games/catalog';
 import styles from './FinalShareCard.module.css';
 
@@ -10,6 +11,8 @@ interface FinalShareCardProps {
   resultId?: string;
   onDownload?: () => void;
   showAvatar?: boolean;
+  showQR?: boolean;
+  onQrClick?: () => void;
 }
 
 export function FinalShareCard({
@@ -18,13 +21,15 @@ export function FinalShareCard({
   resultSummary,
   resultId,
   showAvatar = true,
+  showQR = true,
+  onQrClick,
 }: FinalShareCardProps) {
   return (
     <div className={styles.card} data-result-id={resultId}>
       <div className={styles.header}>
         {showAvatar && (
           <div className={styles.avatarSection}>
-            <CampaignAvatar size="large" />
+            <CampaignAvatar size="large" expression="smile" />
           </div>
         )}
         <div className={styles.gameInfo}>
@@ -63,8 +68,20 @@ export function FinalShareCard({
       </div>
 
       <div className={styles.footer}>
-        <CampaignMark compact />
-        <p className={styles.cta}>Jogue, compare, compartilhe</p>
+        <div className={styles.footerLeft}>
+          <CampaignMark compact />
+          <p className={styles.cta}>Pre-campanha Alexandre Fonseca para Deputado Estadual RJ</p>
+          <p className={styles.ctaSecondary}>
+            {showQR
+              ? 'Jogue, compare, compartilhe e reentre pelo QR'
+              : 'Jogue, compare e compartilhe com quem vive essa realidade'}
+          </p>
+        </div>
+        {showQR && (
+          <div className={styles.footerQR}>
+            <GameQRCode gameSlug={game.slug} resultId={resultId} size={100} onClick={onQrClick} includeLabel />
+          </div>
+        )}
       </div>
 
       {resultId && (

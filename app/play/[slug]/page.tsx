@@ -6,8 +6,12 @@ import { MetaChip } from '@/components/ui/MetaChip';
 import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import {
+  CAMPAIGN_FRAME_LABELS,
+  COLLECTIVE_SOLUTION_LABELS,
+  COMMON_VS_MARKET_LABELS,
   GAME_PACE_LABELS,
   GAME_SERIES_LABELS,
+  POLITICAL_AXIS_LABELS,
   TERRITORY_SCOPE_LABELS,
   getGameBySlug,
 } from '@/lib/games/catalog';
@@ -70,6 +74,10 @@ export default function PlayPage({ params }: PlayPageProps) {
           <MetaChip icon="⚡">{GAME_PACE_LABELS[game.pace]}</MetaChip>
           <MetaChip icon="🧱">{GAME_SERIES_LABELS[game.series]}</MetaChip>
           <MetaChip icon="🗺">{TERRITORY_SCOPE_LABELS[game.territoryScope]}</MetaChip>
+          <MetaChip icon="🧭">{POLITICAL_AXIS_LABELS[game.politicalAxis]}</MetaChip>
+          <MetaChip icon="🤝">{COLLECTIVE_SOLUTION_LABELS[game.collectiveSolutionType]}</MetaChip>
+          <MetaChip icon="⚖">{COMMON_VS_MARKET_LABELS[game.commonVsMarket]}</MetaChip>
+          <MetaChip icon="📣">{CAMPAIGN_FRAME_LABELS[game.campaignFrame]}</MetaChip>
           <MetaChip icon="⚙">{game.runtimeState}</MetaChip>
         </div>
 
@@ -94,7 +102,10 @@ export default function PlayPage({ params }: PlayPageProps) {
                 de cidade aparece em cada resultado.
               </p>
               <p>
-                Esta experiência integra o Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado.
+                Leitura territorial: {TERRITORY_SCOPE_LABELS[game.territoryScope]} como base, com expansão disciplinada para o Estado do RJ.
+              </p>
+              <p>
+                Esta experiencia integra uma campanha orientada por projeto coletivo e defesa dos comuns.
               </p>
               <Link href="/participar" className={styles.quizLink}>
                 Entrar em ação →

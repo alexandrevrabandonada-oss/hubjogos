@@ -14,6 +14,8 @@ const {
   buildExperimentScorecards,
   buildReadingCriteria,
   toTopRows,
+  loadCatalogMetadata,
+  buildQuickLineInsights,
 } = require('./circulation-utils');
 
 function loadLocalEnv() {
@@ -166,7 +168,81 @@ function getExperimentsRegistry() {
   }));
 }
 
+function normalizeExperimentsPayload(experiments) {
+  if (Array.isArray(experiments)) {
+    return experiments;
+  }
+
+  if (!experiments) {
+    return [];
+  }
+
+  if (typeof experiments === 'string') {
+    try {
+      const parsed = JSON.parse(experiments);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+}
+
+function buildQrExperimentSummary(sessions, events) {
+  const bySession = {};
+  for (const session of sessions || []) {
+    const experiments = normalizeExperimentsPayload(session.experiments);
+    const hit = experiments.find((item) => item.key === 'final-card-qr-code');
+    if (hit) {
+      bySession[session.session_id || session.sessionId] = hit.variant;
+    }
+  }
+
+  const summary = {
+    'with-qr': { sessions: 0, completions: 0, qrViews: 0, qrClicks: 0 },
+    'without-qr': { sessions: 0, completions: 0, qrViews: 0, qrClicks: 0 },
+  };
+
+  for (const session of sessions || []) {
+    const variant = bySession[session.session_id || session.sessionId];
+    if (!variant || !summary[variant]) {
+      continue;
+    }
+    summary[variant].sessions += 1;
+    if (session.status === 'completed') {
+      summary[variant].completions += 1;
+    }
+  }
+
+  for (const event of events || []) {
+    const variant = bySession[event.session_id || event.sessionId];
+    if (!variant || !summary[variant]) {
+      continue;
+    }
+    const name = event.event_name || event.event;
+    if (name === 'final_card_qr_view') {
+      summary[variant].qrViews += 1;
+    }
+    if (name === 'final_card_qr_click') {
+      summary[variant].qrClicks += 1;
+    }
+  }
+
+  return Object.fromEntries(
+    Object.entries(summary).map(([variant, row]) => [
+      variant,
+      {
+        ...row,
+        completionRate: row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0,
+        qrCtr: row.qrViews > 0 ? Math.round((row.qrClicks / row.qrViews) * 100) : 0,
+      },
+    ]),
+  );
+}
+
 function aggregateFromLocal(registry, window = 'all') {
+  const catalogMap = loadCatalogMetadata();
   const sessions = getLocalArray('sessions');
   const events = getLocalArray('events');
   const feedback = getLocalArray('feedback');
@@ -228,6 +304,16 @@ function aggregateFromLocal(registry, window = 'all') {
     })),
     window,
   );
+  const quickInsights = buildQuickLineInsights(
+    sessions.map((s) => ({ session_id: s.sessionId, slug: s.slug, status: s.status, experiments: s.experiments || [] })),
+    events.map((e) => ({ session_id: e.sessionId, event_name: e.event, slug: e.slug, metadata: e.metadata })),
+    catalogMap,
+    window,
+  );
+  const qrExperimentSummary = buildQrExperimentSummary(
+    sessions.map((s) => ({ session_id: s.sessionId, status: s.status, experiments: s.experiments || [] })),
+    events.map((e) => ({ session_id: e.sessionId, event_name: e.event })),
+  );
 
   const experimentRows = [];
   sessions.forEach((s) => {
@@ -278,6 +364,8 @@ function aggregateFromLocal(registry, window = 'all') {
     topSources,
     topGames,
     circulation,
+    quickInsights,
+    qrExperimentSummary,
     readingCriteria,
     scorecards,
     experiments: experimentRows,
@@ -285,6 +373,7 @@ function aggregateFromLocal(registry, window = 'all') {
 }
 
 async function aggregateFromRemote(registry, window = 'all') {
+  const catalogMap = loadCatalogMetadata();
   const [
     funnelRows,
     sourceRows,
@@ -303,9 +392,9 @@ async function aggregateFromRemote(registry, window = 'all') {
     supabaseSelect('feedback_records', 'select=rating,comment&limit=1000'),
     supabaseSelect(
       'game_events',
-      'select=session_id,event_name,slug,engine_kind,cta_id,metadata&event_name=in.(outcome_view,primary_cta_click,secondary_cta_click,share_page_view,next_game_click,hub_return_click)&limit=10000',
+      'select=session_id,event_name,slug,engine_kind,cta_id,metadata&event_name=in.(game_start,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,outcome_replay_intent,first_interaction_time)&limit=10000',
     ),
-    supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer&limit=10000'),
+    supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer,experiments&limit=10000'),
   ]);
 
   if (!funnelRows || funnelRows.length === 0) {
@@ -315,6 +404,8 @@ async function aggregateFromRemote(registry, window = 'all') {
   const funnel = funnelRows[0];
   const circulation = buildCirculationFromRows(sessionRows || [], eventRows || [], window);
   const scorecards = buildExperimentScorecards(expRows || [], registry);
+  const quickInsights = buildQuickLineInsights(sessionRows || [], eventRows || [], catalogMap, window);
+  const qrExperimentSummary = buildQrExperimentSummary(sessionRows || [], eventRows || []);
   const sourceMap = {};
   (sourceRows || []).forEach((row) => {
     sourceMap[row.source] = Number(row.sessions || 0);
@@ -359,6 +450,8 @@ async function aggregateFromRemote(registry, window = 'all') {
       completionRate: Number(row.completion_rate || 0),
     })),
     circulation,
+    quickInsights,
+    qrExperimentSummary,
     readingCriteria,
     scorecards,
     experiments: expRows || [],
@@ -441,6 +534,60 @@ ${topExitGames.map((item) => `- **${item.key}**: ${item.value.exits} (${item.val
 
 ### Saidas por engine
 ${topExitEngines.map((item) => `- **${item.key}**: ${item.value.exits} (${item.value.exitRate}%)`).join('\n') || '_Sem dados_'}
+
+## Linha Quick (Tijolo 26)
+
+### Quick vs Quick
+${(snapshot.quickInsights?.quickComparison || [])
+  .map(
+    (row) =>
+      `- **${row.title}**: views ${row.sessions}, starts ${row.starts}, conclusão ${row.completionRate}%, replay ${row.replayRate}%, share ${row.shareRate}%, CTA pós-jogo ${row.postGameCtaClicks}, card final ${row.finalCardInteractions}, share→play ${row.reentryRate}%, TFI ${row.firstInteractionAvgMs}ms, QR CTR ${row.qrCtr}%, grude ${row.stickyScore}`,
+  )
+  .join('\n') || '_Sem dados quick suficientes_'}
+
+### Ranking de grude (quick)
+${(snapshot.quickInsights?.quickRanking || [])
+  .map((row, index) => `${index + 1}. **${row.title}** (${row.stickyScore})`)
+  .join('\n') || '_Sem ranking_'}
+
+### Ranking por série (quick)
+${(snapshot.quickInsights?.rankedSeries || [])
+  .map((row, index) => `${index + 1}. **${row.key}** (${row.stickyScore}) - sessões ${row.sessions}, conv ${row.completionRate}%, share ${row.shareRate}%`)
+  .join('\n') || '_Sem dados por série_'}
+
+### Ranking por território (quick)
+${(snapshot.quickInsights?.rankedTerritory || [])
+  .map((row, index) => `${index + 1}. **${row.key}** (${row.stickyScore}) - sessões ${row.sessions}, share ${row.shareRate}%, replay ${row.replayRate}%, jogo forte ${row.topGameTitle || row.topGameSlug}`)
+  .join('\n') || '_Sem dados por território_'}
+
+### Eixo político líder (quick)
+${(snapshot.quickInsights?.rankedPoliticalAxis || [])
+  .map((row, index) => `${index + 1}. **${row.key}** (${row.stickyScore}) - sessões ${row.sessions}, conv ${row.completionRate}%, share ${row.shareRate}%`)
+  .join('\n') || '_Sem dados por eixo_'}
+
+### QR A/B (with-qr vs without-qr)
+${Object.entries(snapshot.quickInsights?.qrReadout || snapshot.qrExperimentSummary || {})
+  .map(([variant, row]) => `- **${variant}**: sessões ${row.sessions}, conclusão ${row.completionRate}%, QR views ${row.qrViews}, QR clicks ${row.qrClicks}, QR CTR ${row.qrCtr}%, status ${row.status || 'monitorando'}, delta ${row.deltaVsBaselinePct ?? 0}pp`)
+  .join('\n') || '_Sem dados de experimento QR_'}
+
+### Série e território (quick)
+- Série: ${Object.entries(snapshot.quickInsights?.bySeries || {})
+  .map(([key, row]) => `${key}=${row.sessions} sessões/${row.completions} conclusões`)
+  .join(' | ') || 'sem dados'}
+- Território: ${Object.entries(snapshot.quickInsights?.byTerritory || {})
+  .map(([key, row]) => `${key}=${row.sessions} sessões/${row.completions} conclusões`)
+  .join(' | ') || 'sem dados'}
+- Eixo político: ${Object.entries(snapshot.quickInsights?.byPoliticalAxis || {})
+  .map(([axis, row]) => `${axis}: ${row.sessions} sessões, ${row.completions} conclusões, ${row.shares} shares`)
+  .join(' | ') || 'sem dados'}
+- Comum vs mercado: ${Object.entries(snapshot.quickInsights?.byCommonVsMarket || {})
+  .map(([bucket, row]) => `${bucket}: ${row.sessions} sessões, ${row.completions} conclusões, ${row.shares} shares`)
+  .join(' | ') || 'sem dados'}
+- Mais grudento: ${snapshot.quickInsights?.topStickyGame?.title || 'n/a'}
+
+### Heurística e aviso de amostra
+- Heurística: completion 30%, replay 20%, share 20%, CTA 15%, share→play 10%, TFI 5%
+- Alertas: ${(snapshot.quickInsights?.warnings || []).join(' | ') || 'sem alertas de amostra no quick'}
 
 ## Scorecards de Experimento
 ${snapshot.scorecards

@@ -14,7 +14,7 @@ export interface ExperimentDefinition {
   name: string;
   description: string;
   enabled: boolean;
-  primaryMetric?: 'completion_rate' | 'ctr' | 'share_reentry_rate';
+  primaryMetric?: 'completion_rate' | 'ctr' | 'share_reentry_rate' | 'qr_scan_rate';
   affectedSurface?: string;
   variants: ExperimentVariant[];
 }

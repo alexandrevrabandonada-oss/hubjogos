@@ -6,10 +6,12 @@
 public/
   campaign/
     avatar/
-      base.svg          # Avatar base SVG editável
-      portrait.png      # Portrait derivado para cards
-      icon.png          # Ícone pequeno para tokens
-      busto.png         # Busto completo para hero sections
+      base.svg                    # Avatar V1 placeholder
+      v2/
+        portrait-neutral.svg      # V2 neutro
+        portrait-smile.svg        # V2 sorrindo
+        portrait-determined.svg   # V2 determinado
+        portrait-glasses.svg      # V2 com óculos
       
     share/
       frame-base.svg    # Moldura padrão de share card
@@ -59,6 +61,12 @@ Fluxo atual (Tijolo 22):
 2. Componente `CampaignAvatar` consome o asset
 3. Sistema `FinalShareCard` usa avatar para composição de card final
 
+Fluxo atual (Tijolo 23):
+1. Referências fotográficas consolidadas em linguagem vetorial V2
+2. `CampaignAvatar` escolhe expressão (`neutral|smile|determined`) e óculos (`auto|on|off`)
+3. `FinalShareCard` usa avatar V2 e QR code de reentrada
+4. Tracking de render/click/view valida adoção no `/estado`
+
 Fluxo futuro:
 1. Designer/ilustrador refina asset seguindo `docs/avatar-oficial-alexandre-fonseca.md`
 2. Asset refinado substitui placeholder mantendo mesma estrutura
@@ -86,4 +94,4 @@ Remoção de asset:
 2. Atualizar componentes antes de remover
 3. Documentar remoção
 
-Última atualização: Tijolo 22 (2026-03-06)
+Última atualização: Tijolo 23 (2026-03-06)

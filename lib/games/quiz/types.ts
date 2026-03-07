@@ -3,7 +3,10 @@ export type QuizAxis =
   | 'labor'
   | 'mobility'
   | 'participation'
-  | 'urban-memory';
+  | 'urban-memory'
+  | 'cost-of-living'
+  | 'governance'
+  | 'collective-power';
 
 export interface QuizOption {
   id: string;

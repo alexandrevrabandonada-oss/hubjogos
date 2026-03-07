@@ -14,6 +14,8 @@ const {
   buildExperimentScorecards,
   buildReadingCriteria,
   toTopRows,
+  loadCatalogMetadata,
+  buildQuickLineInsights,
 } = require('./circulation-utils');
 
 function loadLocalEnv() {
@@ -134,8 +136,90 @@ function summarizeCirculation(circulation) {
   };
 }
 
+function normalizeExperimentsPayload(experiments) {
+  if (Array.isArray(experiments)) {
+    return experiments;
+  }
+
+  if (!experiments) {
+    return [];
+  }
+
+  if (typeof experiments === 'string') {
+    try {
+      const parsed = JSON.parse(experiments);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+}
+
+function buildQrExperimentSummary(sessions, events) {
+  const safeSessions = sessions || [];
+  const safeEvents = events || [];
+
+  const bySession = {};
+  for (const session of safeSessions) {
+    const variants = normalizeExperimentsPayload(session.experiments);
+    const hit = variants.find((item) => item.key === 'final-card-qr-code');
+    if (hit) {
+      bySession[session.session_id || session.sessionId] = hit.variant;
+    }
+  }
+
+  const summary = {
+    'with-qr': { sessions: 0, completions: 0, qrViews: 0, qrClicks: 0, finalCardViews: 0 },
+    'without-qr': { sessions: 0, completions: 0, qrViews: 0, qrClicks: 0, finalCardViews: 0 },
+  };
+
+  for (const session of safeSessions) {
+    const variant = bySession[session.session_id || session.sessionId];
+    if (!variant || !summary[variant]) {
+      continue;
+    }
+
+    summary[variant].sessions += 1;
+    if (session.status === 'completed') {
+      summary[variant].completions += 1;
+    }
+  }
+
+  for (const event of safeEvents) {
+    const variant = bySession[event.session_id || event.sessionId];
+    if (!variant || !summary[variant]) {
+      continue;
+    }
+
+    const eventName = event.event_name || event.event;
+    if (eventName === 'final_card_view') {
+      summary[variant].finalCardViews += 1;
+    }
+    if (eventName === 'final_card_qr_view') {
+      summary[variant].qrViews += 1;
+    }
+    if (eventName === 'final_card_qr_click') {
+      summary[variant].qrClicks += 1;
+    }
+  }
+
+  return Object.fromEntries(
+    Object.entries(summary).map(([variant, row]) => [
+      variant,
+      {
+        ...row,
+        completionRate: row.sessions > 0 ? Math.round((row.completions / row.sessions) * 100) : 0,
+        qrCtr: row.qrViews > 0 ? Math.round((row.qrClicks / row.qrViews) * 100) : 0,
+      },
+    ]),
+  );
+}
+
 async function buildExport(window = 'all') {
   const registry = getExperimentsRegistry();
+  const catalogMap = loadCatalogMetadata();
   const remoteFunnel = await supabaseSelect('beta_funnel_overview', 'select=*');
 
   if (remoteFunnel && remoteFunnel.length > 0) {
@@ -151,7 +235,7 @@ async function buildExport(window = 'all') {
         supabaseSelect('ops_audit_log', 'select=action_type'),
         supabaseSelect(
           'game_events',
-          'select=session_id,event_name,slug,engine_kind,cta_id,metadata&event_name=in.(outcome_view,primary_cta_click,secondary_cta_click,share_page_view,next_game_click,hub_return_click)&limit=10000',
+          'select=session_id,event_name,slug,engine_kind,cta_id,metadata&event_name=in.(game_start,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,outcome_replay_intent,first_interaction_time)&limit=10000',
         ),
         supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer,experiments&limit=10000'),
       ]);
@@ -176,6 +260,8 @@ async function buildExport(window = 'all') {
 
     const circulation = buildCirculationFromRows(sessions || [], circulationEvents || [], window);
     const scorecards = buildExperimentScorecards(experiments || [], registry);
+    const quickInsights = buildQuickLineInsights(sessions || [], circulationEvents || [], catalogMap, window);
+    const qrExperimentSummary = buildQrExperimentSummary(sessions || [], circulationEvents || []);
     const readingCriteria = buildReadingCriteria(circulation, sourceMap, scorecards);
 
     return {
@@ -191,6 +277,8 @@ async function buildExport(window = 'all') {
       readingCriteria,
       circulation,
       circulationSummary: summarizeCirculation(circulation),
+      quickInsights,
+      qrExperimentSummary,
       feedback: feedback || [],
       audit: {
         recent: auditRecent || [],
@@ -228,6 +316,36 @@ async function buildExport(window = 'all') {
     })),
     window,
   );
+  const quickInsights = buildQuickLineInsights(
+    sessions.map((s) => ({
+      session_id: s.sessionId,
+      slug: s.slug,
+      status: s.status,
+      experiments: s.experiments || [],
+    })),
+    events.map((e) => ({
+      session_id: e.sessionId,
+      event_name: e.event,
+      slug: e.slug,
+      metadata: e.metadata,
+    })),
+    catalogMap,
+    window,
+  );
+  const qrExperimentSummary = buildQrExperimentSummary(
+    sessions.map((s) => ({
+      session_id: s.sessionId,
+      slug: s.slug,
+      status: s.status,
+      experiments: s.experiments || [],
+    })),
+    events.map((e) => ({
+      session_id: e.sessionId,
+      event_name: e.event,
+      slug: e.slug,
+      metadata: e.metadata,
+    })),
+  );
 
   const sourceMap = {};
   sessions.forEach((s) => {
@@ -250,6 +368,8 @@ async function buildExport(window = 'all') {
     readingCriteria,
     circulation,
     circulationSummary: summarizeCirculation(circulation),
+    quickInsights,
+    qrExperimentSummary,
     audit: {
       recent: [],
       summary: {

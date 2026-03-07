@@ -11,9 +11,13 @@ import { ShellContainer } from '@/components/ui/ShellContainer';
 import { BetaBanner } from '@/components/ui/BetaBanner';
 import { CampaignMark } from '@/components/campaign/CampaignMark';
 import {
+  CAMPAIGN_FRAME_LABELS,
+  COMMON_VS_MARKET_LABELS,
+  COLLECTIVE_SOLUTION_LABELS,
   games,
   GAME_PACE_LABELS,
   GAME_SERIES_LABELS,
+  POLITICAL_AXIS_LABELS,
   TERRITORY_SCOPE_LABELS,
   type GameSeries,
 } from '@/lib/games/catalog';
@@ -45,6 +49,12 @@ export default function Home() {
     count: games.filter((game) => game.territoryScope === scope).length,
   }));
 
+  const axisEntries = Object.entries(POLITICAL_AXIS_LABELS).map(([axis, label]) => ({
+    axis,
+    label,
+    count: games.filter((game) => game.politicalAxis === axis).length,
+  }));
+
   async function handleCampaignClick() {
     await trackCampaignMarkClick({ slug: 'home', kind: 'quiz', engineId: 'campaign-mark' } as any, 'home-hero').catch(
       console.error,
@@ -74,7 +84,7 @@ export default function Home() {
       <BetaBanner />
       <PageHero
         eyebrow="Hub de Jogos da Pré-Campanha"
-        title="Jogue, compare, compartilhe: Missões eleitorais do RJ"
+        title="Jogue, compare e organize: missoes populares do RJ"
         description={heroDescription}
         actions={
           <CTACluster>
@@ -93,7 +103,7 @@ export default function Home() {
             <li>Diversão primeiro, sermão nunca.</li>
             <li>Volta Redonda como laboratório vivo.</li>
             <li>Escala progressiva para todo o estado do RJ.</li>
-            <li>Pré-campanha de Alexandre Fonseca presente em cada rodada.</li>
+            <li>Campanha como projeto coletivo, nao como culto de personalidade.</li>
           </ol>
           <CampaignMark compact onClick={handleCampaignClick} />
         </div>
@@ -125,7 +135,7 @@ export default function Home() {
       <Section
         eyebrow="Em destaque"
         title="Portas de entrada para engajamento eleitoral"
-        description="Jogue rápido, compartilhe resultado e leve o nome de Alexandre Fonseca para o debate político local."
+        description="Jogue rapido, compartilhe resultado e leve propostas coletivas para o debate politico local."
       >
         {featured.length ? (
           <div className={styles.grid}>
@@ -139,6 +149,42 @@ export default function Home() {
             description="O catálogo está sendo atualizado."
           />
         )}
+      </Section>
+
+      <Section
+        eyebrow="Leitura ideologica"
+        title="Eixos politicos em jogo"
+        description="Cada experiencia reforca uma disputa entre mercado, reforma estatal e poder popular em solucoes concretas."
+      >
+        <div className={styles.territoryGrid}>
+          {axisEntries.map((entry) => (
+            <article key={entry.axis} className={styles.pillar}>
+              <h4>{entry.label}</h4>
+              <p>{entry.count} jogos classificados neste eixo.</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        eyebrow="Motor ideologico"
+        title="Do comum contra o mercado"
+        description="Taxonomia aplicada no catalogo para guiar o desenho dos jogos e a leitura de resultados no Estado de Nacao."
+      >
+        <div className={styles.pillars}>
+          <article className={styles.pillar}>
+            <h4>{COMMON_VS_MARKET_LABELS.comum}</h4>
+            <p>Jogos que defendem organizacao coletiva e bens comuns como eixo central.</p>
+          </article>
+          <article className={styles.pillar}>
+            <h4>{COLLECTIVE_SOLUTION_LABELS.autogestao}</h4>
+            <p>Apostas de autogestao, cooperativismo e ajuda mutua para resposta territorial.</p>
+          </article>
+          <article className={styles.pillar}>
+            <h4>{CAMPAIGN_FRAME_LABELS['defesa-dos-comuns']}</h4>
+            <p>Campanha como ferramenta de luta concreta e nao como narrativa personalista.</p>
+          </article>
+        </div>
       </Section>
 
       <Section
@@ -193,7 +239,7 @@ export default function Home() {
         <ShellContainer>
           <div className={styles.footerContent}>
             <div className={styles.footerSection}>
-              <h4>Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado</h4>
+              <h4>Hub de Jogos da Pre-Campanha</h4>
               <p>Um universo político-jogável feito para ler a cidade e agir sobre ela.</p>
             </div>
 
@@ -220,7 +266,7 @@ export default function Home() {
 
           <div className={styles.footerBottom}>
             <p>
-              © 2026 Hub de Jogos da Pré-Campanha de Alexandre Fonseca para Deputado. Código aberto em{' '}
+              © 2026 Hub de Jogos da Pre-Campanha. Codigo aberto em{' '}
               <a href="https://github.com/alexandrevrabandonada-oss/hubjogos">
                 GitHub
               </a>

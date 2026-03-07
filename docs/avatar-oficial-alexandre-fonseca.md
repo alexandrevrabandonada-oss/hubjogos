@@ -91,16 +91,49 @@ Erros comuns a não cometer:
 - Esquecer de testar legibilidade mobile
 - Criar versão tão estilizada que perde reconhecimento
 
+## Atualização V2 (Tijolo 23)
+
+Referências recebidas e incorporadas:
+- Retrato sorrindo em fundo limpo
+- Referências com e sem óculos
+- Referências de corpo inteiro
+- Referência em frente à CSN
+- Referência com camiseta VR Abandonada
+
+Consolidação facial e estilização aplicada:
+- Barba cheia como traço principal de reconhecimento
+- Cabelo escuro curto com volume superior
+- Sobrancelhas definidas e olhos escuros
+- Estrutura de rosto alongado e maxilar marcado
+- Óculos como variante opcional (não padrão)
+
+Decisões de design V2:
+- Expressões oficiais: `neutral`, `smile`, `determined`
+- Óculos: contrato `auto | on | off` no `CampaignAvatar`
+- `fullBody` adicionado no contrato para evolução futura sem quebra
+- Avatar continua em linguagem de personagem/jogo (não foto aplicada)
+
+Assets V2 criados:
+- `public/campaign/avatar/v2/portrait-neutral.svg`
+- `public/campaign/avatar/v2/portrait-smile.svg`
+- `public/campaign/avatar/v2/portrait-determined.svg`
+- `public/campaign/avatar/v2/portrait-glasses.svg`
+
+Plano para full-body:
+- V2 atual foca busto para share/outcomes
+- Próxima etapa (Tijolo 24+) cria variação full-body com poses de campanha
+- Manter a mesma anatomia facial para continuidade visual
+
 ## Limitações técnicas atuais
 
-Versão atual (Tijolo 22):
-- Asset base criado como SVG técnico/placeholder estilizado
-- Representa conceito e estrutura, mas ainda precisa de refinamento artístico profissional
-- Componente `CampaignAvatar` funcional e reutilizável, pronto para substituição de asset final
+Versão atual (Tijolo 24):
+- V2 já é reconhecível e operacional, mas ainda passível de refinamento artístico profissional
+- Sem sprites animados
+- Full-body preparado no contrato, mas ainda não desenhado
 
 Próximos passos:
-- Refinar asset com designer/ilustrador profissional mantendo as diretrizes deste documento
-- Gerar variações de expressão e contexto
+- Refinar traços com ilustrador e criar kit de poses
+- Gerar variações por contexto territorial (VR, RJ, série)
 - Criar sprite sheets quando formatos maiores forem implementados
 
 ## Referências visuais
@@ -127,7 +160,8 @@ Processo de atualização:
 
 Versionamento:
 - V1 (Tijolo 22): placeholder técnico/estilizado
-- V2 (futuro): refinamento profissional
-- V3+ (futuro): variações e expressões
+- V2 (Tijolo 23): conjunto de expressões reconhecível + variante com óculos
+- V2.1 (Tijolo 24): uso experimental consolidado com card final A/B (com/sem QR)
+- V3+ (Tijolo 25+): full-body, animações leves e sprites de gameplay
 
-Última atualização: Tijolo 22 (2026-03-06)
+Última atualização: Tijolo 24 (2026-03-06)

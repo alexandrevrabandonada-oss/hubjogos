@@ -6,6 +6,9 @@ const axisPriority: QuizAxis[] = [
   'mobility',
   'participation',
   'urban-memory',
+  'cost-of-living',
+  'governance',
+  'collective-power',
 ];
 
 function emptyScores(): Record<QuizAxis, number> {
@@ -15,7 +18,35 @@ function emptyScores(): Record<QuizAxis, number> {
     mobility: 0,
     participation: 0,
     'urban-memory': 0,
+    'cost-of-living': 0,
+    governance: 0,
+    'collective-power': 0,
   };
+}
+
+function pickProfileByScoreBand(quiz: QuizDefinition, dominantAxis: QuizAxis, score: number) {
+  const axisProfiles = quiz.profiles.filter((item) => item.axis === dominantAxis);
+
+  if (axisProfiles.length === 0) {
+    return quiz.profiles[0];
+  }
+
+  if (axisProfiles.length === 1) {
+    return axisProfiles[0];
+  }
+
+  const maxScore = quiz.questions.reduce((sum, question) => {
+    const optionMax = Math.max(...question.options.map((option) => Number(option.impact[dominantAxis] || 0)));
+    return sum + Math.max(optionMax, 0);
+  }, 0);
+
+  if (maxScore <= 0) {
+    return axisProfiles[0];
+  }
+
+  const normalized = Math.max(0, Math.min(1, score / maxScore));
+  const index = Math.min(axisProfiles.length - 1, Math.floor(normalized * axisProfiles.length));
+  return axisProfiles[index];
 }
 
 export function calculateQuizResult(
@@ -47,9 +78,7 @@ export function calculateQuizResult(
     return bestAxis;
   }, axisPriority[0]);
 
-  const fallback = quiz.profiles[0];
-  const profile =
-    quiz.profiles.find((item) => item.axis === dominantAxis) || fallback;
+  const profile = pickProfileByScoreBand(quiz, dominantAxis, scores[dominantAxis]);
 
   const answered = selectedOptionIds.filter(Boolean).length;
   const summary = `${profile.title}: ${profile.description} Próxima ação sugerida: ${profile.nextAction}`;

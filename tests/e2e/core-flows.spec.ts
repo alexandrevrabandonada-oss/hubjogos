@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('home abre', async ({ page }) => {
   await page.goto('/');
   await expect(
-    page.getByRole('heading', { name: 'Jogue, compare, compartilhe: Missões eleitorais do RJ' })
+    page.getByRole('heading', { name: 'Jogue, compare e organize: missoes populares do RJ' })
   ).toBeVisible();
 });
 

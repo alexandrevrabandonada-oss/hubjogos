@@ -14,7 +14,10 @@ import {
   trackCtaClick,
   trackFirstInteractionTime,
   trackGameComplete,
+  trackIdeologicalAxisSignal,
   trackLinkCopy,
+  trackQuickMinigameCompletion,
+  trackQuickMinigameReplay,
   trackResultCopy,
   trackStepAdvance,
 } from '@/lib/analytics/track';
@@ -75,7 +78,25 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
       title: result.profile.title,
       summary: `${ctas.shareLine} ${result.summary}`,
     });
-  }, [ctas.shareLine, game, isFinished, result.profile.id, result.profile.title, result.summary]);
+    void trackIdeologicalAxisSignal(
+      game,
+      result.profile.id,
+      result.profile.axis,
+      result.scores[result.profile.axis] || 0,
+    );
+    if (game.pace === 'quick') {
+      void trackQuickMinigameCompletion(game, result.profile.id);
+    }
+  }, [
+    ctas.shareLine,
+    game,
+    isFinished,
+    result.profile.axis,
+    result.profile.id,
+    result.profile.title,
+    result.scores,
+    result.summary,
+  ]);
 
   function persist(next: string[]) {
     if (typeof window !== 'undefined') {
@@ -133,6 +154,9 @@ export function QuizEngine({ quiz, game }: QuizEngineProps) {
     setStep(0);
     setShowIntro(true);
     persist(reset);
+    if (game.pace === 'quick') {
+      void trackQuickMinigameReplay(game);
+    }
   }
 
   if (showIntro) {

@@ -15,9 +15,18 @@ interface ResultCardProps {
   resultTitle: string;
   resultId: string;
   summary: string;
+  onQrClick?: () => void;
+  showQR?: boolean;
 }
 
-export function ResultCard({ gameSlug, resultTitle, resultId, summary }: ResultCardProps) {
+export function ResultCard({ 
+  gameSlug, 
+  resultTitle, 
+  resultId, 
+  summary, 
+  onQrClick, 
+  showQR = true 
+}: ResultCardProps) {
   const game = games.find((g) => g.slug === gameSlug);
 
   if (!game) {
@@ -31,6 +40,8 @@ export function ResultCard({ gameSlug, resultTitle, resultId, summary }: ResultC
       resultSummary={summary}
       resultId={resultId}
       showAvatar={true}
+      showQR={showQR}
+      onQrClick={onQrClick}
     />
   );
 }
