@@ -49,6 +49,7 @@ function renderStatusBadge(status) {
 
 function renderMarkdown(data) {
   const quickInsights = data.quickInsights || {};
+  const effectiveRuns = data.effectiveRuns || {};
   const collectionTargets = quickInsights.collectionTargets || {};
   const collectionStatus = quickInsights.collectionStatus || {};
   const byQuick = collectionStatus.byQuick || {};
@@ -190,112 +191,165 @@ ${warnings.map((warning) => `- ${warning}`).join('\n') || '- Sem alertas'}
 ### O que distribuir esta semana
 
 ${(() => {
-  const quicksInsuficientes = Object.entries(byQuick).filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento');
-  const territoriosInsuficientes = Object.entries(byTerritory).filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento');
-  
-  // Ordenar quicks por progressPct (menor primeiro)
-  quicksInsuficientes.sort((a, b) => (a[1].progressPct || 0) - (b[1].progressPct || 0));
-  
+  const scorecards = effectiveRuns.scorecards || {};
+  const topRuns = (effectiveRuns.topEffectiveRunsByGame || []).slice(0, 1);
+  const topReplays = (effectiveRuns.topEffectiveReplayByGame || []).slice(0, 1);
+  const topBridge = (effectiveRuns.crossGameBridges || []).slice(0, 1);
+  const channels = (effectiveRuns.byChannel || []).slice(0, 1);
+  const territories = (effectiveRuns.byTerritory || []).slice(0, 1);
+
+  const previewStatus = scorecards.previewToPlay?.status || 'insufficient_data';
+  const replayStatus = scorecards.replayEffectiveness?.status || 'insufficient_data';
+  const crossStatus = scorecards.crossGameEffectiveness?.status || 'insufficient_data';
+  const insufficientSample = [previewStatus, replayStatus, crossStatus].every((status) => status === 'insufficient_data');
+
   const weeklyPlan = [];
-  
-  if (quicksInsuficientes.length === 0 && territoriosInsuficientes.length === 0) {
-    weeklyPlan.push('✅ **Metas atingidas!** Considerar avanço para Tijolo 29.');
-  } else {
-    // Determinar quick prioritário
-    if (quicksInsuficientes.length > 0) {
-      const topQuick = quicksInsuficientes[0];
-      weeklyPlan.push(`**🎮 Quick prioritário:** ${topQuick[0]}`);
-      weeklyPlan.push(`   - Progresso atual: ${topQuick[1].progressPct}% da meta`);
-      weeklyPlan.push(`   - Distribuir nos canais: Instagram, WhatsApp, TikTok`);
-      weeklyPlan.push(`   - Focar nos primeiros 2-3 dias da semana`);
-    }
-    
-    // Determinar território prioritário
-    if (territoriosInsuficientes.length > 0) {
-      const topTerr = territoriosInsuficientes[0];
-      weeklyPlan.push(`\n**🗺️ Território prioritário:** ${topTerr[0]}`);
-      weeklyPlan.push(`   - Progresso atual: ${topTerr[1].progressPct}% da meta`);
-      weeklyPlan.push(`   - Usar pacote: reports/distribution/packages/territorio-${topTerr[0]}.md`);
-      weeklyPlan.push(`   - Contextualizar mensagens para o território`);
-    }
-    
-    // Série recomendada
-    const seriesInsuficientes = Object.entries(bySeries).filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento');
-    if (seriesInsuficientes.length > 0) {
-      seriesInsuficientes.sort((a, b) => (a[1].progressPct || 0) - (b[1].progressPct || 0));
-      const topSerie = seriesInsuficientes[0];
-      weeklyPlan.push(`\n**📚 Série prioritária:** ${topSerie[0]}`);
-      weeklyPlan.push(`   - Progresso atual: ${topSerie[1].progressPct}% da meta`);
-      weeklyPlan.push(`   - Empurrar quicks desta série primeiro`);
-    }
-    
-    // Pacotes recomendados
-    weeklyPlan.push(`\n**📦 Pacotes de distribuição recomendados:**`);
-    weeklyPlan.push(`   - reports/distribution/packages/instagram-geral.md`);
-    weeklyPlan.push(`   - reports/distribution/packages/whatsapp-geral.md`);
-    weeklyPlan.push(`   - reports/distribution/packages/tiktok-geral.md`);
-    if (territoriosInsuficientes.length > 0) {
-      weeklyPlan.push(`   - reports/distribution/packages/territorio-${territoriosInsuficientes[0][0]}.md`);
-    }
+
+  if (insufficientSample) {
+    weeklyPlan.push('**Sem base para pivot de formato.**');
+    weeklyPlan.push('- Manter plano atual de coleta por mais 7 dias (sem abrir novo jogo/formato).');
+    weeklyPlan.push('- Objetivo da semana: aumentar `effective_run_start` e `effective_replay` sem mudar narrativa central.');
+    weeklyPlan.push('- Regra operacional: nao interpretar vencedor quick vs arcade enquanto scorecards estiverem em `insufficient_data`.');
   }
-  
+
+  if (topRuns.length > 0) {
+    const row = topRuns[0];
+    weeklyPlan.push(`- **Jogo 1o push:** ${row.slug} (${row.effectiveRuns}/${row.cardClicks}, ${row.effectiveRunRate}%).`);
+  } else {
+    weeklyPlan.push('- **Jogo 1o push:** usar quick com menor progresso de coleta para fechar lacuna.');
+  }
+
+  if (topReplays.length > 0) {
+    const row = topReplays[0];
+    weeklyPlan.push(`- **Jogo 2o clique:** ${row.slug} (${row.effectiveReplay}/${row.replayClicks}, ${row.effectiveReplayRate}%).`);
+  } else {
+    weeklyPlan.push('- **Jogo 2o clique:** reforcar o mesmo jogo do 1o push ate gerar replay efetivo mensuravel.');
+  }
+
+  if (topBridge.length > 0) {
+    const bridge = topBridge[0];
+    weeklyPlan.push(`- **Direcao promissora:** ${bridge.from} -> ${bridge.to} (${bridge.effectiveStarts}/${bridge.clicks}, ${bridge.effectiveRate}%).`);
+  } else {
+    weeklyPlan.push('- **Direcao promissora:** sem ponte valida; manter sequencia quick -> arcade padrao e observar proxima janela.');
+  }
+
+  if (channels.length > 0) {
+    const channel = channels[0];
+    weeklyPlan.push(`- **Canal prioritario:** ${channel.channel} (${channel.effectiveRuns}/${channel.cardClicks}, ${channel.effectiveRunRate}%).`);
+  } else {
+    weeklyPlan.push('- **Canal prioritario:** sem sinal de canal; distribuir equilibrado entre Instagram, WhatsApp e TikTok.');
+  }
+
+  if (territories.length > 0) {
+    const territory = territories[0];
+    weeklyPlan.push(`- **Territorio prioritario:** ${territory.territory} (${territory.effectiveRuns}/${territory.cardClicks}, ${territory.effectiveRunRate}%).`);
+  } else {
+    weeklyPlan.push('- **Territorio prioritario:** sem sinal de territorio; manter cobertura multi-territorio.');
+  }
+
+  weeklyPlan.push('\n**Pacotes de distribuicao recomendados:**');
+  weeklyPlan.push('- reports/distribution/packages/instagram-geral.md');
+  weeklyPlan.push('- reports/distribution/packages/whatsapp-geral.md');
+  weeklyPlan.push('- reports/distribution/packages/tiktok-geral.md');
+  if (territories.length > 0) {
+    weeklyPlan.push(`- reports/distribution/packages/territorio-${territories[0].territory}.md`);
+  }
+
   return weeklyPlan.join('\n');
 })()}
 
-### Recomendações operacionais
+## ⚡ Distribuição guiada por run real
 
 ${(() => {
-  const quicksInsuficientes = Object.entries(byQuick).filter(([, status]) => status.status === 'coleta-insuficiente');
-  const seriesInsuficientes = Object.entries(bySeries).filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento');
-  const territoriosInsuficientes = Object.entries(byTerritory).filter(([, status]) => status.status === 'coleta-insuficiente' || status.status === 'coleta-em-andamento');
-  
+  const lines = [];
+  const scorecards = effectiveRuns.scorecards || {};
+  const topRuns = (effectiveRuns.topEffectiveRunsByGame || []).slice(0, 5);
+  const bridges = (effectiveRuns.crossGameBridges || []).slice(0, 5);
+
+  if (Object.keys(scorecards).length === 0) {
+    return '- Sem dados de run efetiva suficientes para orientar distribuição.';
+  }
+
+  lines.push(`- Preview -> Play efetivo: ${scorecards.previewToPlay?.conversionRate || 0}% (${scorecards.previewToPlay?.status || 'insufficient_data'})`);
+  lines.push(`- Replay efetivo: ${scorecards.replayEffectiveness?.conversionRate || 0}% (${scorecards.replayEffectiveness?.status || 'insufficient_data'})`);
+  lines.push(`- Cross-game efetivo: ${scorecards.crossGameEffectiveness?.conversionRate || 0}% (${scorecards.crossGameEffectiveness?.status || 'insufficient_data'})`);
+
+  if (topRuns.length > 0) {
+    lines.push('\n**Jogos que mais viram run real:**');
+    topRuns.forEach((row) => {
+      lines.push(`- ${row.slug}: ${row.effectiveRuns}/${row.cardClicks} (${row.effectiveRunRate}%)`);
+    });
+  }
+
+  if (bridges.length > 0) {
+    lines.push('\n**Pontes de cross-game efetivo:**');
+    bridges.forEach((row) => {
+      lines.push(`- ${row.from} -> ${row.to}: ${row.effectiveStarts}/${row.clicks} (${row.effectiveRate}%)`);
+    });
+  }
+
+  lines.push(`\n- Direção dominante: ${effectiveRuns.directionWinner || 'balanced'}`);
+  if ((effectiveRuns.warnings || []).length > 0) {
+    lines.push(`- Aviso: ${(effectiveRuns.warnings || []).join(' | ')}`);
+  }
+
+  return lines.join('\n');
+})()}
+
+### Recomendacoes operacionais
+
+${(() => {
+  const scorecards = effectiveRuns.scorecards || {};
+  const channels = (effectiveRuns.byChannel || []).slice(0, 3);
+  const territories = (effectiveRuns.byTerritory || []).slice(0, 3);
+  const topRuns = (effectiveRuns.topEffectiveRunsByGame || []).slice(0, 3);
   const recommendations = [];
-  
-  if (quicksInsuficientes.length > 0) {
-    recommendations.push(`**1. Priorizar distribuição para os seguintes quicks:**`);
-    quicksInsuficientes.forEach(([slug, status]) => {
-      recommendations.push(`   - ${slug} (${status.progressPct}% da meta)`);
-    });
+
+  const previewStatus = scorecards.previewToPlay?.status || 'insufficient_data';
+  const replayStatus = scorecards.replayEffectiveness?.status || 'insufficient_data';
+  const crossStatus = scorecards.crossGameEffectiveness?.status || 'insufficient_data';
+
+  recommendations.push('1. **Meta da semana:** priorizar aumento de run real (`effective_run_start`) e replay efetivo (`effective_replay`).');
+
+  if (topRuns.length > 0) {
+    recommendations.push(`2. **Distribuicao por jogo:** concentrar 60% do volume em ${topRuns[0].slug} e 40% no segundo melhor sinal.`);
+  } else {
+    recommendations.push('2. **Distribuicao por jogo:** usar regra de coleta (quicks com menor progresso) ate surgir sinal efetivo.');
   }
-  
-  if (seriesInsuficientes.length > 0) {
-    recommendations.push(`\n**2. Séries que precisam de atenção:**`);
-    seriesInsuficientes.forEach(([serie, status]) => {
-      recommendations.push(`   - ${serie} (${status.progressPct}% da meta)`);
-    });
+
+  if (channels.length > 0) {
+    recommendations.push(`3. **Canal com maior sinal:** ${channels[0].channel}. Replicar copy e criativo nos proximos 7 dias.`);
+  } else {
+    recommendations.push('3. **Canal com maior sinal:** sem evidencias; manter distribuicao equilibrada entre canais principais.');
   }
-  
-  if (territoriosInsuficientes.length > 0) {
-    recommendations.push(`\n**3. Territórios que precisam de atenção:**`);
-    territoriosInsuficientes.forEach(([territorio, status]) => {
-      recommendations.push(`   - ${territorio} (${status.progressPct}% da meta)`);
-    });
+
+  if (territories.length > 0) {
+    recommendations.push(`4. **Territorio a reforcar:** ${territories[0].territory}. Direcionar pacotes territoriais primeiro para este bloco.`);
+  } else {
+    recommendations.push('4. **Territorio a reforcar:** sem destaque; manter cobertura territorial balanceada.');
   }
-  
+
+  if (previewStatus === 'insufficient_data' && replayStatus === 'insufficient_data' && crossStatus === 'insufficient_data') {
+    recommendations.push('5. **Nao interpretar vencedor de formato ainda.** Janela atual sem massa critica para pivot quick vs arcade.');
+  } else {
+    recommendations.push(`5. **Leitura de direcao:** ${effectiveRuns.directionWinner || 'balanced'} (usar apenas como sinal direcional).`);
+  }
+
   if (qrExperiment.status === 'coleta-insuficiente' || qrExperiment.status === 'coleta-em-andamento') {
-    recommendations.push(`\n**4. Experimento QR precisa de mais exposições**`);
-    recommendations.push(`   - Status: ${renderStatusBadge(qrExperiment.status)}`);
-    Object.entries(qrExperiment.progressByVariant || {}).forEach(([variant, progress]) => {
-      recommendations.push(`   - ${variant}: ${progress.progressPct}% da meta`);
-    });
+    recommendations.push('6. **QR A/B:** manter exposicao balanceada por variante e adiar conclusao ate bater meta minima.');
   }
-  
+
   const readyForPriority = [
     ...Object.entries(bySeries).filter(([, status]) => status.status === 'pronto-para-priorizacao'),
     ...Object.entries(byTerritory).filter(([, status]) => status.status === 'pronto-para-priorizacao'),
   ];
-  
   if (readyForPriority.length > 0) {
-    recommendations.push(`\n**✅ Pronto para priorização no Tijolo 29:**`);
+    recommendations.push('7. **Itens prontos para priorizacao (sem mudar escopo de produto):**');
     readyForPriority.forEach(([key, status]) => {
-      recommendations.push(`   - ${key} (meta atingida, ${status.progressPct}%)`);
+      recommendations.push(`- ${key} (${status.progressPct}%)`);
     });
   }
-  
-  if (recommendations.length === 0) {
-    return '- Nenhuma recomendação urgente. Continuar distribuição equilibrada.';
-  }
-  
+
   return recommendations.join('\n');
 })()}
 
@@ -335,6 +389,7 @@ _Relatório gerado em: ${new Date().toISOString()}_
 
 function renderJSON(data) {
   const quickInsights = data.quickInsights || {};
+  const effectiveRuns = data.effectiveRuns || {};
   return {
     generatedAt: data.generatedAt,
     source: data.source,
@@ -342,6 +397,17 @@ function renderJSON(data) {
     collectionTargets: quickInsights.collectionTargets,
     collectionStatus: quickInsights.collectionStatus,
     warnings: quickInsights.warnings,
+    effectiveRuns: {
+      scorecards: effectiveRuns.scorecards || {},
+      direction: effectiveRuns.direction || {},
+      directionWinner: effectiveRuns.directionWinner || 'balanced',
+      topEffectiveRunsByGame: (effectiveRuns.topEffectiveRunsByGame || []).slice(0, 5),
+      topEffectiveReplayByGame: (effectiveRuns.topEffectiveReplayByGame || []).slice(0, 5),
+      topBridges: (effectiveRuns.crossGameBridges || []).slice(0, 5),
+      byChannel: (effectiveRuns.byChannel || []).slice(0, 5),
+      byTerritory: (effectiveRuns.byTerritory || []).slice(0, 5),
+      warnings: effectiveRuns.warnings || [],
+    },
     readySeries: Object.entries(quickInsights.collectionStatus?.bySeries || {})
       .filter(([, status]) => status.status === 'pronto-para-priorizacao')
       .map(([key]) => key),

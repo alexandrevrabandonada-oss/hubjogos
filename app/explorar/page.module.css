@@ -6,23 +6,27 @@
 .ctaSecondary {
   border-radius: var(--radius-md);
   border: 1px solid transparent;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.92rem;
   padding: 10px 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ctaPrimary {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   color: #1b1609;
-  border-color: color-mix(in srgb, var(--accent) 80%, black);
+  border-color: color-mix(in srgb, var(--accent-strong) 75%, black);
 }
 
 .ctaPrimary:hover {
-  background: var(--accent-strong);
+  transform: translateY(-1px);
 }
 
 .ctaSecondary {
-  background: transparent;
+  background: color-mix(in srgb, var(--surface) 90%, var(--accent) 10%);
   border-color: var(--border);
   color: var(--text);
 }
@@ -38,81 +42,121 @@
   gap: 14px;
 }
 
-.seriesGrid,
-.taxonomyGrid {
+.arcadeSpotlightGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 12px;
 }
 
-.seriesCard {
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--accent-primary) 8%, var(--bg-primary));
-  color: var(--text-primary);
+.arcadeSpotlightCard {
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: var(--radius-lg);
+  background: radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 28%, transparent), transparent 56%),
+    color-mix(in srgb, var(--surface) 90%, var(--accent) 10%);
+  color: var(--text);
   text-decoration: none;
-  padding: var(--space-md);
+  padding: 14px;
   display: grid;
-  gap: var(--space-xs);
+  gap: 8px;
 }
 
-.seriesCard:hover {
-  border-color: var(--accent-primary);
-}
-
-.seriesCardActive {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-primary) 35%, transparent) inset;
-}
-
-.seriesCard h4,
-.seriesCard p {
+.arcadeSpotlightCard h3,
+.arcadeSpotlightCard p {
   margin: 0;
 }
 
-.seriesCard span {
-  margin-top: var(--space-xs);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  color: var(--accent-primary);
-}
-
-.engineTypes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
-}
-
-.engineType {
-  padding: var(--space-md);
-  background: var(--bg-secondary);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
-}
-
-.engineType h4 {
-  font-size: var(--text-md);
-  font-weight: 600;
-  margin: 0 0 var(--space-xs) 0;
-  color: var(--accent-primary);
-}
-
-.engineType p {
-  font-size: var(--text-sm);
-  line-height: 1.5;
-  color: var(--text-muted);
-  margin: 0 0 var(--space-sm) 0;
-}
-
-.engineCount {
-  display: inline-block;
-  font-size: var(--text-xs);
-  font-weight: 600;
+.arcadeBadge {
+  display: inline-flex;
+  width: fit-content;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-primary);
-  background: var(--bg-primary);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.arcadeMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.83rem;
+}
+
+.arcadeCardCta {
+  color: var(--accent-strong);
+}
+
+.filtersRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.filterField {
+  display: grid;
+  gap: 6px;
+}
+
+.filterField span {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.filterField select {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  padding: 10px;
+}
+
+.quickStrip {
+  display: grid;
+  gap: 10px;
+}
+
+.quickStripCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.quickStripCard h4,
+.quickStripCard p {
+  margin: 0;
+}
+
+.quickStripCard p {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.quickStripCard strong {
+  color: var(--accent-strong);
+}
+
+@media (max-width: 900px) {
+  .filtersRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+  }
 }

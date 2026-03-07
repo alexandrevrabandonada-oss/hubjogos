@@ -4,12 +4,14 @@
  */
 
 import { getLocalArray } from '@/lib/storage/local-session';
-import type { SessionRecord, AnalyticsEventPayload, ResultRecord } from '@/lib/analytics/events';
+import type { SessionRecord, AnalyticsEventPayload, ResultRecord, AnalyticsEventName } from '@/lib/analytics/events';
 import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { buildExperimentScorecard, scorecardThresholds } from '@/lib/experiments/scorecard';
 import { listAllExperiments } from '@/lib/experiments/config';
 import type { TimeWindow, DataEnvironment } from './windowing';
 import { getWindowStartDate, determineEnvironment } from './windowing';
+import type { EffectiveRunsAnalysis } from './effective-runs';
+import { analyzeEffectiveRuns } from './effective-runs';
 
 interface CirculationPoint {
   outcomeViews: number;
@@ -274,6 +276,7 @@ export interface MetricsSnapshot {
     };
     byArcadeGame: ArcadeRow[];
   };
+  effectiveRuns?: EffectiveRunsAnalysis; // Tijolo 33
   generatedAt: string;
 }
 
@@ -1260,6 +1263,25 @@ export function collectLocalMetrics(
   );
   const arcadeInsights = getArcadeInsights(gamesCatalog, normalizedEvents);
 
+  // Tijolo 33: Effective Runs Analysis
+  let effectiveRuns: EffectiveRunsAnalysis | undefined;
+  try {
+    const territoryBySlug = Object.fromEntries(
+      gamesCatalog.map((game) => [game.slug, (game as any).territoryScope || 'estado-rj']),
+    );
+    effectiveRuns = analyzeEffectiveRuns(filteredEvents, {
+      sessions: filteredSessions.map((session) => ({
+        sessionId: session.sessionId,
+        slug: session.slug,
+        utmSource: session.utm_source,
+      })),
+      territoryBySlug,
+    });
+  } catch {
+    // Se falhar, continua sem effective runs
+    effectiveRuns = undefined;
+  }
+
   return {
     source: 'local',
     environment: determineEnvironment('local', false),
@@ -1288,6 +1310,7 @@ export function collectLocalMetrics(
     experimentScorecards,
     quickInsights,
     arcadeInsights,
+      effectiveRuns,
     generatedAt: new Date().toISOString(),
   };
 }
@@ -1424,6 +1447,14 @@ async function collectRemoteMetrics(
           'replay_click',
           'outcome_replay_intent',
           'first_interaction_time',
+                  // Tijolo 32 events
+                  'card_preview_interaction',
+                  'card_full_click',
+                  'click_to_play_time',
+                  'replay_after_run_click',
+                  'next_game_after_run_click',
+                  'quick_to_arcade_click',
+                  'arcade_to_quick_click',
         ])
         .limit(10000),
       (supabase as any)
@@ -1570,6 +1601,35 @@ async function collectRemoteMetrics(
 
     const experimentScorecards = buildScorecardsFromSnapshot(experiments, window, resolvedLastEventAt);
     const quickInsights = getQuickInsights(gamesCatalog, sessions, normalizedEvents, window);
+
+        // Tijolo 33: Effective Runs Analysis
+        let effectiveRuns: EffectiveRunsAnalysis | undefined;
+        try {
+          const territoryBySlug = Object.fromEntries(
+            gamesCatalog.map((game) => [game.slug, (game as any).territoryScope || 'estado-rj']),
+          );
+          const eventsForAnalysis = rawEventRows.map<AnalyticsEventPayload>((row) => ({
+            sessionId: row.session_id,
+            anonymousId: 'remote',
+            event: row.event_name as AnalyticsEventName,
+            slug: row.slug,
+            engineKind: row.engine_kind,
+            ctaId: row.cta_id,
+            metadata: row.metadata as Record<string, string | number | boolean | null> | undefined,
+            createdAt: row.created_at || new Date().toISOString(),
+          }));
+          effectiveRuns = analyzeEffectiveRuns(eventsForAnalysis, {
+            sessions: sessions.map((session) => ({
+              sessionId: session.sessionId,
+              slug: session.slug,
+              utmSource: session.utm_source,
+            })),
+            territoryBySlug,
+          });
+        } catch {
+          // Se falhar, continua sem effective runs
+          effectiveRuns = undefined;
+        }
     const arcadeInsights = getArcadeInsights(gamesCatalog, normalizedEvents);
 
     return {
@@ -1600,6 +1660,7 @@ async function collectRemoteMetrics(
       experimentScorecards,
       quickInsights,
       arcadeInsights,
+      effectiveRuns,
       generatedAt: new Date().toISOString(),
     };
   } catch {

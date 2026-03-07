@@ -1,0 +1,182 @@
+{
+  "geradoEm": "2026-03-07T21:53:44.297Z",
+  "semanaAtual": 1,
+  "objetivoCampanha": "Consolidar amostra mínima comparável por quick/série/território para decisão baseada em evidência",
+  "candidato": "Alexandre Fonseca",
+  "cargo": "Deputado Estadual",
+  "estado": "Rio de Janeiro",
+  "focoSemanal": {
+    "semana": 1,
+    "territorio": "Estado do Rio de Janeiro",
+    "serie": "Soluções Coletivas",
+    "quicksPrioritarios": [
+      "Cidade em Comum",
+      "Quem Paga a Conta",
+      "Custo de Viver"
+    ]
+  },
+  "quickGamesAtivos": [
+    {
+      "slug": "cidade-em-comum",
+      "title": "Cidade em Comum",
+      "serie": "serie-solucoes-coletivas",
+      "linkPronto": "https://hub-jogos-pre-campanha.vercel.app/play/cidade-em-comum?utm_source=whatsapp&utm_medium=messaging&utm_campaign=pre-campanha-alexandre-fonseca&utm_content=cidade-em-comum&territorio=estado-rj&serie=serie-solucoes-coletivas&jogo=cidade-em-comum"
+    },
+    {
+      "slug": "custo-de-viver",
+      "title": "Custo de Viver",
+      "serie": "serie-trabalho-sobrevivencia",
+      "linkPronto": "https://hub-jogos-pre-campanha.vercel.app/play/custo-de-viver?utm_source=whatsapp&utm_medium=messaging&utm_campaign=pre-campanha-alexandre-fonseca&utm_content=custo-de-viver&territorio=estado-rj&serie=serie-solucoes-coletivas&jogo=custo-de-viver"
+    },
+    {
+      "slug": "quem-paga-a-conta",
+      "title": "Quem Paga a Conta",
+      "serie": "serie-solucoes-coletivas",
+      "linkPronto": "https://hub-jogos-pre-campanha.vercel.app/play/quem-paga-a-conta?utm_source=whatsapp&utm_medium=messaging&utm_campaign=pre-campanha-alexandre-fonseca&utm_content=quem-paga-a-conta&territorio=estado-rj&serie=serie-solucoes-coletivas&jogo=quem-paga-a-conta"
+    }
+  ],
+  "statusColeta": {
+    "quicks": [],
+    "series": [],
+    "territorios": [],
+    "qrExperimento": {
+      "with-qr": {
+        "sessions": 67,
+        "completions": 0,
+        "qrViews": 6,
+        "qrClicks": 0,
+        "completionRate": 0,
+        "qrCtr": 0,
+        "status": "monitorando",
+        "deltaVsBaselinePct": 0
+      },
+      "without-qr": {
+        "sessions": 69,
+        "completions": 0,
+        "qrViews": 2,
+        "qrClicks": 0,
+        "completionRate": 0,
+        "qrCtr": 0,
+        "status": "monitorando",
+        "deltaVsBaselinePct": 0
+      }
+    },
+    "statusGeral": {
+      "byQuick": {},
+      "bySeries": {},
+      "byTerritory": {},
+      "qrExperiment": {
+        "status": "coleta-minima-atingida",
+        "progressByVariant": {
+          "with-qr": {
+            "sessions": 67,
+            "qrViews": 6,
+            "qrClicks": 0,
+            "progressPct": 47
+          },
+          "without-qr": {
+            "sessions": 69,
+            "qrViews": 2,
+            "qrClicks": 0,
+            "progressPct": 42
+          }
+        }
+      }
+    }
+  },
+  "sinaisEfetivos": {
+    "scorecards": {
+      "previewToPlay": {
+        "name": "Preview -> Play efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Preview -> Play efetivo: amostra insuficiente (0 < 10)"
+      },
+      "cardClickToRun": {
+        "name": "Card click -> Run efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Card click -> Run efetivo: amostra insuficiente (0 < 10)"
+      },
+      "replayEffectiveness": {
+        "name": "Replay efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Replay efetivo: amostra insuficiente (0 < 10)"
+      },
+      "crossGameEffectiveness": {
+        "name": "Cross-game efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Cross-game efetivo: amostra insuficiente (0 < 10)"
+      },
+      "quickToArcadeEffective": {
+        "name": "Quick -> Arcade efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Quick -> Arcade efetivo: amostra insuficiente (0 < 10)"
+      },
+      "arcadeToQuickEffective": {
+        "name": "Arcade -> Quick efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Arcade -> Quick efetivo: amostra insuficiente (0 < 10)"
+      }
+    },
+    "direction": {
+      "quickToArcade": {
+        "clicks": 0,
+        "effectiveStarts": 0,
+        "effectiveRate": 0
+      },
+      "arcadeToQuick": {
+        "clicks": 0,
+        "effectiveStarts": 0,
+        "effectiveRate": 0
+      }
+    },
+    "directionWinner": "balanced",
+    "topRuns": [],
+    "topReplays": [],
+    "topBridges": [],
+    "warnings": [
+      "Preview -> Play efetivo: amostra insuficiente (0 < 10)",
+      "Card click -> Run efetivo: amostra insuficiente (0 < 10)",
+      "Replay efetivo: amostra insuficiente (0 < 10)",
+      "Cross-game efetivo: amostra insuficiente (0 < 10)",
+      "Quick -> Arcade efetivo: amostra insuficiente (0 < 10)",
+      "Arcade -> Quick efetivo: amostra insuficiente (0 < 10)"
+    ]
+  },
+  "recomendacaoDaSemana": {
+    "acoes": [
+      "Distribuir jogos no território: Estado do Rio de Janeiro",
+      "Priorizar série: Soluções Coletivas",
+      "Focar nos quick games na ordem: Cidade em Comum, Quem Paga a Conta, Custo de Viver",
+      "Usar canais prioritários: Instagram, WhatsApp, TikTok",
+      "Manter distribuição equilibrada entre quick e arcade até haver direção dominante"
+    ],
+    "alertas": [
+      "⚠️ Sem sessões quick na janela 7d - iniciar distribuição imediatamente",
+      "⚠️ Run efetiva ainda com amostra insuficiente - manter coleta por mais 7 dias"
+    ],
+    "proximosPassos": [
+      "Abrir pacote de distribuição correspondente ao território da semana",
+      "Copiar links prontos e distribuir nos canais prioritários",
+      "Checar progresso em /estado no meio e fim da semana",
+      "Rodar 'npm run beta:distribution-report' no fim da semana 1"
+    ]
+  }
+}

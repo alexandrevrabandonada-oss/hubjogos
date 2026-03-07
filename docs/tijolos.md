@@ -60,6 +60,9 @@ npm run test:e2e
 - Tijolo 27 ✅ operacao disciplinada de distribuicao e coleta para linha quick
 - Tijolo 28 ✅ operacao pratica de distribuicao e campanha
 - Tijolo 29 ✅ linha arcade real + primeiro vertical slice jogavel
+- Tijolo 30 ✅ consolidacao da linha arcade com 2 jogos reais e game feel aprimorado
+- Tijolo 31 ✅ reposicionamento arcade-first e leitura front-stage da conversao
+- Tijolo 32 ✅ superfície impulsiva, preview vivo e replay/reentrada fortalecidos
 
 ## Tijolo 20 - Cockpit Temporal ✅
 
@@ -340,46 +343,215 @@ Transformar o plano de distribuicao do Tijolo 27 em operacao pratica de campanha
 - cockpit `/estado` acionavel e leve
 - operacao de campanha clara, rastreavel e idiota-proof
 
-## Proximo
-
-- Tijolo30 - Consolidacao da linha arcade com game feel melhorado e segundo jogo ✅
+## Tijolo 31 - Front-stage arcade-first e clique imediato ✅
 
 ### Objetivo
 
-Consolidar a linha arcade com dois jogos reais, melhorias de game feel baseadas em metricas e comparacao entre diferentes loops arcade.
+Reposicionar a superficie publica do hub para parecer primeiro um portal de jogos de campanha (divertido e clicavel), com campanha visivel sem friccao editorial no topo.
 
 ### Entregues
 
-- **Game feel melhorado no Tarifa Zero**:
-  - Suavizacao do meter comum via interpolacao (visao continua, nao oscilante)
-  - Indicador visual de combo ativo em tela (feedback de estado)
-  - Novo tipo de entidade rara: "chance" nos ultimos 15s (recompensa tardia, +50 score)
-  - HUD melhorado com mensagem de combo e feedback visual de sucesso
-  - Resposta visual aprimorada em coleta/bloqueio
-- **Segundo arcade real**: `Passe Livre Nacional - Sindicato em Movimento`
-  - Loop diferente: positioning/coordination (90s) vs lane-based (55s)
-  - Mecanica central: transportar passageiros entre paradas, defender contra privatizacao, organizar sindicato
-  - Mecanica de coletividade: defesa sindicato + cobertura de rede vs ameaca de privatizacao
-  - Telemetria integrada a pipeline arcade existente
-- **Documentacao de Game Feel**:
-  - `docs/game-feel-arcade.md` com framework de 8 dimensoes de qualidade ludica
-  - Criterios de sucesso mensuráveis (time-to-fun, feedback latency, clareza risco/recompensa, etc)
-  - Comparacao Tarifa Zero vs Passe Livre em termos de loop e mecanica politica
-- **Comparacao entre arcades no `/estado`**:
-  - Breakdown per-game (runs, replay rate, first input, score avg)
-  - Sinalizacao de qual loop tem maior engajamento
-  - Base de dados para decidir qual line cresce ou iteracoes futuras
-- **Integracao completa**: ambos os arcades no catalogo com metadados, serie, eixo politico e CTA de campanha.
-- **Validacao tecnica**: lint, type-check, test:unit, build, verify - todos passando sem regressoes.
+- Home arcade-first com CTA principal para jogar agora e bloco `Jogue agora` acima da dobra.
+- Cards de destaque com metadata de decisao rapida (tipo, duracao, serie, territorio e CTA).
+- Bloco quick-vs-arcade com captura de preferencia declarada.
+- Explorar reorganizada como catalogo jogavel:
+  - spotlight arcade
+  - quick strip
+  - filtros por tipo, serie e territorio
+- `GameCard` com leitura mais direta e destaque visual para arcade.
+- Tracking front-stage implementado:
+  - `home_primary_play_click`
+  - `home_arcade_click`
+  - `home_quick_click`
+  - `home_play_now_block_click`
+  - `home_quick_vs_arcade_choice`
+  - `arcade_vs_quick_preference`
+  - `above_fold_game_click`
+  - `manifesto_expand_click`
+  - `explorar_arcade_click`
+  - `explorar_quick_click`
+  - `explorar_filter_change`
+- `/estado` com bloco "Front-stage da Home e Explorar" para leitura de CTR arcade vs quick, cliques above-fold, preferencia quick-vs-arcade, interesse editorial e uso de filtros.
+- Validacao tecnica completa:
+  - lint
+  - type-check
+  - test:unit
+  - build
+  - verify
+  - test:e2e
 
 ### Nao inclui
 
-- Terceiro arcade (fica para futuro)
-- RPG/plataforma/tycoon grande
-- Leaderboard global ou persistencia de score individual
-- Animacoes sofisticadas ou engine de particula complexa
-- Mobile app wrapper ou deep linking
+- nova engine
+- auth/CMS/admin
+- formato medio novo (2-6 min)
+- terceiro arcade
 
 ## Proximo
 
-- Tijolo 31: validacao por dados reais, iteracao de segunda rodada arcade se indicado, ou pivot para formato medio (2-6min).
+- Tijolo 32: otimizacao de conversao arcade por iteracoes de front-stage, distribuicao territorial orientada por dados e melhoria de replay nos arcades ativos.
+
+## Tijolo 32 - Superfície impulsiva, replay e reentrada ✅
+
+### Objetivo
+
+Transformar a home arcade-first em uma superfície mais impulsiva e jogável, reduzindo a fricção entre descoberta e início de jogo, aumentando replay e fortalecendo a reentrada entre experiências sem abrir nova engine.
+
+### Entregues
+
+- **Preview vivo para jogos em destaque**:
+  - Animações CSS leves nos cards (pulso, glow, hover bounce) para dar sensação de jogo real antes do clique
+  - Badge arcade com animação de pulso
+  - Ícones com animação de escala e rotação no hover
+  - Efeito de glow rotativo nos cards arcade em destaque
+  - Quick cards com animação de slide no hover
+- **Redução de friction de launch**:
+  - Card inteiro clicável com feedback visual melhorado
+  - CTAs mais diretos e ação-orientados ("Jogar agora", "Correr agora")
+  - Área de clique expandida com transições suaves
+  - Seta de CTA com animação de translate no hover
+- **Bloco "Jogue agora" reforçado**:
+  - Copy mais impulsivo: "Missões jogáveis. Entre em segundos."
+  - Descrição focada em ação: "Arcade de controle real ou quick de descoberta rápida. Escolha, jogue uma rodada, compartilhe o resultado."
+- **Explorar melhorado para decisão rápida**:
+  - Hero copy: "Escolha um, jogue agora"
+  - Seção arcade: "Jogar de verdade. Replay imediato."
+  - Filtros simplificados: "Encontre seu jogo rápido"
+- **Replay e reentrada fortalecidos**:
+  - Sistema de recomendação de próximos jogos (`lib/games/recommendations.ts`)
+  - Botão de replay prominente no outcome
+  - 3 recomendações de next-game baseadas em série/território/formato
+  - Explicação clara do motivo da recomendação
+  - Visual cards para os próximos jogos recomendados
+- **Instrumentação de conversão**:
+  - `card_preview_interaction`: hover/focus em preview
+  - `card_full_click`: clique na área completa do card
+  - `click_to_play_time`: tempo do clique até first input
+  - `replay_after_run_click`: replay pós-jogo
+  - `next_game_after_run_click`: próximo jogo recomendado
+  - `quick_to_arcade_click`: conversão quick → arcade
+  - `arcade_to_quick_click`: conversão arcade → quick
+- **Dashboard /estado com métricas de conversão**:
+  - Seção "Conversão e Replay (Tijolo 32)" com 11 indicadores
+  - Preview CTR
+  - Click-to-play metrics
+  - Replay rate pós-run
+  - Next game rate pós-run
+  - Cross-game conversão (quick ↔ arcade)
+
+### Documentação atualizada
+
+- `README.md` com estado do Tijolo 32
+- `docs/tijolos.md` com entry do Tijolo 32
+- `docs/roadmap.md` com próximos ciclos
+- `docs/linha-arcade-da-campanha.md` com estratégia de preview e replay
+
+### Validação técnica
+
+- Lint: passou
+- Type-check: passou
+- Test:unit: passou
+- Build: passou
+- Verify: passou
+
+### Não inclui
+
+- Nova engine ou novo jogo
+- Assets de vídeo/GIF pesados
+- Redesign completo da UI
+- Auth ou admin
+- Novos formatos de jogo
+
+### Próximo ciclo recomendado (Tijolo 34)
+
+- Transformar leitura de efetividade em recomendação de distribuição operacional acionável.
+- Segmentar efetividade por canal (`utm_source`) e território (slug-based).
+- Adicionar regra explícita de não-pivot com baixa amostra.
+- Atualizar `/estado`, reports e brief com distribuição por efetividade real.
+
+## Tijolo 33 - Run efetiva e distribuição guiada ✅
+
+### Objetivo
+
+Separar clique superficial de comportamento real de jogo para orientar campanha com base em run efetiva, replay efetivo e cross-game efetivo.
+
+### Entregues
+
+- Camada de run efetiva em `lib/analytics/effective-runs.ts`.
+- Ampliação de `MetricsSnapshot` com bloco `effectiveRuns`.
+- `/estado` atualizado com scorecards reais e alertas de amostra.
+- Atualização de scripts beta para carregar leitura de efetividade:
+  - `beta:snapshot`
+  - `beta:export`
+  - `beta:circulation-report`
+  - `beta:distribution-report`
+  - `beta:campaign-brief`
+- Recomendação pós-run refinada (`lib/games/recommendations.ts`) com peso por histórico local de clique -> start efetivo.
+
+### Definições adotadas
+
+- `effective_run_start`: card click seguido de `game_start`/`first_interaction_time` em janela curta.
+- `effective_replay`: replay click seguido de novo start em janela curta.
+- `effective_cross_game_start`: next-game click seguido de start do jogo de destino em janela curta.
+
+### Guardrails mantidos
+
+- Sem nova engine.
+- Sem novo formato médio.
+- Sem auth/CMS/admin.
+
+### Próximo
+
+- Consolidar 7-14 dias para confirmar sinais úteis antes de abrir novo arcade ou formato médio.
+
+## Tijolo 34 - Efetividade em operação de campanha ✅
+
+### Objetivo
+
+Transformar efetividade em orientação operacional semanal de distribuição sem abrir novo escopo de produto: responder objetivamente "qual jogo empurrar?", "qual canal?", "qual território?" e "quando pivotar?".
+
+### Entregues
+
+- Segmentação de efetividade por **canal** (`utm_source` normalizado) e **território** (slug-based mapping).
+- Ampliação de `lib/analytics/effective-runs.ts` com:
+  - `EffectiveSegmentRow` para segmentar efetividade.
+  - `EffectiveRunsAnalysisOptions` para contexto de sessão (UTM/slug).
+  - Rankings: `topEffectiveRunsByGame`, `topEffectiveReplayByGame`, `crossGameBridges`, `byChannel`, `byTerritory`.
+  - Scorecards consolidados com status de maturidade.
+  - Direção dominante (`quick_to_arcade` / `arcade_to_quick` / `balanced`).
+- Atualização de `lib/analytics/metrics.ts` para passar contexto de sessão e mapa de território.
+- Atualização de scripts operacionais:
+  - `tools/effective-runs-utils.js`: segmentação canal/território.
+  - `tools/beta-export.js`, `tools/beta-snapshot.js`: passa contexto completo de sessões.
+  - `tools/beta-distribution-report.js`: recomendação semanal acionável com:
+    - Jogo de 1º push (maior run efetiva).
+    - Jogo de 2º clique (maior replay efetivo).
+    - Canal prioritário.
+    - Território promissor.
+    - Direção quick ↔ arcade.
+    - **Regra explícita de não-pivot** quando scorecards em `insufficient_data`.
+  - `tools/beta-campaign-brief.js`: brief operacional por efetividade (jogo/canal/território/regra de baixa amostra).
+- Dashboard `/estado` atualizado com blocos de "Run efetiva por canal" e "Run efetiva por território".
+- Novo plano de distribuição: `docs/plano-distribuicao-por-efetividade.md`.
+- Atualização de `README.md`, `docs/roadmap.md`, `docs/tijolos.md`.
+
+### Decisões operacionais acionáveis
+
+- **Jogo 1º push:** top de run efetiva; fallback para menor progresso de coleta.
+- **Jogo 2º clique:** top de replay efetivo; fallback para reforçar 1º push.
+- **Canal prioritário:** top de run efetiva por canal; fallback para distribuição equilibrada.
+- **Território prioritário:** top de run efetiva por território; fallback para cobertura multi-territorial.
+- **Direção quick ↔ arcade:** interpretação de `directionWinner` apenas se scorecards >= `directional_signal`; caso contrário, `balanced` e observação adicional.
+- **Regra de não-pivot:** se `previewToPlay`, `replayEffectiveness` e `crossGameEffectiveness` estão `insufficient_data`, manter coleta 7 dias sem mudar formato/narrativa.
+
+### Guardrails mantidos
+
+- Sem novo jogo/formato/engine/CMS/auth/admin.
+- Sem pivot de narrativa antes de massa crítica por efetividade.
+- Coleta de sinais 7–14 dias sem expandir escopo de produto.
+
+### Próximo
+
+- Executar rotina semanal de distribuição por 14 dias completos com plano de efetividade.
+- Validar se scorecards atingem `directional_signal` ou `useful_signal` de forma consistente.
+- Consideração de formato médio (Tijolo 29 retomado) apenas após confirmação de narrativa central com massa crítica de run real.

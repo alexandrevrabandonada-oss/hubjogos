@@ -7,100 +7,71 @@ import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { CTACluster } from '@/components/ui/CTACluster';
 import {
-  COLLECTIVE_SOLUTION_LABELS,
-  COMMON_VS_MARKET_LABELS,
   games,
   GAME_SERIES_LABELS,
-  GAME_LINE_LABELS,
-  GAME_PACE_LABELS,
-  POLITICAL_AXIS_LABELS,
   TERRITORY_SCOPE_LABELS,
   type GameSeries,
+  type TerritoryScope,
 } from '@/lib/games/catalog';
 import { GameCard } from '@/components/hub/GameCard';
 import { BetaBanner } from '@/components/ui/BetaBanner';
 import { CampaignMark } from '@/components/campaign/CampaignMark';
-import { trackSeriesClick } from '@/lib/analytics/track';
+import {
+  trackSeriesClick,
+  trackExplorarArcadeClick,
+  trackExplorarQuickClick,
+  trackExplorarFilterChange,
+} from '@/lib/analytics/track';
 import styles from './page.module.css';
 
+type KindFilter = 'all' | 'arcade' | 'quick';
+
 export default function ExplorarPage() {
-  const [selectedSeries, setSelectedSeries] = useState<GameSeries | null>(null);
+  const [selectedSeries, setSelectedSeries] = useState<GameSeries | 'all'>('all');
+  const [selectedTerritory, setSelectedTerritory] = useState<TerritoryScope | 'all'>('all');
+  const [selectedKind, setSelectedKind] = useState<KindFilter>('all');
+
   const liveGames = games.filter((g) => g.status === 'live');
-  const betaGames = games.filter((g) => g.status === 'beta');
-  const comingGames = games.filter((g) => g.status === 'coming');
-  const realLiveGames = liveGames.filter((g) => g.runtimeState === 'real');
-  const shellLiveGames = liveGames.filter((g) => g.runtimeState === 'shell');
+  const arcadeGames = liveGames.filter((g) => g.kind === 'arcade');
+  const quickGames = liveGames.filter((g) => g.pace === 'quick' && g.kind !== 'arcade');
+  const referenceGame = games[0];
 
-  // Count by engine type
-  const engineCounts = realLiveGames.reduce((acc, game) => {
-    acc[game.kind] = (acc[game.kind] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  const engineTypeLabels: Record<string, string> = {
-    quiz: 'Questionários',
-    branching_story: 'Narrativas',
-    simulation: 'Simulações',
-    map: 'Mapas',
-    narrative: 'Narrativas',
-    arcade: 'Arcades',
-  };
-
-  const engineTypeDescriptions: Record<string, string> = {
-    quiz: 'Compare prioridades políticas através de perguntas direcionadas',
-    branching_story: 'Explore consequências estruturais de escolhas encadeadas',
-    simulation: 'Teste cenários e observe custos invisíveis de decisões',
-    map: 'Descubra padrões territoriais através de exploração espacial',
-    arcade: 'Runs curtas com loop de ação e replay imediato em celular e PC',
-  };
-
-  const seriesEntries = Object.entries(GAME_SERIES_LABELS).map(([seriesKey, label]) => {
-    const seriesGames = games.filter((game) => game.series === seriesKey);
-    return {
-      key: seriesKey as GameSeries,
-      label,
-      count: seriesGames.length,
-      firstSlug: seriesGames[0]?.slug,
-      territories: Array.from(new Set(seriesGames.map((game) => TERRITORY_SCOPE_LABELS[game.territoryScope]))).join(', '),
-    };
-  });
-
-  const filteredLiveGames = useMemo(() => {
-    if (!selectedSeries) {
-      return liveGames;
-    }
-    return liveGames.filter((game) => game.series === selectedSeries);
-  }, [liveGames, selectedSeries]);
-
-  const paceSummary = Object.keys(GAME_PACE_LABELS)
-    .filter((paceKey) => paceKey !== 'future-flagship')
-    .map((paceKey) => {
-      const count = games.filter((game) => game.pace === paceKey).length;
-      return `${paceKey}: ${count}`;
-    })
-    .join(' • ');
-
-  const axisSummary = Object.entries(POLITICAL_AXIS_LABELS).map(([axis, label]) => ({
-    axis,
-    label,
-    count: games.filter((game) => game.politicalAxis === axis).length,
-  }));
-
-  const solutionSummary = Object.entries(COLLECTIVE_SOLUTION_LABELS)
-    .filter(([key]) => key !== 'nao-definido')
-    .map(([key, label]) => ({
-      key,
-      label,
-      count: games.filter((game) => game.collectiveSolutionType === key).length,
-    }));
+  const filteredGames = useMemo(() => {
+    return liveGames.filter((game) => {
+      if (selectedSeries !== 'all' && game.series !== selectedSeries) {
+        return false;
+      }
+      if (selectedTerritory !== 'all' && game.territoryScope !== selectedTerritory) {
+        return false;
+      }
+      if (selectedKind === 'arcade' && game.kind !== 'arcade') {
+        return false;
+      }
+      if (selectedKind === 'quick' && !(game.pace === 'quick' && game.kind !== 'arcade')) {
+        return false;
+      }
+      return true;
+    });
+  }, [liveGames, selectedSeries, selectedTerritory, selectedKind]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
     }
     const params = new URLSearchParams(window.location.search);
-    const value = params.get('serie');
-    setSelectedSeries((value as GameSeries | null) || null);
+    const series = params.get('serie') as GameSeries | null;
+    const kind = params.get('tipo') as KindFilter | null;
+    const territory = params.get('territorio') as TerritoryScope | null;
+
+    if (series && Object.prototype.hasOwnProperty.call(GAME_SERIES_LABELS, series)) {
+      setSelectedSeries(series);
+    }
+    if (kind === 'all' || kind === 'arcade' || kind === 'quick') {
+      setSelectedKind(kind);
+    }
+    if (territory && Object.prototype.hasOwnProperty.call(TERRITORY_SCOPE_LABELS, territory)) {
+      setSelectedTerritory(territory);
+    }
   }, []);
 
   async function handleSeriesClick(series: GameSeries) {
@@ -111,23 +82,49 @@ export default function ExplorarPage() {
     await trackSeriesClick(reference as any, series, reference.territoryScope, 'explorar-series').catch(console.error);
   }
 
+  async function handleFilterChange(filterType: string, value: string) {
+    if (!referenceGame) {
+      return;
+    }
+    await trackExplorarFilterChange(referenceGame as any, filterType, value).catch(console.error);
+  }
+
+  async function handleArcadeClick(slug: string) {
+    if (!referenceGame) {
+      return;
+    }
+    await trackExplorarArcadeClick(referenceGame as any, slug).catch(console.error);
+  }
+
+  async function handleQuickClick(slug: string) {
+    if (!referenceGame) {
+      return;
+    }
+    await trackExplorarQuickClick(referenceGame as any, slug).catch(console.error);
+  }
+
   return (
     <div className={styles.page}>
       <BetaBanner />
       <PageHero
-        eyebrow="Catálogo vivo"
-        title="Escolha um conflito e jogue agora"
-        description="Linha oficial de jogos da pre-campanha: rapida para entrar, forte para compartilhar e pronta para escalar no RJ."
+        eyebrow="🎮 Jogos prontos"
+        title="Escolha um, jogue agora"
+        description="Arcade de controle real ou quick de descoberta rápida. Cada jogo tem resultado compartilhável e leitura política."
         actions={
           <CTACluster>
-            <Link href="/arcade/tarifa-zero-corredor" className={styles.ctaPrimary}>
-              Jogar agora: Tarifa Zero RJ
+            <Link
+              href="/arcade/tarifa-zero-corredor"
+              className={styles.ctaPrimary}
+              onClick={() => handleArcadeClick('tarifa-zero-corredor')}
+            >
+              🎮 Jogar Arcade
             </Link>
-            <Link href="/play/voto-consciente" className={styles.ctaPrimary}>
-              Jogar agora: Voto Consciente
-            </Link>
-            <Link href="/participar" className={styles.ctaSecondary}>
-              Sugerir nova pauta
+            <Link
+              href="/play/custo-de-viver"
+              className={styles.ctaSecondary}
+              onClick={() => handleQuickClick('custo-de-viver')}
+            >
+              ⚡ Jogar Quick
             </Link>
           </CTACluster>
         }
@@ -136,163 +133,139 @@ export default function ExplorarPage() {
       </PageHero>
 
       <Section
-        eyebrow="Coleções"
-        title="Séries da campanha"
-        description="Navegue por blocos editoriais para seguir uma trilha de jogo, tema e território."
+        eyebrow="🎮 Arcades"
+        title="Jogar de verdade. Replay imediato."
+        description="Controle real, game feel polido, runs de 30s a 3 min."
       >
-        <div className={styles.seriesGrid}>
-          {seriesEntries.map((entry) => (
+        <div className={styles.arcadeSpotlightGrid}>
+          {arcadeGames.map((game) => (
             <Link
-              key={entry.key}
-              href={`/explorar?serie=${entry.key}`}
-              className={`${styles.seriesCard} ${selectedSeries === entry.key ? styles.seriesCardActive : ''}`}
-              onClick={() => {
-                setSelectedSeries(entry.key);
-                void handleSeriesClick(entry.key);
-              }}
+              key={game.id}
+              href={`/arcade/${game.slug}`}
+              className={styles.arcadeSpotlightCard}
+              onClick={() => handleArcadeClick(game.slug)}
             >
-              <h4>{entry.label}</h4>
-              <p>{entry.count} jogos no catálogo</p>
-              <p>Escopo: {entry.territories || 'a definir'}</p>
-              {entry.firstSlug ? <span>Abrir série</span> : null}
+              <span className={styles.arcadeBadge}>🎮 ARCADE</span>
+              <h3>{game.icon} {game.title}</h3>
+              <p>{game.shortDescription}</p>
+              <div className={styles.arcadeMeta}>
+                <span>⏱ {game.duration}</span>
+                <span>📍 {TERRITORY_SCOPE_LABELS[game.territoryScope]}</span>
+                <span>🧱 {GAME_SERIES_LABELS[game.series]}</span>
+              </div>
+              <strong className={styles.arcadeCardCta}>{game.cta} agora →</strong>
             </Link>
           ))}
         </div>
       </Section>
 
-      {realLiveGames.length > 0 && (
-        <Section
-          eyebrow="Formatos disponíveis"
-          title="Diversidade de mecânicas"
-          description={
-            Object.entries(engineCounts)
-              .map(([kind, count]) => `${count} ${engineTypeLabels[kind] || kind}`)
-              .join(' • ')
-          }
-        >
-          <div className={styles.engineTypes}>
-            {Object.entries(engineCounts).map(([kind, count]) => (
-              <div key={kind} className={styles.engineType}>
-                <h4>{engineTypeLabels[kind] || kind}</h4>
-                <p>{engineTypeDescriptions[kind] || ''}</p>
-                <span className={styles.engineCount}>{count} disponível{count !== 1 ? 'is' : ''}</span>
-              </div>
-            ))}
-          </div>
-        </Section>
-      )}
-
-      {liveGames.length > 0 && (
-        <Section
-          eyebrow="Jogável agora"
-          title="Experiências ao vivo"
-          description={`${filteredLiveGames.length} jogáveis nesta visão • ${realLiveGames.length} totalmente implementadas • ${shellLiveGames.length} com dramaturgia pronta para próximas rodadas`}
-        >
-          <div className={styles.grid}>
-            {filteredLiveGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </div>
-        </Section>
-      )}
-
       <Section
-        eyebrow="Taxonomia ideologica"
-        title="Eixo politico e solucao coletiva"
-        description={`Comum vs mercado: ${COMMON_VS_MARKET_LABELS.comum} como horizonte de campanha`}
+        eyebrow="Filtros"
+        title="Encontre seu jogo rápido"
+        description="Filtre por tipo, série ou território."
       >
-        <div className={styles.taxonomyGrid}>
-          {axisSummary.map((item) => (
-            <article key={item.axis} className={styles.engineType}>
-              <h4>{item.label}</h4>
-              <p>{item.count} jogos neste eixo politico.</p>
-            </article>
-          ))}
-          {solutionSummary.map((item) => (
-            <article key={item.key} className={styles.engineType}>
-              <h4>{item.label}</h4>
-              <p>{item.count} jogos priorizando esta solucao coletiva.</p>
-            </article>
-          ))}
+        <div className={styles.filtersRow}>
+          <label className={styles.filterField}>
+            <span>Tipo</span>
+            <select
+              value={selectedKind}
+              onChange={(e) => {
+                const value = e.target.value as KindFilter;
+                setSelectedKind(value);
+                void handleFilterChange('kind', value);
+              }}
+            >
+              <option value="all">Todos</option>
+              <option value="arcade">Arcade</option>
+              <option value="quick">Quick (1-3 min)</option>
+            </select>
+          </label>
+
+          <label className={styles.filterField}>
+            <span>Série</span>
+            <select
+              value={selectedSeries}
+              onChange={(e) => {
+                const value = e.target.value as GameSeries | 'all';
+                setSelectedSeries(value);
+                void handleFilterChange('series', value);
+                if (value !== 'all') {
+                  void handleSeriesClick(value);
+                }
+              }}
+            >
+              <option value="all">Todas</option>
+              {Object.entries(GAME_SERIES_LABELS).map(([series, label]) => (
+                <option key={series} value={series}>{label}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className={styles.filterField}>
+            <span>Território</span>
+            <select
+              value={selectedTerritory}
+              onChange={(e) => {
+                const value = e.target.value as TerritoryScope | 'all';
+                setSelectedTerritory(value);
+                void handleFilterChange('territory', value);
+              }}
+            >
+              <option value="all">Todos</option>
+              {Object.entries(TERRITORY_SCOPE_LABELS).map(([scope, label]) => (
+                <option key={scope} value={scope}>{label}</option>
+              ))}
+            </select>
+          </label>
         </div>
       </Section>
 
       <Section
-        eyebrow="Taxonomia oficial"
-        title="Tempo, tema e território"
-        description={`Paces: ${paceSummary}`}
+        eyebrow="Quick games"
+        title="Entrada rápida em 1-3 minutos"
+        description="Para descobrir pauta rápido, comparar resultado e compartilhar sem fricção."
       >
-        <div className={styles.taxonomyGrid}>
-          {Object.entries(GAME_LINE_LABELS).map(([lineKey, label]) => (
-            <article key={lineKey} className={styles.engineType}>
-              <h4>{label}</h4>
-              <p>{games.filter((game) => game.line === lineKey).length} jogos nesta linha.</p>
-            </article>
-          ))}
-        </div>
+        {quickGames.length > 0 ? (
+          <div className={styles.quickStrip}>
+            {quickGames.map((game) => (
+              <Link
+                key={game.id}
+                href={`/play/${game.slug}`}
+                className={styles.quickStripCard}
+                onClick={() => handleQuickClick(game.slug)}
+              >
+                <span>{game.icon}</span>
+                <div>
+                  <h4>{game.title}</h4>
+                  <p>{game.shortDescription}</p>
+                </div>
+                <strong>{game.cta} →</strong>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <EmptyState title="Sem quick games ativos" description="A linha quick está em atualização." />
+        )}
       </Section>
 
       <Section
-        eyebrow="Próximos formatos"
-        title="Universo em expansão"
-        description="Sem prometer entrega imediata: estes formatos guiam o horizonte de campanha para o estado do Rio de Janeiro."
+        eyebrow="Catálogo ao vivo"
+        title="Todos os jogos com filtros aplicados"
+        description={`${filteredGames.length} jogos encontrados para esta combinação.`}
       >
-        <div className={styles.taxonomyGrid}>
-          <article className={styles.engineType}>
-            <h4>Plataforma cívica</h4>
-            <p>Missões curtas por território com progressão de campanha.</p>
-          </article>
-          <article className={styles.engineType}>
-            <h4>RPG político</h4>
-            <p>Personagens, alianças e escolhas de longo prazo no RJ.</p>
-          </article>
-          <article className={styles.engineType}>
-            <h4>Tycoon de políticas públicas</h4>
-            <p>Gestão de prioridades estaduais com trade-offs eleitorais.</p>
-          </article>
-          <article className={styles.engineType}>
-            <h4>Mapa estadual de conflitos</h4>
-            <p>Leitura comparada entre regiões para orientar narrativa da campanha.</p>
-          </article>
-        </div>
-      </Section>
-
-      {betaGames.length > 0 && (
-        <Section
-          eyebrow="Campo de teste"
-          title="Módulos em refinamento"
-          description="Experiências quase prontas, com ajustes de ritmo, dificuldade e legibilidade política."
-        >
+        {filteredGames.length > 0 ? (
           <div className={styles.grid}>
-            {betaGames.map((game) => (
+            {filteredGames.map((game) => (
               <GameCard key={game.id} game={game} />
             ))}
           </div>
-        </Section>
-      )}
-
-      {comingGames.length > 0 && (
-        <Section
-          eyebrow="Próxima leva"
-          title="Módulos em desenvolvimento"
-          description="Pautas já mapeadas, com dramaturgia e mecânicas em construção."
-        >
-          <div className={styles.grid}>
-            {comingGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </div>
-        </Section>
-      )}
-
-      {games.length === 0 && (
-        <Section>
+        ) : (
           <EmptyState
-            title="Catálogo temporariamente vazio"
-            description="Estamos preparando novas experiências de pauta."
+            title="Nenhum jogo com esses filtros"
+            description="Tente limpar filtros para voltar ao catálogo completo."
           />
-        </Section>
-      )}
+        )}
+      </Section>
     </div>
   );
 }

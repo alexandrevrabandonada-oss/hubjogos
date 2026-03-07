@@ -2,7 +2,7 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: Tijolo 30 concluido - linha arcade consolidada com 2 jogos reais, game feel melhorado, comparacao entre arcades ativa.
+Status atual: Tijolo 34 concluído - operação de distribuição por efetividade real ativa, guiada por run real, replay efetivo e cross-game sem expandir escopo de produto.
 
 ## Estado do Produto
 
@@ -16,6 +16,12 @@ Status atual: Tijolo 30 concluido - linha arcade consolidada com 2 jogos reais, 
 - Card final com QR code dinamico para reentrada.
 - Pipeline de assets de campanha organizado (`public/campaign/`, `docs/assets/`).
 - Minigames quick ativos: `custo-de-viver`, `quem-paga-a-conta` e `cidade-em-comum` (1-2 min, rejogaveis, compartilhaveis).
+- Home reposicionada para entrada imediata com bloco `Jogue agora` acima da dobra, prioridade visual de arcades e entrada quick em paralelo.
+- Preview vivo nos cards: animações CSS de pulso, glow, bounce para sensação de jogo real antes do clique.
+- Card inteiro clicável com CTAs mais diretos e ação-orientados.
+- Sistema de recomendações de próximos jogos baseado em série/território/formato.
+- Replay fortalecido pós-run com botão prominente e 3 next-games sugeridos.
+- Explorar reposicionada como catalogo jogavel: spotlight arcade, quick strip e filtros praticos por tipo/serie/territorio.
 - Experimento ativo `final-card-qr-code` com variantes `with-qr` e `without-qr`.
 - Operacao de feedback em `/estado/feedback` com rota protegida opcional.
 - Audit log remoto ativo em `ops_audit_log`.
@@ -37,6 +43,7 @@ Scripts de campanha:
 ```bash
 npm run campaign:links          # Gerar links de campanha rastreáveis
 npm run campaign:brief          # Gerar brief semanal de distribuição
+npm run beta:campaign-brief     # Alias operacional para campaign:brief
 ```
 
 Documentos:
@@ -55,7 +62,7 @@ Documentos:
 - Barra de progresso visual e recomendacoes operacionais de distribuicao.
 - **Bloco "O que distribuir agora"** com quick/territorio/serie prioritarios (Tijolo 28).
 
-Documento operacional: `docs/plano-distribuicao-quick.md`
+Documento operacional: `docs/plano-distribuicao-quick.md`, `docs/plano-distribuicao-por-efetividade.md`
 
 ## Game Feel e Replay
 
@@ -86,6 +93,69 @@ DocumentoArcade (Tijolo 29)
   - first input time
   - CTA pos-run
   - comparacao quick vs arcade
+
+  Front-stage (Tijolo 31)
+
+  - Novos eventos de conversao na superficie publica:
+    - `home_primary_play_click`
+    - `home_arcade_click`
+    - `above_fold_game_click`
+    - `manifesto_expand_click`
+    - `explorar_arcade_click`
+    - `explorar_quick_click`
+    - `explorar_filter_change`
+  - Bloco dedicado em `/estado` com leitura de CTR arcade vs quick, cliques above-fold e uso de filtros.
+
+  Conversão e Replay (Tijolo 32)
+
+  - Preview vivo nos cards com animações CSS leves (pulso, glow, hover bounce).
+  - Sistema de recomendações de próximos jogos (`lib/games/recommendations.ts`).
+  - Replay fortalecido no outcome com botão prominente e 3 next-games sugeridos.
+  - Novos eventos de conversão:
+    - `card_preview_interaction`
+    - `card_full_click`
+    - `click_to_play_time`
+    - `replay_after_run_click`
+    - `next_game_after_run_click`
+    - `quick_to_arcade_click`
+    - `arcade_to_quick_click`
+  - Bloco dedicado em `/estado` com métricas de preview CTR, replay rate pós-run, next game rate e cross-game conversão.
+
+  Run Efetiva e Distribuição Guiada (Tijolo 33 + 34)
+
+  - Camada de leitura de comportamento real em `lib/analytics/effective-runs.ts`.
+  - Definições instrumentadas:
+    - `effective_run_start`: card click + start/input válido em janela curta.
+    - `effective_replay`: replay click + novo start em janela curta.
+    - `effective_cross_game_start`: next-game click + start do próximo jogo em janela curta.
+  - Scorecards de maturidade: `insufficient_data`, `monitoring`, `directional_signal`, `useful_signal`.
+  - **Novidade Tijolo 34:**
+    - Segmentação de efetividade por **canal** (`utm_source`) e **território** (derivado do slug).
+    - Recomendação semanal acionável:
+      - Jogo de 1º push (maior run efetiva).
+      - Jogo de 2º clique (maior replay efetivo).
+      - Canal prioritário.
+      - Território promissor.
+      - Direção quick ↔ arcade ou **regra explícita de não-pivot** quando amostra insuficiente.
+    - Bloco dedicado em `/estado` com top run efetiva por canal e por território.
+  - Reports beta incluem run efetiva, replay efetivo, cross-game efetivo, segmentação canal/território e direção quick → arcade vs arcade → quick.
+  - Plano operacional: `docs/plano-distribuicao-por-efetividade.md`.
+    - `home_quick_click`
+    - `home_play_now_block_click`
+    - `home_quick_vs_arcade_choice`
+    - `arcade_vs_quick_preference`
+    - `above_fold_game_click`
+    - `manifesto_expand_click`
+    - `explorar_arcade_click`
+    - `explorar_quick_click`
+    - `explorar_filter_change`
+  - `/estado` com bloco "Front-stage da Home e Explorar" para leitura de:
+    - cliques above-the-fold
+    - CTR arcade vs quick na home
+    - delta arcade-quick
+    - preferencia quick-vs-arcade
+    - sinal de interesse editorial (`manifesto_expand_click`)
+    - uso de filtros no explorar como proxy de exploracao
 
 ## Linha  guia: `docs/game-feel-e-diversao.md`
 
@@ -167,4 +237,4 @@ Este ciclo nao adiciona:
 - integracao Slack/email
 - painel admin enterprise
 
-Foco: priorizacao estrategica da linha quick com evidencia comparavel (grude, serie lider, eixo lider, territorio responsivo) e sem inflar escopo para jogo medio ainda.
+Foco: portal de jogos de campanha primeiro (arcade + quick com clique imediato), com leitura disciplinada de front-stage e sem inflar escopo para auth/CMS/admin.

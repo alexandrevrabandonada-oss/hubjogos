@@ -27,6 +27,82 @@
   border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
 }
 
+.replayButton {
+  margin-top: 8px;
+  width: 100%;
+  font-size: 1rem;
+  padding: 12px;
+  background: var(--accent);
+  color: #1a1508;
+  font-weight: 700;
+}
+
+.nextGamesBlock {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.nextGamesGrid {
+  display: grid;
+  gap: 8px;
+}
+
+.nextGameCard {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.nextGameCard:hover {
+  transform: translateX(3px);
+  border-color: var(--accent);
+}
+
+.nextGameIcon {
+  font-size: 1.3rem;
+}
+
+.nextGameContent {
+  display: grid;
+  gap: 2px;
+}
+
+.nextGameContent h4 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.nextGameReason {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.nextGameBadge {
+  font-size: 0.75rem;
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.nextGameCta {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  white-space: nowrap;
+}
+
 .links {
   display: flex;
   flex-wrap: wrap;

@@ -7,6 +7,8 @@ import { Card } from '@/components/ui/Card';
 import { CampaignMark } from '@/components/campaign/CampaignMark';
 import { OutcomeCtaConfig } from '@/lib/games/ctas';
 import { MicroFeedback } from '@/components/ui/MicroFeedback';
+import { getNextGameRecommendations } from '@/lib/games/recommendations';
+import { getGameBySlug } from '@/lib/games/catalog';
 import {
   trackLinkCopy,
   trackCampaignMarkClick,
@@ -19,6 +21,8 @@ import {
   trackSecondaryCtaClick,
   trackNextGameClick,
   trackHubReturnClick,
+  trackReplayAfterRunClick,
+  trackNextGameAfterRunClick,
 } from '@/lib/analytics/track';
 import { resolveExperimentVariantClient } from '@/lib/experiments/client';
 import styles from './GameOutcome.module.css';
@@ -54,12 +58,21 @@ export function GameOutcome({
 }: GameOutcomeProps) {
   const [feedback, setFeedback] = useState('');
   const [primaryLabel, setPrimaryLabel] = useState(ctas.primary.label);
+  const [nextGames, setNextGames] = useState<ReturnType<typeof getNextGameRecommendations>>([]);
 
   useEffect(() => {
     if (resultId) {
       trackOutcomeView(game as any, resultId).catch(console.error);
     }
   }, [game, resultId]);
+
+  useEffect(() => {
+    const fullGame = getGameBySlug(game.slug);
+    if (fullGame) {
+      const recommendations = getNextGameRecommendations(fullGame);
+      setNextGames(recommendations);
+    }
+  }, [game.slug]);
 
   useEffect(() => {
     const variant = resolveExperimentVariantClient('outcome-primary-cta-copy', 'explore-next');
@@ -152,6 +165,7 @@ export function GameOutcome({
   async function handleRestart() {
     await trackReplayClick(game as any, 'outcome').catch(console.error);
     await trackOutcomeReplayIntent(game as any, 'replay').catch(console.error);
+    await trackReplayAfterRunClick(game as any, 'outcome').catch(console.error);
     onRestart();
   }
 
@@ -186,9 +200,47 @@ export function GameOutcome({
       </div>
 
       <div className={styles.replayCue}>
-        <strong>Quer testar outra estratégia?</strong>
+        <strong>🔁 Quer testar outra estratégia?</strong>
         <p>Troque uma decisão-chave e veja como o resultado muda.</p>
+        <Button onClick={handleRestart} className={styles.replayButton}>
+          Jogar de novo agora
+        </Button>
       </div>
+
+      {nextGames.length > 0 && (
+        <div className={styles.nextGamesBlock}>
+          <strong>Próximos jogos recomendados</strong>
+          <div className={styles.nextGamesGrid}>
+            {nextGames.map((rec) => {
+              const destination = rec.game.kind === 'arcade' 
+                ? `/arcade/${rec.game.slug}` 
+                : `/play/${rec.game.slug}`;
+              const isArcade = rec.game.kind === 'arcade';
+              return (
+                <Link
+                  key={rec.game.slug}
+                  href={destination}
+                  className={styles.nextGameCard}
+                  onClick={() => {
+                    void trackNextGameAfterRunClick(game as any, rec.game.slug, 'outcome');
+                    void trackNextGameClick(game as any, rec.game.slug);
+                  }}
+                >
+                  <span className={styles.nextGameIcon}>{rec.game.icon}</span>
+                  <div className={styles.nextGameContent}>
+                    <h4>{rec.game.title}</h4>
+                    <p className={styles.nextGameReason}>{rec.reason}</p>
+                    <span className={styles.nextGameBadge}>
+                      {isArcade ? '🎮 Arcade' : '⚡ Quick'} • {rec.game.duration}
+                    </span>
+                  </div>
+                  <span className={styles.nextGameCta}>{rec.game.cta} →</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <div className={styles.links}>
         <Link
@@ -208,7 +260,6 @@ export function GameOutcome({
       </div>
 
       <div className={styles.actions}>
-        <Button onClick={handleRestart}>Jogar de novo</Button>
         <Button onClick={handleCopySummary} variant="ghost">
           Copiar resumo
         </Button>

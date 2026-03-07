@@ -1,0 +1,17 @@
+
+> hub-jogos-pre-campanha@0.0.1 type-check
+> tsc --noEmit
+
+app/explorar/page.tsx(122,11): error TS2657: JSX expressions must have one parent element.
+app/explorar/page.tsx(122,81): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+app/explorar/page.tsx(123,76): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+app/explorar/page.tsx(125,15): error TS17002: Expected corresponding JSX closing tag for 'CTACluster'.
+app/explorar/page.tsx(129,11): error TS1005: '}' expected.
+app/explorar/page.tsx(129,13): error TS17002: Expected corresponding JSX closing tag for 'div'.
+app/explorar/page.tsx(130,9): error TS1005: ')' expected.
+app/explorar/page.tsx(131,7): error TS1109: Expression expected.
+app/explorar/page.tsx(133,7): error TS1128: Declaration or statement expected.
+app/explorar/page.tsx(196,7): error TS2657: JSX expressions must have one parent element.
+app/explorar/page.tsx(293,5): error TS1128: Declaration or statement expected.
+app/explorar/page.tsx(294,3): error TS1109: Expression expected.
+app/explorar/page.tsx(295,1): error TS1128: Declaration or statement expected.

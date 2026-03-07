@@ -17,6 +17,7 @@ const {
   loadCatalogMetadata,
   buildQuickLineInsights,
 } = require('./circulation-utils');
+const { analyzeEffectiveRuns } = require('./effective-runs-utils');
 
 function loadLocalEnv() {
   const candidates = ['.env.local', '.env'];
@@ -314,6 +315,26 @@ function aggregateFromLocal(registry, window = 'all') {
     sessions.map((s) => ({ session_id: s.sessionId, status: s.status, experiments: s.experiments || [] })),
     events.map((e) => ({ session_id: e.sessionId, event_name: e.event })),
   );
+  const territoryBySlug = Object.fromEntries(
+    Object.values(catalogMap || {}).map((game) => [game.slug, game.territoryScope || 'estado-rj']),
+  );
+  const effectiveRuns = analyzeEffectiveRuns(
+    events.map((e) => ({
+      session_id: e.sessionId,
+      event_name: e.event,
+      slug: e.slug,
+      metadata: e.metadata,
+      created_at: e.createdAt || e.created_at,
+    })),
+    {
+      sessions: sessions.map((s) => ({
+        sessionId: s.sessionId,
+        slug: s.slug,
+        utmSource: s.utm_source,
+      })),
+      territoryBySlug,
+    },
+  );
 
   const experimentRows = [];
   sessions.forEach((s) => {
@@ -365,6 +386,7 @@ function aggregateFromLocal(registry, window = 'all') {
     topGames,
     circulation,
     quickInsights,
+    effectiveRuns,
     qrExperimentSummary,
     readingCriteria,
     scorecards,
@@ -392,7 +414,7 @@ async function aggregateFromRemote(registry, window = 'all') {
     supabaseSelect('feedback_records', 'select=rating,comment&limit=1000'),
     supabaseSelect(
       'game_events',
-      'select=session_id,event_name,slug,engine_kind,cta_id,metadata&event_name=in.(game_start,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,outcome_replay_intent,first_interaction_time)&limit=10000',
+      'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_first_input_time,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click)&limit=10000',
     ),
     supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer,experiments&limit=10000'),
   ]);
@@ -406,6 +428,17 @@ async function aggregateFromRemote(registry, window = 'all') {
   const scorecards = buildExperimentScorecards(expRows || [], registry);
   const quickInsights = buildQuickLineInsights(sessionRows || [], eventRows || [], catalogMap, window);
   const qrExperimentSummary = buildQrExperimentSummary(sessionRows || [], eventRows || []);
+  const territoryBySlug = Object.fromEntries(
+    Object.values(catalogMap || {}).map((game) => [game.slug, game.territoryScope || 'estado-rj']),
+  );
+  const effectiveRuns = analyzeEffectiveRuns(eventRows || [], {
+    sessions: (sessionRows || []).map((session) => ({
+      sessionId: session.session_id,
+      slug: session.slug,
+      utmSource: session.utm_source,
+    })),
+    territoryBySlug,
+  });
   const sourceMap = {};
   (sourceRows || []).forEach((row) => {
     sourceMap[row.source] = Number(row.sessions || 0);
@@ -451,6 +484,7 @@ async function aggregateFromRemote(registry, window = 'all') {
     })),
     circulation,
     quickInsights,
+    effectiveRuns,
     qrExperimentSummary,
     readingCriteria,
     scorecards,
@@ -588,6 +622,26 @@ ${Object.entries(snapshot.quickInsights?.qrReadout || snapshot.qrExperimentSumma
 ### Heurística e aviso de amostra
 - Heurística: completion 30%, replay 20%, share 20%, CTA 15%, share→play 10%, TFI 5%
 - Alertas: ${(snapshot.quickInsights?.warnings || []).join(' | ') || 'sem alertas de amostra no quick'}
+
+## Run Efetiva (Tijolo 33)
+
+### Scorecards de conversão real
+${Object.values(snapshot.effectiveRuns?.scorecards || {})
+  .map((card) => `- **${card.name}**: ${card.effectiveConversions}/${card.totalClicks} (${card.conversionRate}%) - status ${card.status}`)
+  .join('\n') || '_Sem dados de run efetiva_'}
+
+### Direção cross-game mais forte
+- Quick -> Arcade: ${snapshot.effectiveRuns?.direction?.quickToArcade?.effectiveStarts || 0}/${snapshot.effectiveRuns?.direction?.quickToArcade?.clicks || 0} (${snapshot.effectiveRuns?.direction?.quickToArcade?.effectiveRate || 0}%)
+- Arcade -> Quick: ${snapshot.effectiveRuns?.direction?.arcadeToQuick?.effectiveStarts || 0}/${snapshot.effectiveRuns?.direction?.arcadeToQuick?.clicks || 0} (${snapshot.effectiveRuns?.direction?.arcadeToQuick?.effectiveRate || 0}%)
+- Vencedor da direção: ${snapshot.effectiveRuns?.directionWinner || 'balanced'}
+
+### Top puxadores de run real
+${(snapshot.effectiveRuns?.topEffectiveRunsByGame || [])
+  .map((row, index) => `${index + 1}. **${row.slug}** - ${row.effectiveRuns}/${row.cardClicks} (${row.effectiveRunRate}%)`)
+  .join('\n') || '_Sem amostra suficiente_'}
+
+### Avisos de baixa amostra
+${(snapshot.effectiveRuns?.warnings || []).map((warning) => `- ${warning}`).join('\n') || '- Sem alertas de amostra em run efetiva'}
 
 ## Scorecards de Experimento
 ${snapshot.scorecards

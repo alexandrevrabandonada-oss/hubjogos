@@ -87,3 +87,43 @@ Decisao de produto:
 Horizonte futuro (nao abrir agora):
 - plataforma politico-territorial;
 - tycoon de politicas publicas populares.
+
+## Atualizacao Tijolo 31 - arcade-first na superficie publica
+
+Mudanca de produto aplicada:
+- arcade passou a ocupar a posicao de vitrine principal da home e da explorar.
+- quick continua ativo como linha de throughput, mas sem esconder a proposta de jogo de verdade.
+
+Impacto esperado:
+- aumentar clique imediato para `arcade/[slug]` acima da dobra.
+- elevar sinal de replay por run com menor friccao de entrada.
+- reduzir dependencia de texto editorial no topo para iniciar sessao.
+
+Eventos adicionados para validar o reposicionamento:
+- `home_primary_play_click`
+- `home_arcade_click`
+- `home_play_now_block_click`
+- `above_fold_game_click`
+- `arcade_vs_quick_preference`
+- `explorar_arcade_click`
+
+Leitura no `/estado`:
+- CTR arcade vs quick na home
+- delta arcade-quick
+- cliques em blocos above-the-fold
+- comparativo de escolha declarada quick-vs-arcade
+
+Guardrail mantido:
+- sem inflar escopo para nova engine, auth/CMS/admin ou formato grande neste ciclo.
+
+## Atualizacao Tijolo 33 - run efetiva como criterio de decisão
+
+Leitura oficial para arcade line:
+- clique em card e clique em replay so contam como sinal util quando viram novo start/input valido;
+- recomendacao de próximo jogo so conta quando gera start efetivo no destino;
+- direção quick -> arcade vs arcade -> quick passa a ser decidida por conversao efetiva, nao apenas por clique.
+
+Implicacao para distribuicao arcade:
+- priorizar em superficie e canais os arcades que puxam run efetiva e replay efetivo acima da media;
+- reduzir peso de recomendações com clique alto, mas start efetivo baixo;
+- adiar abertura de novo arcade ate consolidar 7-14 dias de amostra util.

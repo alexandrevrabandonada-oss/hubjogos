@@ -5,12 +5,47 @@
 .linkWrap {
   display: block;
   color: inherit;
+  cursor: pointer;
 }
 
 .card {
   display: grid;
   gap: 12px;
   min-height: 270px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.linkWrap:hover .card {
+  transform: translateY(-2px);
+}
+
+.arcadeCard {
+  background: radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 22%, transparent), transparent 55%);
+}
+
+.arcadeCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 35%, transparent) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.linkWrap:hover .arcadeCard::before {
+  opacity: 1;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
 }
 
 .accentBar {
@@ -20,6 +55,11 @@
   width: 100%;
   height: 3px;
   background: var(--accent-color);
+  transition: height 0.2s ease;
+}
+
+.linkWrap:hover .accentBar {
+  height: 4px;
 }
 
 .topRow {
@@ -29,9 +69,45 @@
   gap: 10px;
 }
 
+.topBadges {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arcadeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--accent-strong);
+  animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+  50% { 
+    box-shadow: 0 0 8px 2px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+}
+
 .icon {
   font-size: 1.7rem;
   line-height: 1;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.linkWrap:hover .icon {
+  transform: scale(1.15) rotate(5deg);
 }
 
 .title {
@@ -57,6 +133,7 @@
   line-height: 1.5;
   color: var(--text-muted);
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -70,18 +147,28 @@
   gap: 10px;
   padding-top: 8px;
   border-top: 1px dashed var(--border);
+  transition: border-color 0.2s ease;
 }
 
-.cta span {
+.linkWrap:hover .cta {
+  border-color: var(--accent);
+}
+
+.ctaHint {
   font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--text-muted);
 }
 
-.cta strong {
+.ctaAction {
+  font-size: 0.9rem;
   color: var(--accent-strong);
-  font-size: 0.92rem;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.linkWrap:hover .ctaAction {
+  transform: translateX(3px);
 }
 
 @media (max-width: 768px) {

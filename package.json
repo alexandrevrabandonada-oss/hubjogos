@@ -25,6 +25,7 @@
     "beta:staleness-check": "node tools/beta-staleness-check.js",
     "beta:ops": "node tools/beta-ops.js",
     "campaign:links": "node tools/generate-campaign-links.js",
+    "beta:campaign-brief": "node tools/beta-campaign-brief.js",
     "campaign:brief": "node tools/beta-campaign-brief.js",
     "ops:apply-migration": "node tools/apply-tijolo-14-migration.js",
     "ops:export-config": "node tools/export-experiments-config.js",

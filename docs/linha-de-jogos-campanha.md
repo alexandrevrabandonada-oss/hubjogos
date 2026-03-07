@@ -109,3 +109,40 @@ O que fica para o Tijolo 27:
 - consolidar amostra minima por territorio para decisao de investimento
 - transformar serie quick lider em blueprint de formato medio
 - tensionar distribuicao no territorio lider sem abrir sistemas paralelos
+
+## Atualizacao Tijolo 31 - front-stage arcade-first
+
+Decisao aplicada na superficie publica:
+- a home deve parecer primeiro um portal de jogos da campanha, e so depois uma camada editorial.
+- ordem de descoberta prioriza clique imediato para jogar (arcade e quick) acima da dobra.
+- a camada de campanha permanece explicita (Alexandre Fonseca para Deputado), mas sem abrir com parede de texto.
+
+Criterios de front-stage adotados:
+- CTA principal de jogo em destaque no hero.
+- bloco `Jogue agora` com informacao minima de decisao (tipo, duracao, serie, territorio, CTA).
+- separacao clara de duas portas de entrada:
+  - quick para descoberta rapida
+  - arcade para loop de acao e replay
+- explorar operando como catalogo jogavel (spotlight + filtros acionaveis).
+
+Leitura operacional associada:
+- cliques above-the-fold
+- CTR arcade vs quick na home
+- delta de preferencia entre tipos
+- sinais de uso de filtro no explorar
+- sinal de interesse editorial (expansao de manifesto)
+
+## Atualizacao Tijolo 33 - leitura de comportamento real
+
+Regra de leitura da linha de jogos:
+- metrica principal deixa de ser clique bruto e passa a ser run efetiva.
+
+Definicoes operacionais:
+- run efetiva: click de entrada seguido de start/input valido em janela curta;
+- replay efetivo: clique de replay seguido de nova run;
+- cross-game efetivo: clique no proximo jogo seguido de start no jogo de destino.
+
+Como isso informa distribuicao:
+- quicks e arcades com maior taxa de run efetiva sobem prioridade semanal;
+- direcao quick -> arcade vs arcade -> quick passa a orientar ordem de CTA pós-run;
+- sinais abaixo de amostra minima ficam em `monitoring` e nao justificam pivot estrutural.

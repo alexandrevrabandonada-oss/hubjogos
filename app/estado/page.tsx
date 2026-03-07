@@ -428,6 +428,75 @@ export default function EstadoPage() {
   const arcadeVsQuickRunDelta = arcadeOverview.runs - arcadeOverview.quickStarts;
   const arcadeVsQuickReplayDelta = arcadeOverview.replayRate - arcadeOverview.quickReplayRate;
 
+  const homePrimaryPlayClicks = metrics.eventsByType['home_primary_play_click'] || 0;
+  const homeArcadeClicks = metrics.eventsByType['home_arcade_click'] || 0;
+  const homeQuickClicks = metrics.eventsByType['home_quick_click'] || 0;
+  const aboveFoldGameClicks = metrics.eventsByType['above_fold_game_click'] || 0;
+  const homePlayNowClicks = metrics.eventsByType['home_play_now_block_click'] || 0;
+  const quickVsArcadeChoices =
+    (metrics.eventsByType['home_quick_vs_arcade_choice'] || 0) +
+    (metrics.eventsByType['arcade_vs_quick_preference'] || 0);
+  const manifestoExpandClicks = metrics.eventsByType['manifesto_expand_click'] || 0;
+  const seriesClicks = metrics.eventsByType['series_click'] || 0;
+  const explorarArcadeClicks = metrics.eventsByType['explorar_arcade_click'] || 0;
+  const explorarQuickClicks = metrics.eventsByType['explorar_quick_click'] || 0;
+  const explorarFilterChanges = metrics.eventsByType['explorar_filter_change'] || 0;
+
+  // Tijolo 32: Conversion & Replay metrics
+  const cardFullClicks = metrics.eventsByType['card_full_click'] || 0;
+  const cardPreviewInteractions = metrics.eventsByType['card_preview_interaction'] || 0;
+  const clickToPlayEvents = metrics.eventsByType['click_to_play_time'] || 0;
+  const replayAfterRunClicks = metrics.eventsByType['replay_after_run_click'] || 0;
+  const nextGameAfterRunClicks = metrics.eventsByType['next_game_after_run_click'] || 0;
+  const quickToArcadeClicks = metrics.eventsByType['quick_to_arcade_click'] || 0;
+  const arcadeToQuickClicks = metrics.eventsByType['arcade_to_quick_click'] || 0;
+
+  const cardPreviewCtr = cardFullClicks > 0 ? Math.round((cardPreviewInteractions / cardFullClicks) * 100) : 0;
+  const replayAfterRunRate = metrics.funnel.completions > 0 ? Math.round((replayAfterRunClicks / metrics.funnel.completions) * 100) : 0;
+  const nextGameAfterRunRate = metrics.funnel.completions > 0 ? Math.round((nextGameAfterRunClicks / metrics.funnel.completions) * 100) : 0;
+  const crossGameConversionTotal = quickToArcadeClicks + arcadeToQuickClicks;
+
+  // Tijolo 33: Effective runs readout
+  const effective = metrics.effectiveRuns;
+  const effectivePreviewToPlay = effective?.previewToPlay;
+  const effectiveReplay = effective?.replayEffectiveness;
+  const effectiveCrossGame = effective?.crossGameEffectiveness;
+  const effectiveQuickToArcade = effective?.quickToArcadeEffective;
+  const effectiveArcadeToQuick = effective?.arcadeToQuickEffective;
+  const effectiveCardToRun = effective?.cardClickToRun;
+
+  const effectiveRunsByGame = effective
+    ? Array.from(effective.effectiveRunsByGame.values())
+      .sort((a, b) => b.effectiveRunRate - a.effectiveRunRate)
+      .slice(0, 5)
+    : [];
+
+  const effectiveReplayByGame = effective
+    ? Array.from(effective.effectiveReplayByGame.values())
+      .sort((a, b) => b.effectiveReplayRate - a.effectiveReplayRate)
+      .slice(0, 5)
+    : [];
+
+  const strongestCrossGameBridges = effective
+    ? Array.from(effective.effectiveCrossGame.entries())
+      .flatMap(([from, toMap]) =>
+        Array.from(toMap.entries()).map(([to, starts]) => ({ from, to, starts })),
+      )
+      .sort((a, b) => b.starts - a.starts)
+      .slice(0, 5)
+    : [];
+
+  const effectiveByChannel = (effective?.byChannel || []).slice(0, 5);
+  const effectiveByTerritory = (effective?.byTerritory || []).slice(0, 5);
+
+  const effectiveWarnings = effective?.warnings || [];
+
+  const homeTotalTrackedClicks = homePrimaryPlayClicks + homeArcadeClicks + homeQuickClicks + homePlayNowClicks;
+  const homeArcadeCtr =
+    homeTotalTrackedClicks > 0 ? Math.round(((homePrimaryPlayClicks + homeArcadeClicks) / homeTotalTrackedClicks) * 100) : 0;
+  const homeQuickCtr = homeTotalTrackedClicks > 0 ? Math.round((homeQuickClicks / homeTotalTrackedClicks) * 100) : 0;
+  const homeToPlayByTypeDelta = homeArcadeCtr - homeQuickCtr;
+
   const trackedQuickSlugs = ['custo-de-viver', 'quem-paga-a-conta', 'cidade-em-comum'];
   const quickComparison = metrics.quickInsights.quickComparison
     .filter((row) => trackedQuickSlugs.includes(row.slug))
@@ -1040,6 +1109,312 @@ export default function EstadoPage() {
               </table>
             </div>
           )}
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Front-stage da Home e Explorar</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Cliques above-the-fold</p>
+              <p className={styles.signalValue}>{aboveFoldGameClicks}</p>
+              <p className={styles.signalNote}>Proxy de entrada imediata no jogo</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Home: cliques primários</p>
+              <p className={styles.signalValue}>{homePrimaryPlayClicks}</p>
+              <p className={styles.signalNote}>Botões do hero (jogar agora)</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Home: bloco &quot;Jogue agora&quot;</p>
+              <p className={styles.signalValue}>{homePlayNowClicks}</p>
+              <p className={styles.signalNote}>Clique em cards acima da dobra</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Arcade CTR na home</p>
+              <p className={styles.signalValue}>{homeArcadeCtr}%</p>
+              <p className={styles.signalNote}>Arcade clicks: {homePrimaryPlayClicks + homeArcadeClicks}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Quick CTR na home</p>
+              <p className={styles.signalValue}>{homeQuickCtr}%</p>
+              <p className={styles.signalNote}>Quick clicks: {homeQuickClicks}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Delta arcade - quick</p>
+              <p className={styles.signalValue}>{homeToPlayByTypeDelta}%</p>
+              <p className={styles.signalNote}>Home → play por tipo</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Quick vs Arcade choice clicks</p>
+              <p className={styles.signalValue}>{quickVsArcadeChoices}</p>
+              <p className={styles.signalNote}>Preferência declarada no bloco comparativo</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Manifesto expand clicks</p>
+              <p className={styles.signalValue}>{manifestoExpandClicks}</p>
+              <p className={styles.signalNote}>Interesse em camada editorial/política</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Series clicks</p>
+              <p className={styles.signalValue}>{seriesClicks}</p>
+              <p className={styles.signalNote}>Seção mais clicada da camada editorial</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Explorar: cliques em arcade</p>
+              <p className={styles.signalValue}>{explorarArcadeClicks}</p>
+              <p className={styles.signalNote}>Vitrine de arcades no catálogo</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Explorar: cliques em quick</p>
+              <p className={styles.signalValue}>{explorarQuickClicks}</p>
+              <p className={styles.signalNote}>Strip de quick games</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Explorar: uso de filtros</p>
+              <p className={styles.signalValue}>{explorarFilterChanges}</p>
+              <p className={styles.signalNote}>Proxy útil de scroll depth e exploração</p>
+            </div>
+          </div>
+          <p className={styles.techNote}>
+            Eventos front-stage: home_primary_play_click, home_arcade_click, home_quick_click, home_play_now_block_click,
+            home_quick_vs_arcade_choice, arcade_vs_quick_preference, above_fold_game_click, manifesto_expand_click,
+            series_click, explorar_arcade_click, explorar_quick_click, explorar_filter_change.
+          </p>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>🎯 Conversão e Replay (Tijolo 32)</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Card full clicks</p>
+              <p className={styles.signalValue}>{cardFullClicks}</p>
+              <p className={styles.signalNote}>Cliques na área completa do card</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Preview interactions</p>
+              <p className={styles.signalValue}>{cardPreviewInteractions}</p>
+              <p className={styles.signalNote}>Hover/focus em preview vivo</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Preview CTR</p>
+              <p className={styles.signalValue}>{cardPreviewCtr}%</p>
+              <p className={styles.signalNote}>Interações preview → click</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Click-to-play events</p>
+              <p className={styles.signalValue}>{clickToPlayEvents}</p>
+              <p className={styles.signalNote}>Medições de tempo click → first input</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Replay after run</p>
+              <p className={styles.signalValue}>{replayAfterRunClicks}</p>
+              <p className={styles.signalNote}>Clique replay pós-jogo</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Replay rate pós-run</p>
+              <p className={styles.signalValue}>{replayAfterRunRate}%</p>
+              <p className={styles.signalNote}>Replay / completions</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Next game after run</p>
+              <p className={styles.signalValue}>{nextGameAfterRunClicks}</p>
+              <p className={styles.signalNote}>Recomendações pós-jogo clicadas</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Next game rate pós-run</p>
+              <p className={styles.signalValue}>{nextGameAfterRunRate}%</p>
+              <p className={styles.signalNote}>Cross-game / completions</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Quick → Arcade crossover</p>
+              <p className={styles.signalValue}>{quickToArcadeClicks}</p>
+              <p className={styles.signalNote}>Conversão quick para arcade</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Arcade → Quick crossover</p>
+              <p className={styles.signalValue}>{arcadeToQuickClicks}</p>
+              <p className={styles.signalNote}>Conversão arcade para quick</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Cross-game total</p>
+              <p className={styles.signalValue}>{crossGameConversionTotal}</p>
+              <p className={styles.signalNote}>Quick ↔ Arcade conversão total</p>
+            </div>
+
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Preview → play efetivo</p>
+              <p className={styles.signalValue}>{effectivePreviewToPlay?.conversionRate ?? 0}%</p>
+              <p className={styles.signalNote}>Status: {effectivePreviewToPlay?.status || 'insufficient_data'}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Card click → run efetivo</p>
+              <p className={styles.signalValue}>{effectiveCardToRun?.conversionRate ?? 0}%</p>
+              <p className={styles.signalNote}>Status: {effectiveCardToRun?.status || 'insufficient_data'}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Replay efetivo</p>
+              <p className={styles.signalValue}>{effectiveReplay?.conversionRate ?? 0}%</p>
+              <p className={styles.signalNote}>Status: {effectiveReplay?.status || 'insufficient_data'}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Next-game start efetivo</p>
+              <p className={styles.signalValue}>{effectiveCrossGame?.conversionRate ?? 0}%</p>
+              <p className={styles.signalNote}>Status: {effectiveCrossGame?.status || 'insufficient_data'}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Quick → Arcade efetivo</p>
+              <p className={styles.signalValue}>{effectiveQuickToArcade?.conversionRate ?? 0}%</p>
+              <p className={styles.signalNote}>Status: {effectiveQuickToArcade?.status || 'insufficient_data'}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Arcade → Quick efetivo</p>
+              <p className={styles.signalValue}>{effectiveArcadeToQuick?.conversionRate ?? 0}%</p>
+              <p className={styles.signalNote}>Status: {effectiveArcadeToQuick?.status || 'insufficient_data'}</p>
+            </div>
+          </div>
+          {effectiveWarnings.length > 0 && (
+            <div className={styles.techNote}>
+              <strong>Avisos de amostra:</strong>
+              <ul>
+                {effectiveWarnings.map((warning) => (
+                  <li key={warning}>{warning}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {effectiveRunsByGame.length > 0 && (
+            <div className={styles.tableWrap}>
+              <h4>Top jogos por run efetiva</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Jogo</th>
+                    <th>Runs efetivas</th>
+                    <th>Card clicks</th>
+                    <th>Taxa efetiva</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {effectiveRunsByGame.map((row) => (
+                    <tr key={row.slug}>
+                      <td className={styles.gameTitle}>{row.slug}</td>
+                      <td className={styles.numeric}>{row.effectiveRuns}</td>
+                      <td className={styles.numeric}>{row.cardClicks}</td>
+                      <td className={styles.numeric}>{row.effectiveRunRate}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {effectiveReplayByGame.length > 0 && (
+            <div className={styles.tableWrap}>
+              <h4>Replay efetivo por jogo</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Jogo</th>
+                    <th>Replays efetivos</th>
+                    <th>Replay clicks</th>
+                    <th>Taxa efetiva</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {effectiveReplayByGame.map((row) => (
+                    <tr key={row.slug}>
+                      <td className={styles.gameTitle}>{row.slug}</td>
+                      <td className={styles.numeric}>{row.effectiveReplays}</td>
+                      <td className={styles.numeric}>{row.replayClicks}</td>
+                      <td className={styles.numeric}>{row.effectiveReplayRate}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {strongestCrossGameBridges.length > 0 && (
+            <div className={styles.tableWrap}>
+              <h4>Pontes cross-game mais fortes</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>De</th>
+                    <th>Para</th>
+                    <th>Starts efetivos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {strongestCrossGameBridges.map((row) => (
+                    <tr key={`${row.from}->${row.to}`}>
+                      <td className={styles.gameTitle}>{row.from}</td>
+                      <td className={styles.gameTitle}>{row.to}</td>
+                      <td className={styles.numeric}>{row.starts}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {effectiveByChannel.length > 0 && (
+            <div className={styles.tableWrap}>
+              <h4>Run efetiva por canal</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Canal</th>
+                    <th>Card clicks</th>
+                    <th>Runs efetivas</th>
+                    <th>Taxa efetiva</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {effectiveByChannel.map((row) => (
+                    <tr key={row.key}>
+                      <td className={styles.gameTitle}>{row.label}</td>
+                      <td className={styles.numeric}>{row.cardClicks}</td>
+                      <td className={styles.numeric}>{row.effectiveRuns}</td>
+                      <td className={styles.numeric}>{row.effectiveRunRate}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {effectiveByTerritory.length > 0 && (
+            <div className={styles.tableWrap}>
+              <h4>Run efetiva por território</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Território</th>
+                    <th>Card clicks</th>
+                    <th>Runs efetivas</th>
+                    <th>Taxa efetiva</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {effectiveByTerritory.map((row) => (
+                    <tr key={row.key}>
+                      <td className={styles.gameTitle}>{row.label}</td>
+                      <td className={styles.numeric}>{row.cardClicks}</td>
+                      <td className={styles.numeric}>{row.effectiveRuns}</td>
+                      <td className={styles.numeric}>{row.effectiveRunRate}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <p className={styles.techNote}>
+            Eventos de conversão (Tijolo 32): card_full_click, card_preview_interaction, click_to_play_time,
+            replay_after_run_click, next_game_after_run_click, quick_to_arcade_click, arcade_to_quick_click.
+          </p>
         </Card>
 
         {/* Top Origens */}

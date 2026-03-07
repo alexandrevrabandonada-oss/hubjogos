@@ -1,0 +1,132 @@
+{
+  "generatedAt": "2026-03-07T21:53:42.315Z",
+  "source": "supabase",
+  "collectionTargets": {
+    "quick": {
+      "sessions": 60,
+      "starts": 50,
+      "completions": 15,
+      "shares": 5,
+      "replays": 3
+    },
+    "series": {
+      "sessions": 100,
+      "starts": 80,
+      "completions": 25,
+      "shares": 8
+    },
+    "territory": {
+      "sessions": 80,
+      "starts": 60,
+      "completions": 20,
+      "shares": 6
+    },
+    "qrVariant": {
+      "sessions": 60,
+      "qrViews": 20,
+      "qrClicks": 8
+    }
+  },
+  "collectionStatus": {
+    "byQuick": {},
+    "bySeries": {},
+    "byTerritory": {},
+    "qrExperiment": {
+      "status": "coleta-minima-atingida",
+      "progressByVariant": {
+        "with-qr": {
+          "sessions": 67,
+          "qrViews": 6,
+          "qrClicks": 0,
+          "progressPct": 47
+        },
+        "without-qr": {
+          "sessions": 69,
+          "qrViews": 2,
+          "qrClicks": 0,
+          "progressPct": 42
+        }
+      }
+    }
+  },
+  "warnings": [
+    "Sem sessões quick na janela atual para comparação entre jogos."
+  ],
+  "effectiveRuns": {
+    "scorecards": {
+      "previewToPlay": {
+        "name": "Preview -> Play efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Preview -> Play efetivo: amostra insuficiente (0 < 10)"
+      },
+      "cardClickToRun": {
+        "name": "Card click -> Run efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Card click -> Run efetivo: amostra insuficiente (0 < 10)"
+      },
+      "replayEffectiveness": {
+        "name": "Replay efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Replay efetivo: amostra insuficiente (0 < 10)"
+      },
+      "crossGameEffectiveness": {
+        "name": "Cross-game efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Cross-game efetivo: amostra insuficiente (0 < 10)"
+      },
+      "quickToArcadeEffective": {
+        "name": "Quick -> Arcade efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Quick -> Arcade efetivo: amostra insuficiente (0 < 10)"
+      },
+      "arcadeToQuickEffective": {
+        "name": "Arcade -> Quick efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Arcade -> Quick efetivo: amostra insuficiente (0 < 10)"
+      }
+    },
+    "direction": {
+      "quickToArcade": {
+        "clicks": 0,
+        "effectiveStarts": 0,
+        "effectiveRate": 0
+      },
+      "arcadeToQuick": {
+        "clicks": 0,
+        "effectiveStarts": 0,
+        "effectiveRate": 0
+      }
+    },
+    "directionWinner": "balanced",
+    "topEffectiveRunsByGame": [],
+    "topBridges": [],
+    "warnings": [
+      "Preview -> Play efetivo: amostra insuficiente (0 < 10)",
+      "Card click -> Run efetivo: amostra insuficiente (0 < 10)",
+      "Replay efetivo: amostra insuficiente (0 < 10)",
+      "Cross-game efetivo: amostra insuficiente (0 < 10)",
+      "Quick -> Arcade efetivo: amostra insuficiente (0 < 10)",
+      "Arcade -> Quick efetivo: amostra insuficiente (0 < 10)"
+    ]
+  },
+  "readySeries": [],
+  "readyTerritories": []
+}

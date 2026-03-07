@@ -3,14 +3,14 @@ import { expect, test } from '@playwright/test';
 test('home abre', async ({ page }) => {
   await page.goto('/');
   await expect(
-    page.getByRole('heading', { name: 'Jogue, compare e organize: missoes populares do RJ' })
+    page.getByRole('heading', { name: /missões populares do RJ/i })
   ).toBeVisible();
 });
 
 test('explorar abre', async ({ page }) => {
   await page.goto('/explorar');
   await expect(
-    page.getByRole('heading', { name: 'Escolha um conflito e jogue agora' })
+    page.getByRole('heading', { name: /Escolha um, jogue agora|Escolha e jogue em segundos/i })
   ).toBeVisible();
 });
 

@@ -9,7 +9,6 @@ import Link from 'next/link';
 import {
   Game,
   GAME_SERIES_LABELS,
-  POLITICAL_AXIS_LABELS,
   TERRITORY_SCOPE_LABELS,
 } from '@/lib/games/catalog';
 import { Card } from '@/components/ui/Card';
@@ -24,6 +23,10 @@ interface GameCardProps {
 
 export function GameCard({ game }: GameCardProps) {
   const destination = game.kind === 'arcade' ? `/arcade/${game.slug}` : `/play/${game.slug}`;
+  const isArcade = game.kind === 'arcade';
+  const actionLabel = isArcade 
+    ? `${game.cta} agora` 
+    : `${game.cta} agora`;
 
   async function handleCardClick() {
     await trackSeriesClick(game as any, game.series, game.territoryScope, 'game-card').catch(console.error);
@@ -31,7 +34,7 @@ export function GameCard({ game }: GameCardProps) {
 
   return (
     <Link href={destination} className={styles.linkWrap} onClick={handleCardClick}>
-      <Card interactive className={styles.card}>
+      <Card interactive className={`${styles.card} ${isArcade ? styles.arcadeCard : ''}`}>
         <div
           className={styles.accentBar}
           style={{ '--accent-color': game.color } as any}
@@ -41,32 +44,28 @@ export function GameCard({ game }: GameCardProps) {
           <span className={styles.icon} aria-hidden>
             {game.icon}
           </span>
-          <StatusBadge status={game.status} />
+          <div className={styles.topBadges}>
+            {isArcade ? <span className={styles.arcadeBadge}>ARCADE</span> : null}
+            <StatusBadge status={game.status} />
+          </div>
         </div>
 
         <h3 className={styles.title}>{game.title}</h3>
         <p className={styles.description}>{game.shortDescription}</p>
 
         <div className={styles.meta}>
-          <MetaChip icon="⏱">{game.estimatedMinutes} min</MetaChip>
-          <MetaChip icon="⚡">{game.pace}</MetaChip>
-          <MetaChip icon="📌">{game.theme}</MetaChip>
+          <MetaChip icon="⏱">{game.duration}</MetaChip>
+          <MetaChip icon="🎮">{isArcade ? 'arcade run' : 'quick'}</MetaChip>
           <MetaChip icon="🗺">{TERRITORY_SCOPE_LABELS[game.territoryScope]}</MetaChip>
           <MetaChip icon="🧱">{GAME_SERIES_LABELS[game.series]}</MetaChip>
-          <MetaChip icon="🧭">{POLITICAL_AXIS_LABELS[game.politicalAxis]}</MetaChip>
-          <MetaChip icon="🤝">{game.collectiveSolutionType}</MetaChip>
-          <MetaChip icon="🎮">{game.kind}</MetaChip>
-          <MetaChip icon={game.runtimeState === 'real' ? '✅' : '🧱'}>
-            {game.runtimeState === 'real' ? 'engine real' : 'shell'}
-          </MetaChip>
-          {(game.territoryScope === 'volta-redonda' || game.territoryScope === 'sul-fluminense') && (
-            <MetaChip icon="🧭">Escala {TERRITORY_SCOPE_LABELS[game.territoryScope]} {'->'} Estado RJ</MetaChip>
-          )}
+          {isArcade ? <MetaChip icon="🔁">replay imediato</MetaChip> : <MetaChip icon="⚡">entrada rápida</MetaChip>}
         </div>
 
         <div className={styles.cta}>
-          <span>Entender a pauta</span>
-          <strong>{game.cta} →</strong>
+          <span className={styles.ctaHint}>
+            {isArcade ? '🎮 Jogue de verdade' : '⚡ Entre rápido'}
+          </span>
+          <strong className={styles.ctaAction}>{actionLabel} →</strong>
         </div>
       </Card>
     </Link>

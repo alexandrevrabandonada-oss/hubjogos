@@ -44,7 +44,27 @@ export type AnalyticsEventName =
   | 'arcade_first_input_time'
   | 'arcade_replay_click'
   | 'arcade_powerup_collect'
-  | 'arcade_campaign_cta_click';
+  | 'arcade_campaign_cta_click'
+  // Front-stage tracking (Tijolo 31)
+  | 'home_primary_play_click'
+  | 'home_arcade_click'
+  | 'home_quick_click'
+  | 'home_play_now_block_click'
+  | 'home_quick_vs_arcade_choice'
+  | 'arcade_vs_quick_preference'
+  | 'above_fold_game_click'
+  | 'manifesto_expand_click'
+  | 'explorar_arcade_click'
+  | 'explorar_quick_click'
+  | 'explorar_filter_change'
+  // Conversão e replay tracking (Tijolo 32)
+  | 'card_preview_interaction'
+  | 'card_full_click'
+  | 'click_to_play_time'
+  | 'replay_after_run_click'
+  | 'next_game_after_run_click'
+  | 'quick_to_arcade_click'
+  | 'arcade_to_quick_click';
 
 export interface AnalyticsEventPayload {
   sessionId: string;

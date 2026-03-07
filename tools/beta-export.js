@@ -17,6 +17,7 @@ const {
   loadCatalogMetadata,
   buildQuickLineInsights,
 } = require('./circulation-utils');
+const { analyzeEffectiveRuns } = require('./effective-runs-utils');
 
 function loadLocalEnv() {
   const candidates = ['.env.local', '.env'];
@@ -235,7 +236,7 @@ async function buildExport(window = 'all') {
         supabaseSelect('ops_audit_log', 'select=action_type'),
         supabaseSelect(
           'game_events',
-          'select=session_id,event_name,slug,engine_kind,cta_id,metadata&event_name=in.(game_start,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,outcome_replay_intent,first_interaction_time)&limit=10000',
+          'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_first_input_time,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click)&limit=10000',
         ),
         supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer,experiments&limit=10000'),
       ]);
@@ -262,6 +263,17 @@ async function buildExport(window = 'all') {
     const scorecards = buildExperimentScorecards(experiments || [], registry);
     const quickInsights = buildQuickLineInsights(sessions || [], circulationEvents || [], catalogMap, window);
     const qrExperimentSummary = buildQrExperimentSummary(sessions || [], circulationEvents || []);
+    const territoryBySlug = Object.fromEntries(
+      Object.values(catalogMap || {}).map((game) => [game.slug, game.territoryScope || 'estado-rj']),
+    );
+    const effectiveRuns = analyzeEffectiveRuns(circulationEvents || [], {
+      sessions: (sessions || []).map((session) => ({
+        sessionId: session.session_id,
+        slug: session.slug,
+        utmSource: session.utm_source,
+      })),
+      territoryBySlug,
+    });
     const readingCriteria = buildReadingCriteria(circulation, sourceMap, scorecards);
 
     return {
@@ -278,6 +290,7 @@ async function buildExport(window = 'all') {
       circulation,
       circulationSummary: summarizeCirculation(circulation),
       quickInsights,
+      effectiveRuns,
       qrExperimentSummary,
       feedback: feedback || [],
       audit: {
@@ -346,6 +359,26 @@ async function buildExport(window = 'all') {
       metadata: e.metadata,
     })),
   );
+  const territoryBySlug = Object.fromEntries(
+    Object.values(catalogMap || {}).map((game) => [game.slug, game.territoryScope || 'estado-rj']),
+  );
+  const effectiveRuns = analyzeEffectiveRuns(
+    events.map((e) => ({
+      session_id: e.sessionId,
+      event_name: e.event,
+      slug: e.slug,
+      metadata: e.metadata,
+      created_at: e.createdAt || e.created_at,
+    })),
+    {
+      sessions: sessions.map((s) => ({
+        sessionId: s.sessionId,
+        slug: s.slug,
+        utmSource: s.utm_source,
+      })),
+      territoryBySlug,
+    },
+  );
 
   const sourceMap = {};
   sessions.forEach((s) => {
@@ -369,6 +402,7 @@ async function buildExport(window = 'all') {
     circulation,
     circulationSummary: summarizeCirculation(circulation),
     quickInsights,
+    effectiveRuns,
     qrExperimentSummary,
     audit: {
       recent: [],
@@ -399,7 +433,13 @@ async function main() {
   console.log(JSON.stringify({ source: data.source, outputPath }, null, 2));
 }
 
-main().catch((error) => {
-  console.error('Falha no export:', error?.message || error);
-  process.exit(1);
-});
+module.exports = {
+  buildExport,
+};
+
+if (require.main === module) {
+  main().catch((error) => {
+    console.error('Falha no export:', error?.message || error);
+    process.exit(1);
+  });
+}

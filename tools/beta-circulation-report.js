@@ -50,6 +50,7 @@ function renderMarkdown(data) {
   const scorecards = data.scorecards || [];
   const quickInsights = data.quickInsights || {};
   const qrExperimentSummary = data.qrExperimentSummary || {};
+  const effectiveRuns = data.effectiveRuns || {};
 
   return `# Circulation Report (Tijolo 17)
 
@@ -144,6 +145,33 @@ ${Object.entries(circulation.ctrByPlacement || {})
 
 ## Alertas de amostra
 ${(data.readingCriteria?.warnings || []).map((warning) => `- ${warning}`).join('\n') || '- Sem alertas'}
+
+## Run efetiva (Tijolo 33)
+
+### Scorecards de conversão real
+${Object.values(effectiveRuns.scorecards || {})
+  .map((card) => `- ${card.name}: ${card.effectiveConversions}/${card.totalClicks} (${card.conversionRate}%) [${card.status}]`)
+  .join('\n') || '_Sem dados de run efetiva_'}
+
+### Replay efetivo por jogo (top)
+${(effectiveRuns.topEffectiveReplayByGame || [])
+  .slice(0, 5)
+  .map((row, index) => `${index + 1}. ${row.slug} - ${row.effectiveReplays}/${row.replayClicks} (${row.effectiveReplayRate}%)`)
+  .join('\n') || '_Sem dados_'}
+
+### Cross-game efetivo mais forte
+${(effectiveRuns.crossGameBridges || [])
+  .slice(0, 5)
+  .map((row, index) => `${index + 1}. ${row.from} -> ${row.to} | ${row.effectiveStarts}/${row.clicks} (${row.effectiveRate}%)`)
+  .join('\n') || '_Sem dados_'}
+
+### Direção quick/arcade
+- Quick -> Arcade: ${effectiveRuns.direction?.quickToArcade?.effectiveStarts || 0}/${effectiveRuns.direction?.quickToArcade?.clicks || 0} (${effectiveRuns.direction?.quickToArcade?.effectiveRate || 0}%)
+- Arcade -> Quick: ${effectiveRuns.direction?.arcadeToQuick?.effectiveStarts || 0}/${effectiveRuns.direction?.arcadeToQuick?.clicks || 0} (${effectiveRuns.direction?.arcadeToQuick?.effectiveRate || 0}%)
+- Leitura: ${effectiveRuns.directionWinner || 'balanced'}
+
+### Alertas de baixa amostra (run efetiva)
+${(effectiveRuns.warnings || []).map((warning) => `- ${warning}`).join('\n') || '- Sem alertas'}
 `;
 }
 

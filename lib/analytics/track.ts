@@ -366,3 +366,225 @@ export async function trackArcadeCampaignCtaClick(
     }),
   );
 }
+
+// Front-stage tracking (Tijolo 31)
+export async function trackHomePrimaryPlayClick(game: Game, targetSlug: string, targetType: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'home_primary_play_click',
+      metadata: {
+        targetSlug,
+        targetType,
+        placement: 'home_hero',
+      },
+    }),
+  );
+}
+
+export async function trackHomeArcadeClick(game: Game, arcadeSlug: string, placement: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'home_arcade_click',
+      metadata: {
+        arcadeSlug,
+        placement,
+      },
+    }),
+  );
+}
+
+export async function trackHomeQuickClick(game: Game, quickSlug: string, placement: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'home_quick_click',
+      metadata: {
+        quickSlug,
+        placement,
+      },
+    }),
+  );
+}
+
+export async function trackHomePlayNowBlockClick(game: Game, gameSlug: string, gameType: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'home_play_now_block_click',
+      metadata: {
+        gameSlug,
+        gameType,
+        placement: 'play_now_block',
+      },
+    }),
+  );
+}
+
+export async function trackHomeQuickVsArcadeChoice(game: Game, choice: 'quick' | 'arcade', gameSlug: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'home_quick_vs_arcade_choice',
+      metadata: {
+        choice,
+        gameSlug,
+        placement: 'quick_vs_arcade_block',
+      },
+    }),
+  );
+}
+
+export async function trackArcadeVsQuickPreference(game: Game, choice: 'quick' | 'arcade', gameSlug: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_vs_quick_preference',
+      metadata: {
+        choice,
+        gameSlug,
+        placement: 'quick_vs_arcade_block',
+      },
+    }),
+  );
+}
+
+export async function trackAboveFoldGameClick(game: Game, gameSlug: string, gameType: string, position: number) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'above_fold_game_click',
+      metadata: {
+        gameSlug,
+        gameType,
+        position,
+        placement: 'above_fold',
+      },
+    }),
+  );
+}
+
+export async function trackManifestoExpandClick(game: Game, expanded: boolean, placement: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'manifesto_expand_click',
+      metadata: {
+        expanded,
+        placement,
+      },
+    }),
+  );
+}
+
+export async function trackExplorarArcadeClick(game: Game, arcadeSlug: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'explorar_arcade_click',
+      metadata: {
+        arcadeSlug,
+        placement: 'explorar_arcade_section',
+      },
+    }),
+  );
+}
+
+export async function trackExplorarQuickClick(game: Game, quickSlug: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'explorar_quick_click',
+      metadata: {
+        quickSlug,
+        placement: 'explorar_quick_section',
+      },
+    }),
+  );
+}
+
+export async function trackExplorarFilterChange(game: Game, filterType: string, filterValue: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'explorar_filter_change',
+      metadata: {
+        filterType,
+        filterValue,
+        placement: 'explorar_filters',
+      },
+    }),
+  );
+}
+
+// Tijolo 32: Conversion and replay tracking
+export async function trackCardPreviewInteraction(game: Game, interactionType: 'hover' | 'focus') {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'card_preview_interaction',
+      metadata: {
+        interactionType,
+      },
+    }),
+  );
+}
+
+export async function trackCardFullClick(game: Game, placement: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'card_full_click',
+      metadata: {
+        placement,
+      },
+    }),
+  );
+}
+
+export async function trackClickToPlayTime(game: Game, msSinceClick: number, entryPoint: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'click_to_play_time',
+      metadata: {
+        msSinceClick: Math.max(0, Math.round(msSinceClick)),
+        entryPoint,
+      },
+    }),
+  );
+}
+
+export async function trackReplayAfterRunClick(game: Game, context: 'outcome' | 'arcade_finish') {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'replay_after_run_click',
+      metadata: {
+        context,
+      },
+    }),
+  );
+}
+
+export async function trackNextGameAfterRunClick(game: Game, nextGameSlug: string, context: 'outcome' | 'share') {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'next_game_after_run_click',
+      metadata: {
+        nextGameSlug,
+        context,
+      },
+    }),
+  );
+}
+
+export async function trackQuickToArcadeClick(game: Game, arcadeSlug: string, placement: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'quick_to_arcade_click',
+      metadata: {
+        arcadeSlug,
+        placement,
+      },
+    }),
+  );
+}
+
+export async function trackArcadeToQuickClick(game: Game, quickSlug: string, placement: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'arcade_to_quick_click',
+      metadata: {
+        quickSlug,
+        placement,
+      },
+    }),
+  );
+}

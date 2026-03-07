@@ -10,8 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// Importar lógica de export existente
-const { getQuickInsights } = require('./beta-export.js');
+const { buildExport } = require('./beta-export.js');
 
 const QUICK_GAMES = [
   { slug: 'cidade-em-comum', title: 'Cidade em Comum', serie: 'serie-solucoes-coletivas' },
@@ -74,8 +73,13 @@ async function generateBrief() {
   const currentWeek = getCurrentWeek();
   const weekRec = getWeekRecommendations(currentWeek);
   
-  // Obter insights de quick games
-  const insights = await getQuickInsights('7d');
+  const exportData = await buildExport('7d');
+  const insights = exportData.quickInsights || {};
+  const effectiveRuns = exportData.effectiveRuns || {};
+
+  const quickRows = insights.quickComparison || [];
+  const bySeriesRows = insights.rankedSeries || [];
+  const byTerritoryRows = insights.rankedTerritory || [];
   
   const brief = {
     geradoEm: new Date().toISOString(),
@@ -103,55 +107,110 @@ async function generateBrief() {
     
     // Status de coleta
     statusColeta: {
-      quicks: insights?.byGame || [],
-      series: insights?.bySeries || [],
-      territorios: insights?.byTerritory || [],
-      qrExperimento: insights?.qrExperiment || {},
+      quicks: quickRows,
+      series: bySeriesRows,
+      territorios: byTerritoryRows,
+      qrExperimento: insights?.qrReadout || {},
       statusGeral: insights?.collectionStatus || {},
+    },
+
+    sinaisEfetivos: {
+      scorecards: effectiveRuns.scorecards || {},
+      direction: effectiveRuns.direction || {},
+      directionWinner: effectiveRuns.directionWinner || 'balanced',
+      topRuns: effectiveRuns.topEffectiveRunsByGame || [],
+      topReplays: effectiveRuns.topEffectiveReplayByGame || [],
+      topBridges: effectiveRuns.crossGameBridges || [],
+      byChannel: effectiveRuns.byChannel || [],
+      byTerritory: effectiveRuns.byTerritory || [],
+      warnings: effectiveRuns.warnings || [],
     },
     
     // Recomendação da semana
-    recomendacaoDaSemana: gerarRecomendacao(currentWeek, weekRec, insights),
+    recomendacaoDaSemana: gerarRecomendacao(currentWeek, weekRec, insights, effectiveRuns),
   };
   
   return brief;
 }
 
-function gerarRecomendacao(week, weekRec, insights) {
+function gerarRecomendacao(week, weekRec, insights, effectiveRuns) {
   const recomendacao = {
     acoes: [],
     alertas: [],
     proximosPassos: [],
   };
-  
-  // Ações prioritárias
-  recomendacao.acoes.push(`Distribuir jogos no território: ${weekRec.territorioLabel}`);
-  recomendacao.acoes.push(`Priorizar série: ${weekRec.serieLabel}`);
-  recomendacao.acoes.push(`Focar nos quick games na ordem: ${weekRec.quickLabels.join(', ')}`);
-  recomendacao.acoes.push('Usar canais prioritários: Instagram, WhatsApp, TikTok');
-  
-  // Alertas baseados em insights
-  if (!insights || !insights.byGame || insights.byGame.length === 0) {
-    recomendacao.alertas.push('⚠️ Sem sessões quick na janela 7d - iniciar distribuição imediatamente');
+
+  const scorecards = effectiveRuns?.scorecards || {};
+  const topRuns = (effectiveRuns?.topEffectiveRunsByGame || []).slice(0, 2);
+  const topReplays = (effectiveRuns?.topEffectiveReplayByGame || []).slice(0, 2);
+  const topBridges = (effectiveRuns?.crossGameBridges || []).slice(0, 2);
+  const topChannels = (effectiveRuns?.byChannel || []).slice(0, 2);
+  const topTerritories = (effectiveRuns?.byTerritory || []).slice(0, 2);
+
+  const previewStatus = scorecards.previewToPlay?.status || 'insufficient_data';
+  const replayStatus = scorecards.replayEffectiveness?.status || 'insufficient_data';
+  const crossStatus = scorecards.crossGameEffectiveness?.status || 'insufficient_data';
+  const lowSample = [previewStatus, replayStatus, crossStatus].every((status) => status === 'insufficient_data');
+
+  recomendacao.acoes.push(`Territorio da semana: ${weekRec.territorioLabel}`);
+  recomendacao.acoes.push(`Serie da semana: ${weekRec.serieLabel}`);
+
+  if (topRuns.length > 0) {
+    recomendacao.acoes.push(`Jogo 1o push: ${topRuns[0].slug} (${topRuns[0].effectiveRuns}/${topRuns[0].cardClicks}, ${topRuns[0].effectiveRunRate}%)`);
   } else {
-    // Checar quais quicks estão abaixo da meta
-    insights.byGame.forEach(game => {
-      if (game.sessions < 60) {
-        recomendacao.alertas.push(`⚠️ ${game.gameTitle} abaixo da meta (${game.sessions}/60 sessões)`);
+    recomendacao.acoes.push(`Jogo 1o push: ${weekRec.quicksPrioritarios[0]} (regra de coleta)`);
+  }
+
+  if (topReplays.length > 0) {
+    recomendacao.acoes.push(`Jogo 2o clique: ${topReplays[0].slug} (${topReplays[0].effectiveReplay}/${topReplays[0].replayClicks}, ${topReplays[0].effectiveReplayRate}%)`);
+  } else {
+    recomendacao.acoes.push(`Jogo 2o clique: ${weekRec.quicksPrioritarios[1]} (ainda sem replay efetivo suficiente)`);
+  }
+
+  if (topChannels.length > 0) {
+    recomendacao.acoes.push(`Canal prioritario: ${topChannels[0].channel}`);
+  } else {
+    recomendacao.acoes.push('Canal prioritario: distribuicao equilibrada Instagram/WhatsApp/TikTok');
+  }
+
+  if (topTerritories.length > 0) {
+    recomendacao.acoes.push(`Territorio promissor por run real: ${topTerritories[0].territory}`);
+  }
+
+  if (topBridges.length > 0) {
+    recomendacao.acoes.push(`Direcao promissora: ${topBridges[0].from} -> ${topBridges[0].to}`);
+  } else {
+    recomendacao.acoes.push(`Direcao promissora: ${effectiveRuns?.directionWinner || 'balanced'} (sinal ainda fraco)`);
+  }
+
+  const quickRows = insights?.quickComparison || [];
+  if (!quickRows || quickRows.length === 0) {
+    recomendacao.alertas.push('Sem sessoes quick na janela 7d; iniciar distribuicao imediatamente.');
+  } else {
+    quickRows.forEach((game) => {
+      if ((game.sessions || 0) < 60) {
+        recomendacao.alertas.push(`${game.title || game.slug} abaixo da meta de sessoes (${game.sessions || 0}/60).`);
       }
     });
   }
-  
-  // Próximos passos
-  recomendacao.proximosPassos.push('Abrir pacote de distribuição correspondente ao território da semana');
-  recomendacao.proximosPassos.push('Copiar links prontos e distribuir nos canais prioritários');
-  recomendacao.proximosPassos.push('Checar progresso em /estado no meio e fim da semana');
-  recomendacao.proximosPassos.push(`Rodar 'npm run beta:distribution-report' no fim da semana ${week}`);
-  
-  if (week === 2) {
-    recomendacao.proximosPassos.push('Avaliar amostra consolidada e decisão sobre formato médio (Tijolo 29)');
+
+  if (lowSample) {
+    recomendacao.alertas.push('Scorecards efetivos em `insufficient_data`: nao pivotar formato quick vs arcade nesta semana.');
   }
-  
+
+  if ((effectiveRuns?.warnings || []).length > 0) {
+    recomendacao.alertas.push(`Avisos de amostra: ${(effectiveRuns.warnings || []).join(' | ')}`);
+  }
+
+  recomendacao.proximosPassos.push('Abrir pacote de distribuicao do territorio da semana e iniciar 1o push em ate 48h.');
+  recomendacao.proximosPassos.push('Executar 2o clique no jogo recomendado apos consumo do primeiro link.');
+  recomendacao.proximosPassos.push('Checar /estado no meio e no fim da semana para validar run real por canal e territorio.');
+  recomendacao.proximosPassos.push(`Rodar 'npm run beta:distribution-report' e 'npm run beta:campaign-brief' ao fim da semana ${week}.`);
+
+  if (week === 2) {
+    recomendacao.proximosPassos.push('Com massa critica suficiente, revisar decisao direcional sem expandir escopo de produto.');
+  }
+
   return recomendacao;
 }
 
@@ -201,7 +260,7 @@ function formatAsMarkdown(brief) {
     md += `|------|---------|--------|\n`;
     brief.statusColeta.quicks.forEach(game => {
       const status = game.sessions >= 60 ? '✅' : game.sessions >= 30 ? '🟡' : '🔴';
-      md += `| ${game.gameTitle} | ${game.sessions}/60 | ${status} |\n`;
+      md += `| ${game.title || game.slug} | ${game.sessions}/60 | ${status} |\n`;
     });
     md += `\n`;
   }
@@ -216,6 +275,69 @@ function formatAsMarkdown(brief) {
     });
     md += `\n`;
   }
+
+  // Sinais efetivos de campanha
+  md += `## ⚡ Sinais de Run Efetiva\n\n`;
+  const scorecards = brief.sinaisEfetivos?.scorecards || {};
+  if (Object.keys(scorecards).length === 0) {
+    md += `Sem dados suficientes de run efetiva na janela atual.\n\n`;
+  } else {
+    md += `- Preview -> play efetivo: ${scorecards.previewToPlay?.conversionRate || 0}% (${scorecards.previewToPlay?.status || 'insufficient_data'})\n`;
+    md += `- Replay efetivo: ${scorecards.replayEffectiveness?.conversionRate || 0}% (${scorecards.replayEffectiveness?.status || 'insufficient_data'})\n`;
+    md += `- Next-game start efetivo: ${scorecards.crossGameEffectiveness?.conversionRate || 0}% (${scorecards.crossGameEffectiveness?.status || 'insufficient_data'})\n`;
+    md += `- Quick -> Arcade efetivo: ${scorecards.quickToArcadeEffective?.conversionRate || 0}% (${scorecards.quickToArcadeEffective?.status || 'insufficient_data'})\n`;
+    md += `- Arcade -> Quick efetivo: ${scorecards.arcadeToQuickEffective?.conversionRate || 0}% (${scorecards.arcadeToQuickEffective?.status || 'insufficient_data'})\n`;
+    md += `- Direção dominante: ${brief.sinaisEfetivos?.directionWinner || 'balanced'}\n\n`;
+
+    const topRunGames = (brief.sinaisEfetivos?.topRuns || []).slice(0, 3);
+    if (topRunGames.length > 0) {
+      md += `**Jogos que mais geram run real:**\n`;
+      topRunGames.forEach((row) => {
+        md += `- ${row.slug}: ${row.effectiveRuns}/${row.cardClicks} (${row.effectiveRunRate}%)\n`;
+      });
+      md += `\n`;
+    }
+
+    const topReplayGames = (brief.sinaisEfetivos?.topReplays || []).slice(0, 3);
+    if (topReplayGames.length > 0) {
+      md += `**Jogos que puxam replay de verdade:**\n`;
+      topReplayGames.forEach((row) => {
+        md += `- ${row.slug}: ${row.effectiveReplay}/${row.replayClicks} (${row.effectiveReplayRate}%)\n`;
+      });
+      md += `\n`;
+    }
+
+    const topBridges = (brief.sinaisEfetivos?.topBridges || []).slice(0, 3);
+    if (topBridges.length > 0) {
+      md += `**Jogos que puxam o proximo jogo:**\n`;
+      topBridges.forEach((row) => {
+        md += `- ${row.from} -> ${row.to}: ${row.effectiveStarts}/${row.clicks} (${row.effectiveRate}%)\n`;
+      });
+      md += `\n`;
+    }
+
+    const byChannel = (brief.sinaisEfetivos?.byChannel || []).slice(0, 3);
+    if (byChannel.length > 0) {
+      md += `**Canais com melhor run real:**\n`;
+      byChannel.forEach((row) => {
+        md += `- ${row.channel}: ${row.effectiveRuns}/${row.cardClicks} (${row.effectiveRunRate}%)\n`;
+      });
+      md += `\n`;
+    }
+
+    const byTerritory = (brief.sinaisEfetivos?.byTerritory || []).slice(0, 3);
+    if (byTerritory.length > 0) {
+      md += `**Territorios com melhor run real:**\n`;
+      byTerritory.forEach((row) => {
+        md += `- ${row.territory}: ${row.effectiveRuns}/${row.cardClicks} (${row.effectiveRunRate}%)\n`;
+      });
+      md += `\n`;
+    }
+
+    if ((brief.sinaisEfetivos?.warnings || []).length > 0) {
+      md += `**Avisos de amostra:** ${(brief.sinaisEfetivos.warnings || []).join(' | ')}\n\n`;
+    }
+  }
   
   // Recomendação da semana
   md += `## 💡 Recomendação da Semana\n\n`;
@@ -228,7 +350,7 @@ function formatAsMarkdown(brief) {
   
   if (brief.recomendacaoDaSemana.alertas.length > 0) {
     md += `### Alertas\n\n`;
-    brief.recomendacaoDaSemana.alertas.forEach(alerta => {
+    brief.recomendacaoDaSemana.alertas.forEach((alerta) => {
       md += `- ${alerta}\n`;
     });
     md += `\n`;
