@@ -33,6 +33,31 @@ import styles from './TarifaZeroArcadeGame.module.css';
 
 interface TarifaZeroArcadeGameProps {
   game: Game;
+  previewFinal?: boolean;
+}
+
+function buildPreviewResult(): ArcadeRunResult {
+  return {
+    score: 1420,
+    title: 'Corredor liberado com organizacao popular',
+    summary: 'Voce transformou pressao em forca coletiva e fechou o percurso com o medidor em alta.',
+    campaignLine: 'Tarifa zero e mobilidade como direito no Estado do RJ.',
+    resultId: 'preview-t35f',
+    stats: {
+      apoio: 18,
+      mutiroes: 7,
+      bloqueios: 5,
+      individualismos: 3,
+      collectiveRate: 79,
+      durationMs: 55_000,
+      comboMultiplierPeak: 2.48,
+      perfectStreakPeak: 13_200,
+      apoioSequencePeak: 9,
+      eventsTriggered: 6,
+      totalCollisions: 8,
+      currentPhase: 'final',
+    },
+  };
 }
 
 function formatPhaseLabel(phase?: ArcadeRunResult['stats']['currentPhase']) {
@@ -50,10 +75,10 @@ function formatPhaseLabel(phase?: ArcadeRunResult['stats']['currentPhase']) {
   }
 }
 
-export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
-  const [phase, setPhase] = useState<'intro' | 'running' | 'finished'>('intro');
+export function TarifaZeroArcadeGame({ game, previewFinal = false }: TarifaZeroArcadeGameProps) {
+  const [phase, setPhase] = useState<'intro' | 'running' | 'finished'>(previewFinal ? 'finished' : 'intro');
   const [runId, setRunId] = useState(1);
-  const [result, setResult] = useState<ArcadeRunResult | null>(null);
+  const [result, setResult] = useState<ArcadeRunResult | null>(previewFinal ? buildPreviewResult() : null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const shareHref = useMemo(() => {
@@ -232,17 +257,18 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
   return (
     <div className={styles.wrap}>
       <Card className={`${styles.resultTop} ${styles.resultPremium}`}>
-        <span className="eyebrow">Fim da run</span>
+        <span className="eyebrow">Corredor concluído</span>
         <h3>{result.title}</h3>
         <p>{result.summary}</p>
-        <p className={styles.scoreLine}>Score final: <strong>{result.score}</strong></p>
+        <p className={styles.scoreLine}>Score total: <strong>{result.score}</strong></p>
         <p className={styles.statsLine}>
-          Apoio {result.stats.apoio} • Mutirões {result.stats.mutiroes} • Bloqueios {result.stats.bloqueios} •
-          Coletivo {result.stats.collectiveRate}%
+          Apoio territorial {result.stats.apoio} • Mutirões {result.stats.mutiroes} • Taxa coletiva {result.stats.collectiveRate}% • Combo pico {result.stats.comboMultiplierPeak?.toFixed(2) ?? '1.00'}x
         </p>
         <div className={styles.visualMeta}>
           <span className={styles.visualTag}>{TARIFA_ZERO_VISUAL_VERSION}</span>
           <span className={styles.visualTag}>{TARIFA_ZERO_ASSET_SET}</span>
+          <span className={styles.visualTag}>Premium T35F</span>
+          <span className={styles.visualTag}>SFX base on</span>
         </div>
         <div className={styles.scoreboardGrid}>
           <div className={styles.scoreboardCard}>
@@ -250,7 +276,7 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
             <strong>{result.score}</strong>
           </div>
           <div className={styles.scoreboardCard}>
-            <span>Fase</span>
+            <span>Fase final</span>
             <strong>{formatPhaseLabel(result.stats.currentPhase)}</strong>
           </div>
           <div className={styles.scoreboardCard}>
@@ -263,15 +289,23 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
 
       <div className={styles.finalCardShell}>
         <div className={styles.finalCardHeading}>
-          <span>Final card premium</span>
-          <span>QR e reentrada prontos</span>
+          <span>Card de compartilhamento</span>
+          <span>QR code para reentrada</span>
         </div>
         <div ref={cardRef} className={styles.finalCardFrame}>
           <FinalShareCard
             game={gameForCard}
             resultId={result.resultId}
+            theme="tarifa-zero-premium"
             resultTitle={result.title}
             resultSummary={`${result.campaignLine} ${result.summary}`}
+            metrics={[
+              { label: 'Score', value: String(result.score) },
+              { label: 'Taxa coletiva', value: `${result.stats.collectiveRate}%` },
+              { label: 'Combo pico', value: `${result.stats.comboMultiplierPeak?.toFixed(2) ?? '1.00'}x` },
+            ]}
+            ctaLabel="Tarifa Zero RJ - Corredor do Povo"
+            ctaSecondaryLabel="Escaneie o QR, compare runs e reentre no corredor agora"
             onQrClick={() => {
               void trackFinalCardQRClick(game, result.resultId);
             }}
@@ -281,13 +315,9 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
         </div>
       </div>
 
+      {/* Primary CTAs */}
       <div className={styles.actions}>
-        <Button onClick={restartRun} className={styles.premiumReplayButton}>Jogar de novo</Button>
-        <DownloadCardButton
-          cardContainerRef={cardRef}
-          gameSlug={game.slug}
-          resultId={result.resultId}
-        />
+        <Button onClick={restartRun} className={`${styles.premiumReplayButton} ${styles.replayPulse}`}>Jogar de novo</Button>
         <Link
           href="/arcade/passe-livre-nacional"
           className={`${styles.linkPrimary} ${styles.premiumNextLink}`}
@@ -295,8 +325,16 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
             void trackArcadeCampaignCtaClick(game, 'passe-livre-nacional', 'arcade-next-game');
           }}
         >
-          Proximo jogo
+          Próximo jogo →
         </Link>
+
+        {/* Secondary CTAs */}
+        <DownloadCardButton
+          cardContainerRef={cardRef}
+          gameSlug={game.slug}
+          resultId={result.resultId}
+        />
+
         <Link
           href={shareHref}
           className={styles.linkPrimary}
@@ -304,16 +342,18 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
             void trackArcadeCampaignCtaClick(game, game.slug, 'arcade-post-run-share');
           }}
         >
-          Abrir página de compartilhamento
+          Compartilhar resultado
         </Link>
+
+        {/* Campaign CTA */}
         <Link
           href="/participar"
-          className={styles.linkGhost}
+          className={`${styles.linkGhost} ${styles.campaignCta}`}
           onClick={() => {
             void trackArcadeCampaignCtaClick(game, game.slug, 'arcade-post-run-participar');
           }}
         >
-          Entrar na pré-campanha
+          Participar da campanha →
         </Link>
       </div>
     </div>

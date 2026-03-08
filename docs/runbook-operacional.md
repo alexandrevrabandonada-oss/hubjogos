@@ -42,6 +42,10 @@ Checklist rapido (menos de 3 minutos):
 3. Conferir sinais-chave:
   - ultimo evento remoto visto
   - amostra da janela
+  - estado da linha arcade (`insufficient_sample`/`early_signal`/`directional_lead`/`candidate_flagship`/`ready_for_next_step`)
+  - recomendacao oficial Tarifa vs Mutirao (`arcade_a_leads`/`arcade_b_leads`/`technical_tie`)
+  - status de duelo justo por exposicao (`unbalanced_exposure`/`exposure_correction_in_progress`/`fair_comparison_window`/`decision_ready`)
+  - arcade subexposto e boost recomendado na semana
   - experimentos ativos sem trafego
   - pendencias prioritarias
 4. Rodar `npm run beta:ops` e confirmar o mesmo panorama no terminal.

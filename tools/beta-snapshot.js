@@ -18,6 +18,9 @@ const {
   buildQuickLineInsights,
 } = require('./circulation-utils');
 const { analyzeEffectiveRuns } = require('./effective-runs-utils');
+const { buildMutiraoInsights } = require('./mutirao-report-utils');
+const { buildArcadeRowsFromEvents, buildArcadeLineDecisionFromRows } = require('./arcade-line-utils');
+const { buildArcadeExposureDuelFromEvents } = require('./arcade-exposure-utils');
 
 function loadLocalEnv() {
   const candidates = ['.env.local', '.env'];
@@ -335,6 +338,19 @@ function aggregateFromLocal(registry, window = 'all') {
       territoryBySlug,
     },
   );
+  const normalizedEventRows = events.map((e) => ({
+    session_id: e.sessionId,
+    event_name: e.event,
+    slug: e.slug,
+    engine_kind: e.engineKind,
+    cta_id: e.ctaId,
+    metadata: e.metadata,
+    created_at: e.createdAt || e.created_at,
+  }));
+  const mutiraoInsights = buildMutiraoInsights(normalizedEventRows);
+  const arcadeLineRows = buildArcadeRowsFromEvents(normalizedEventRows);
+  const arcadeLineDecision = buildArcadeLineDecisionFromRows(arcadeLineRows);
+  const arcadeExposureDuel = buildArcadeExposureDuelFromEvents(normalizedEventRows, arcadeLineDecision);
 
   const experimentRows = [];
   sessions.forEach((s) => {
@@ -387,6 +403,9 @@ function aggregateFromLocal(registry, window = 'all') {
     circulation,
     quickInsights,
     effectiveRuns,
+    mutiraoInsights,
+    arcadeLineDecision,
+    arcadeExposureDuel,
     qrExperimentSummary,
     readingCriteria,
     scorecards,
@@ -414,7 +433,7 @@ async function aggregateFromRemote(registry, window = 'all') {
     supabaseSelect('feedback_records', 'select=rating,comment&limit=1000'),
     supabaseSelect(
       'game_events',
-      'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_first_input_time,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click)&limit=10000',
+      'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_run_end,arcade_score,arcade_replay_click,arcade_campaign_cta_click,arcade_first_input_time,mutirao_action_used,mutirao_event_triggered,mutirao_pressure_peak,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click,home_arcade_click,explorar_arcade_click,home_primary_play_click,above_fold_game_click)&limit=10000',
     ),
     supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer,experiments&limit=10000'),
   ]);
@@ -439,6 +458,10 @@ async function aggregateFromRemote(registry, window = 'all') {
     })),
     territoryBySlug,
   });
+  const mutiraoInsights = buildMutiraoInsights(eventRows || []);
+  const arcadeLineRows = buildArcadeRowsFromEvents(eventRows || []);
+  const arcadeLineDecision = buildArcadeLineDecisionFromRows(arcadeLineRows);
+  const arcadeExposureDuel = buildArcadeExposureDuelFromEvents(eventRows || [], arcadeLineDecision);
   const sourceMap = {};
   (sourceRows || []).forEach((row) => {
     sourceMap[row.source] = Number(row.sessions || 0);
@@ -485,6 +508,9 @@ async function aggregateFromRemote(registry, window = 'all') {
     circulation,
     quickInsights,
     effectiveRuns,
+    mutiraoInsights,
+    arcadeLineDecision,
+    arcadeExposureDuel,
     qrExperimentSummary,
     readingCriteria,
     scorecards,
@@ -642,6 +668,81 @@ ${(snapshot.effectiveRuns?.topEffectiveRunsByGame || [])
 
 ### Avisos de baixa amostra
 ${(snapshot.effectiveRuns?.warnings || []).map((warning) => `- ${warning}`).join('\n') || '- Sem alertas de amostra em run efetiva'}
+
+## Mutirao do Bairro - Efetividade (T36C)
+
+- Runs: ${snapshot.mutiraoInsights?.runs || 0}
+- Collapse rate: ${snapshot.mutiraoInsights?.collapseRate || 0}%
+- Score medio: ${snapshot.mutiraoInsights?.avgScore || 0}
+- Pressao media: ${snapshot.mutiraoInsights?.avgPressurePeak || 0}
+- Duracao media: ${Math.round((snapshot.mutiraoInsights?.avgDurationMs || 0) / 1000)}s
+- Replay rate: ${snapshot.mutiraoInsights?.replayRate || 0}%
+- CTA pos-run: ${snapshot.mutiraoInsights?.postRunCtaClicks || 0}
+- Acao dominante: ${snapshot.mutiraoInsights?.mostUsedAction || 'nenhuma'}
+- Diversidade de acao: ${snapshot.mutiraoInsights?.actionDiversity || 0}/100
+
+### Breakdown de acoes
+- reparar: ${snapshot.mutiraoInsights?.actionBreakdown?.reparar || 0}
+- defender: ${snapshot.mutiraoInsights?.actionBreakdown?.defender || 0}
+- mobilizar: ${snapshot.mutiraoInsights?.actionBreakdown?.mobilizar || 0}
+- mutirao: ${snapshot.mutiraoInsights?.actionBreakdown?.mutirao || 0}
+
+### Breakdown de eventos
+- chuva forte: ${snapshot.mutiraoInsights?.eventBreakdown?.chuvaForte || 0}
+- boato de panico: ${snapshot.mutiraoInsights?.eventBreakdown?.boatoPanico || 0}
+- onda solidaria: ${snapshot.mutiraoInsights?.eventBreakdown?.ondaSolidaria || 0}
+- tranco de sabotagem: ${snapshot.mutiraoInsights?.eventBreakdown?.trancoSabotagem || 0}
+
+### Milestones de pressao
+- 55%: ${snapshot.mutiraoInsights?.pressureMilestones?.peak55 || 0}
+- 70%: ${snapshot.mutiraoInsights?.pressureMilestones?.peak70 || 0}
+- 85%: ${snapshot.mutiraoInsights?.pressureMilestones?.peak85 || 0}
+
+### Comparacao vs Tarifa Zero RJ
+- Engajamento: ${snapshot.mutiraoInsights?.comparison?.engagement || 'similar'}
+- Delta score: ${snapshot.mutiraoInsights?.comparison?.scoreDeltaPct || 0}%
+- Delta replay: ${snapshot.mutiraoInsights?.comparison?.replayDeltaPp || 0}pp
+
+## Linha Arcade - Decisao Oficial (T37)
+
+- Estado de decisao: ${snapshot.arcadeLineDecision?.decision?.state || 'insufficient_sample'}
+- Recomendacao: ${snapshot.arcadeLineDecision?.decision?.recommendation || 'insufficient_sample'}
+- Lider da linha: ${snapshot.arcadeLineDecision?.duel?.leader || 'insufficient_sample'}
+- Confianca: ${snapshot.arcadeLineDecision?.duel?.confidence || 'insufficient_sample'}
+- Pronto para proximo passo: ${snapshot.arcadeLineDecision?.decision?.readyForNextStep ? 'sim' : 'nao'}
+- Sumario: ${snapshot.arcadeLineDecision?.decision?.summary || 'Sem leitura consolidada no momento.'}
+
+### Forca de campanha (Tarifa vs Mutirao)
+- Tarifa Zero (score): ${snapshot.arcadeLineDecision?.campaignStrength?.tarifa?.weightedScore || 0}
+- Mutirao (score): ${snapshot.arcadeLineDecision?.campaignStrength?.mutirao?.weightedScore || 0}
+- Vencedor tecnico: ${snapshot.arcadeLineDecision?.campaignStrength?.winner || 'technical_tie'}
+
+### Dimensoes comparadas
+${(snapshot.arcadeLineDecision?.duel?.dimensions || [])
+  .map((dimension) => `- ${dimension.label}: Tarifa ${dimension.tarifaValue} | Mutirao ${dimension.mutiraoValue} | vencedor ${dimension.winner}`)
+  .join('\n') || '_Sem dimensoes comparaveis_'}
+
+### Alertas de amostra
+${(snapshot.arcadeLineDecision?.decision?.warnings || []).map((warning) => `- ${warning}`).join('\n') || '- Sem alertas adicionais'}
+
+## Linha Arcade - duelo justo por exposicao (T38)
+
+- Status: ${snapshot.arcadeExposureDuel?.fairness?.status || 'unbalanced_exposure'}
+- Resumo: ${snapshot.arcadeExposureDuel?.fairness?.summary || 'Sem leitura de exposicao consolidada.'}
+- Gap de exposicao: ${snapshot.arcadeExposureDuel?.fairness?.exposureDeltaPct || 0}pp
+- Gap de share de runs: ${snapshot.arcadeExposureDuel?.fairness?.runsDeltaPct || 0}pp
+- Arcade subexposto: ${snapshot.arcadeExposureDuel?.fairness?.underexposedArcade || 'nenhum'}
+- Boost recomendado: +${snapshot.arcadeExposureDuel?.fairness?.recommendedExposureBoost || 0}
+
+### Liderancas de contexto
+- Volume: ${snapshot.arcadeExposureDuel?.contextLeaders?.volumeLeader || 'technical_tie'}
+- Eficiencia: ${snapshot.arcadeExposureDuel?.contextLeaders?.efficiencyLeader || 'technical_tie'}
+- Forca de campanha: ${snapshot.arcadeExposureDuel?.contextLeaders?.campaignLeader || 'technical_tie'}
+
+### Scorecards de exposicao
+${(snapshot.arcadeExposureDuel?.scorecards || [])
+  .map((row) => `- ${row.slug}: exposicao ${row.exposureSignals}, interesse ${row.intentClicks}, starts ${row.starts}, starts efetivos ${row.effectiveStarts}, expo->start ${row.exposureToStartRate}%`)
+  .join('\n') || '- Sem scorecards por arcade'}
 
 ## Scorecards de Experimento
 ${snapshot.scorecards

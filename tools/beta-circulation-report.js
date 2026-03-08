@@ -51,6 +51,9 @@ function renderMarkdown(data) {
   const quickInsights = data.quickInsights || {};
   const qrExperimentSummary = data.qrExperimentSummary || {};
   const effectiveRuns = data.effectiveRuns || {};
+  const mutiraoInsights = data.mutiraoInsights || {};
+  const arcadeLineDecision = data.arcadeLineDecision || {};
+  const arcadeExposureDuel = data.arcadeExposureDuel || {};
 
   return `# Circulation Report (Tijolo 17)
 
@@ -172,6 +175,75 @@ ${(effectiveRuns.crossGameBridges || [])
 
 ### Alertas de baixa amostra (run efetiva)
 ${(effectiveRuns.warnings || []).map((warning) => `- ${warning}`).join('\n') || '- Sem alertas'}
+
+## Mutirao do Bairro (T36C)
+- Runs: ${mutiraoInsights.runs || 0}
+- Collapse rate: ${mutiraoInsights.collapseRate || 0}%
+- Score medio: ${mutiraoInsights.avgScore || 0}
+- Pressao media: ${mutiraoInsights.avgPressurePeak || 0}
+- Duracao media: ${Math.round((mutiraoInsights.avgDurationMs || 0) / 1000)}s
+- Replay rate: ${mutiraoInsights.replayRate || 0}%
+- CTA pos-run: ${mutiraoInsights.postRunCtaClicks || 0}
+- Acao dominante: ${mutiraoInsights.mostUsedAction || 'nenhuma'}
+- Diversidade de acao: ${mutiraoInsights.actionDiversity || 0}/100
+
+### Mutirao action breakdown
+- reparar: ${mutiraoInsights.actionBreakdown?.reparar || 0}
+- defender: ${mutiraoInsights.actionBreakdown?.defender || 0}
+- mobilizar: ${mutiraoInsights.actionBreakdown?.mobilizar || 0}
+- mutirao: ${mutiraoInsights.actionBreakdown?.mutirao || 0}
+
+### Mutirao pressure milestones
+- 55%: ${mutiraoInsights.pressureMilestones?.peak55 || 0}
+- 70%: ${mutiraoInsights.pressureMilestones?.peak70 || 0}
+- 85%: ${mutiraoInsights.pressureMilestones?.peak85 || 0}
+
+### Comparacao com Tarifa Zero RJ
+- Engajamento: ${mutiraoInsights.comparison?.engagement || 'similar'}
+- Delta score: ${mutiraoInsights.comparison?.scoreDeltaPct || 0}%
+- Delta replay: ${mutiraoInsights.comparison?.replayDeltaPp || 0}pp
+
+## Linha Arcade - decisao comparativa (T37)
+- Estado: ${arcadeLineDecision.decision?.state || 'insufficient_sample'}
+- Recomendacao: ${arcadeLineDecision.decision?.recommendation || 'insufficient_sample'}
+- Lider: ${arcadeLineDecision.duel?.leader || 'insufficient_sample'}
+- Confianca: ${arcadeLineDecision.duel?.confidence || 'insufficient_sample'}
+- Pronto para proximo passo: ${arcadeLineDecision.decision?.readyForNextStep ? 'sim' : 'nao'}
+- Sumario: ${arcadeLineDecision.decision?.summary || 'Sem leitura consolidada no momento.'}
+
+### Forca de campanha
+- Tarifa score: ${arcadeLineDecision.campaignStrength?.tarifa?.weightedScore || 0}
+- Mutirao score: ${arcadeLineDecision.campaignStrength?.mutirao?.weightedScore || 0}
+- Vencedor tecnico: ${arcadeLineDecision.campaignStrength?.winner || 'technical_tie'}
+
+### Dimensoes oficiais
+${(arcadeLineDecision.duel?.dimensions || [])
+  .map((dimension) => `- ${dimension.label}: Tarifa ${dimension.tarifaValue} | Mutirao ${dimension.mutiraoValue} | vencedor ${dimension.winner}`)
+  .join('\n') || '_Sem dimensoes comparaveis_'}
+
+### Alertas
+${(arcadeLineDecision.decision?.warnings || []).map((warning) => `- ${warning}`).join('\n') || '- Sem alertas adicionais'}
+
+## Linha Arcade - duelo justo por exposicao (T38)
+- Status: ${arcadeExposureDuel.fairness?.status || 'unbalanced_exposure'}
+- Resumo: ${arcadeExposureDuel.fairness?.summary || 'Sem leitura de exposicao consolidada.'}
+- Gap de exposicao: ${arcadeExposureDuel.fairness?.exposureDeltaPct || 0}pp
+- Gap de share de runs: ${arcadeExposureDuel.fairness?.runsDeltaPct || 0}pp
+- Arcade subexposto: ${arcadeExposureDuel.fairness?.underexposedArcade || 'nenhum'}
+- Boost recomendado: +${arcadeExposureDuel.fairness?.recommendedExposureBoost || 0}
+
+### Liderancas de contexto
+- Lider por volume: ${arcadeExposureDuel.contextLeaders?.volumeLeader || 'technical_tie'}
+- Lider por eficiencia: ${arcadeExposureDuel.contextLeaders?.efficiencyLeader || 'technical_tie'}
+- Lider por forca de campanha: ${arcadeExposureDuel.contextLeaders?.campaignLeader || 'technical_tie'}
+
+### Scorecards de exposicao
+${(arcadeExposureDuel.scorecards || [])
+  .map((row) => `- ${row.slug}: exposicao ${row.exposureSignals}, interesse ${row.intentClicks}, starts ${row.starts}, starts efetivos ${row.effectiveStarts}, expo->start ${row.exposureToStartRate}%, share ${row.shareOfExposure}%`)
+  .join('\n') || '_Sem dados por arcade_'}
+
+### Acoes corretivas
+${(arcadeExposureDuel.fairness?.actions || []).map((action) => `- ${action}`).join('\n') || '- Sem acoes adicionais'}
 `;
 }
 

@@ -1,5 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 56" fill="none">
-  <rect x="2" y="2" width="296" height="52" rx="14" fill="#0B1D2B" fill-opacity="0.78" stroke="#F9CF4A" stroke-width="4"/>
+  <defs>
+    <linearGradient id="eventBg" x1="150" x2="150" y1="2" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123D59" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#0B1D2B" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="296" height="52" rx="14" fill="url(#eventBg)" stroke="#F9CF4A" stroke-width="4"/>
   <path d="M18 28H66" stroke="#7CE0AE" stroke-width="4" stroke-linecap="round"/>
   <path d="M234 28H282" stroke="#7CE0AE" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="80" cy="28" r="3" fill="#7CE0AE" fill-opacity="0.72"/>
+  <circle cx="220" cy="28" r="3" fill="#7CE0AE" fill-opacity="0.72"/>
 </svg>

@@ -1,0 +1,5 @@
+<svg width="320" height="48" viewBox="0 0 320 48" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="316" height="44" rx="10" fill="#0F1E2B" stroke="#C9F27B"/>
+  <rect x="10" y="18" width="220" height="12" rx="6" fill="#7FD36E"/>
+  <text x="238" y="28" fill="#F0F5FF" font-size="12" font-family="Arial, sans-serif">ESTAVEL</text>
+</svg>

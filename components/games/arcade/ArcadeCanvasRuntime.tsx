@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createArcadeAudioController } from '@/lib/games/arcade/audio/arcade-audio';
+import { playTarifaZeroRuntimeSfx } from '@/lib/games/arcade/audio/tarifa-zero-sfx';
 import type {
   ArcadeGameLogic,
   ArcadeInputKind,
   ArcadeInputSnapshot,
+  ArcadeRuntimeEvent,
   ArcadeRunResult,
 } from '@/lib/games/arcade/types';
 import styles from './ArcadeCanvasRuntime.module.css';
@@ -15,8 +18,19 @@ interface ArcadeCanvasRuntimeProps<State> {
   onRunEnd: (result: ArcadeRunResult) => void;
   onFirstInput: (elapsedMs: number, kind: ArcadeInputKind) => void;
   onPowerupCollect?: (powerupId: string) => void;
+  onRuntimeEvent?: (event: ArcadeRuntimeEvent) => void;
   hudBadge?: string;
   hudDetail?: string;
+  scoreLabel?: string;
+  canvasAriaLabel?: string;
+  hintText?: string;
+  controlScheme?: 'lane' | 'hotspot';
+  actionLabels?: {
+    one: string;
+    two: string;
+    three: string;
+    special: string;
+  };
 }
 
 interface InputBuffer {
@@ -24,6 +38,10 @@ interface InputBuffer {
   rightHeld: boolean;
   leftPressed: boolean;
   rightPressed: boolean;
+  actionOnePressed: boolean;
+  actionTwoPressed: boolean;
+  actionThreePressed: boolean;
+  specialPressed: boolean;
   pausePressed: boolean;
   restartPressed: boolean;
   pointerLane: number | null;
@@ -36,6 +54,10 @@ function defaultInputBuffer(): InputBuffer {
     rightHeld: false,
     leftPressed: false,
     rightPressed: false,
+    actionOnePressed: false,
+    actionTwoPressed: false,
+    actionThreePressed: false,
+    specialPressed: false,
     pausePressed: false,
     restartPressed: false,
     pointerLane: null,
@@ -49,6 +71,10 @@ function consumeSnapshot(buffer: InputBuffer): ArcadeInputSnapshot {
     moveRight: buffer.rightHeld,
     moveLeftPressed: buffer.leftPressed,
     moveRightPressed: buffer.rightPressed,
+    actionOnePressed: buffer.actionOnePressed,
+    actionTwoPressed: buffer.actionTwoPressed,
+    actionThreePressed: buffer.actionThreePressed,
+    specialPressed: buffer.specialPressed,
     pausePressed: buffer.pausePressed,
     restartPressed: buffer.restartPressed,
     pointerLane: buffer.pointerLane,
@@ -57,6 +83,10 @@ function consumeSnapshot(buffer: InputBuffer): ArcadeInputSnapshot {
 
   buffer.leftPressed = false;
   buffer.rightPressed = false;
+  buffer.actionOnePressed = false;
+  buffer.actionTwoPressed = false;
+  buffer.actionThreePressed = false;
+  buffer.specialPressed = false;
   buffer.pausePressed = false;
   buffer.restartPressed = false;
   buffer.pointerLane = null;
@@ -70,6 +100,10 @@ function getSnapshotInputKind(snapshot: ArcadeInputSnapshot): ArcadeInputKind | 
     snapshot.moveRight ||
     snapshot.moveLeftPressed ||
     snapshot.moveRightPressed ||
+    snapshot.actionOnePressed ||
+    snapshot.actionTwoPressed ||
+    snapshot.actionThreePressed ||
+    snapshot.specialPressed ||
     snapshot.pointerLane !== null;
 
   if (!hasInput) {
@@ -109,8 +143,14 @@ export function ArcadeCanvasRuntime<State>({
   onRunEnd,
   onFirstInput,
   onPowerupCollect,
+  onRuntimeEvent,
   hudBadge,
   hudDetail,
+  scoreLabel = 'Score',
+  canvasAriaLabel = 'Jogo arcade Tarifa Zero',
+  hintText = 'Toque nos cards ou use teclado (A/D, setas) • P pausa • R reinicia • M som',
+  controlScheme = 'lane',
+  actionLabels,
 }: ArcadeCanvasRuntimeProps<State>) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -123,8 +163,21 @@ export function ArcadeCanvasRuntime<State>({
   const firstInputTrackedRef = useRef(false);
   const [paused, setPaused] = useState(false);
   const [score, setScore] = useState(0);
+  const [muted, setMuted] = useState(false);
 
   const inputBuffer = useMemo(() => defaultInputBuffer(), []);
+  const audio = useMemo(() => createArcadeAudioController(), []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const stored = window.localStorage.getItem('arcade-sfx-muted');
+    const initialMuted = stored === '1';
+    audio.setMuted(initialMuted);
+    setMuted(initialMuted);
+  }, [audio]);
 
   useEffect(() => {
     setPaused(false);
@@ -181,9 +234,33 @@ export function ArcadeCanvasRuntime<State>({
         inputBuffer.pausePressed = true;
         inputBuffer.lastInputKind = 'keyboard';
       }
+      if (key === '1') {
+        inputBuffer.actionOnePressed = true;
+        inputBuffer.lastInputKind = 'keyboard';
+      }
+      if (key === '2') {
+        inputBuffer.actionTwoPressed = true;
+        inputBuffer.lastInputKind = 'keyboard';
+      }
+      if (key === '3') {
+        inputBuffer.actionThreePressed = true;
+        inputBuffer.lastInputKind = 'keyboard';
+      }
+      if (key === ' ') {
+        inputBuffer.specialPressed = true;
+        inputBuffer.lastInputKind = 'keyboard';
+        event.preventDefault();
+      }
       if (key === 'r') {
         inputBuffer.restartPressed = true;
         inputBuffer.lastInputKind = 'keyboard';
+      }
+      if (key === 'm') {
+        const nextMuted = audio.toggleMute();
+        setMuted(nextMuted);
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem('arcade-sfx-muted', nextMuted ? '1' : '0');
+        }
       }
     };
 
@@ -228,12 +305,26 @@ export function ArcadeCanvasRuntime<State>({
       const inputKind = getSnapshotInputKind(snapshot);
       if (!firstInputTrackedRef.current && inputKind) {
         firstInputTrackedRef.current = true;
+        audio.arm();
         onFirstInput(elapsedRef.current, inputKind);
+      }
+
+      if (!pausedRef.current && (
+        snapshot.moveLeftPressed ||
+        snapshot.moveRightPressed ||
+        snapshot.actionOnePressed ||
+        snapshot.actionTwoPressed ||
+        snapshot.actionThreePressed ||
+        snapshot.specialPressed ||
+        snapshot.pointerLane !== null
+      )) {
+        audio.play('move');
       }
 
       if (snapshot.pausePressed) {
         pausedRef.current = !pausedRef.current;
         setPaused(pausedRef.current);
+        audio.play(pausedRef.current ? 'pause' : 'resume');
       }
 
       if (snapshot.restartPressed) {
@@ -256,9 +347,11 @@ export function ArcadeCanvasRuntime<State>({
 
         if (tick.events) {
           for (const item of tick.events) {
+            onRuntimeEvent?.(item);
             if (item.type === 'powerup_collect') {
               onPowerupCollect?.(item.powerupId);
             }
+            playTarifaZeroRuntimeSfx(audio, item);
           }
         }
 
@@ -280,6 +373,7 @@ export function ArcadeCanvasRuntime<State>({
 
       if (logic.isFinished(stateRef.current, { elapsedMs: elapsedRef.current })) {
         finishedRef.current = true;
+        audio.play('run-end');
         onRunEnd(logic.buildResult(stateRef.current));
         return;
       }
@@ -298,28 +392,57 @@ export function ArcadeCanvasRuntime<State>({
         window.cancelAnimationFrame(frameRef.current);
       }
     };
-  }, [logic, onFirstInput, onPowerupCollect, onRunEnd, runId, inputBuffer]);
+  }, [audio, logic, onFirstInput, onPowerupCollect, onRunEnd, onRuntimeEvent, runId, inputBuffer]);
 
   function triggerMoveLeft() {
+    audio.arm();
     inputBuffer.leftPressed = true;
     inputBuffer.lastInputKind = 'virtual';
   }
 
   function triggerMoveRight() {
+    audio.arm();
     inputBuffer.rightPressed = true;
     inputBuffer.lastInputKind = 'virtual';
   }
 
   function triggerPause() {
+    audio.arm();
     inputBuffer.pausePressed = true;
     inputBuffer.lastInputKind = 'virtual';
+  }
+
+  function triggerAction(kind: 'one' | 'two' | 'three' | 'special') {
+    audio.arm();
+    if (kind === 'one') {
+      inputBuffer.actionOnePressed = true;
+    }
+    if (kind === 'two') {
+      inputBuffer.actionTwoPressed = true;
+    }
+    if (kind === 'three') {
+      inputBuffer.actionThreePressed = true;
+    }
+    if (kind === 'special') {
+      inputBuffer.specialPressed = true;
+    }
+    inputBuffer.lastInputKind = 'virtual';
+  }
+
+  function toggleMute() {
+    audio.arm();
+    const nextMuted = audio.toggleMute();
+    setMuted(nextMuted);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('arcade-sfx-muted', nextMuted ? '1' : '0');
+    }
   }
 
   return (
     <div className={styles.runtime} ref={wrapperRef}>
       <div className={styles.hudTop}>
         <div className={styles.hudScore}>
-          <span className={styles.hudLabel}>Score</span>
+          <span className={styles.hudLabel}>{scoreLabel}</span>
           <span className={styles.hudValue}>{score}</span>
         </div>
         {hudBadge || hudDetail ? (
@@ -331,24 +454,45 @@ export function ArcadeCanvasRuntime<State>({
         <div className={styles.hudStatus}>
           {paused ? '⏸ Pausado' : '▶ Em jogo'}
         </div>
-      </div>
-      <canvas ref={canvasRef} className={styles.canvas} aria-label="Jogo arcade Tarifa Zero" />
-      <div className={styles.touchControls}>
-        <button type="button" onClick={triggerMoveLeft} className={styles.controlButton} aria-label="Mover para esquerda">
-          <span className={styles.controlIcon}>←</span>
-          <span className={styles.controlLabel}>Esquerda</span>
-        </button>
-        <button type="button" onClick={triggerPause} className={`${styles.controlButton} ${styles.controlPause}`} aria-label="Pausar jogo">
-          {paused ? '▶' : '⏸'}
-        </button>
-        <button type="button" onClick={triggerMoveRight} className={styles.controlButton} aria-label="Mover para direita">
-          <span className={styles.controlIcon}>→</span>
-          <span className={styles.controlLabel}>Direita</span>
+        <button type="button" className={styles.soundToggle} onClick={toggleMute} aria-label="Alternar som">
+          {muted ? 'Som: off' : 'Som: on'}
         </button>
       </div>
-      <p className={styles.hint}>
-        Toque nos cards ou use teclado (A/D, setas) • P pausa • R reinicia
-      </p>
+      <canvas ref={canvasRef} className={styles.canvas} aria-label={canvasAriaLabel} />
+      {controlScheme === 'hotspot' ? (
+        <div className={styles.actionControls}>
+          <button type="button" onClick={() => triggerAction('one')} className={styles.actionButton} aria-label={actionLabels?.one || 'Acao 1'}>
+            {actionLabels?.one || 'Acao 1'}
+          </button>
+          <button type="button" onClick={() => triggerAction('two')} className={styles.actionButton} aria-label={actionLabels?.two || 'Acao 2'}>
+            {actionLabels?.two || 'Acao 2'}
+          </button>
+          <button type="button" onClick={() => triggerAction('three')} className={styles.actionButton} aria-label={actionLabels?.three || 'Acao 3'}>
+            {actionLabels?.three || 'Acao 3'}
+          </button>
+          <button type="button" onClick={() => triggerAction('special')} className={`${styles.actionButton} ${styles.actionSpecial}`} aria-label={actionLabels?.special || 'Acao especial'}>
+            {actionLabels?.special || 'Especial'}
+          </button>
+          <button type="button" onClick={triggerPause} className={`${styles.actionButton} ${styles.actionPause}`} aria-label="Pausar jogo">
+            {paused ? 'Retomar' : 'Pausar'}
+          </button>
+        </div>
+      ) : (
+        <div className={styles.touchControls}>
+          <button type="button" onClick={triggerMoveLeft} className={styles.controlButton} aria-label="Mover para esquerda">
+            <span className={styles.controlIcon}>←</span>
+            <span className={styles.controlLabel}>Esquerda</span>
+          </button>
+          <button type="button" onClick={triggerPause} className={`${styles.controlButton} ${styles.controlPause}`} aria-label="Pausar jogo">
+            {paused ? '▶' : '⏸'}
+          </button>
+          <button type="button" onClick={triggerMoveRight} className={styles.controlButton} aria-label="Mover para direita">
+            <span className={styles.controlIcon}>→</span>
+            <span className={styles.controlLabel}>Direita</span>
+          </button>
+        </div>
+      )}
+      <p className={styles.hint}>{hintText}</p>
     </div>
   );
 }

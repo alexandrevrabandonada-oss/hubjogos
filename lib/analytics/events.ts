@@ -45,6 +45,9 @@ export type AnalyticsEventName =
   | 'arcade_replay_click'
   | 'arcade_powerup_collect'
   | 'arcade_campaign_cta_click'
+  | 'mutirao_action_used'
+  | 'mutirao_event_triggered'
+  | 'mutirao_pressure_peak'
   // Front-stage tracking (Tijolo 31)
   | 'home_primary_play_click'
   | 'home_arcade_click'

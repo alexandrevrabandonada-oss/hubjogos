@@ -76,6 +76,9 @@ async function generateBrief() {
   const exportData = await buildExport('7d');
   const insights = exportData.quickInsights || {};
   const effectiveRuns = exportData.effectiveRuns || {};
+  const arcadeLineDecision = exportData.arcadeLineDecision || {};
+  const arcadeExposureDuel = exportData.arcadeExposureDuel || {};
+  const arcadeConvergenceScorecard = exportData.arcadeConvergenceScorecard || {};
 
   const quickRows = insights.quickComparison || [];
   const bySeriesRows = insights.rankedSeries || [];
@@ -125,15 +128,28 @@ async function generateBrief() {
       byTerritory: effectiveRuns.byTerritory || [],
       warnings: effectiveRuns.warnings || [],
     },
-    
+
+    linhaArcade: {
+      estado: arcadeLineDecision?.decision?.state || 'insufficient_sample',
+      recomendacao: arcadeLineDecision?.decision?.recommendation || 'insufficient_sample',
+      lider: arcadeLineDecision?.duel?.leader || 'insufficient_sample',
+      confianca: arcadeLineDecision?.duel?.confidence || 'insufficient_sample',
+      prontoParaProximoPasso: Boolean(arcadeLineDecision?.decision?.readyForNextStep),
+      resumo: arcadeLineDecision?.decision?.summary || 'Sem leitura consolidada no momento.',
+      forcaCampanha: arcadeLineDecision?.campaignStrength || {},
+      dimensoes: arcadeLineDecision?.duel?.dimensions || [],
+      alertas: arcadeLineDecision?.decision?.warnings || [],
+      dueloJusto: arcadeExposureDuel || {},
+      convergenciaDecisao: arcadeConvergenceScorecard || {}, // T39
+    },
     // Recomendação da semana
-    recomendacaoDaSemana: gerarRecomendacao(currentWeek, weekRec, insights, effectiveRuns),
+    recomendacaoDaSemana: gerarRecomendacao(currentWeek, weekRec, insights, effectiveRuns, arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard),
   };
   
   return brief;
 }
 
-function gerarRecomendacao(week, weekRec, insights, effectiveRuns) {
+function gerarRecomendacao(week, weekRec, insights, effectiveRuns, arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard) {
   const recomendacao = {
     acoes: [],
     alertas: [],
@@ -151,6 +167,12 @@ function gerarRecomendacao(week, weekRec, insights, effectiveRuns) {
   const replayStatus = scorecards.replayEffectiveness?.status || 'insufficient_data';
   const crossStatus = scorecards.crossGameEffectiveness?.status || 'insufficient_data';
   const lowSample = [previewStatus, replayStatus, crossStatus].every((status) => status === 'insufficient_data');
+  const arcadeState = arcadeLineDecision?.decision?.state || 'insufficient_sample';
+  const arcadeRecommendation = arcadeLineDecision?.decision?.recommendation || 'insufficient_sample';
+  const fairStatus = arcadeExposureDuel?.fairness?.status || 'unbalanced_exposure';
+  const underexposedArcade = arcadeExposureDuel?.fairness?.underexposedArcade;
+  const recommendedBoost = arcadeExposureDuel?.fairness?.recommendedExposureBoost || 0;
+  const arcadeLeader = arcadeLineDecision?.duel?.leader || 'insufficient_sample';
 
   recomendacao.acoes.push(`Territorio da semana: ${weekRec.territorioLabel}`);
   recomendacao.acoes.push(`Serie da semana: ${weekRec.serieLabel}`);
@@ -183,6 +205,43 @@ function gerarRecomendacao(week, weekRec, insights, effectiveRuns) {
     recomendacao.acoes.push(`Direcao promissora: ${effectiveRuns?.directionWinner || 'balanced'} (sinal ainda fraco)`);
   }
 
+  if (arcadeRecommendation === 'arcade_a_leads') {
+    recomendacao.acoes.push('Arcade lider da semana: Tarifa Zero RJ - Corredor do Povo.');
+  } else if (arcadeRecommendation === 'arcade_b_leads') {
+    recomendacao.acoes.push('Arcade lider da semana: Mutirao do Bairro.');
+  } else if (arcadeRecommendation === 'technical_tie') {
+    recomendacao.acoes.push('Arcade em empate tecnico: manter distribuicao comparavel Tarifa vs Mutirao.');
+  } else {
+    recomendacao.acoes.push('Arcade sem amostra minima: foco em coletar runs comparaveis antes de pivotar.');
+  }
+
+  if (fairStatus === 'unbalanced_exposure' || fairStatus === 'exposure_correction_in_progress') {
+    recomendacao.acoes.push(`Correcao de exposicao arcade: aumentar ${underexposedArcade || 'o arcade subexposto'} em +${recommendedBoost} sinais nesta semana.`);
+  } else {
+    recomendacao.acoes.push('Duelo arcade em janela justa: comparar volume e eficiencia sem vies de vitrine.');
+  }
+
+  // T39: Convergência de decisão
+  const convergenceState = arcadeConvergenceScorecard?.confidence?.state || 'insufficient_fair_sample';
+  const alignedDimensions = arcadeConvergenceScorecard?.convergence?.alignedDimensions || 0;
+  const convergenceFinalScore = arcadeConvergenceScorecard?.confidence?.finalScore || 0;
+  const readyToDecide = arcadeConvergenceScorecard?.decision?.readyToDecide || false;
+  const convergenceRecommendedLeader = arcadeConvergenceScorecard?.decision?.recommendedLeader || 'maintain parity';
+
+  if (convergenceState === 'insufficient_fair_sample') {
+    recomendacao.alertas.push('T39 - Amostra ainda insuficiente ou exposição desequilibrada para decisão confiável.');
+  } else if (convergenceState === 'fair_sample_but_divergent') {
+    recomendacao.alertas.push(`T39 - Amostra justa, mas líderes divergem em múltiplas dimensões. Avaliar qualidade antes de decidir.`);
+  } else if (convergenceState === 'directional_alignment') {
+    recomendacao.acoes.push(`T39 - Sinais alinhados em ${alignedDimensions}/6 dimensões (${convergenceFinalScore}/100). Monitorar consolidação.`);
+  } else if (convergenceState === 'decision_candidate') {
+    recomendacao.acoes.push(`T39 - Convergência forte em ${alignedDimensions}/6 dimensões (${convergenceFinalScore}/100). Recomendación: ${convergenceRecommendedLeader}.`);
+    recomendacao.proximosPassos.push('Validar convergência T39 por mais 7 dias antes de concentrar distribuição em um arcade.');
+  } else if (convergenceState === 'ready_for_next_step') {
+    recomendacao.acoes.push(`T39 - Convergência forte e confiável (${alignedDimensions}/6, ${convergenceFinalScore}/100). Arcade pronto: ${convergenceRecommendedLeader}.`);
+    recomendacao.proximosPassos.push(`T39 aprovado para T40: ${convergenceRecommendedLeader} é arcade focal com segurança operacional alta.`);
+  }
+
   const quickRows = insights?.quickComparison || [];
   if (!quickRows || quickRows.length === 0) {
     recomendacao.alertas.push('Sem sessoes quick na janela 7d; iniciar distribuicao imediatamente.');
@@ -198,6 +257,18 @@ function gerarRecomendacao(week, weekRec, insights, effectiveRuns) {
     recomendacao.alertas.push('Scorecards efetivos em `insufficient_data`: nao pivotar formato quick vs arcade nesta semana.');
   }
 
+  if (arcadeState === 'insufficient_sample') {
+    recomendacao.alertas.push('Linha arcade com amostra insuficiente para declarar vencedor oficial Tarifa vs Mutirao.');
+  }
+
+  if (fairStatus === 'unbalanced_exposure') {
+    recomendacao.alertas.push('Duelo arcade com vies de exposicao. Equalizar vitrine antes de interpretar vencedor oficial.');
+  }
+
+  if ((arcadeLineDecision?.decision?.warnings || []).length > 0) {
+    recomendacao.alertas.push(`Arcade/T37: ${(arcadeLineDecision.decision.warnings || []).join(' | ')}`);
+  }
+
   if ((effectiveRuns?.warnings || []).length > 0) {
     recomendacao.alertas.push(`Avisos de amostra: ${(effectiveRuns.warnings || []).join(' | ')}`);
   }
@@ -206,6 +277,16 @@ function gerarRecomendacao(week, weekRec, insights, effectiveRuns) {
   recomendacao.proximosPassos.push('Executar 2o clique no jogo recomendado apos consumo do primeiro link.');
   recomendacao.proximosPassos.push('Checar /estado no meio e no fim da semana para validar run real por canal e territorio.');
   recomendacao.proximosPassos.push(`Rodar 'npm run beta:distribution-report' e 'npm run beta:campaign-brief' ao fim da semana ${week}.`);
+
+  if (arcadeLineDecision?.decision?.readyForNextStep) {
+    recomendacao.proximosPassos.push(`Linha arcade pronta para proximo passo: ${arcadeLeader}. Avaliar consolidacao como flagship sem abrir novo produto.`);
+  } else {
+    recomendacao.proximosPassos.push('Linha arcade ainda em consolidacao: manter duelo Tarifa vs Mutirao na mesma vitrine e metas de coleta.');
+  }
+
+  if (fairStatus === 'unbalanced_exposure' || fairStatus === 'exposure_correction_in_progress') {
+    recomendacao.proximosPassos.push('Executar pacote corretivo de exposicao arcade e reavaliar status de duelo justo em 7 dias.');
+  }
 
   if (week === 2) {
     recomendacao.proximosPassos.push('Com massa critica suficiente, revisar decisao direcional sem expandir escopo de produto.');
@@ -341,6 +422,67 @@ function formatAsMarkdown(brief) {
   
   // Recomendação da semana
   md += `## 💡 Recomendação da Semana\n\n`;
+
+  // Linha arcade comparativa
+  md += `## 🕹️ Linha Arcade - Decisão Oficial (T37)\n\n`;
+  md += `- **Estado:** ${brief.linhaArcade?.estado || 'insufficient_sample'}\n`;
+  md += `- **Recomendação:** ${brief.linhaArcade?.recomendacao || 'insufficient_sample'}\n`;
+  md += `- **Líder:** ${brief.linhaArcade?.lider || 'insufficient_sample'}\n`;
+  md += `- **Confiança:** ${brief.linhaArcade?.confianca || 'insufficient_sample'}\n`;
+  md += `- **Pronto para próximo passo:** ${brief.linhaArcade?.prontoParaProximoPasso ? 'sim' : 'não'}\n`;
+  md += `- **Resumo:** ${brief.linhaArcade?.resumo || 'Sem leitura consolidada no momento.'}\n\n`;
+
+  const arcadeStrength = brief.linhaArcade?.forcaCampanha || {};
+  md += `**Força de campanha (score):**\n`;
+  md += `- Tarifa Zero: ${arcadeStrength?.tarifa?.weightedScore || 0}\n`;
+  md += `- Mutirão: ${arcadeStrength?.mutirao?.weightedScore || 0}\n`;
+  md += `- Vencedor técnico: ${arcadeStrength?.winner || 'technical_tie'}\n\n`;
+
+  if ((brief.linhaArcade?.dimensoes || []).length > 0) {
+    md += `**Dimensões comparadas:**\n`;
+    brief.linhaArcade.dimensoes.forEach((dimension) => {
+      md += `- ${dimension.label}: Tarifa ${dimension.tarifaValue} | Mutirão ${dimension.mutiraoValue} | vencedor ${dimension.winner}\n`;
+    });
+    md += `\n`;
+  }
+
+  if ((brief.linhaArcade?.alertas || []).length > 0) {
+    md += `**Alertas de amostra:** ${(brief.linhaArcade.alertas || []).join(' | ')}\n\n`;
+  }
+
+  const dueloJusto = brief.linhaArcade?.dueloJusto || {};
+  md += `### Duelo Justo por Exposição (T38)\n\n`;
+  md += `- Status: ${dueloJusto.fairness?.status || 'unbalanced_exposure'}\n`;
+  md += `- Resumo: ${dueloJusto.fairness?.summary || 'Sem leitura de exposição consolidada.'}\n`;
+  md += `- Gap de exposição: ${dueloJusto.fairness?.exposureDeltaPct || 0}pp\n`;
+  md += `- Arcade subexposto: ${dueloJusto.fairness?.underexposedArcade || 'nenhum'}\n`;
+  md += `- Boost recomendado: +${dueloJusto.fairness?.recommendedExposureBoost || 0}\n`;
+  md += `- Líder por volume: ${dueloJusto.contextLeaders?.volumeLeader || 'technical_tie'}\n`;
+  md += `- Líder por eficiência: ${dueloJusto.contextLeaders?.efficiencyLeader || 'technical_tie'}\n`;
+  md += `- Líder por força de campanha: ${dueloJusto.contextLeaders?.campaignLeader || 'technical_tie'}\n\n`;
+
+  if ((dueloJusto.scorecards || []).length > 0) {
+    md += `**Scorecards por arcade:**\n`;
+    dueloJusto.scorecards.forEach((row) => {
+      md += `- ${row.slug}: exposição ${row.exposureSignals}, interesse ${row.intentClicks}, starts ${row.starts}, exposição->start ${row.exposureToStartRate}%\n`;
+    });
+    md += `\n`;
+  }
+
+  const convergencia = brief.linhaArcade?.convergenciaDecisao || {};
+  md += `### Decisão de Convergência (T39)\n\n`;
+  md += `- Estado: ${convergencia.confidence?.state || 'insufficient_fair_sample'}\n`;
+  md += `- Escore: ${convergencia.confidence?.finalScore || 0}/100\n`;
+  md += `- Dimensões alinhadas: ${convergencia.convergence?.alignedDimensions || 0}/${convergencia.convergence?.totalDimensions || 6}\n`;
+  md += `- Pronto para decidir?: ${convergencia.decision?.readyToDecide ? 'Sim' : 'Não'}\n`;
+  md += `- Líder recomendado: ${convergencia.decision?.recommendedLeader || 'maintain parity'}\n`;
+  md += `- Rationale: ${convergencia.decision?.rationale || 'Sem leitura consolidada.'}\n`;
+  
+  if ((convergencia.convergence?.divergentDimensions || []).length > 0) {
+    md += `- Dimensões divergentes: ${(convergencia.convergence?.divergentDimensions || []).join(', ')}\n`;
+  }
+  
+  md += `\n`;
   
   md += `### Ações Prioritárias\n\n`;
   brief.recomendacaoDaSemana.acoes.forEach(acao => {

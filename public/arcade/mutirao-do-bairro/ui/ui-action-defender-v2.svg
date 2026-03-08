@@ -1,0 +1,32 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="defenseGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#5BA3D0" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#5BA3D0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Glow de fundo -->
+  <circle cx="32" cy="32" r="30" fill="url(#defenseGlow)"/>
+  
+  <!-- Frame octogonal defensivo -->
+  <polygon points="32,6 44,12 50,24 50,40 44,52 32,58 20,52 14,40 14,24 20,12" 
+           fill="none" stroke="#5BA3D0" stroke-width="3"/>
+  
+  <!-- Escudo comunitario central -->
+  <path d="M 32 14 L 42 20 L 42 36 Q 42 44 32 50 Q 22 44 22 36 L 22 20 Z" 
+        fill="#5BA3D0" opacity="0.7"/>
+  
+  <!-- Tres pontos de apoio (protecao coletiva) -->
+  <circle cx="32" cy="26" r="3" fill="#123D59"/>
+  <circle cx="26" cy="36" r="3" fill="#123D59"/>
+  <circle cx="38" cy="36" r="3" fill="#123D59"/>
+  
+  <!-- Linhas de conexao -->
+  <line x1="32" y1="26" x2="26" y2="36" stroke="#C9F27B" stroke-width="2"/>
+  <line x1="32" y1="26" x2="38" y2="36" stroke="#C9F27B" stroke-width="2"/>
+  <line x1="26" y1="36" x2="38" y2="36" stroke="#C9F27B" stroke-width="2"/>
+  
+  <!-- Simbolo de resistencia -->
+  <path d="M 32 32 L 32 42" stroke="#7FD36E" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

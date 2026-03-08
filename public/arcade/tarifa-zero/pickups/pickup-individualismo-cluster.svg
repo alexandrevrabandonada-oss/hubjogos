@@ -1,0 +1,26 @@
+<svg width="60" height="52" viewBox="0 0 60 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Pickup: Individualismo Cluster -->
+  <!-- Three individualism tokens clustered together -->
+  
+  <!-- Left token -->
+  <circle cx="15" cy="26" r="12" fill="#9db3c4" stroke="#b8c5d0" stroke-width="2"/>
+  <circle cx="15" cy="26" r="8" fill="#b8c5d0" opacity="0.4"/>
+  <path d="M15 20 L15 32 M9 26 L21 26" stroke="#7a8d9f" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Center token (slightly elevated) -->
+  <circle cx="30" cy="18" r="12" fill="#9db3c4" stroke="#b8c5d0" stroke-width="2"/>
+  <circle cx="30" cy="18" r="8" fill="#b8c5d0" opacity="0.4"/>
+  <path d="M30 12 L30 24 M24 18 L36 18" stroke="#7a8d9f" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Right token -->
+  <circle cx="45" cy="26" r="12" fill="#9db3c4" stroke="#b8c5d0" stroke-width="2"/>
+  <circle cx="45" cy="26" r="8" fill="#b8c5d0" opacity="0.4"/>
+  <path d="M45 20 L45 32 M39 26 L51 26" stroke="#7a8d9f" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Connection indicators (subtle) -->
+  <line x1="23" y1="24" x2="22" y2="21" stroke="#b8c5d0" stroke-width="1.5" opacity="0.3"/>
+  <line x1="37" y1="21" x2="38" y2="24" stroke="#b8c5d0" stroke-width="1.5" opacity="0.3"/>
+  
+  <!-- Shadow/depth -->
+  <ellipse cx="30" cy="44" rx="22" ry="4" fill="rgba(123, 141, 159, 0.15)"/>
+</svg>

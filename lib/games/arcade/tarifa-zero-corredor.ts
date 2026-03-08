@@ -2,6 +2,7 @@ import { generateId } from '@/lib/storage/local-session';
 import type {
   ArcadeGameLogic,
   ArcadeInputSnapshot,
+  ArcadeRuntimeEvent,
   ArcadeRunResult,
   ArcadeTickResult,
 } from './types';
@@ -42,6 +43,12 @@ interface RunEventState {
   active: RunEvent;
   timeLeftMs: number;
   triggered: boolean;
+}
+
+interface PhaseTransitionState {
+  from: RunPhase | null;
+  to: RunPhase | null;
+  timeLeftMs: number;
 }
 
 export interface TarifaZeroState {
@@ -99,6 +106,7 @@ export interface TarifaZeroState {
   laneFlashMs: number;
   lastFlashLane: number | null; // Which lane had the collision (for lane-specific flash)
   recentFeedback: RecentFeedback[];
+  phaseTransition: PhaseTransitionState;
 }
 
 const LANE_COUNT = 3;
@@ -159,6 +167,60 @@ function getPhaseMotionFactor(phase: RunPhase) {
     case 'final':
       return 1.5;
   }
+}
+
+function wave(value: number, amplitude: number, frequency = 1) {
+  return Math.sin(value * frequency) * amplitude;
+}
+
+function getEntityMotionProfile(entity: TarifaEntity, elapsedMs: number) {
+  const time = (elapsedMs + entity.ageMs * 1.35) / 1000;
+
+  if (entity.type.startsWith('apoio')) {
+    return {
+      bobY: wave(time, 2.8, 4.8),
+      rotation: wave(time, 0.045, 2.8),
+      scale: 1 + Math.sin(time * 4.5) * 0.04,
+    };
+  }
+
+  if (entity.type.startsWith('mutirao')) {
+    return {
+      bobY: wave(time, 3.4, 5.5),
+      rotation: wave(time, 0.035, 2.2),
+      scale: 1 + Math.sin(time * 5.2) * 0.055,
+    };
+  }
+
+  if (entity.type.startsWith('chance')) {
+    return {
+      bobY: wave(time, 4.4, 6),
+      rotation: wave(time, 0.08, 3.5),
+      scale: 1 + Math.sin(time * 6.5) * 0.08,
+    };
+  }
+
+  if (entity.type.startsWith('individualismo')) {
+    return {
+      bobY: wave(time, 2.2, 4.2),
+      rotation: wave(time, 0.06, 3.2),
+      scale: 1 + Math.sin(time * 5.4) * 0.035,
+    };
+  }
+
+  if (isHazardEntity(entity.type)) {
+    return {
+      bobY: wave(time, 1.5, 3.6),
+      rotation: wave(time, 0.03, 2.4),
+      scale: 1 + Math.sin(time * 4) * 0.025,
+    };
+  }
+
+  return {
+    bobY: 0,
+    rotation: 0,
+    scale: 1,
+  };
 }
 
 // === PHASE & EVENT SYSTEM ===
@@ -456,7 +518,7 @@ function applyInput(state: TarifaZeroState, input: ArcadeInputSnapshot) {
 
 interface CollisionResult {
   state: Partial<TarifaZeroState>;
-  event?: { type: 'powerup_collect'; powerupId: string };
+  events?: ArcadeRuntimeEvent[];
 }
 
 // Helper to create feedback with position for particle rendering
@@ -476,7 +538,7 @@ function processEntityCollision(
   entity: TarifaEntity,
   activeEvent: RunEventState
 ): CollisionResult {
-  const result: CollisionResult = { state: {} };
+  const result: CollisionResult = { state: {}, events: [] };
   const baseMultiplier = state.comboMultiplier;
   const eventModifier = activeEvent.active === 'mutirao-ativo' ? 1.5 : 1;
   const finalMultiplier = baseMultiplier * eventModifier;
@@ -524,7 +586,8 @@ function processEntityCollision(
     result.state.score = state.score + Math.round(28 * eventModifier);
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
     result.state.lastCollectLane = entity.lane;
-    result.event = { type: 'powerup_collect', powerupId: 'mutirao-popular' };
+    result.events?.push({ type: 'powerup_collect', powerupId: 'mutirao-popular' });
+    result.events?.push({ type: 'special_event', eventId: 'mutirao-popular' });
   }
   
   if (entity.type === 'mutirao-bairro') {
@@ -538,7 +601,8 @@ function processEntityCollision(
     result.state.score = state.score + Math.round((35 + bonusForMovement) * eventModifier);
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
     result.state.lastCollectLane = entity.lane;
-    result.event = { type: 'powerup_collect', powerupId: 'mutirao-bairro' };
+    result.events?.push({ type: 'powerup_collect', powerupId: 'mutirao-bairro' });
+    result.events?.push({ type: 'special_event', eventId: 'mutirao-bairro' });
   }
   
   if (entity.type === 'mutirao-sindical') {
@@ -549,7 +613,8 @@ function processEntityCollision(
     result.state.score = state.score + Math.round(40 * eventModifier);
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
     result.state.lastCollectLane = entity.lane;
-    result.event = { type: 'powerup_collect', powerupId: 'mutirao-sindical' };
+    result.events?.push({ type: 'powerup_collect', powerupId: 'mutirao-sindical' });
+    result.events?.push({ type: 'special_event', eventId: 'mutirao-sindical' });
   }
   
   // BLOQUEIO TYPES (break streak, flash damage)
@@ -562,6 +627,7 @@ function processEntityCollision(
     result.state.perfectStreakMs = 0; // Break perfect streak
     result.state.apoioSequenceCount = 0; // Break apoio sequence
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
+    result.events?.push({ type: 'collision', severity: 'light', hazardId: entity.type });
   }
   
   if (entity.type === 'bloqueio-pesado') {
@@ -575,6 +641,7 @@ function processEntityCollision(
     result.state.perfectStreakMs = 0;
     result.state.apoioSequenceCount = 0;
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
+    result.events?.push({ type: 'collision', severity: 'heavy', hazardId: entity.type });
   }
   
   if (entity.type === 'bloqueio-sequencia') {
@@ -588,6 +655,7 @@ function processEntityCollision(
     result.state.perfectStreakMs = 0;
     result.state.apoioSequenceCount = 0;
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
+    result.events?.push({ type: 'collision', severity: 'light', hazardId: entity.type });
   }
   
   if (entity.type === 'zona-pressao') {
@@ -600,6 +668,7 @@ function processEntityCollision(
     result.state.lastFlashLane = entity.lane;
     // Don't break perfect streak (you chose to traverse)
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
+    result.events?.push({ type: 'collision', severity: 'light', hazardId: entity.type });
   }
   
   // INDIVIDUALISMO TYPES (score gain, meter loss, break sequence)
@@ -640,7 +709,8 @@ function processEntityCollision(
     result.state.comboMultiplier = Math.max(state.comboMultiplier, 2.0);
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
     result.state.lastCollectLane = entity.lane;
-    result.event = { type: 'powerup_collect', powerupId: 'chance-coletiva' };
+    result.events?.push({ type: 'powerup_collect', powerupId: 'chance-coletiva' });
+    result.events?.push({ type: 'special_event', eventId: 'chance-coletiva' });
   }
   
   if (entity.type === 'chance-virada') {
@@ -652,7 +722,8 @@ function processEntityCollision(
     result.state.comboMultiplier = 2.5;
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
     result.state.lastCollectLane = entity.lane;
-    result.event = { type: 'powerup_collect', powerupId: 'chance-virada' };
+    result.events?.push({ type: 'powerup_collect', powerupId: 'chance-virada' });
+    result.events?.push({ type: 'special_event', eventId: 'chance-virada' });
   }
   
   if (entity.type === 'chance-abertura') {
@@ -669,7 +740,8 @@ function processEntityCollision(
         timeLeftMs: activeEvent.timeLeftMs + 2_000,
       };
     }
-    result.event = { type: 'powerup_collect', powerupId: 'chance-abertura' };
+    result.events?.push({ type: 'powerup_collect', powerupId: 'chance-abertura' });
+    result.events?.push({ type: 'special_event', eventId: 'chance-abertura' });
   }
   
   return result;
@@ -858,6 +930,107 @@ function getEventTheme(event: RunEvent) {
   }
 }
 
+function getPhaseTransitionProgress(state: TarifaZeroState) {
+  if (!state.phaseTransition.to || state.phaseTransition.timeLeftMs <= 0) {
+    return 0;
+  }
+
+  return clamp(1 - state.phaseTransition.timeLeftMs / 1500, 0, 1);
+}
+
+function drawLaneImpactOverlay(
+  canvasCtx: CanvasRenderingContext2D,
+  state: TarifaZeroState,
+  width: number,
+  height: number,
+  laneWidth: number,
+) {
+  const flash = state.laneFlashMs > 0 ? state.laneFlashMs / 320 : 0;
+  if (flash <= 0) {
+    return;
+  }
+
+  const flashLane = state.lastFlashLane ?? state.playerLane;
+  const laneX = flashLane * laneWidth;
+  const centerX = laneX + laneWidth / 2;
+  const centerY = height * PLAYER_COLLISION_Y_RATIO;
+  const pulse = 1 - flash;
+
+  const laneGradient = canvasCtx.createLinearGradient(laneX, 0, laneX + laneWidth, 0);
+  laneGradient.addColorStop(0, `rgba(244, 95, 95, ${flash * 0.04})`);
+  laneGradient.addColorStop(0.5, `rgba(255, 128, 128, ${flash * 0.32})`);
+  laneGradient.addColorStop(1, `rgba(244, 95, 95, ${flash * 0.04})`);
+  canvasCtx.fillStyle = laneGradient;
+  canvasCtx.fillRect(laneX + 4, 0, laneWidth - 8, height);
+
+  const shock = canvasCtx.createRadialGradient(centerX, centerY, 10, centerX, centerY, laneWidth * (0.35 + pulse * 0.7));
+  shock.addColorStop(0, `rgba(255, 210, 210, ${flash * 0.42})`);
+  shock.addColorStop(0.4, `rgba(244, 95, 95, ${flash * 0.24})`);
+  shock.addColorStop(1, 'rgba(244, 95, 95, 0)');
+  canvasCtx.fillStyle = shock;
+  canvasCtx.fillRect(laneX - laneWidth * 0.35, centerY - laneWidth * 0.8, laneWidth * 1.7, laneWidth * 1.6);
+
+  canvasCtx.strokeStyle = `rgba(255, 216, 216, ${flash * 0.45})`;
+  canvasCtx.lineWidth = 3;
+  canvasCtx.beginPath();
+  canvasCtx.arc(centerX, centerY, 24 + pulse * 42, 0, Math.PI * 2);
+  canvasCtx.stroke();
+
+  canvasCtx.strokeStyle = `rgba(255, 130, 130, ${flash * 0.34})`;
+  canvasCtx.lineWidth = 2;
+  canvasCtx.beginPath();
+  canvasCtx.arc(centerX, centerY, 34 + pulse * 70, 0, Math.PI * 2);
+  canvasCtx.stroke();
+
+  canvasCtx.fillStyle = `rgba(255, 108, 108, ${flash * 0.12})`;
+  canvasCtx.fillRect(0, 0, width, height);
+}
+
+function drawPhaseTransitionOverlay(
+  canvasCtx: CanvasRenderingContext2D,
+  state: TarifaZeroState,
+  width: number,
+  height: number,
+) {
+  if (!state.phaseTransition.to || state.phaseTransition.timeLeftMs <= 0) {
+    return;
+  }
+
+  const progress = getPhaseTransitionProgress(state);
+  const intro = progress < 0.5 ? progress / 0.5 : (1 - progress) / 0.5;
+  const phaseTheme = getPhaseTheme(state.phaseTransition.to);
+  const overlayAlpha = 0.08 + intro * 0.18;
+  const accentAlpha = 0.14 + intro * 0.3;
+
+  const wash = canvasCtx.createLinearGradient(0, 0, 0, height);
+  wash.addColorStop(0, `rgba(8, 18, 29, ${overlayAlpha * 0.65})`);
+  wash.addColorStop(0.42, `rgba(${hexToRgb(phaseTheme.color)}, ${overlayAlpha})`);
+  wash.addColorStop(1, `rgba(8, 18, 29, ${overlayAlpha * 0.72})`);
+  canvasCtx.fillStyle = wash;
+  canvasCtx.fillRect(0, 0, width, height);
+
+  const bandHeight = 86;
+  const bandY = height * 0.22 + wave(progress, 6, Math.PI);
+  canvasCtx.fillStyle = `rgba(8, 18, 29, ${0.42 + intro * 0.18})`;
+  fillRoundedRect(canvasCtx, 24, bandY, width - 48, bandHeight, 24);
+  canvasCtx.strokeStyle = `rgba(${hexToRgb(phaseTheme.color)}, ${accentAlpha})`;
+  canvasCtx.lineWidth = 3;
+  strokeRoundedRect(canvasCtx, 24, bandY, width - 48, bandHeight, 24);
+
+  const sweepWidth = width * (0.18 + progress * 0.42);
+  canvasCtx.fillStyle = `rgba(${hexToRgb(phaseTheme.color)}, ${0.06 + intro * 0.1})`;
+  fillRoundedRect(canvasCtx, width * 0.5 - sweepWidth / 2, bandY + 10, sweepWidth, bandHeight - 20, 18);
+
+  canvasCtx.fillStyle = phaseTheme.color;
+  canvasCtx.textAlign = 'center';
+  canvasCtx.textBaseline = 'middle';
+  canvasCtx.font = '700 11px system-ui, sans-serif';
+  canvasCtx.fillText('TRANSICAO DE FASE', width / 2, bandY + 24);
+  canvasCtx.fillStyle = '#f0f5ff';
+  canvasCtx.font = '700 18px system-ui, sans-serif';
+  canvasCtx.fillText(phaseTheme.label, width / 2, bandY + 52);
+}
+
 function drawBackground(
   canvasCtx: CanvasRenderingContext2D,
   state: TarifaZeroState,
@@ -865,6 +1038,7 @@ function drawBackground(
   height: number,
   laneWidth: number,
 ) {
+  const elapsedSec = state.elapsedMs / 1000;
   const background = canvasCtx.createLinearGradient(0, 0, 0, height);
   background.addColorStop(0, '#08121d');
   background.addColorStop(0.45, '#123d59');
@@ -872,15 +1046,18 @@ function drawBackground(
   canvasCtx.fillStyle = background;
   canvasCtx.fillRect(0, 0, width, height);
 
-  drawTarifaZeroAsset(canvasCtx, 'bg-skyline-far', 0, 0, width, height, { alpha: 0.95 });
-  drawTarifaZeroAsset(canvasCtx, 'bg-skyline-mid', 0, 0, width, height, { alpha: 0.98 });
+  const farDrift = wave(elapsedSec, 6, 0.2);
+  const midDrift = wave(elapsedSec, 9, 0.28);
+  drawTarifaZeroAsset(canvasCtx, 'bg-skyline-far', farDrift, -2, width, height, { alpha: 0.95 });
+  drawTarifaZeroAsset(canvasCtx, 'bg-skyline-mid', midDrift, 2, width, height, { alpha: 0.98 });
   drawTarifaZeroAsset(canvasCtx, 'bg-corredor-road', 0, 0, width, height, { alpha: 1 });
 
   const motionFactor = getPhaseMotionFactor(state.currentPhase);
   const streakOffset = (state.elapsedMs * 0.24 * motionFactor) % 56;
 
   const haze = canvasCtx.createLinearGradient(0, 0, 0, height * 0.38);
-  haze.addColorStop(0, 'rgba(255, 239, 183, 0.2)');
+  const hazeAlpha = 0.16 + Math.max(0, wave(elapsedSec, 0.06, 0.8));
+  haze.addColorStop(0, `rgba(255, 239, 183, ${hazeAlpha})`);
   haze.addColorStop(1, 'rgba(255, 239, 183, 0)');
   canvasCtx.fillStyle = haze;
   canvasCtx.fillRect(0, 0, width, height * 0.38);
@@ -939,27 +1116,30 @@ function drawSpawnTelegraph(
 function drawEntitySprite(
   canvasCtx: CanvasRenderingContext2D,
   entity: TarifaEntity,
+  state: TarifaZeroState,
   width: number,
 ) {
+  const motion = getEntityMotionProfile(entity, state.elapsedMs);
   const x = laneCenterX(entity.lane, width);
+  const entityY = entity.y + motion.bobY;
 
   drawSpawnTelegraph(canvasCtx, entity, width);
 
   canvasCtx.fillStyle = 'rgba(8, 18, 29, 0.22)';
   canvasCtx.beginPath();
-  canvasCtx.ellipse(x, entity.y + 21, 18, 7, 0, 0, Math.PI * 2);
+  canvasCtx.ellipse(x, entityY + 21, 18 * motion.scale, 7 * motion.scale, 0, 0, Math.PI * 2);
   canvasCtx.fill();
 
   if (entity.type === 'apoio') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio', x - 26, entity.y - 26, 52, 52)) {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio', x - 26, entityY - 26, 52, 52, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
-    const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, 15);
+    const gradient = canvasCtx.createRadialGradient(x, entityY, 0, x, entityY, 15);
     gradient.addColorStop(0, '#7ce0ae');
     gradient.addColorStop(1, '#5bc893');
     canvasCtx.fillStyle = gradient;
     canvasCtx.beginPath();
-    canvasCtx.arc(x, entity.y, 14, 0, Math.PI * 2);
+    canvasCtx.arc(x, entityY, 14 * motion.scale, 0, Math.PI * 2);
     canvasCtx.fill();
     canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
     canvasCtx.lineWidth = 2;
@@ -968,73 +1148,79 @@ function drawEntitySprite(
   }
 
   if (entity.type === 'apoio-cadeia') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio-cadeia', x - 34, entity.y - 24, 68, 48)) {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio-cadeia', x - 34, entityY - 24, 68, 48, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#94e9bc';
     canvasCtx.beginPath();
-    canvasCtx.arc(x - 10, entity.y, 12, 0, Math.PI * 2);
-    canvasCtx.arc(x + 10, entity.y, 12, 0, Math.PI * 2);
+    canvasCtx.arc(x - 10, entityY, 12, 0, Math.PI * 2);
+    canvasCtx.arc(x + 10, entityY, 12, 0, Math.PI * 2);
     canvasCtx.fill();
     return;
   }
 
   if (entity.type === 'apoio-territorial') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio-territorial', x - 29, entity.y - 29, 58, 58)) {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio-territorial', x - 29, entityY - 29, 58, 58, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#6fd1f0';
     canvasCtx.beginPath();
-    canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
+    canvasCtx.arc(x, entityY, 16, 0, Math.PI * 2);
     canvasCtx.fill();
     return;
   }
 
   if (entity.type === 'bloqueio') {
-    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-catraca', x - 28, entity.y - 28, 56, 56)) {
+    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-catraca', x - 28, entityY - 28, 56, 56, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#f45f5f';
-    canvasCtx.fillRect(x - 16, entity.y - 16, 32, 32);
+    canvasCtx.fillRect(x - 16, entityY - 16, 32, 32);
     return;
   }
 
   if (entity.type === 'bloqueio-pesado') {
-    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 34, entity.y - 30, 68, 60)) {
+    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 34, entityY - 30, 68, 60, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#d84545';
-    canvasCtx.fillRect(x - 20, entity.y - 20, 40, 40);
+    canvasCtx.fillRect(x - 20, entityY - 20, 40, 40);
     return;
   }
 
   if (entity.type === 'bloqueio-sequencia') {
-    const drewTop = drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 26, entity.y - 34, 52, 24);
-    const drewBottom = drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 26, entity.y + 8, 52, 24);
+    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-bloqueio-sequencia', x - 26, entityY - 30, 52, 60, { scaleX: motion.scale, scaleY: motion.scale })) {
+      return;
+    }
+
+    // Fallback: compose two barriers
+    const drewTop = drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 26, entityY - 34, 52, 24, { scaleX: motion.scale, scaleY: motion.scale });
+    const drewBottom = drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 26, entityY + 8, 52, 24, { scaleX: motion.scale, scaleY: motion.scale });
     if (drewTop && drewBottom) {
       canvasCtx.strokeStyle = 'rgba(244, 95, 95, 0.8)';
       canvasCtx.lineWidth = 2;
       canvasCtx.setLineDash([3, 3]);
       canvasCtx.beginPath();
-      canvasCtx.moveTo(x, entity.y - 8);
-      canvasCtx.lineTo(x, entity.y + 8);
+      canvasCtx.moveTo(x, entityY - 8);
+      canvasCtx.lineTo(x, entityY + 8);
       canvasCtx.stroke();
       canvasCtx.setLineDash([]);
       return;
     }
+
     canvasCtx.fillStyle = '#f47575';
-    canvasCtx.fillRect(x - 14, entity.y - 22, 28, 14);
-    canvasCtx.fillRect(x - 14, entity.y + 8, 28, 14);
+    canvasCtx.fillRect(x - 14, entityY - 22, 28, 14);
+    canvasCtx.fillRect(x - 14, entityY + 8, 28, 14);
     return;
   }
 
   if (entity.type === 'zona-pressao') {
     const rectHeight = entity.height || 60;
-    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-zona-pressao', x - 24, entity.y - rectHeight / 2, 48, rectHeight)) {
+    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-zona-pressao', x - 24, entityY - rectHeight / 2, 48, rectHeight, { scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = 'rgba(244, 95, 95, 0.25)';
-    canvasCtx.fillRect(x - 18, entity.y - rectHeight / 2, 36, rectHeight);
+    canvasCtx.fillRect(x - 18, entityY - rectHeight / 2, 36, rectHeight);
     return;
   }
 
@@ -1045,39 +1231,45 @@ function drawEntitySprite(
       ? 'pickup-mutirao-sindical'
       : 'pickup-mutirao';
 
-    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 28, entity.y - 28, 56, 56)) {
+    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 28, entityY - 28, 56, 56, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#ffd765';
     canvasCtx.beginPath();
-    canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
+    canvasCtx.arc(x, entityY, 16 * motion.scale, 0, Math.PI * 2);
     canvasCtx.fill();
     return;
   }
 
   if (entity.type === 'individualismo' || entity.type === 'individualismo-tentador') {
     const assetKey = entity.type === 'individualismo-tentador' ? 'pickup-individualismo-tentador' : 'pickup-individualismo';
-    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 24, entity.y - 24, 48, 48)) {
+    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 24, entityY - 24, 48, 48, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#b8c5d0';
     canvasCtx.beginPath();
-    canvasCtx.arc(x, entity.y, 13, 0, Math.PI * 2);
+    canvasCtx.arc(x, entityY, 13 * motion.scale, 0, Math.PI * 2);
     canvasCtx.fill();
     return;
   }
 
   if (entity.type === 'individualismo-cluster') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 30, entity.y - 22, 24, 24)) {
-      drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 12, entity.y - 26, 24, 24);
-      drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x + 6, entity.y - 22, 24, 24);
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo-cluster', x - 30, entityY - 26, 60, 52, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
+
+    // Fallback: compose three individual tokens
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 30, entityY - 22, 24, 24, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
+      drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 12, entityY - 26, 24, 24, { rotation: -motion.rotation, scaleX: motion.scale, scaleY: motion.scale });
+      drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x + 6, entityY - 22, 24, 24, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale });
+      return;
+    }
+
     const positions = [{ dx: -10, dy: -6 }, { dx: 10, dy: -6 }, { dx: 0, dy: 8 }];
     for (const pos of positions) {
       canvasCtx.fillStyle = '#b8c5d0';
       canvasCtx.beginPath();
-      canvasCtx.arc(x + pos.dx, entity.y + pos.dy, 8, 0, Math.PI * 2);
+      canvasCtx.arc(x + pos.dx, entityY + pos.dy, 8, 0, Math.PI * 2);
       canvasCtx.fill();
     }
     return;
@@ -1085,23 +1277,23 @@ function drawEntitySprite(
 
   if (entity.type === 'chance' || entity.type === 'chance-abertura') {
     const assetKey = entity.type === 'chance-abertura' ? 'pickup-chance-abertura' : 'pickup-chance-rara';
-    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 30, entity.y - 30, 60, 60)) {
+    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 30, entityY - 30, 60, 60, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#00d9ff';
     canvasCtx.beginPath();
-    canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
+    canvasCtx.arc(x, entityY, 16 * motion.scale, 0, Math.PI * 2);
     canvasCtx.fill();
     return;
   }
 
   if (entity.type === 'chance-virada') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-chance-virada', x - 30, entity.y - 30, 60, 60)) {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-chance-virada', x - 30, entityY - 30, 60, 60, { rotation: motion.rotation, scaleX: motion.scale, scaleY: motion.scale })) {
       return;
     }
     canvasCtx.fillStyle = '#ffd700';
     canvasCtx.beginPath();
-    canvasCtx.arc(x, entity.y, 18, 0, Math.PI * 2);
+    canvasCtx.arc(x, entityY, 18 * motion.scale, 0, Math.PI * 2);
     canvasCtx.fill();
   }
 }
@@ -1112,6 +1304,7 @@ function drawHud(
   width: number,
   height: number,
 ) {
+  const elapsedSec = state.elapsedMs / 1000;
   const progress = clamp(state.elapsedMs / RUN_DURATION_MS, 0, 1);
   const barMargin = 14;
   const barWidth = width - 2 * barMargin;
@@ -1134,6 +1327,8 @@ function drawHud(
     canvasCtx.fillStyle = progressGradient;
     fillRoundedRect(canvasCtx, barMargin + 4, 16, barWidth - 8, barHeight - 8, 8);
   }
+  canvasCtx.fillStyle = `rgba(255, 255, 255, ${0.08 + Math.max(0, wave(elapsedSec, 0.06, 2.6))})`;
+  fillRoundedRect(canvasCtx, barMargin + 26 + ((barWidth - 88) * progress * 0.6), 15, 48, barHeight - 2, 9);
   canvasCtx.restore();
 
   const phaseTheme = getPhaseTheme(state.currentPhase);
@@ -1146,6 +1341,9 @@ function drawHud(
     canvasCtx.textBaseline = 'middle';
     canvasCtx.fillText(phaseTheme.label, phaseBadgeX + phaseBadgeWidth / 2, 56);
   }
+  canvasCtx.strokeStyle = `rgba(249, 207, 74, ${0.24 + Math.max(0, wave(elapsedSec, 0.08, 2.2))})`;
+  canvasCtx.lineWidth = 2;
+  strokeRoundedRect(canvasCtx, phaseBadgeX + 2, 44, phaseBadgeWidth - 4, 24, 12);
 
   const meterHeight = height * 0.32;
   const meterWidth = 26;
@@ -1168,6 +1366,10 @@ function drawHud(
   meterGradient.addColorStop(1, '#ffd765');
   canvasCtx.fillStyle = meterGradient;
   fillRoundedRect(canvasCtx, meterX + 5, meterY + meterHeight - 6 - fillHeight, meterWidth - 10, fillHeight, 8);
+  if (fillHeight > 14) {
+    canvasCtx.fillStyle = `rgba(255, 255, 255, ${0.1 + Math.max(0, wave(elapsedSec, 0.08, 2.8))})`;
+    fillRoundedRect(canvasCtx, meterX + 7, meterY + meterHeight - 10 - fillHeight, meterWidth - 14, 8, 4);
+  }
 
   canvasCtx.fillStyle = '#f0f5ff';
   canvasCtx.font = '700 10px system-ui, sans-serif';
@@ -1206,7 +1408,8 @@ function drawHud(
 
   if (state.comboTimerMs > 0) {
     const comboIntensity = Math.min(1, state.comboTimerMs / 2000);
-    canvasCtx.fillStyle = `rgba(249, 207, 74, ${0.4 + comboIntensity * 0.4})`;
+    const comboPulse = 0.4 + comboIntensity * 0.4 + Math.max(0, wave(elapsedSec, 0.08, 7));
+    canvasCtx.fillStyle = `rgba(249, 207, 74, ${comboPulse})`;
     fillRoundedRect(canvasCtx, width / 2 - 114, height - 118, 228, 40, 16);
     canvasCtx.strokeStyle = '#f9cf4a';
     canvasCtx.lineWidth = 2;
@@ -1280,6 +1483,7 @@ function drawEventLayer(
   const bannerWidth = Math.min(width - 36, 290);
   const bannerX = (width - bannerWidth) / 2;
   const bannerY = 42;
+  const pulse = 1 + Math.max(0, wave(state.elapsedMs / 1000, 0.03, 5));
   if (!drawTarifaZeroAsset(canvasCtx, 'ui-badge-event', bannerX, bannerY, bannerWidth, 30)) {
     canvasCtx.fillStyle = theme.bg;
     fillRoundedRect(canvasCtx, bannerX, bannerY, bannerWidth, 28, 12);
@@ -1287,9 +1491,12 @@ function drawEventLayer(
     canvasCtx.lineWidth = 2;
     strokeRoundedRect(canvasCtx, bannerX, bannerY, bannerWidth, 28, 12);
   }
+  canvasCtx.strokeStyle = `rgba(${hexToRgb(theme.color)}, ${0.26 + Math.max(0, wave(state.elapsedMs / 1000, 0.12, 4))})`;
+  canvasCtx.lineWidth = 2;
+  strokeRoundedRect(canvasCtx, bannerX + 2, bannerY + 2, bannerWidth - 4, 26, 12);
 
   canvasCtx.fillStyle = theme.color;
-  canvasCtx.font = '700 11px system-ui, sans-serif';
+  canvasCtx.font = `700 ${11 * pulse}px system-ui, sans-serif`;
   canvasCtx.textAlign = 'center';
   canvasCtx.textBaseline = 'middle';
   canvasCtx.fillText(theme.label, width / 2, bannerY + 13);
@@ -1305,11 +1512,13 @@ function drawPlayer(
   playerY: number,
 ) {
   const playerX = laneCenterX(state.playerVisualLane, width);
+  const bob = wave(state.elapsedMs / 1000, 2.6, 8) + Math.abs(state.playerTravelMomentum) * 1.4;
   const tilt = state.playerTravelMomentum * 0.08;
+  const scale = 1 + Math.max(0, wave(state.elapsedMs / 1000, 0.015, 8));
 
   canvasCtx.fillStyle = 'rgba(8, 18, 29, 0.28)';
   canvasCtx.beginPath();
-  canvasCtx.ellipse(playerX, playerY + 28, 24, 9, 0, 0, Math.PI * 2);
+  canvasCtx.ellipse(playerX, playerY + 28, 24 * scale, 9 * scale, 0, 0, Math.PI * 2);
   canvasCtx.fill();
 
   if (Math.abs(state.playerTravelMomentum) > 0.04) {
@@ -1322,18 +1531,18 @@ function drawPlayer(
     canvasCtx.stroke();
   }
 
-  if (drawTarifaZeroAsset(canvasCtx, 'player-bus-default', playerX - 34, playerY - 32, 68, 68, { rotation: tilt })) {
+  if (drawTarifaZeroAsset(canvasCtx, 'player-bus-default', playerX - 34, playerY - 32 - bob, 68, 68, { rotation: tilt, scaleX: scale, scaleY: scale })) {
     return;
   }
 
   canvasCtx.shadowColor = '#f9cf4a';
   canvasCtx.shadowBlur = 12;
-  const playerGradient = canvasCtx.createRadialGradient(playerX, playerY, 0, playerX, playerY, 20);
+  const playerGradient = canvasCtx.createRadialGradient(playerX, playerY - bob, 0, playerX, playerY - bob, 20);
   playerGradient.addColorStop(0, '#f9cf4a');
   playerGradient.addColorStop(1, '#f0ba38');
   canvasCtx.fillStyle = playerGradient;
   canvasCtx.beginPath();
-  canvasCtx.arc(playerX, playerY, 18, 0, Math.PI * 2);
+  canvasCtx.arc(playerX, playerY - bob, 18 * scale, 0, Math.PI * 2);
   canvasCtx.fill();
   canvasCtx.shadowBlur = 0;
   canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
@@ -1343,7 +1552,7 @@ function drawPlayer(
   canvasCtx.font = '700 13px system-ui, sans-serif';
   canvasCtx.textAlign = 'center';
   canvasCtx.textBaseline = 'middle';
-  canvasCtx.fillText('AF', playerX, playerY);
+  canvasCtx.fillText('AF', playerX, playerY - bob);
 }
 
 export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
@@ -1391,6 +1600,7 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
       laneFlashMs: 0,
       lastFlashLane: null,
       recentFeedback: [],
+      phaseTransition: { from: null, to: null, timeLeftMs: 0 },
     };
   },
 
@@ -1400,12 +1610,18 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
       pointerLane: normalizeLane(input.pointerLane),
     });
 
+    const events: ArcadeTickResult<TarifaZeroState>['events'] = [];
+
     const next: TarifaZeroState = {
       ...state,
       elapsedMs: state.elapsedMs + ctx.dtMs,
       playerLane: targetLane,
       laneFlashMs: Math.max(0, state.laneFlashMs - ctx.dtMs),
       comboTimerMs: Math.max(0, state.comboTimerMs - ctx.dtMs),
+      phaseTransition: {
+        ...state.phaseTransition,
+        timeLeftMs: Math.max(0, state.phaseTransition.timeLeftMs - ctx.dtMs),
+      },
     };
 
     const visualSmoothing = Math.min(1, ctx.dtMs / 92);
@@ -1414,7 +1630,18 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
     next.playerTravelMomentum = state.playerTravelMomentum + (desiredMomentum - state.playerTravelMomentum) * Math.min(1, ctx.dtMs / 120);
     
     // Update phase
+    const previousPhase = state.currentPhase;
     next.currentPhase = getCurrentPhase(next.elapsedMs);
+    if (next.currentPhase !== previousPhase) {
+      next.phaseTransition = {
+        from: previousPhase,
+        to: next.currentPhase,
+        timeLeftMs: 1500,
+      };
+      events.push({ type: 'phase_transition', phase: next.currentPhase });
+    } else if (next.phaseTransition.timeLeftMs <= 0) {
+      next.phaseTransition = { from: null, to: null, timeLeftMs: 0 };
+    }
     
     // Update combo multiplier based on combo timer
     if (next.comboTimerMs > 0) {
@@ -1443,6 +1670,7 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
         triggered: true,
       };
       next.eventsTriggered = [...next.eventsTriggered, newEvent];
+      events.push({ type: 'special_event', eventId: newEvent });
     }
     
     // Update active event timer
@@ -1469,8 +1697,6 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
     next.recentFeedback = state.recentFeedback
       .map((f) => ({ ...f, ageMs: f.ageMs + ctx.dtMs }))
       .filter((f) => f.ageMs < 500);
-
-    const events: ArcadeTickResult<TarifaZeroState>['events'] = [];
 
     // Spawn entities (rate varies by phase & event)
     next.spawnCooldownMs -= ctx.dtMs;
@@ -1529,8 +1755,8 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
         }
         
         // Add collision events
-        if (collisionResult.event) {
-          events.push(collisionResult.event);
+        if (collisionResult.events && collisionResult.events.length > 0) {
+          events.push(...collisionResult.events);
         }
         
         continue; // Entity consumed
@@ -1560,17 +1786,10 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
 
     drawBackground(canvasCtx, state, width, height, laneWidth);
     for (const entity of state.entities) {
-      drawEntitySprite(canvasCtx, entity, width);
+      drawEntitySprite(canvasCtx, entity, state, width);
     }
 
-    const flash = state.laneFlashMs > 0 ? state.laneFlashMs / 320 : 0;
-    if (flash > 0) {
-      const flashLane = state.lastFlashLane ?? state.playerLane;
-      canvasCtx.fillStyle = `rgba(244, 95, 95, ${flash * 0.28})`;
-      canvasCtx.fillRect(flashLane * laneWidth + 4, 0, laneWidth - 8, height);
-      canvasCtx.fillStyle = `rgba(255, 108, 108, ${flash * 0.14})`;
-      canvasCtx.fillRect(0, 0, width, height);
-    }
+    drawLaneImpactOverlay(canvasCtx, state, width, height, laneWidth);
 
     // Particle feedback for pickups - colorful burst effect
     for (const feedback of state.recentFeedback) {
@@ -1628,6 +1847,7 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
 
     drawEventLayer(canvasCtx, state, width, height);
     drawPlayer(canvasCtx, state, width, playerY);
+    drawPhaseTransitionOverlay(canvasCtx, state, width, height);
     drawHud(canvasCtx, state, width, height);
 
     // Recent feedback flash

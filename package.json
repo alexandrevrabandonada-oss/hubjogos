@@ -27,6 +27,7 @@
     "campaign:links": "node tools/generate-campaign-links.js",
     "beta:campaign-brief": "node tools/beta-campaign-brief.js",
     "campaign:brief": "node tools/beta-campaign-brief.js",
+    "beta:arcade-final-decision": "node tools/beta-arcade-final-decision.js",
     "ops:apply-migration": "node tools/apply-tijolo-14-migration.js",
     "ops:export-config": "node tools/export-experiments-config.js",
     "ops:check-alerts": "node tools/ops-check-alerts.js",

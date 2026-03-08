@@ -67,6 +67,95 @@ npm run test:e2e
 - Tijolo 34 ✅ efetividade em operação de campanha
 - Tijolo 35A ✅ fundação visual profissional do primeiro arcade
 - Tijolo 35D ✅ produção visual de assets profissionais integrada ao Tarifa Zero RJ
+- Tijolo 35E ✅ acabamento premium coeso com variantes dedicadas e smoke e2e do arcade
+- Tijolo 36A ✅ pre-producao completa do proximo arcade forte (`Mutirao do Bairro`)
+- Tijolo 36B ✅ vertical slice jogavel do Mutirao do Bairro com assets P0
+- Tijolo 36C ✅ fechamento premium operacional do Mutirao com reports + testes + gates
+
+## Tijolo 36B - Vertical slice jogavel do Mutirao do Bairro ✅
+
+### Objetivo
+
+Implementar o segundo arcade forte da campanha com mecânica de coordenação de hotspots, sem quebrar os arcades existentes e mantendo assets em nível P0 funcional.
+
+### Entregues
+
+- Runtime arcade extendido com controle por ações (`controlScheme: 'hotspot'` além de `'lane'`).
+- Inputs estendidos: `actionOnePressed`, `actionTwoPressed`, `actionThreePressed`, `specialPressed`.
+- Eventos de runtime customizados: `action_used` com `actionId` e `hotspotId` opcional.
+- Lógica completa do jogo em `lib/games/arcade/mutirao-do-bairro.ts` (549 linhas):
+  - 3 hotspots (água, energia, mobilidade) com integrity/danger.
+  - 4 ações: Reparar, Defender, Mobilizar, Mutirão (special).
+  - Sistema de pressão progressiva com marcos (55%, 70%, 85%) e grace period.
+  - 4 eventos especiais: chuva-forte, boato-de-pânico, onda-solidária, tranco-de-sabotagem.
+  - 4 fases temporais: arranque → pressão → virada → fechamento.
+  - Outcome: survival vs collapse.
+- Componente UI completo: `MutiraoDoBairroArcadeGame` com intro/running/finished.
+- 7 assets SVG P0 em `public/arcade/mutirao-do-bairro/` (bg, player, entities, ui).
+- Tema premium no `FinalShareCard`: `mutirao-bairro-premium`.
+- Telemetria dedicada: `mutirao_action_used`, `mutirao_event_triggered`, `mutirao_pressure_peak`.
+- Integração em `/estado` com contadores de eventos mutirao.
+- Smoke tests e2e (desktop + mobile) em `tests/e2e/mutirao-do-bairro-slice.spec.ts`.
+- Catálogo atualizado: `mutirao-do-bairro` promovido de `coming/shell` para `live/real`.
+- Zero regressões nos arcades anteriores (tarifa-zero, passe-livre).
+
+### Nao inclui
+
+- modo cooperativo ou narrativa procedural.
+
+## Tijolo 36C - Fechamento premium operacional do Mutirao ✅
+
+### Objetivo
+
+Transformar o Mutirao em segundo arcade premium validado de forma objetiva, com camada operacional e verificação completa.
+
+### Entregues
+
+- Runtime Mutirao com pack premium ativo (HUD + overlays + final premium), fallback preservado.
+- Card de efetividade no `/estado` com leitura de:
+  - runs
+  - collapse rate
+  - score medio
+  - pressao media
+  - replay
+  - diversidade de acao
+  - comparacao com Tarifa Zero RJ
+- Reports operacionais com bloco Mutirao:
+  - `beta:snapshot`
+  - `beta:export`
+  - `beta:circulation-report`
+- Testes unitarios dedicados: `tests/unit/mutirao-do-bairro.test.ts` (28 testes).
+- E2E premium ampliado: `tests/e2e/mutirao-do-bairro-slice.spec.ts` (4 testes Mutirao; suite total 25/25).
+- Gates finais validados:
+  - lint
+  - type-check
+  - build
+  - test:unit
+  - test:e2e
+- Zero regressao observada em Tarifa Zero RJ, Passe Livre Nacional e linha quick.
+
+## Tijolo 36A - Pre-producao do proximo arcade forte ✅
+
+### Objetivo
+
+Abrir a nova fase da linha arcade com pre-producao organizada, contrastando com Tarifa Zero RJ e sem implementar ainda o jogo completo.
+
+### Entregues
+
+- Decisao explicita de rota: **A) novo arcade `mutirao-do-bairro`**.
+- Documento de conceito: `docs/mutirao-do-bairro-game-concept.md`.
+- Systems design completo: `docs/mutirao-do-bairro-systems-design.md`.
+- Direcao de arte completa: `docs/mutirao-do-bairro-art-direction.md`.
+- Pipeline de assets preparada: `public/arcade/mutirao-do-bairro/README.md` + estrutura `player/entities/ui/bg`.
+- Planejamento formal de HUD, tela final, telemetria e vertical slice T36B.
+- Integracao editorial leve no catalogo como `coming/shell` (sem publicar live).
+
+### Nao inclui
+
+- implementacao final do runtime do novo arcade;
+- polimento premium completo de assets;
+- abertura de formato medio;
+- auth/CMS/admin.
 
 ## Tijolo 35D - Produção visual de assets profissionais ✅
 
@@ -93,6 +182,38 @@ Transformar os concepts das linhas A-D do Tarifa Zero RJ em assets reais integr�
 - reescrita da lógica do gameplay
 - novo arcade
 - abandono do fallback em canvas
+
+## Tijolo 35E - Acabamento premium coeso ✅
+
+### Objetivo
+
+Fechar lacunas de acabamento visual do Tarifa Zero RJ, reforçando identidade premium sem abrir novo jogo e sem mexer pesado na lógica de gameplay.
+
+### Entregues
+
+- Variantes dedicadas integradas no runtime:
+  - `public/arcade/tarifa-zero/obstacles/obstacle-bloqueio-sequencia.svg`
+  - `public/arcade/tarifa-zero/pickups/pickup-individualismo-cluster.svg`
+- Runtime atualizado para usar as variantes dedicadas com fallback preservado.
+- Transição visual entre fases validada no canvas (overlay curto com badge/tema de fase).
+- Final de run refinado no `TarifaZeroArcadeGame` com hierarquia premium e CTAs reforçados.
+- CTAs finais reorganizados para fluxo de conversão:
+  - replay
+  - próximo jogo
+  - compartilhar
+  - participar da campanha
+- Smoke e2e focado no arcade:
+  - teste de carregamento e HUD
+  - teste de estabilidade com variantes
+  - teste de final premium
+  - screenshots desktop/mobile em `reports/validation/`
+
+### Guardrails mantidos
+
+- sem novo jogo
+- sem reescrita da lógica principal
+- performance preservada
+- fallback canvas preservado
 
 ## Tijolo 20 - Cockpit Temporal ✅
 

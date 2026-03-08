@@ -1,0 +1,28 @@
+<svg width="320" height="100" viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="boadoGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F18F4E" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#D74B4B" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Banner de evento -->
+  <rect x="10" y="10" width="300" height="80" rx="16" fill="url(#boadoGrad)"/>
+  <rect x="12" y="12" width="296" height="76" rx="14" fill="none" stroke="#D74B4B" stroke-width="3"/>
+  
+  <!-- Ondas de rumor -->
+  <path d="M 60 40 Q 70 35 80 40" stroke="#123D59" stroke-width="3" fill="none" opacity="0.6"/>
+  <path d="M 55 50 Q 70 42 85 50" stroke="#123D59" stroke-width="3" fill="none" opacity="0.5"/>
+  <path d="M 50 60 Q 70 50 90 60" stroke="#123D59" stroke-width="3" fill="none" opacity="0.4"/>
+  
+  <!-- Sinais de alerta -->
+  <polygon points="95,30 105,50 85,50" fill="#D74B4B"/>
+  <text x="95" y="46" font-family="sans-serif" font-size="16" font-weight="bold" 
+        fill="#0F1E2B" text-anchor="middle">!</text>
+  
+  <!-- Texto do evento -->
+  <text x="200" y="48" font-family="sans-serif" font-size="18" font-weight="bold" 
+        fill="#0F1E2B" text-anchor="middle">BOATO DE PANICO</text>
+  <text x="200" y="70" font-family="sans-serif" font-size="12" 
+        fill="#123D59" text-anchor="middle">Pressao social aumentou</text>
+</svg>

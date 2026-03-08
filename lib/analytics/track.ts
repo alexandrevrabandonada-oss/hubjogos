@@ -367,6 +367,54 @@ export async function trackArcadeCampaignCtaClick(
   );
 }
 
+export async function trackMutiraoActionUsed(
+  game: Game,
+  actionId: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'mutirao_action_used',
+      metadata: {
+        actionId,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackMutiraoEventTriggered(
+  game: Game,
+  eventId: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'mutirao_event_triggered',
+      metadata: {
+        eventId,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackMutiraoPressurePeak(
+  game: Game,
+  peak: number,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'mutirao_pressure_peak',
+      metadata: {
+        peak,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
 // Front-stage tracking (Tijolo 31)
 export async function trackHomePrimaryPlayClick(game: Game, targetSlug: string, targetType: string) {
   await trackEvent(

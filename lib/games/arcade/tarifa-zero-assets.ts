@@ -8,6 +8,7 @@ export type TarifaZeroAssetKey =
   | 'transport-bus-event'
   | 'obstacle-catraca'
   | 'obstacle-barreira-pesada'
+    | 'obstacle-bloqueio-sequencia'
   | 'obstacle-zona-pressao'
   | 'pickup-apoio'
   | 'pickup-apoio-cadeia'
@@ -19,6 +20,7 @@ export type TarifaZeroAssetKey =
   | 'pickup-chance-abertura'
   | 'pickup-individualismo'
   | 'pickup-individualismo-tentador'
+    | 'pickup-individualismo-cluster'
   | 'pickup-chance-virada'
   | 'ui-hud-progress-frame'
   | 'ui-hud-progress-fill'
@@ -32,8 +34,8 @@ export type TarifaZeroAssetKey =
   | 'ui-button-replay'
   | 'ui-button-next';
 
-export const TARIFA_ZERO_ASSET_SET = 'corredor-do-povo-v2';
-export const TARIFA_ZERO_VISUAL_VERSION = 'T35D-assets-v2';
+export const TARIFA_ZERO_ASSET_SET = 'corredor-do-povo-v6';
+export const TARIFA_ZERO_VISUAL_VERSION = 'T35E-premium-v7';
 
 const assetPaths: Record<TarifaZeroAssetKey, string> = {
   'bg-skyline-far': '/arcade/tarifa-zero/bg/bg-skyline-far.svg',
@@ -45,6 +47,7 @@ const assetPaths: Record<TarifaZeroAssetKey, string> = {
   'transport-bus-event': '/arcade/tarifa-zero/transport/transport-bus-event.svg',
   'obstacle-catraca': '/arcade/tarifa-zero/obstacles/obstacle-catraca.svg',
   'obstacle-barreira-pesada': '/arcade/tarifa-zero/obstacles/obstacle-barreira-pesada.svg',
+    'obstacle-bloqueio-sequencia': '/arcade/tarifa-zero/obstacles/obstacle-bloqueio-sequencia.svg',
   'obstacle-zona-pressao': '/arcade/tarifa-zero/obstacles/obstacle-zona-pressao.svg',
   'pickup-apoio': '/arcade/tarifa-zero/pickups/pickup-apoio.svg',
   'pickup-apoio-cadeia': '/arcade/tarifa-zero/pickups/pickup-apoio-cadeia.svg',
@@ -56,6 +59,7 @@ const assetPaths: Record<TarifaZeroAssetKey, string> = {
   'pickup-chance-abertura': '/arcade/tarifa-zero/pickups/pickup-chance-abertura.svg',
   'pickup-individualismo': '/arcade/tarifa-zero/pickups/pickup-individualismo.svg',
   'pickup-individualismo-tentador': '/arcade/tarifa-zero/pickups/pickup-individualismo-tentador.svg',
+    'pickup-individualismo-cluster': '/arcade/tarifa-zero/pickups/pickup-individualismo-cluster.svg',
   'pickup-chance-virada': '/arcade/tarifa-zero/pickups/pickup-chance-virada.svg',
   'ui-hud-progress-frame': '/arcade/tarifa-zero/ui/ui-hud-progress-frame.svg',
   'ui-hud-progress-fill': '/arcade/tarifa-zero/ui/ui-hud-progress-fill.svg',
@@ -147,6 +151,8 @@ export function drawTarifaZeroAsset(
   options?: {
     alpha?: number;
     rotation?: number;
+    scaleX?: number;
+    scaleY?: number;
   },
 ) {
   const cached = ensureAsset(key);
@@ -154,12 +160,15 @@ export function drawTarifaZeroAsset(
     return false;
   }
 
-  const { alpha = 1, rotation = 0 } = options || {};
+  const { alpha = 1, rotation = 0, scaleX = 1, scaleY = 1 } = options || {};
   ctx.save();
   ctx.globalAlpha = alpha;
   ctx.translate(x + width / 2, y + height / 2);
   if (rotation !== 0) {
     ctx.rotate(rotation);
+  }
+  if (scaleX !== 1 || scaleY !== 1) {
+    ctx.scale(scaleX, scaleY);
   }
   ctx.drawImage(cached.image, -width / 2, -height / 2, width, height);
   ctx.restore();

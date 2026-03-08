@@ -116,6 +116,56 @@ Leitura no `/estado`:
 Guardrail mantido:
 - sem inflar escopo para nova engine, auth/CMS/admin ou formato grande neste ciclo.
 
+## Atualizacao Tijolo 35F - fechamento premium operacional
+
+Escopo concluido para `tarifa-zero-corredor` sem abrir novo jogo:
+- audio base com politica segura de interacao (som armado no primeiro input, toggle persistente no HUD);
+- skin formal em `FinalShareCard` via `theme="tarifa-zero-premium"`;
+- fixture de final premium rapido (`?preview=final`) para smoke de regressao sem esperar 55s;
+- baseline visual formalizada em `reports/validation/baselines/` para run/final desktop+mobile;
+- ajuste de observabilidade com `instrumentation.ts`, `instrumentation-client.ts` e `app/global-error.tsx`.
+
+Leitura de produto:
+- quick line preservada;
+- arcade line reforcada com fechamento premium reutilizavel e validacao mais rapida.
+
+## Atualizacao Tijolo 36A - abertura da proxima frente arcade
+
+Decisao explicita do ciclo:
+- rota A: novo arcade `mutirao-do-bairro` (pre-producao completa, sem publicar runtime final ainda).
+
+Justificativa de produto:
+- `tarifa-zero-corredor` ja cumpre papel de corrida coletiva premium;
+- proximo arcade precisava mudar o verbo principal de jogo;
+- `mutirao-do-bairro` entra com foco em coordenacao, reparo e defesa territorial.
+
+Entregas de pre-producao:
+- conceito mestre: `docs/mutirao-do-bairro-game-concept.md`
+- systems design: `docs/mutirao-do-bairro-systems-design.md`
+- art direction: `docs/mutirao-do-bairro-art-direction.md`
+- pipeline de assets: `public/arcade/mutirao-do-bairro/README.md`
+
+Direcao de loop (contraste obrigatorio):
+- sai de lane collect/avoid;
+- entra em coordenacao de hotspots com acoes curtas de reparar, defender e mobilizar;
+- mantem run curta (30s-3min), replay imediato e politica por mecanica.
+
+Ponte para T36B:
+- implementar vertical slice jogavel minimo do `mutirao-do-bairro` mantendo guardrails de escopo.
+
+## Atualizacao Tijolo 36C - fechamento premium do Mutirao
+
+Escopo concluido para `mutirao-do-bairro` sem expandir para novos formatos:
+- pass premium do runtime consolidado com assets dedicados, HUD e overlays de evento;
+- leitura de efetividade integrada ao `/estado` e aos reports operacionais (`beta:snapshot`, `beta:export`, `beta:circulation-report`);
+- testes unitarios dedicados de logica (28 casos) e e2e premium desktop/mobile;
+- gates finais verdes (lint, type-check, build, test:unit, test:e2e).
+
+Leitura de produto:
+- `mutirao-do-bairro` passa de vertical slice para arcade premium em validacao seria;
+- linha arcade mantem contraste de verbo de jogo (corrida coletiva vs coordenacao territorial);
+- guardrails preservados: sem auth/CMS/admin, sem novo formato medio neste ciclo.
+
 ## Atualizacao Tijolo 33 - run efetiva como criterio de decisão
 
 Leitura oficial para arcade line:
@@ -127,3 +177,50 @@ Implicacao para distribuicao arcade:
 - priorizar em superficie e canais os arcades que puxam run efetiva e replay efetivo acima da media;
 - reduzir peso de recomendações com clique alto, mas start efetivo baixo;
 - adiar abertura de novo arcade ate consolidar 7-14 dias de amostra util.
+
+## Atualizacao Tijolo 37 - duelo oficial Tarifa vs Mutirao
+
+Objetivo aplicado:
+- transformar a linha arcade em comparacao oficial entre `tarifa-zero-corredor` e `mutirao-do-bairro`;
+- emitir estado de decisao explicito com guardrail de amostra;
+- informar readiness para proximo passo sem abrir terceiro arcade.
+
+Scorecard oficial T37 (dimensoes):
+- runs totais;
+- run end rate;
+- replay rate;
+- CTA pos-run rate;
+- first input medio (menor e melhor);
+- indice de engajamento (replay + CTA).
+
+Estados de decisao da linha arcade:
+- `insufficient_sample`;
+- `early_signal`;
+- `directional_lead`;
+- `candidate_flagship`;
+- `ready_for_next_step`.
+
+Leituras derivadas:
+- recomendacao canonica: `arcade_a_leads`, `arcade_b_leads`, `technical_tie` ou `insufficient_sample`;
+- forca de campanha por arcade (score ponderado);
+- avisos de cautela quando a amostra ainda nao cruza os limites minimos.
+
+## Atualizacao Tijolo 38 - duelo justo por exposicao
+
+Objetivo aplicado:
+- equalizar a comparacao entre `tarifa-zero-corredor` e `mutirao-do-bairro` por exposicao real de vitrine;
+- separar leitura de lideranca por volume, eficiencia e forca de campanha;
+- evitar decisao enviesada quando um arcade recebe menos entrada na janela.
+
+Camada nova T38:
+- scorecards por arcade: `exposureSignals`, `intentClicks`, `starts`, `effectiveStarts`, `exposureToStartRate`;
+- status de duelo justo:
+  - `unbalanced_exposure`
+  - `exposure_correction_in_progress`
+  - `fair_comparison_window`
+  - `decision_ready`
+- recomendacao corretiva com boost de exposicao para o arcade subexposto.
+
+Propagacao operacional:
+- `/estado` com card dedicado de exposicao arcade;
+- `beta:snapshot`, `beta:export`, `beta:circulation-report`, `beta:distribution-report` e `beta:campaign-brief` com leitura T38.

@@ -5,6 +5,14 @@
 **Documento criado**: 2026-03-07 (Tijolo 35B)  
 **Status**: Design completo para implementação
 
+## Atualizacao T35F (implementado)
+
+- Runtime de eventos ampliado para `collision`, `phase_transition` e `special_event`.
+- Camada de SFX base adicionada em `lib/games/arcade/audio/` com controle de mute no HUD e atalho `M`.
+- Mapeamento de eventos para cues: coleta, colisao leve/pesada, transicao de fase, evento especial e fim de run.
+- Fixture de final premium rapido habilitada via `?preview=final` (ou `?fixture=final-premium`) para smoke/E2E.
+- Telemetria existente preservada, sem reescrever core de gameplay.
+
 ---
 
 ## Visão do Gameplay

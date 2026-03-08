@@ -27,6 +27,8 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
 
+  allowedDevOrigins: ['127.0.0.1'],
+
   /* Experimental features safe for this stage */
   experimental: {
     // Optimization features can be added here as needed

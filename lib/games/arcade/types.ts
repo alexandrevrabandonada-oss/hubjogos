@@ -5,6 +5,10 @@ export interface ArcadeInputSnapshot {
   moveRight: boolean;
   moveLeftPressed: boolean;
   moveRightPressed: boolean;
+  actionOnePressed: boolean;
+  actionTwoPressed: boolean;
+  actionThreePressed: boolean;
+  specialPressed: boolean;
   pausePressed: boolean;
   restartPressed: boolean;
   pointerLane: number | null;
@@ -22,6 +26,24 @@ export type ArcadeRuntimeEvent =
   | {
       type: 'powerup_collect';
       powerupId: string;
+    }
+  | {
+      type: 'collision';
+      severity: 'light' | 'heavy';
+      hazardId: string;
+    }
+  | {
+      type: 'phase_transition';
+      phase: 'abertura' | 'escalada' | 'pressao' | 'final';
+    }
+  | {
+      type: 'special_event';
+      eventId: string;
+    }
+  | {
+      type: 'action_used';
+      actionId: string;
+      hotspotId?: string;
     };
 
 export interface ArcadeTickResult<State> {

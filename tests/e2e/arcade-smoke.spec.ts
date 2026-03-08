@@ -28,8 +28,8 @@ test('tarifa zero arcade smoke', async ({ page }) => {
 
   await expect(page.locator('canvas[aria-label="Jogo arcade Tarifa Zero"]')).toBeVisible();
   await expect(page.getByText(/Em jogo/i)).toBeVisible();
-  await expect(page.getByText(/T35D-assets-v2/i)).toBeVisible();
-  await expect(page.getByText(/corredor-do-povo-v2/i)).toBeVisible();
+  await expect(page.getByText(/T35E-premium-v7/i)).toBeVisible();
+  await expect(page.getByText(/corredor-do-povo-v6/i)).toBeVisible();
 
   await page.getByRole('button', { name: /Mover para direita/i }).click();
   await page.waitForTimeout(300);

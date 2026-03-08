@@ -1,14 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 760" fill="none">
   <defs>
-    <linearGradient id="midUrban" x1="210" x2="210" y1="240" y2="620" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#DEC79A" stop-opacity="0.7"/>
-      <stop offset="1" stop-color="#163B53" stop-opacity="0.22"/>
+    <linearGradient id="midUrban" x1="210" x2="210" y1="220" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E5D2A6" stop-opacity="0.74"/>
+      <stop offset="1" stop-color="#163B53" stop-opacity="0.2"/>
     </linearGradient>
   </defs>
-  <path d="M0 454L26 430H44L52 408H72L84 426H94L106 372H130L142 392H164L180 340H208L222 376H248L264 330H290L300 350H320L336 396H350L362 374H388L404 432H420V760H0V454Z" fill="url(#midUrban)"/>
-  <path d="M20 482H76V760H20V482ZM92 450H148V760H92V450ZM166 414H228V760H166V414ZM238 436H302V760H238V436ZM316 466H392V760H316V466Z" fill="#123D59" fill-opacity="0.22"/>
-  <path d="M0 520C70 492 120 486 186 486C250 486 308 500 420 542V760H0V520Z" fill="#173B52" fill-opacity="0.26"/>
-  <path d="M50 532H120" stroke="#FFD765" stroke-opacity="0.2" stroke-width="4" stroke-linecap="round"/>
-  <path d="M228 548H286" stroke="#7CE0AE" stroke-opacity="0.18" stroke-width="4" stroke-linecap="round"/>
-  <path d="M304 530H346" stroke="#F9CF4A" stroke-opacity="0.16" stroke-width="4" stroke-linecap="round"/>
+  <path d="M0 458L18 438H38L52 414H68L82 430H94L106 376H126L144 394H164L178 340H198L214 370H232L252 316H274L288 340H306L320 384H340L356 360H376L394 420H420V760H0V458Z" fill="url(#midUrban)"/>
+  <path d="M22 486H74V760H22V486ZM90 454H150V760H90V454ZM164 416H230V760H164V416ZM238 438H304V760H238V438ZM316 470H394V760H316V470Z" fill="#123D59" fill-opacity="0.24"/>
+  <path d="M0 526C70 498 122 490 188 490C252 490 310 504 420 548V760H0V526Z" fill="#173B52" fill-opacity="0.28"/>
+  <rect x="48" y="536" width="78" height="10" rx="5" fill="#FFD765" fill-opacity="0.16"/>
+  <rect x="226" y="548" width="66" height="10" rx="5" fill="#7CE0AE" fill-opacity="0.16"/>
+  <rect x="304" y="530" width="48" height="10" rx="5" fill="#F9CF4A" fill-opacity="0.14"/>
+  <path d="M140 418H176" stroke="#EBD7A6" stroke-opacity="0.2" stroke-width="3" stroke-linecap="round"/>
+  <path d="M260 388H294" stroke="#EBD7A6" stroke-opacity="0.18" stroke-width="3" stroke-linecap="round"/>
 </svg>

@@ -1,11 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none">
   <defs>
     <radialGradient id="bairroFill" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(48 42) rotate(90) scale(34)">
-      <stop stop-color="#FFF3BA"/>
-      <stop offset="1" stop-color="#F3C652"/>
+      <stop stop-color="#FFF4C4"/>
+      <stop offset="1" stop-color="#F0C24B"/>
     </radialGradient>
   </defs>
   <path d="M48 14L57 33L78 36L63 50L67 72L48 62L29 72L33 50L18 36L39 33L48 14Z" fill="url(#bairroFill)" stroke="#FFF6DB" stroke-width="4" stroke-linejoin="round"/>
-  <path d="M35 58V45L48 35L61 45V58" stroke="#123D59" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M40 58V49H56V58" stroke="#123D59" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M33 59V45L48 34L63 45V59" stroke="#123D59" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39 59V50H57V59" stroke="#123D59" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="34" cy="44" r="4" fill="#123D59"/>
+  <circle cx="62" cy="44" r="4" fill="#123D59"/>
 </svg>

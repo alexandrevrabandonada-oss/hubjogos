@@ -1,0 +1,58 @@
+<svg width="640" height="960" viewBox="0 0 640 960" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F1E2B"/>
+      <stop offset="100%" stop-color="#1E3A4C"/>
+    </linearGradient>
+    <linearGradient id="urbanLayer" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#123D59" stop-opacity="0.15"/>
+      <stop offset="50%" stop-color="#123D59" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#123D59" stop-opacity="0.15"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Base gradient -->
+  <rect width="640" height="960" fill="url(#bgGradient)"/>
+  
+  <!-- Urban silhouettes - edificios baixos -->
+  <rect x="40" y="120" width="80" height="140" rx="4" fill="url(#urbanLayer)"/>
+  <rect x="130" y="100" width="70" height="160" rx="4" fill="url(#urbanLayer)"/>
+  <rect x="210" y="130" width="90" height="130" rx="4" fill="url(#urbanLayer)"/>
+  <circle cx="255" cy="95" r="8" fill="#123D59" opacity="0.12"/>
+  
+  <rect x="340" y="110" width="85" height="150" rx="4" fill="url(#urbanLayer)"/>
+  <rect x="435" y="140" width="75" height="120" rx="4" fill="url(#urbanLayer)"/>
+  <rect x="520" y="105" width="80" height="155" rx="4" fill="url(#urbanLayer)"/>
+  
+  <!-- Piso/grid leve de ruas -->
+  <g opacity="0.08">
+    <line x1="0" y1="300" x2="640" y2="300" stroke="#2F5D50" stroke-width="1.5"/>
+    <line x1="0" y1="480" x2="640" y2="480" stroke="#2F5D50" stroke-width="1.5"/>
+    <line x1="0" y1="660" x2="640" y2="660" stroke="#2F5D50" stroke-width="1.5"/>
+    <line x1="160" y1="260" x2="160" y2="900" stroke="#2F5D50" stroke-width="1.5"/>
+    <line x1="320" y1="260" x2="320" y2="900" stroke="#2F5D50" stroke-width="1.5"/>
+    <line x1="480" y1="260" x2="480" y2="900" stroke="#2F5D50" stroke-width="1.5"/>
+  </g>
+  
+  <!-- Pontos de encontro comunitarios (reservando espacos para hotspots) -->
+  <circle cx="120" cy="350" r="68" fill="#7FD36E" opacity="0.25"/>
+  <circle cx="520" cy="350" r="62" fill="#7FD36E" opacity="0.22"/>
+  <circle cx="320" cy="550" r="72" fill="#7FD36E" opacity="0.28"/>
+  <circle cx="160" cy="720" r="58" fill="#7FD36E" opacity="0.20"/>
+  <circle cx="480" cy="720" r="64" fill="#7FD36E" opacity="0.24"/>
+  
+  <!-- Caminhos comunitarios conectando zonas -->
+  <path d="M 120 350 Q 220 400 320 480" 
+        stroke="#C9F27B" stroke-width="3" stroke-linecap="round" opacity="0.12" fill="none"/>
+  <path d="M 520 350 Q 420 400 320 480" 
+        stroke="#C9F27B" stroke-width="3" stroke-linecap="round" opacity="0.12" fill="none"/>
+  <path d="M 320 550 Q 240 635 160 720" 
+        stroke="#C9F27B" stroke-width="3" stroke-linecap="round" opacity="0.12" fill="none"/>
+  <path d="M 320 550 Q 400 635 480 720" 
+        stroke="#C9F27B" stroke-width="3" stroke-linecap="round" opacity="0.12" fill="none"/>
+  
+  <!-- Detalhes de bairro vivo -->
+  <rect x="70" y="310" width="32" height="24" rx="2" fill="#2F5D50" opacity="0.18"/>
+  <rect x="490" y="310" width="28" height="20" rx="2" fill="#2F5D50" opacity="0.16"/>
+  <circle cx="320" cy="620" r="12" fill="#F9CF4A" opacity="0.15"/>
+</svg>

@@ -218,12 +218,125 @@ Objetivo:
 Entregas:
 1. pipeline local consolidado em `public/arcade/tarifa-zero/` com pastas de `bg`, `player`, `transport`, `obstacles`, `pickups` e `ui`.
 2. asset set `corredor-do-povo-v1` e versão visual `T35D-assets-v1` publicados e expostos no runtime.
+
+## Tijolo 37 (concluido)
+
+Objetivo:
+- consolidar a linha arcade como duelo comparavel real entre `tarifa-zero-corredor` e `mutirao-do-bairro`, com decisao oficial guiada por amostra minima.
+
+Entregas:
+1. scorecard comparativo oficial da linha arcade com seis dimensoes (runs, run end, replay, CTA, first input e engajamento).
+2. camada de estado de decisao (`insufficient_sample`, `early_signal`, `directional_lead`, `candidate_flagship`, `ready_for_next_step`).
+3. recomendacao explicita por janela (`arcade_a_leads`, `arcade_b_leads`, `technical_tie`, `insufficient_sample`).
+4. secao dedicada no `/estado` para leitura estrategica da linha arcade.
+5. propagacao do readout T37 para `beta:snapshot`, `beta:export`, `beta:circulation-report` e `beta:campaign-brief`.
+6. guardrail mantido: sem abrir terceiro arcade, sem nova engine, sem auth/CMS/admin.
 3. background em camadas com skyline industrial/urbano e corredor vertical integrado ao canvas.
 4. player/ônibus amarelo estilizado, pickups e obstáculos em SVG com fallback canvas preservado.
 5. HUD principal e feedback de fase/evento reforçados com assets reais.
 6. pós-run premium com score, fase, combo, frame final e CTA de replay/próximo jogo.
 7. `/estado` ampliado com indicador simples de versão visual por arcade.
 8. documentação operacional e artística atualizada para o pass de produção.
+
+## Tijolo 35E (concluido)
+
+Objetivo:
+- elevar o acabamento visual do Tarifa Zero RJ sem abrir novo jogo e sem alterar pesado a lógica de gameplay.
+
+Entregas:
+1. variantes dedicadas integradas no runtime para entidades compostas:
+   - `obstacle-bloqueio-sequencia.svg`
+   - `pickup-individualismo-cluster.svg`
+2. fallback seguro preservado para todas as entidades em caso de falha de asset.
+3. transição de fase (overlay premium curto) validada e mantida no fluxo da run.
+4. final de run refinado com hierarquia visual melhor (score, fase, combo, meta visual e final card).
+5. CTAs finais reordenados e reforçados: replay → próximo jogo → compartilhar → campanha.
+6. versão visual atualizada para `T35E-premium-v7` com exposição no runtime e `/estado`.
+7. smoke e2e específico do arcade executado (desktop + mobile viewport) com capturas em `reports/validation/`.
+
+## Tijolo 36A (concluido)
+
+Objetivo:
+- abrir a proxima fase da linha arcade com pre-producao completa e organizada do proximo arcade forte, sem implementar ainda o jogo final.
+
+Entregas:
+1. diagnostico formal do estado premium do `tarifa-zero-corredor` e definicao de contraste obrigatorio para o proximo loop.
+2. decisao explicita de rota: **A) novo arcade `mutirao-do-bairro`**.
+3. documento mestre de conceito:
+   - `docs/mutirao-do-bairro-game-concept.md`
+4. systems design completo:
+   - `docs/mutirao-do-bairro-systems-design.md`
+5. art direction completa:
+   - `docs/mutirao-do-bairro-art-direction.md`
+6. pipeline de assets preparada:
+   - `public/arcade/mutirao-do-bairro/README.md`
+   - estrutura de pastas `player/entities/ui/bg`
+7. plano de HUD, tela final, telemetria e vertical slice T36B documentado.
+8. integracao editorial leve:
+   - catalogo com `mutirao-do-bairro` como `coming/shell` (nao live)
+   - atualizacao de README, roadmap, tijolos e linha arcade.
+
+## Tijolo 36B (concluido)
+
+Objetivo:
+- implementar vertical slice jogavel do Mutirao do Bairro com assets P0 funcionais, sem quebrar arcades existentes.
+
+Entregas:
+1. runtime arcade extendido com controle por acoes (`controlScheme: 'hotspot'` alem de `'lane'`).
+2. logica completa do jogo em `lib/games/arcade/mutirao-do-bairro.ts`:
+   - 3 hotspots (agua, energia, mobilidade) com integrity/danger
+   - 4 acoes: Reparar, Defender, Mobilizar, Mutirao (special)
+   - sistema de pressao progressiva com marcos (55%, 70%, 85%)
+   - 4 eventos especiais: chuva-forte, boato-de-panico, onda-solidaria, tranco-de-sabotagem
+   - outcome: survival vs collapse
+3. componente UI completo: `MutiraoDoBairroArcadeGame` (intro/running/finished).
+4. 7 assets SVG P0 em `public/arcade/mutirao-do-bairro/` (bg, player, entities, ui).
+5. tema premium no `FinalShareCard`: `mutirao-bairro-premium`.
+6. telemetria dedicada: `mutirao_action_used`, `mutirao_event_triggered`, `mutirao_pressure_peak`.
+7. smoke tests e2e (desktop + mobile) em `tests/e2e/mutirao-do-bairro-slice.spec.ts`.
+8. catalogo atualizado: `mutirao-do-bairro` promovido de `coming/shell` para `live/real`.
+9. zero regressoes nos arcades anteriores (tarifa-zero, passe-livre).
+
+## Tijolo 36C (concluido)
+
+Objetivo:
+- fechar o Mutirao como segundo arcade premium em validacao seria, sem inflar escopo e sem regressao de linhas existentes.
+
+Entregas:
+1. pass premium de assets integrado no runtime do `mutirao-do-bairro` com HUD e overlays de evento.
+2. leitura de efetividade no dashboard `/estado` (collapse rate, score, pressao, replay, diversidade de acao e comparacao com Tarifa Zero RJ).
+3. reports operacionais atualizados com bloco Mutirao:
+   - `tools/beta-snapshot.js`
+   - `tools/beta-export.js`
+   - `tools/beta-circulation-report.js`
+4. testes unitarios dedicados: `tests/unit/mutirao-do-bairro.test.ts` (28 casos).
+5. e2e premium ampliado: `tests/e2e/mutirao-do-bairro-slice.spec.ts` (desktop/mobile + premium assets + final screen).
+6. gates finais validados: lint, type-check, build, test:unit, test:e2e.
+
+## Tijolo 38 (concluido)
+
+Objetivo cumprido:
+- equalizar a leitura de lideranca arcade por exposicao real, evitando decisao enviesada quando um arcade recebe menos entrada na vitrine (T37 era decisao oficial mas sem validacao de fairness por exposicao).
+
+Entregas:
+1. scorecards por arcade com metricas de exposicao: `exposureSignals`, `intentClicks`, `starts`, `effectiveStarts`, `exposureToStartRate`, `shareOfExposure`, `shareOfRuns`.
+2. eventos de entrada arcade trackeados: `home_arcade_click`, `explorar_arcade_click`, `quick_to_arcade_click`, `home_primary_play_click`, `above_fold_game_click`, `card_preview_interaction`, `card_full_click`.
+3. status de duelo justo com 4 estados: `unbalanced_exposure` (gap >= 35pp), `exposure_correction_in_progress` (gap > 15pp), `fair_comparison_window` (gap <= 15pp), `decision_ready` (fair + runs >= threshold).
+4. recomendacao corretiva: +N sinais para o arcade subexposto em cada semana conforme status.
+5. liderancas desacopladas: `volumeLeader` (quem tem mais runs raw), `efficiencyLeader` (quem converte exposicao em start melhor), `campaignLeader` (T37 oficial decision).
+6. secao T38 dedicada em `/estado` com card completo: status badge, gap visual, scorecards table com rates e shares, warning box se unbalanced com acoes corretivas.
+7. propagacao em 6 reports: `beta:snapshot` (secao markdown), `beta:export` (JSON field), `beta:circulation-report` (fairness status), `beta:distribution-report` (boost recommendations), `beta:campaign-brief` (duelo justo + corrective boost), `/estado` (full card T38).
+8. documentacao atualizada: `linha-arcade-da-campanha.md`, `runbook-operacional.md`, `plano-distribuicao-por-efetividade.md`, `tijolos.md`, `README.md` com referencias a T38.
+9. gates finais: lint, type-check, build, verify - todos passando.
+
+## Proximo ciclo (T39)
+
+Foco sugerido:
+1. consolidar monitoramento de duelo arcade em janela justa (T38) com distribuicao pareada e balanceada entre Tarifa e Mutirao.
+2. avaliar convergencia entre lideranca oficial T37 e lideranca por eficiencia T38 (exposure->start rate).
+3. sem novo arcade ate atingir 30+ runs efetivos por arcade na janela justa.
+4. preparar pre-producao do proximo arcade forte com contraste essencial vs lane-based, nao baseado em coordination hotspot.
+5. manter guardrails: sem auth/CMS/admin, sem formato medio, sem quebrar quick e arcades live.
 
 ## Próximo ciclo (Tijolo 34)
 
@@ -289,4 +402,4 @@ Recomendação para o próximo ciclo:
 - validar se scorecards atingem `directional_signal` de forma consistente.
 - retomar formato médio (Tijolo 29) apenas após confirmação de narrativa central com massa crítica de run real.
 
-Última atualização: 2026-03-07 (Tijolo 34)
+Última atualização: 2026-03-08 (Tijolo 36B)

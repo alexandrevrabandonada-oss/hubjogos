@@ -1,0 +1,52 @@
+<svg width="120" height="145" viewBox="0 0 120 145" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mobilidadeBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E3A4C"/>
+      <stop offset="100%" stop-color="#123D59"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Frame octogonal externo -->
+  <polygon points="30,5 90,5 115,30 115,115 90,140 30,140 5,115 5,30" 
+           fill="none" stroke="#123D59" stroke-width="3"/>
+  
+  <!-- Frame interno -->
+  <polygon points="32,8 88,8 112,32 112,113 88,137 32,137 8,113 8,32" 
+           fill="url(#mobilidadeBg)" stroke="#7FD36E" stroke-width="2"/>
+  
+  <!-- Icone de mobilidade - setas circulares -->
+  <circle cx="60" cy="48" r="20" fill="none" stroke="#7FD36E" stroke-width="3" opacity="0.5"/>
+  
+  <!-- Setas de circulacao -->
+  <path d="M 80 48 L 74 42 L 74 48 L 80 48 Z" fill="#7FD36E"/>
+  <path d="M 60 28 L 54 28 L 60 22 L 66 28 L 60 28 Z" fill="#7FD36E"/>
+  <path d="M 40 48 L 46 54 L 46 48 L 40 48 Z" fill="#7FD36E"/>
+  <path d="M 60 68 L 66 68 L 60 74 L 54 68 L 60 68 Z" fill="#7FD36E"/>
+  
+  <!-- Centro de mobilidade -->
+  <circle cx="60" cy="48" r="8" fill="#C9F27B" opacity="0.7"/>
+  <circle cx="60" cy="48" r="4" fill="#F9CF4A"/>
+  
+  <!-- Rotas comunitarias -->
+  <path d="M 42 35 L 48 40" stroke="#C9F27B" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 78 35 L 72 40" stroke="#C9F27B" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 42 61 L 48 56" stroke="#C9F27B" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 78 61 L 72 56" stroke="#C9F27B" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  
+  <!-- Pontos de transporte -->
+  <circle cx="45" cy="75" r="3" fill="#7FD36E" opacity="0.7"/>
+  <circle cx="60" cy="78" r="3" fill="#7FD36E" opacity="0.7"/>
+  <circle cx="75" cy="75" r="3" fill="#7FD36E" opacity="0.7"/>
+  
+  <!-- Barra de integrity (inferior) - placeholder em 82% -->
+  <rect x="15" y="120" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="120" width="74" height="8" rx="4" fill="#7FD36E"/>
+  
+  <!-- Barra de danger (superior) - placeholder em 28% -->
+  <rect x="15" y="90" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="90" width="25" height="8" rx="4" fill="#F18F4E"/>
+  
+  <!-- Label -->
+  <text x="60" y="112" font-family="sans-serif" font-size="11" font-weight="600" 
+        fill="#7FD36E" text-anchor="middle">MOBILIDADE</text>
+</svg>

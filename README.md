@@ -2,20 +2,28 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: Tijolo 35D concluído - production pass real de assets do Tarifa Zero RJ integrado ao runtime arcade, com fundo em camadas, sprites reais para player, pickups e obstáculos, HUD premium e fallback canvas preservado.
+Status atual: Tijolo 38 concluido - duelo arcade `tarifa-zero-corredor` vs `mutirao-do-bairro` agora usa leitura de exposicao justa, com status de viés/correcao (`unbalanced_exposure`, `exposure_correction_in_progress`, `fair_comparison_window`, `decision_ready`) e recomendacoes corretivas propagadas para `/estado` e reports operacionais.
 
 ## Estado do Produto
 
 - 4 engines reais publicas em `/play/[slug]` (quiz, branching, simulation, map).
-- 2 runtimes arcade reais em `/arcade/[slug]` com canvas loop reutilizavel:
+- 3 runtimes arcade reais em `/arcade/[slug]` com canvas loop reutilizavel:
   - `tarifa-zero-corredor` (55s, lane-based collect/avoid, tarifa zero + apoio coletivo) - **fundação visual profissional** com direção de arte campanha, HUD forte e feedback claro
   - `passe-livre-nacional` (90s, positioning/coordination, sindicato + transporte público)
+  - `mutirao-do-bairro` (90s, coordenacao de hotspots, reparo/defesa/mobilizacao, foco em ajuda mutua)
 - Fundação visual arcade estabelecida e colocada em produção: paleta oficial (#f9cf4a, #123d59, #7ce0ae, #f45f5f), shape language, pipeline de assets e asset set `corredor-do-povo-v1` ativo no Tarifa Zero RJ.
-- Tarifa Zero RJ com pass de assetização T35D:
+- Tarifa Zero RJ com pass de assetização T35D + acabamento premium T35E:
   - background em layers (`bg-skyline-far`, `bg-skyline-mid`, `bg-corredor-road`)
   - player/ônibus amarelo estilizado integrado ao canvas
   - pickups e obstáculos reais em SVG com fallback seguro
   - HUD principal, badges de fase/evento e pós-run premium
+  - variantes dedicadas para `bloqueio-sequencia` e `individualismo-cluster`
+  - CTAs finais refinados e versão visual `T35E-premium-v7`
+- Trilha arcade expandida com novo slice em producao:
+  - `mutirao-do-bairro` no catalogo como `live/real`
+  - docs de conceito/systems/art mantidas como contrato da implementacao
+  - pipeline premium ativa em `public/arcade/mutirao-do-bairro/` com fallback de runtime preservado
+  - bloco de efetividade do Mutirao integrado em `/estado`, `beta:snapshot`, `beta:export` e `beta:circulation-report`
 - Avatar oficial da campanha como personagem recorrente.
 - Card final universal compartilhavel em todos os jogos.
 - Card final com QR code dinamico para reentrada.
@@ -243,3 +251,45 @@ Este ciclo nao adiciona:
 - painel admin enterprise
 
 Foco: portal de jogos de campanha primeiro (arcade + quick com clique imediato), com leitura disciplinada de front-stage e sem inflar escopo para auth/CMS/admin.
+
+## Pre-producao T36A - Mutirao do Bairro
+
+Decisao do ciclo:
+- rota A: novo arcade `Mutirao do Bairro`.
+
+Entregas de pre-producao:
+- conceito mestre: `docs/mutirao-do-bairro-game-concept.md`
+- systems design: `docs/mutirao-do-bairro-systems-design.md`
+
+## Implementacao T36B - Vertical Slice Mutirao do Bairro
+
+Entregas de implementacao:
+- runtime real em `/arcade/mutirao-do-bairro` com loop proprio (coordenacao territorial, nao lane-based).
+- input mobile + mouse + teclado com equivalencia funcional (`1/2/3`, `Espaco`, `A/D`/setas e toque nos hotspots).
+- HUD minima funcional (tempo, estabilidade, confianca, folego de mutirao, pressao).
+- phases/eventos minimos (arranque, pressao, virada, fechamento + chuva/boato/onda/tranco).
+- outcome screen com score, leitura da run, replay, proximo jogo, share e CTA de campanha.
+- telemetria baseline ampliada com eventos do slice (`mutirao_action_used`, `mutirao_event_triggered`, `mutirao_pressure_peak`).
+- bloco leve no `/estado` para eventos dedicados do mutirao.
+- suite de testes consolidada:
+  - `tests/unit/mutirao-do-bairro.test.ts` com 28 testes de logica critica
+  - `tests/e2e/mutirao-do-bairro-slice.spec.ts` com smoke desktop/mobile + validacao premium de assets e tela final
+- direcao de arte: `docs/mutirao-do-bairro-art-direction.md`
+- pipeline de assets: `public/arcade/mutirao-do-bairro/README.md`
+
+## Fechamento T36C
+
+Entregas operacionais consolidadas:
+- reports com leitura Mutirao (runs, collapse rate, score, pressao, replay, diversidade de acao, CTA pos-run e comparacao com Tarifa Zero RJ):
+  - `tools/beta-snapshot.js`
+  - `tools/beta-export.js`
+  - `tools/beta-circulation-report.js`
+- dashboard `/estado` com card dedicado de efetividade do Mutirao.
+- validacao tecnica final:
+  - `npm run lint` sem warnings
+  - `npm run type-check` limpo
+  - `npm run build` ok
+  - `npm run test:unit` 43/43
+  - `npm run test:e2e` 25/25
+
+Escopo de implementacao fica para T36B (vertical slice jogavel).

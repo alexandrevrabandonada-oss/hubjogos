@@ -221,7 +221,15 @@ checkFileExists(path.join(process.cwd(), 'lib/supabase/client.ts'), 'Supabase cl
 checkFileExists(path.join(process.cwd(), 'lib/share/export-card.ts'), 'Share card export helper');
 checkFileExists(path.join(process.cwd(), 'components/games/share/DownloadCardButton.tsx'), 'DownloadCardButton component');
 checkFileExists(path.join(process.cwd(), '.github/workflows/ci.yml'), 'GitHub Actions CI workflow');
-checkFileExists(path.join(process.cwd(), 'sentry.client.config.ts'), 'Sentry configuration');
+const hasLegacySentryClient = fs.existsSync(path.join(process.cwd(), 'sentry.client.config.ts'));
+const hasInstrumentationClient = fs.existsSync(path.join(process.cwd(), 'instrumentation-client.ts'));
+if (hasLegacySentryClient || hasInstrumentationClient) {
+  console.log(`${GREEN}✓ Sentry configuration exists${RESET}`);
+  passCount += 1;
+} else {
+  console.log(`${RED}✗ Sentry configuration missing${RESET}`);
+  failCount += 1;
+}
 checkFileExists(path.join(process.cwd(), 'tests/e2e/a11y.spec.ts'), 'A11y test specification');
 
 // ============================================================================

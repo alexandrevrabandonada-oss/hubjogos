@@ -1,0 +1,41 @@
+<svg width="120" height="145" viewBox="0 0 120 145" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="aguaBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E3A4C"/>
+      <stop offset="100%" stop-color="#123D59"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Frame octogonal externo -->
+  <polygon points="30,5 90,5 115,30 115,115 90,140 30,140 5,115 5,30" 
+           fill="none" stroke="#123D59" stroke-width="3"/>
+  
+  <!-- Frame interno -->
+  <polygon points="32,8 88,8 112,32 112,113 88,137 32,137 8,113 8,32" 
+           fill="url(#aguaBg)" stroke="#5BA3D0" stroke-width="2"/>
+  
+  <!-- Icone de agua - gota estilizada -->
+  <path d="M 60 28 Q 45 40 45 54 Q 45 68 60 68 Q 75 68 75 54 Q 75 40 60 28 Z" 
+        fill="#5BA3D0" opacity="0.7"/>
+  <path d="M 60 32 Q 50 42 50 52 Q 50 62 60 62 Q 70 62 70 52 Q 70 42 60 32 Z" 
+        fill="#7FD36E" opacity="0.5"/>
+  <circle cx="60" cy="48" r="4" fill="#C9F27B"/>
+  
+  <!-- Ondas de agua (simbolo de fluxo) -->
+  <path d="M 45 75 Q 52 72 60 75 Q 68 78 75 75" 
+        stroke="#5BA3D0" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M 45 82 Q 52 79 60 82 Q 68 85 75 82" 
+        stroke="#5BA3D0" stroke-width="2" fill="none" opacity="0.5"/>
+  
+  <!-- Barra de integrity (inferior) - placeholder em 75% -->
+  <rect x="15" y="120" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="120" width="68" height="8" rx="4" fill="#7FD36E"/>
+  
+  <!-- Barra de danger (superior) - placeholder em 35% -->
+  <rect x="15" y="90" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="90" width="32" height="8" rx="4" fill="#F18F4E"/>
+  
+  <!-- Label -->
+  <text x="60" y="112" font-family="sans-serif" font-size="11" font-weight="600" 
+        fill="#5BA3D0" text-anchor="middle">AGUA</text>
+</svg>

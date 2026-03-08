@@ -16,6 +16,9 @@ import type { TimeWindow } from '@/lib/analytics/windowing';
 import { formatTimeAgo } from '@/lib/analytics/windowing';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
 import { listAllExperiments } from '@/lib/experiments/config';
+import { calculateMutiraoEffectiveness, compareMutiraoVsTarifaZero } from '@/lib/games/arcade/mutirao-effectiveness';
+import { getLocalArray } from '@/lib/storage/local-session';
+import type { AnalyticsEventPayload } from '@/lib/analytics/events';
 import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -425,8 +428,53 @@ export default function EstadoPage() {
   const quickQrCtr = quickQrViews > 0 ? Math.round((quickQrClicks / quickQrViews) * 100) : 0;
 
   const arcadeOverview = metrics.arcadeInsights.overview;
+  const arcadeDecision = metrics.arcadeLineDecision;
+  const arcadeExposureDuel = metrics.arcadeExposureDuel;
+
+  // T39: Convergence scorecard (decision confidence)
+  const arcadeConvergenceScorecard = metrics.arcadeConvergenceScorecard;
+  const arcadeFinalDecision = metrics.arcadeFinalDecision;
+  const arcadeDecisionLabel =
+    arcadeDecision.decision.recommendation === 'arcade_a_leads'
+      ? 'Arcade A (Tarifa Zero) lidera'
+      : arcadeDecision.decision.recommendation === 'arcade_b_leads'
+      ? 'Arcade B (Mutirao) lidera'
+      : arcadeDecision.decision.recommendation === 'technical_tie'
+      ? 'Empate tecnico'
+      : 'Amostra insuficiente';
+  const arcadeStateLabel = arcadeDecision.decision.state;
+  const arcadeFairStatusLabel = arcadeExposureDuel.fairness.status;
+  const arcadeExposureSummary = arcadeExposureDuel.fairness.summary;
+  const arcadeUnderexposed = arcadeExposureDuel.fairness.underexposedArcade;
   const arcadeVsQuickRunDelta = arcadeOverview.runs - arcadeOverview.quickStarts;
   const arcadeVsQuickReplayDelta = arcadeOverview.replayRate - arcadeOverview.quickReplayRate;
+  const mutiraoActions = metrics.eventsByType['mutirao_action_used'] || 0;
+  const mutiraoEvents = metrics.eventsByType['mutirao_event_triggered'] || 0;
+  const mutiraoPressurePeak = metrics.eventsByType['mutirao_pressure_peak'] || 0;
+
+  // T36C: Mutirao effectiveness
+  const events = getLocalArray<AnalyticsEventPayload>('events');
+  const mutiraoEffectiveness = calculateMutiraoEffectiveness(events);
+  
+  // Calculate Tarifa Zero metrics for comparison
+  const tarifaZeroScores = events
+    .filter((e) => e.event === 'arcade_score' && e.slug === 'tarifa-zero-rj')
+    .map((e) => e.metadata?.score as number | undefined)
+    .filter((s): s is number => s !== undefined);
+  const tarifaZeroAvgScore = tarifaZeroScores.length > 0 
+    ? Math.round(tarifaZeroScores.reduce((a, b) => a + b, 0) / tarifaZeroScores.length)
+    : 0;
+  const tarifaZeroReplays = events.filter((e) => e.event === 'arcade_replay_click' && e.slug === 'tarifa-zero-rj');
+  const tarifaZeroRuns = events.filter((e) => e.event === 'arcade_run_start' && e.slug === 'tarifa-zero-rj');
+  const tarifaZeroReplayRate = tarifaZeroRuns.length > 0 
+    ? Math.round((tarifaZeroReplays.length / tarifaZeroRuns.length) * 100)
+    : 0;
+  
+  const mutiraoVsTarifaZero = compareMutiraoVsTarifaZero(
+    mutiraoEffectiveness,
+    tarifaZeroAvgScore,
+    tarifaZeroReplayRate,
+  );
 
   const homePrimaryPlayClicks = metrics.eventsByType['home_primary_play_click'] || 0;
   const homeArcadeClicks = metrics.eventsByType['home_arcade_click'] || 0;
@@ -1046,8 +1094,22 @@ export default function EstadoPage() {
             </div>
           </div>
           <p className={styles.techNote}>
-            Eventos dedicados: arcade_run_start, arcade_run_end, arcade_score, arcade_first_input_time, arcade_replay_click, arcade_powerup_collect, arcade_campaign_cta_click.
+            Eventos dedicados: arcade_run_start, arcade_run_end, arcade_score, arcade_first_input_time, arcade_replay_click, arcade_powerup_collect, arcade_campaign_cta_click, mutirao_action_used, mutirao_event_triggered, mutirao_pressure_peak.
           </p>
+          <div className={styles.eventsList}>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>mutirao_action_used</span>
+              <span className={styles.eventCount}>{mutiraoActions}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>mutirao_event_triggered</span>
+              <span className={styles.eventCount}>{mutiraoEvents}</span>
+            </div>
+            <div className={styles.eventRow}>
+              <span className={styles.eventLabel}>mutirao_pressure_peak</span>
+              <span className={styles.eventCount}>{mutiraoPressurePeak}</span>
+            </div>
+          </div>
         </Card>
 
         <Card className={styles.fullCard}>
@@ -1106,6 +1168,8 @@ export default function EstadoPage() {
                             <>
                               <div className={styles.gameTitle}>{arcadeMeta.visualVersion}</div>
                               <div className={styles.tableNote}>{arcadeMeta.assetSet}</div>
+                              {arcadeMeta.premiumTheme ? <div className={styles.tableNote}>theme: {arcadeMeta.premiumTheme}</div> : null}
+                              {arcadeMeta.audioProfile ? <div className={styles.tableNote}>audio: {arcadeMeta.audioProfile}</div> : null}
                             </>
                           ) : (
                             <span className={styles.tableNote}>canvas base</span>
@@ -1125,6 +1189,510 @@ export default function EstadoPage() {
             </div>
           )}
         </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Linha Arcade - comparacao oficial (T37)</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Estado de decisao</p>
+              <p className={styles.signalValue}>{arcadeStateLabel}</p>
+              <p className={styles.signalNote}>{arcadeDecision.decision.summary}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Leitura oficial da semana</p>
+              <p className={styles.signalValue}>{arcadeDecisionLabel}</p>
+              <p className={styles.signalNote}>Confianca: {arcadeDecision.duel.confidence}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Score forca de campanha (Tarifa)</p>
+              <p className={styles.signalValue}>{arcadeDecision.campaignStrength.tarifa.weightedScore}</p>
+              <p className={styles.signalNote}>Runs: {arcadeDecision.campaignStrength.tarifa.runs}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Score forca de campanha (Mutirao)</p>
+              <p className={styles.signalValue}>{arcadeDecision.campaignStrength.mutirao.weightedScore}</p>
+              <p className={styles.signalNote}>Runs: {arcadeDecision.campaignStrength.mutirao.runs}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Duel points Tarifa</p>
+              <p className={styles.signalValue}>{arcadeDecision.duel.tarifaPoints}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Duel points Mutirao</p>
+              <p className={styles.signalValue}>{arcadeDecision.duel.mutiraoPoints}</p>
+              <p className={styles.signalNote}>Delta: {arcadeDecision.duel.pointsDelta}</p>
+            </div>
+          </div>
+
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Dimensao</th>
+                  <th>Tarifa Zero</th>
+                  <th>Mutirao</th>
+                  <th>Vencedor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {arcadeDecision.duel.dimensions.map((dimension) => (
+                  <tr key={dimension.key}>
+                    <td className={styles.gameTitle}>{dimension.label}</td>
+                    <td className={styles.numeric}>{dimension.tarifaValue}</td>
+                    <td className={styles.numeric}>{dimension.mutiraoValue}</td>
+                    <td className={styles.gameTitle}>{dimension.winner}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {arcadeDecision.decision.warnings.length > 0 && (
+            <div className={styles.warningBox}>
+              ⚠️ Leitura sob cautela: {arcadeDecision.decision.warnings.join(' ')}
+            </div>
+          )}
+
+          <p className={styles.techNote}>
+            Regras T37: comparar Tarifa Zero vs Mutirao com guardrail de amostra minima, declarar lideranca apenas com sinal suficiente,
+            e manter empate tecnico quando a margem for estreita.
+          </p>
+        </Card>
+
+        <Card className={styles.fullCard}>
+          <h3>Linha Arcade - Exposicao justa do duelo (T38)</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Status do duelo justo</p>
+              <p className={styles.signalValue}>{arcadeFairStatusLabel}</p>
+              <p className={styles.signalNote}>{arcadeExposureSummary}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Gap de exposicao</p>
+              <p className={styles.signalValue}>{arcadeExposureDuel.fairness.exposureDeltaPct}pp</p>
+              <p className={styles.signalNote}>Meta para comparacao justa: &le; 15pp</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Gap de share de runs</p>
+              <p className={styles.signalValue}>{arcadeExposureDuel.fairness.runsDeltaPct}pp</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Lider por volume (runs)</p>
+              <p className={styles.signalValue}>{arcadeExposureDuel.contextLeaders.volumeLeader}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Lider por eficiencia (exposicao {'\u2192'} start)</p>
+              <p className={styles.signalValue}>{arcadeExposureDuel.contextLeaders.efficiencyLeader}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Lider por forca de campanha</p>
+              <p className={styles.signalValue}>{arcadeExposureDuel.contextLeaders.campaignLeader}</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Arcade subexposto</p>
+              <p className={styles.signalValue}>{arcadeUnderexposed || 'nenhum'}</p>
+              <p className={styles.signalNote}>
+                Boost recomendado: +{arcadeExposureDuel.fairness.recommendedExposureBoost} sinais na proxima janela
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Arcade</th>
+                  <th>Exposicao</th>
+                  <th>Cliques de interesse</th>
+                  <th>Starts</th>
+                  <th>Starts efetivos</th>
+                  <th>Expo {'\u2192'} Start</th>
+                  <th>Share exposicao</th>
+                </tr>
+              </thead>
+              <tbody>
+                {arcadeExposureDuel.scorecards.map((row) => (
+                  <tr key={row.slug}>
+                    <td className={styles.gameTitle}>{row.title}</td>
+                    <td className={styles.numeric}>{row.exposureSignals}</td>
+                    <td className={styles.numeric}>{row.intentClicks}</td>
+                    <td className={styles.numeric}>{row.starts}</td>
+                    <td className={styles.numeric}>{row.effectiveStarts}</td>
+                    <td className={styles.numeric}>{row.exposureToStartRate}%</td>
+                    <td className={styles.numeric}>{row.shareOfExposure}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {(arcadeFairStatusLabel === 'unbalanced_exposure' || arcadeFairStatusLabel === 'exposure_correction_in_progress') && (
+            <div className={styles.warningBox}>
+              ⚠️ Janela ainda nao totalmente justa. Acoes sugeridas: {arcadeExposureDuel.fairness.actions.join(' ')}
+            </div>
+          )}
+
+          <p className={styles.techNote}>
+            Eventos T38 para equalizacao: home_arcade_click, explorar_arcade_click, quick_to_arcade_click,
+            home_primary_play_click, above_fold_game_click, card_preview_interaction, card_full_click e arcade_run_start.
+          </p>
+        </Card>
+
+        {arcadeConvergenceScorecard && (
+          <Card className={styles.fullCard}>
+            <h3>🎯 Decisão da Linha Arcade - Convergência (T39)</h3>
+            <div className={styles.signalGrid}>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Estado de confiança</p>
+                <p className={styles.signalValue}>{arcadeConvergenceScorecard.confidence.state}</p>
+                <p className={styles.signalNote}>{arcadeConvergenceScorecard.confidence.summary}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Escore de confiança</p>
+                <p className={styles.signalValue}>{arcadeConvergenceScorecard.confidence.finalScore}/100</p>
+                <p className={styles.signalNote}>Raw: {arcadeConvergenceScorecard.confidence.rawScore} - Amostra: -{arcadeConvergenceScorecard.confidence.sampleDeduction} - Exp: -{arcadeConvergenceScorecard.confidence.exposureDeduction}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Amostra (runs efetivos)</p>
+                <p className={styles.signalValue}>{arcadeConvergenceScorecard.sample.totalEffectiveRuns}</p>
+                <p className={styles.signalNote}>Tarifa: {arcadeConvergenceScorecard.sample.tarifaEffectiveRuns}/{arcadeConvergenceScorecard.sample.minEffectiveRunsPerArcade} | Mutirao: {arcadeConvergenceScorecard.sample.mutiraoEffectiveRuns}/{arcadeConvergenceScorecard.sample.minEffectiveRunsPerArcade}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Dimensões alinhadas</p>
+                <p className={styles.signalValue}>{arcadeConvergenceScorecard.convergence.alignedDimensions}/{arcadeConvergenceScorecard.convergence.totalDimensions}</p>
+                <p className={styles.signalNote}>Rácio: {Math.round(arcadeConvergenceScorecard.convergence.alignmentRatio * 100)}%</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Pronto para decidir?</p>
+                <p className={styles.signalValue}>{arcadeConvergenceScorecard.decision.readyToDecide ? '✅ Sim' : '⏳ Não'}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Líder recomendado</p>
+                <p className={styles.signalValue}>{arcadeConvergenceScorecard.decision.recommendedLeader}</p>
+                <p className={styles.signalNote}>{arcadeConvergenceScorecard.decision.rationale}</p>
+              </div>
+            </div>
+
+            {arcadeConvergenceScorecard.convergence.divergentDimensions.length > 0 && (
+              <div className={styles.warningBox}>
+                ⚠️ Dimensões divergentes: {arcadeConvergenceScorecard.convergence.divergentDimensions.join(', ')}
+              </div>
+            )}
+
+            {arcadeConvergenceScorecard.confidence.warnings.length > 0 && (
+              <div className={styles.warningBox}>
+                📝 Avisos: {arcadeConvergenceScorecard.confidence.warnings.join(' ')}
+              </div>
+            )}
+
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Dimensão</th>
+                    <th>Tarifa</th>
+                    <th>Mutirão</th>
+                    <th>Líder</th>
+                    <th>Margem</th>
+                    <th>Força</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {arcadeConvergenceScorecard.dimensions.map((dim) => (
+                    <tr key={dim.key}>
+                      <td className={styles.gameTitle}>{dim.label}</td>
+                      <td className={styles.numeric}>{dim.tarifaValue}</td>
+                      <td className={styles.numeric}>{dim.mutiraoValue}</td>
+                      <td className={styles.gameTitle}>{dim.leader}</td>
+                      <td className={styles.numeric}>{Math.round(dim.margin)}%</td>
+                      <td className={styles.numeric}>{dim.signal === 'strong' ? '💪 Forte' : dim.signal === 'moderate' ? '➡️ Moderado' : dim.signal === 'weak' ? '🤏 Fraco' : '❌ Ausente'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <p className={styles.techNote}>
+              T39 mede convergência entre 6 dimensões (volume, exposição, eficiência, engajamento, campanha, QR). Estado: {arcadeConvergenceScorecard.confidence.state}. Próxima ação: {arcadeConvergenceScorecard.decision.nextActionIfNotReady}
+            </p>
+          </Card>
+        )}
+
+        {arcadeFinalDecision && (
+          <Card className={styles.fullCard}>
+            <h3>🏁 Decisão Final da Linha Arcade (T40)</h3>
+            <div className={styles.signalGrid}>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Decisão Final</p>
+                <p className={styles.signalValue} style={{
+                  color: arcadeFinalDecision.decision === 'focus_tarifa_zero' ? '#2E7D32' :
+                         arcadeFinalDecision.decision === 'focus_mutirao' ? '#F9A825' :
+                         arcadeFinalDecision.decision === 'maintain_dual_arcade' ? '#1976D2' :
+                         '#D32F2F'
+                }}>
+                  {arcadeFinalDecision.decision === 'focus_tarifa_zero' ? 'Tarifa Zero RJ' :
+                   arcadeFinalDecision.decision === 'focus_mutirao' ? 'Mutirão do Bairro' :
+                   arcadeFinalDecision.decision === 'maintain_dual_arcade' ? 'Manter Dual' :
+                   'Adiar Decisão'}
+                </p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Confiança</p>
+                <p className={styles.signalValue}>{arcadeFinalDecision.confidence}%</p>
+                <p className={styles.signalNote}>Score: {arcadeFinalDecision.t39.score}/100</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Líder T37</p>
+                <p className={styles.signalValue}>{arcadeFinalDecision.t37.leader === 'tarifa-zero-corredor' ? 'Tarifa' : 
+                                                   arcadeFinalDecision.t37.leader === 'mutirao-do-bairro' ? 'Mutirão' : 'N/A'}</p>
+                <p className={styles.signalNote}>{arcadeFinalDecision.t37.confidence}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Status T38</p>
+                <p className={styles.signalValue}>{arcadeFinalDecision.t38.fairnessStatus}</p>
+                <p className={styles.signalNote}>Δ={Math.round(arcadeFinalDecision.t38.exposureDeltaPct)}pp</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Dims Alinhadas</p>
+                <p className={styles.signalValue}>{arcadeFinalDecision.t39.alignedDimensions}/{arcadeFinalDecision.t39.totalDimensions}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Amostra</p>
+                <p className={styles.signalValue}>{arcadeFinalDecision.sample.totalRuns}</p>
+                <p className={styles.signalNote}>{arcadeFinalDecision.sample.sufficient ? '✅ Suficiente' : '❌ Insuficiente'}</p>
+              </div>
+            </div>
+
+            {arcadeFinalDecision.blockers.length > 0 && (
+              <div className={styles.warningBox} style={{ backgroundColor: '#FFEBEE', borderColor: '#D32F2F' }}>
+                🛑 <strong>Blocadores:</strong> {arcadeFinalDecision.blockers.join(' | ')}
+              </div>
+            )}
+
+            {arcadeFinalDecision.enablers.length > 0 && (
+              <div className={styles.warningBox} style={{ backgroundColor: '#E8F5E9', borderColor: '#2E7D32' }}>
+                ✅ <strong>Habilitadores:</strong> {arcadeFinalDecision.enablers.join(' | ')}
+              </div>
+            )}
+
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Dimensão</th>
+                    <th>Tarifa</th>
+                    <th>Mutirão</th>
+                    <th>Líder</th>
+                    <th>Margem</th>
+                    <th>Força</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {arcadeFinalDecision.t39.dimensions.map((dim) => (
+                    <tr key={dim.key}>
+                      <td className={styles.gameTitle}>{dim.label}</td>
+                      <td className={styles.numeric}>-</td>
+                      <td className={styles.numeric}>-</td>
+                      <td className={styles.gameTitle}>{dim.leader === 'tarifa-zero-corredor' ? 'Tarifa' : 
+                                                         dim.leader === 'mutirao-do-bairro' ? 'Mutirão' : 'N/A'}</td>
+                      <td className={styles.numeric}>{dim.margin}%</td>
+                      <td className={styles.numeric}>{dim.signal === 'strong' ? '💪 Forte' : dim.signal === 'moderate' ? '➡️ Moderado' : dim.signal === 'weak' ? '🤏 Fraco' : '❌ Ausente'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className={styles.warningBox} style={{ 
+              backgroundColor: '#F5F5F5', 
+              borderColor: '#666',
+              marginTop: '1rem'
+            }}>
+              <strong>Recomendação:</strong> {arcadeFinalDecision.recommendation.actionIfDecidable}
+            </div>
+
+            <p className={styles.techNote}>
+              T40 consolida T37+T38+T39 com bloqueadores explícitos. Decisão: {arcadeFinalDecision.decision}. Campanha: {arcadeFinalDecision.recommendation.campaignFocus}
+            </p>
+          </Card>
+        )}
+
+        {mutiraoEffectiveness.totalRuns > 0 && (
+          <Card className={styles.fullCard}>
+            <h3>🎮 Mutirão do Bairro – Efetividade (T36C Premium)</h3>
+            <div className={styles.signalGrid}>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Total de runs</p>
+                <p className={styles.signalValue}>{mutiraoEffectiveness.totalRuns}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Taxa de colapso</p>
+                <p className={styles.signalValue} style={{ 
+                  color: mutiraoEffectiveness.collapseRate > 60 ? '#D74B4B' : 
+                         mutiraoEffectiveness.collapseRate > 40 ? '#F18F4E' : '#7FD36E' 
+                }}>
+                  {mutiraoEffectiveness.collapseRate}%
+                </p>
+                <p className={styles.signalNote}>{mutiraoEffectiveness.collapseCount} colapsos / {mutiraoEffectiveness.survivalCount} sobrevivências</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Score médio</p>
+                <p className={styles.signalValue}>{mutiraoEffectiveness.avgScore}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Diversidade de ações</p>
+                <p className={styles.signalValue}>{mutiraoEffectiveness.actionDiversity}</p>
+                <p className={styles.signalNote}>0-100: distribuição uniforme entre ações</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Ação mais usada</p>
+                <p className={styles.signalValue}>{mutiraoEffectiveness.mostUsedAction}</p>
+                <p className={styles.signalNote}>{mutiraoEffectiveness.totalActions} ações totais</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Pico de pressão médio</p>
+                <p className={styles.signalValue}>{mutiraoEffectiveness.avgPressurePeak}%</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Duração média</p>
+                <p className={styles.signalValue}>{Math.round(mutiraoEffectiveness.avgDurationMs / 1000)}s</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Taxa de replay</p>
+                <p className={styles.signalValue}>{mutiraoEffectiveness.replayRate}%</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Taxa coletiva média</p>
+                <p className={styles.signalValue}>{mutiraoEffectiveness.collectiveRate}%</p>
+              </div>
+            </div>
+
+            <div className={styles.tableWrap}>
+              <h4>Breakdown de ações</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Ação</th>
+                    <th>Usos</th>
+                    <th>% do total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className={styles.gameTitle}>Reparar</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.actionBreakdown.reparar}</td>
+                    <td className={styles.numeric}>
+                      {mutiraoEffectiveness.totalActions > 0 
+                        ? Math.round((mutiraoEffectiveness.actionBreakdown.reparar / mutiraoEffectiveness.totalActions) * 100)
+                        : 0}%
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>Defender</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.actionBreakdown.defender}</td>
+                    <td className={styles.numeric}>
+                      {mutiraoEffectiveness.totalActions > 0 
+                        ? Math.round((mutiraoEffectiveness.actionBreakdown.defender / mutiraoEffectiveness.totalActions) * 100)
+                        : 0}%
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>Mobilizar</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.actionBreakdown.mobilizar}</td>
+                    <td className={styles.numeric}>
+                      {mutiraoEffectiveness.totalActions > 0 
+                        ? Math.round((mutiraoEffectiveness.actionBreakdown.mobilizar / mutiraoEffectiveness.totalActions) * 100)
+                        : 0}%
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>Mutirão</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.actionBreakdown.mutirao}</td>
+                    <td className={styles.numeric}>
+                      {mutiraoEffectiveness.totalActions > 0 
+                        ? Math.round((mutiraoEffectiveness.actionBreakdown.mutirao / mutiraoEffectiveness.totalActions) * 100)
+                        : 0}%
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className={styles.tableWrap}>
+              <h4>Eventos especiais</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Evento</th>
+                    <th>Ocorrências</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className={styles.gameTitle}>Chuva forte</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.eventBreakdown.chuvaForte}</td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>Boato de pânico</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.eventBreakdown.boatoPanico}</td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>Onda solidária</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.eventBreakdown.ondaSolidaria}</td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>Tranco de sabotagem</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.eventBreakdown.trancoSabotagem}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className={styles.tableWrap}>
+              <h4>Milestones de pressão</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Threshold</th>
+                    <th>Atingidos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className={styles.gameTitle}>55% (Moderado)</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.pressureMilestones.peak55}</td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>70% (Alto)</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.pressureMilestones.peak70}</td>
+                  </tr>
+                  <tr>
+                    <td className={styles.gameTitle}>85% (Crítico)</td>
+                    <td className={styles.numeric}>{mutiraoEffectiveness.pressureMilestones.peak85}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {mutiraoVsTarifaZero && (
+              <div className={styles.techNote}>
+                <strong>Comparativo Mutirão vs Tarifa Zero RJ:</strong>
+                <p>
+                  Engajamento Mutirão: {mutiraoVsTarifaZero.mutiraoEngagement === 'higher' ? '⬆ Superior' : 
+                                        mutiraoVsTarifaZero.mutiraoEngagement === 'similar' ? '➡ Similar' : '⬇ Inferior'} 
+                  {' | '}Score: {mutiraoVsTarifaZero.scoreComparison}
+                  {' | '}Replay: {mutiraoVsTarifaZero.replayComparison}
+                </p>
+                <p className={styles.signalNote}>{mutiraoVsTarifaZero.recommendation}</p>
+              </div>
+            )}
+
+            <p className={styles.techNote}>
+              Eventos Mutirão: mutirao_action_used, mutirao_event_triggered, mutirao_pressure_peak. 
+              Fonte: lib/games/arcade/mutirao-effectiveness.ts (T36C).
+            </p>
+          </Card>
+        )}
 
         <Card className={styles.fullCard}>
           <h3>Front-stage da Home e Explorar</h3>

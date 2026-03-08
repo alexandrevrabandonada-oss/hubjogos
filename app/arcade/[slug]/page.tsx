@@ -5,12 +5,17 @@ import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { TarifaZeroArcadeGame } from '@/components/games/arcade/TarifaZeroArcadeGame';
 import { PasseLivreArcadeGame } from '@/components/games/arcade/PasseLivreArcadeGame';
+import { MutiraoDoBairroArcadeGame } from '@/components/games/arcade/MutiraoDoBairroArcadeGame';
 import { getGameBySlug } from '@/lib/games/catalog';
 import styles from './page.module.css';
 
 interface ArcadePageProps {
   params: {
     slug: string;
+  };
+  searchParams?: {
+    preview?: string;
+    fixture?: string;
   };
 }
 
@@ -42,8 +47,12 @@ export function generateMetadata({ params }: ArcadePageProps): Metadata {
   };
 }
 
-export default function ArcadeGamePage({ params }: ArcadePageProps) {
+export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps) {
   const game = getGameBySlug(params.slug);
+  const previewFinal =
+    searchParams?.preview === 'final' ||
+    searchParams?.fixture === 'final-premium' ||
+    searchParams?.fixture === 'final-mutirao';
 
   if (!game || game.kind !== 'arcade') {
     notFound();
@@ -52,9 +61,11 @@ export default function ArcadeGamePage({ params }: ArcadePageProps) {
   let gameComponent = null;
 
   if (game.slug === 'tarifa-zero-corredor') {
-    gameComponent = <TarifaZeroArcadeGame game={game} />;
+    gameComponent = <TarifaZeroArcadeGame game={game} previewFinal={previewFinal} />;
   } else if (game.slug === 'passe-livre-nacional') {
     gameComponent = <PasseLivreArcadeGame game={game} />;
+  } else if (game.slug === 'mutirao-do-bairro') {
+    gameComponent = <MutiraoDoBairroArcadeGame game={game} previewFinal={previewFinal} />;
   }
 
   return (

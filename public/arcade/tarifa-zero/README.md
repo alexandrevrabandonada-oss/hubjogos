@@ -4,13 +4,13 @@ Localizacao: `public/arcade/tarifa-zero/`
 
 Criado em: T35A (2026-03-07)
 
-Atualizado em: T35D (2026-03-07)
+Atualizado em: T35E (2026-03-07)
 
 Proposito: organizar, versionar e integrar os assets reais do arcade sem quebrar gameplay, performance ou fallback.
 
 ## Versao ativa
 
-- `visualVersion`: `T35D-assets-v1`
+- `visualVersion`: `T35E-premium-v7`
 - `assetSet`: `corredor-do-povo-v1`
 - Runtime: asset-first com fallback canvas
 
@@ -69,14 +69,21 @@ Uso:
 Obstaculos:
 - `obstacles/obstacle-catraca.svg`
 - `obstacles/obstacle-barreira-pesada.svg`
+- `obstacles/obstacle-bloqueio-sequencia.svg` (T35E - variante dedicada)
 - `obstacles/obstacle-zona-pressao.svg`
 
 Pickups:
 - `pickups/pickup-apoio.svg`
 - `pickups/pickup-apoio-cadeia.svg`
+- `pickups/pickup-apoio-territorial.svg` (variante)
 - `pickups/pickup-mutirao.svg`
+- `pickups/pickup-mutirao-bairro.svg` (variante)
+- `pickups/pickup-mutirao-sindical.svg` (variante)
 - `pickups/pickup-individualismo.svg`
+- `pickups/pickup-individualismo-tentador.svg` (variante)
+- `pickups/pickup-individualismo-cluster.svg` (T35E - variante dedicada)
 - `pickups/pickup-chance-rara.svg`
+- `pickups/pickup-chance-abertura.svg` (variante)
 - `pickups/pickup-chance-virada.svg`
 
 ### Linha D - HUD e final card
@@ -98,6 +105,40 @@ Pickups:
 Ativo via `drawImage` com cache:
 - background
 - player
+- todas as entidades (pickup e obstáculos)
+- ui/hud elements
+- variantes dedicadas implementadas no T35E
+
+## Linha T35E - Premium coeso
+
+Objetivo: transformar o jogo em experiência visualmente mais coesa e premium.
+
+### Variantes dedicadas criadas
+
+1. **obstacle-bloqueio-sequencia.svg**
+	- Substitui composição de 2x barreira-pesada + linha pontilhada
+	- Visual coeso de bloqueio sequencial vertical
+	- Melhor leitura em movimento
+
+2. **pickup-individualismo-cluster.svg**
+	- Substitui composição de 3x individualismo base
+	- Cluster visualmente unificado
+	- Identidade distinta de individualismo coletivo
+
+### Melhorias visuais T35E
+
+- **Transição de fase**: já implementada no T35D, validada funcionando
+- **Final premium integrado**: card de resultado com asset premium, scoreboards detalhados
+- **CTAs refinados**: ordem clara (replay → próximo jogo → compartilhar → participar)
+- **Visual version bump**: T35E-premium-v7 exposto no HUD e /estado
+
+### Smoke test
+
+Criado em `tests/e2e/tarifa-zero-t35e-premium.spec.ts`:
+- Validação de carregamento e assets
+- Validação de variantes dedicadas
+- Validação de final premium e CTAs
+- Teste completo de run (55s)
 - pickups
 - obstaculos
 - HUD principal

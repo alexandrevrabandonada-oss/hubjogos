@@ -68,6 +68,224 @@ interface ArcadeRow {
   replayRate: number;
 }
 
+type ArcadeDecisionState =
+  | 'insufficient_sample'
+  | 'early_signal'
+  | 'directional_lead'
+  | 'candidate_flagship'
+  | 'ready_for_next_step';
+
+type ArcadeSlug = 'tarifa-zero-corredor' | 'mutirao-do-bairro';
+
+interface ArcadeCampaignStrengthRow {
+  slug: string;
+  title: string;
+  runs: number;
+  runEndRate: number;
+  replayRate: number;
+  campaignCtaRate: number;
+  firstInputAvgMs: number;
+  weightedScore: number;
+}
+
+interface ArcadeDuelDimension {
+  key: 'runs' | 'run_end_rate' | 'replay_rate' | 'campaign_cta_rate' | 'first_input_time' | 'engagement_index';
+  label: string;
+  tarifaValue: number;
+  mutiraoValue: number;
+  winner: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'tie';
+  weight: number;
+}
+
+interface ArcadeLineDecision {
+  compared: {
+    tarifaSlug: string;
+    mutiraoSlug: string;
+  };
+  sample: {
+    tarifaRuns: number;
+    mutiraoRuns: number;
+    minRunsForSignal: number;
+    minRunsForReadiness: number;
+  };
+  campaignStrength: {
+    tarifa: ArcadeCampaignStrengthRow;
+    mutirao: ArcadeCampaignStrengthRow;
+    winner: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie';
+    scoreDelta: number;
+  };
+  duel: {
+    leader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'insufficient_sample';
+    confidence: 'insufficient_sample' | 'early_signal' | 'directional' | 'strong';
+    tarifaPoints: number;
+    mutiraoPoints: number;
+    pointsDelta: number;
+    dimensions: ArcadeDuelDimension[];
+  };
+  decision: {
+    state: ArcadeDecisionState;
+    recommendation: 'arcade_a_leads' | 'arcade_b_leads' | 'technical_tie' | 'insufficient_sample';
+    readyForNextStep: boolean;
+    summary: string;
+    warnings: string[];
+  };
+}
+
+type ArcadeFairStatus = 'unbalanced_exposure' | 'exposure_correction_in_progress' | 'fair_comparison_window' | 'decision_ready';
+
+interface ArcadeExposureScorecard {
+  slug: string;
+  title: string;
+  exposureSignals: number;
+  intentClicks: number;
+  starts: number;
+  effectiveStarts: number;
+  exposureToIntentRate: number;
+  intentToStartRate: number;
+  exposureToStartRate: number;
+  exposureToEffectiveRate: number;
+  shareOfExposure: number;
+  shareOfRuns: number;
+}
+
+interface ArcadeExposureDuel {
+  compared: {
+    tarifaSlug: string;
+    mutiraoSlug: string;
+  };
+  scorecards: ArcadeExposureScorecard[];
+  totals: {
+    exposureSignals: number;
+    starts: number;
+  };
+  fairness: {
+    status: ArcadeFairStatus;
+    minExposureForFairWindow: number;
+    minRunsForDecision: number;
+    exposureDeltaPct: number;
+    runsDeltaPct: number;
+    underexposedArcade: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | null;
+    recommendedExposureBoost: number;
+    summary: string;
+    actions: string[];
+  };
+  contextLeaders: {
+    volumeLeader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie';
+    efficiencyLeader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie';
+    campaignLeader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'insufficient_sample';
+  };
+}
+
+// T39: Convergence Scorecard for Confidence-Based Decision
+type ArcadeConvergenceConfidence =
+  | 'insufficient_fair_sample'        // < 30 runs efetivos por arcade OU exposição ainda desequilibrada
+  | 'fair_sample_but_divergent'       // >= 30 runs e exposição equilibrada MAS líderes divergem em 3+ dimensões
+  | 'directional_alignment'           // 2/3 ou mais dimensões apontam mesmo líder OU líderes alternam entre dois
+  | 'decision_candidate'              // 4/6 dimensões convergem + replay/QR corrobora + volume > 40/60 split
+  | 'ready_for_next_step';            // 5+/6 dimensões convergem + confidence >= 85% + volume >= 50/50 split
+
+interface ArcadeConvergenceDimension {
+  key: 'volume' | 'exposure' | 'exposure_efficiency' | 'effective_runs' | 'campaign_strength' | 'qr_final_card';
+  label: string;
+  tarifaValue: number;
+  mutiraoValue: number;
+  leader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'insufficient_data';
+  margin: number; // % delta
+  weight: number; // importance in decision
+  signal: 'strong' | 'moderate' | 'weak' | 'absent';
+}
+
+interface ArcadeConvergenceScorecard {
+  compared: {
+    tarifaSlug: string;
+    mutiraoSlug: string;
+  };
+  sample: {
+    totalEffectiveRuns: number;
+    tarifaEffectiveRuns: number;
+    mutiraoEffectiveRuns: number;
+    minEffectiveRunsPerArcade: number;
+    sampleSufficiency: 'insufficient' | 'adequate' | 'strong';
+    sampleGapDeduction: number; // deduction from confidence if sample gap large
+  };
+  exposure: {
+    isBalanced: boolean;
+    exposureDeltaPct: number;
+    minBalanceThreshold: number;
+  };
+  dimensions: ArcadeConvergenceDimension[];
+  convergence: {
+    alignedDimensions: number; // count of dims pointing to same leader
+    totalDimensions: number;
+    alignmentRatio: number; // 0-1
+    divergentDimensions: string[]; // list of dims that diverge
+  };
+  confidence: {
+    rawScore: number; // 0-100 before deductions
+    sampleDeduction: number;
+    exposureDeduction: number;
+    finalScore: number; // 0-100
+    state: ArcadeConvergenceConfidence;
+    summary: string;
+    warnings: string[];
+  };
+  decision: {
+    readyToDecide: boolean;
+    recommendedLeader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'no consensus' | 'maintain parity';
+    rationale: string;
+    nextActionIfNotReady: string;
+  };
+}
+
+interface ArcadeFinalDecisionDimension {
+  key: string;
+  label: string;
+  leader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'insufficient_data';
+  margin: number;
+  signal: 'strong' | 'moderate' | 'weak' | 'absent';
+}
+
+interface ArcadeFinalDecision {
+  generatedAt: string;
+  window: string;
+  decision: 'focus_tarifa_zero' | 'focus_mutirao' | 'maintain_dual_arcade' | 'defer_new_product';
+  confidence: number; // 0-100
+  rationale: string;
+  blockers: string[];
+  enablers: string[];
+  t37: {
+    leader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'insufficient_sample';
+    state: string;
+    confidence: string;
+    summary: string;
+  };
+  t38: {
+    fairnessStatus: 'unbalanced_exposure' | 'correcting' | 'fair_exposure' | 'ready_to_compare';
+    exposureDeltaPct: number;
+    volumeLeader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'no consensus';
+    efficiencyLeader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'no consensus';
+  };
+  t39: {
+    state: ArcadeConvergenceConfidence;
+    alignedDimensions: number;
+    totalDimensions: number;
+    score: number;
+    dimensions: ArcadeFinalDecisionDimension[];
+  };
+  sample: {
+    tarifaRuns: number;
+    mutiraoRuns: number;
+    totalRuns: number;
+    minRunsForSignal: number;
+    sufficient: boolean;
+  };
+  recommendation: {
+    actionIfDecidable: string;
+    actionIfDeferred: string;
+    campaignFocus: 'concentrate_tarifa' | 'concentrate_mutirao' | 'maintain_parity' | 'defer_and_retest';
+  };
+}
+
 interface CollectionTargets {
   quick: {
     sessions: number;
@@ -276,8 +494,873 @@ export interface MetricsSnapshot {
     };
     byArcadeGame: ArcadeRow[];
   };
+  arcadeLineDecision: ArcadeLineDecision;
+  arcadeExposureDuel: ArcadeExposureDuel;
+  arcadeConvergenceScorecard?: ArcadeConvergenceScorecard; // T39: Decision confidence
+  arcadeFinalDecision?: ArcadeFinalDecision; // T40: Final arcade decision
   effectiveRuns?: EffectiveRunsAnalysis; // Tijolo 33
   generatedAt: string;
+}
+
+function normalizePct(value: number, max = 100) {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  return Math.max(0, Math.min(max, value));
+}
+
+function buildArcadeCampaignStrength(row: ArcadeRow | undefined, fallbackSlug: string): ArcadeCampaignStrengthRow {
+  const runs = row?.runs || 0;
+  const runEndRate = normalizePct(row?.runEndRate || 0);
+  const replayRate = normalizePct(row?.replayRate || 0);
+  const campaignCtaRate = runs > 0 ? normalizePct(Math.round(((row?.campaignCtaClicks || 0) / runs) * 100)) : 0;
+  const firstInputAvgMs = row?.firstInputAvgMs || 0;
+  const firstInputScore = firstInputAvgMs > 0 ? normalizePct(Math.round((Math.max(0, 4000 - firstInputAvgMs) / 4000) * 100)) : 0;
+
+  const weightedScore = Math.round(
+    runEndRate * 0.25 + replayRate * 0.3 + campaignCtaRate * 0.3 + firstInputScore * 0.15,
+  );
+
+  return {
+    slug: row?.slug || fallbackSlug,
+    title: row?.title || fallbackSlug,
+    runs,
+    runEndRate,
+    replayRate,
+    campaignCtaRate,
+    firstInputAvgMs,
+    weightedScore,
+  };
+}
+
+function getArcadeLineDecision(arcadeRows: ArcadeRow[]): ArcadeLineDecision {
+  const tarifaRow =
+    arcadeRows.find((row) => row.slug === 'tarifa-zero-corredor') ||
+    arcadeRows.find((row) => row.slug === 'tarifa-zero-rj');
+  const mutiraoRow = arcadeRows.find((row) => row.slug === 'mutirao-do-bairro');
+
+  const tarifa = buildArcadeCampaignStrength(tarifaRow, 'tarifa-zero-corredor');
+  const mutirao = buildArcadeCampaignStrength(mutiraoRow, 'mutirao-do-bairro');
+
+  const minRunsForSignal = 30;
+  const minRunsForReadiness = 80;
+  const minRuns = Math.min(tarifa.runs, mutirao.runs);
+
+  const tarifaEngagement = Math.round(tarifa.replayRate * 0.6 + tarifa.campaignCtaRate * 0.4);
+  const mutiraoEngagement = Math.round(mutirao.replayRate * 0.6 + mutirao.campaignCtaRate * 0.4);
+
+  const dimensions: ArcadeDuelDimension[] = [
+    {
+      key: 'runs',
+      label: 'Runs',
+      tarifaValue: tarifa.runs,
+      mutiraoValue: mutirao.runs,
+      winner: tarifa.runs === mutirao.runs ? 'tie' : tarifa.runs > mutirao.runs ? 'tarifa-zero-corredor' : 'mutirao-do-bairro',
+      weight: 1.5,
+    },
+    {
+      key: 'run_end_rate',
+      label: 'Run end rate',
+      tarifaValue: tarifa.runEndRate,
+      mutiraoValue: mutirao.runEndRate,
+      winner:
+        tarifa.runEndRate === mutirao.runEndRate
+          ? 'tie'
+          : tarifa.runEndRate > mutirao.runEndRate
+          ? 'tarifa-zero-corredor'
+          : 'mutirao-do-bairro',
+      weight: 1,
+    },
+    {
+      key: 'replay_rate',
+      label: 'Replay rate',
+      tarifaValue: tarifa.replayRate,
+      mutiraoValue: mutirao.replayRate,
+      winner: tarifa.replayRate === mutirao.replayRate ? 'tie' : tarifa.replayRate > mutirao.replayRate ? 'tarifa-zero-corredor' : 'mutirao-do-bairro',
+      weight: 1.2,
+    },
+    {
+      key: 'campaign_cta_rate',
+      label: 'CTA pos-run rate',
+      tarifaValue: tarifa.campaignCtaRate,
+      mutiraoValue: mutirao.campaignCtaRate,
+      winner:
+        tarifa.campaignCtaRate === mutirao.campaignCtaRate
+          ? 'tie'
+          : tarifa.campaignCtaRate > mutirao.campaignCtaRate
+          ? 'tarifa-zero-corredor'
+          : 'mutirao-do-bairro',
+      weight: 1.2,
+    },
+    {
+      key: 'first_input_time',
+      label: 'First input (menor melhor)',
+      tarifaValue: tarifa.firstInputAvgMs,
+      mutiraoValue: mutirao.firstInputAvgMs,
+      winner:
+        tarifa.firstInputAvgMs === mutirao.firstInputAvgMs
+          ? 'tie'
+          : tarifa.firstInputAvgMs === 0
+          ? 'mutirao-do-bairro'
+          : mutirao.firstInputAvgMs === 0
+          ? 'tarifa-zero-corredor'
+          : tarifa.firstInputAvgMs < mutirao.firstInputAvgMs
+          ? 'tarifa-zero-corredor'
+          : 'mutirao-do-bairro',
+      weight: 0.7,
+    },
+    {
+      key: 'engagement_index',
+      label: 'Indice de engajamento',
+      tarifaValue: tarifaEngagement,
+      mutiraoValue: mutiraoEngagement,
+      winner:
+        tarifaEngagement === mutiraoEngagement ? 'tie' : tarifaEngagement > mutiraoEngagement ? 'tarifa-zero-corredor' : 'mutirao-do-bairro',
+      weight: 1.4,
+    },
+  ];
+
+  let tarifaPoints = 0;
+  let mutiraoPoints = 0;
+
+  for (const dimension of dimensions) {
+    if (dimension.winner === 'tarifa-zero-corredor') {
+      tarifaPoints += dimension.weight;
+    } else if (dimension.winner === 'mutirao-do-bairro') {
+      mutiraoPoints += dimension.weight;
+    }
+  }
+
+  const pointsDelta = Number((tarifaPoints - mutiraoPoints).toFixed(2));
+  const absDelta = Math.abs(pointsDelta);
+  const scoreDelta = tarifa.weightedScore - mutirao.weightedScore;
+
+  const warnings: string[] = [];
+  if (tarifa.runs < minRunsForSignal || mutirao.runs < minRunsForSignal) {
+    warnings.push(
+      `Amostra arcade ainda em consolidacao: Tarifa ${tarifa.runs}/${minRunsForSignal} runs, Mutirao ${mutirao.runs}/${minRunsForSignal} runs.`,
+    );
+  }
+  if (tarifa.runs < minRunsForReadiness || mutirao.runs < minRunsForReadiness) {
+    warnings.push(
+      `Amostra para readiness ainda insuficiente: Tarifa ${tarifa.runs}/${minRunsForReadiness}, Mutirao ${mutirao.runs}/${minRunsForReadiness}.`,
+    );
+  }
+  if (absDelta < 1) {
+    warnings.push('Pontuacao tecnica muito proxima entre os dois arcades; manter leitura como empate tecnico.');
+  }
+
+  let leader: ArcadeLineDecision['duel']['leader'] = 'technical_tie';
+  if (minRuns < 10) {
+    leader = 'insufficient_sample';
+  } else if (pointsDelta > 0.99) {
+    leader = 'tarifa-zero-corredor';
+  } else if (pointsDelta < -0.99) {
+    leader = 'mutirao-do-bairro';
+  }
+
+  const confidence: ArcadeLineDecision['duel']['confidence'] =
+    minRuns < 10 ? 'insufficient_sample' : minRuns < minRunsForSignal ? 'early_signal' : absDelta >= 2.4 ? 'strong' : 'directional';
+
+  const campaignWinner =
+    scoreDelta > 2
+      ? 'tarifa-zero-corredor'
+      : scoreDelta < -2
+      ? 'mutirao-do-bairro'
+      : 'technical_tie';
+
+  let state: ArcadeDecisionState = 'directional_lead';
+  let recommendation: ArcadeLineDecision['decision']['recommendation'] = 'technical_tie';
+  let summary = 'Empate tecnico entre os arcades nesta janela.';
+  let readyForNextStep = false;
+
+  if (minRuns < 10) {
+    state = 'insufficient_sample';
+    recommendation = 'insufficient_sample';
+    summary = 'Amostra insuficiente para declarar lideranca entre Tarifa Zero e Mutirao.';
+  } else if (minRuns < minRunsForSignal) {
+    state = 'early_signal';
+    recommendation = leader === 'tarifa-zero-corredor' ? 'arcade_a_leads' : leader === 'mutirao-do-bairro' ? 'arcade_b_leads' : 'technical_tie';
+    summary =
+      leader === 'technical_tie'
+        ? 'Sinal inicial sem vencedor claro; manter distribuicao equilibrada entre os dois arcades.'
+        : `Sinal inicial aponta ${leader === 'tarifa-zero-corredor' ? 'Tarifa Zero' : 'Mutirao'} na frente, ainda sem massa critica.`;
+  } else if (leader === 'technical_tie') {
+    state = 'directional_lead';
+    recommendation = 'technical_tie';
+    summary = 'Com amostra minima atingida, a leitura continua em empate tecnico.';
+  } else if (minRuns >= minRunsForReadiness && absDelta >= 2.4) {
+    state = 'ready_for_next_step';
+    recommendation = leader === 'tarifa-zero-corredor' ? 'arcade_a_leads' : 'arcade_b_leads';
+    summary = `${leader === 'tarifa-zero-corredor' ? 'Tarifa Zero' : 'Mutirao'} lidera com amostra minima robusta para proximo passo.`;
+    readyForNextStep = true;
+  } else if (absDelta >= 2.4) {
+    state = 'candidate_flagship';
+    recommendation = leader === 'tarifa-zero-corredor' ? 'arcade_a_leads' : 'arcade_b_leads';
+    summary = `${leader === 'tarifa-zero-corredor' ? 'Tarifa Zero' : 'Mutirao'} lidera com sinal forte, aguardando consolidacao de amostra para readiness.`;
+  } else {
+    state = 'directional_lead';
+    recommendation = leader === 'tarifa-zero-corredor' ? 'arcade_a_leads' : 'arcade_b_leads';
+    summary = `${leader === 'tarifa-zero-corredor' ? 'Tarifa Zero' : 'Mutirao'} lidera de forma direcional, com margem ainda moderada.`;
+  }
+
+  return {
+    compared: {
+      tarifaSlug: tarifa.slug,
+      mutiraoSlug: mutirao.slug,
+    },
+    sample: {
+      tarifaRuns: tarifa.runs,
+      mutiraoRuns: mutirao.runs,
+      minRunsForSignal,
+      minRunsForReadiness,
+    },
+    campaignStrength: {
+      tarifa,
+      mutirao,
+      winner: campaignWinner,
+      scoreDelta,
+    },
+    duel: {
+      leader,
+      confidence,
+      tarifaPoints,
+      mutiraoPoints,
+      pointsDelta,
+      dimensions,
+    },
+    decision: {
+      state,
+      recommendation,
+      readyForNextStep,
+      summary,
+      warnings,
+    },
+  };
+}
+
+function resolveArcadeSlugFromEvent(eventName: string, slug: string, metadata?: Record<string, unknown>): string | null {
+  const rawSlug =
+    eventName === 'home_arcade_click' || eventName === 'explorar_arcade_click' || eventName === 'quick_to_arcade_click'
+      ? String(metadata?.arcadeSlug || '')
+      : eventName === 'home_primary_play_click' && String(metadata?.targetType || '').toLowerCase() === 'arcade'
+      ? String(metadata?.targetSlug || '')
+      : eventName === 'above_fold_game_click' && String(metadata?.gameType || '').toLowerCase() === 'arcade'
+      ? String(metadata?.gameSlug || slug || '')
+      : eventName === 'card_preview_interaction' || eventName === 'card_full_click'
+      ? String(slug || '')
+      : null;
+
+  if (!rawSlug) {
+    return null;
+  }
+
+  const normalized = rawSlug === 'tarifa-zero-rj' ? 'tarifa-zero-corredor' : rawSlug;
+  return normalized === 'tarifa-zero-corredor' || normalized === 'mutirao-do-bairro' ? normalized : null;
+}
+
+function getArcadeExposureDuel(
+  events: Array<{ sessionId: string; eventName: string; slug: string; metadata?: Record<string, unknown> }>,
+  arcadeLineDecision: ArcadeLineDecision,
+  effectiveRuns?: EffectiveRunsAnalysis,
+): ArcadeExposureDuel {
+  const rows: Record<'tarifa-zero-corredor' | 'mutirao-do-bairro', ArcadeExposureScorecard> = {
+    'tarifa-zero-corredor': {
+      slug: 'tarifa-zero-corredor',
+      title: 'Tarifa Zero RJ - Corredor do Povo',
+      exposureSignals: 0,
+      intentClicks: 0,
+      starts: 0,
+      effectiveStarts: 0,
+      exposureToIntentRate: 0,
+      intentToStartRate: 0,
+      exposureToStartRate: 0,
+      exposureToEffectiveRate: 0,
+      shareOfExposure: 0,
+      shareOfRuns: 0,
+    },
+    'mutirao-do-bairro': {
+      slug: 'mutirao-do-bairro',
+      title: 'Mutirao do Bairro',
+      exposureSignals: 0,
+      intentClicks: 0,
+      starts: 0,
+      effectiveStarts: 0,
+      exposureToIntentRate: 0,
+      intentToStartRate: 0,
+      exposureToStartRate: 0,
+      exposureToEffectiveRate: 0,
+      shareOfExposure: 0,
+      shareOfRuns: 0,
+    },
+  };
+
+  for (const event of events) {
+    const isExposureEvent =
+      event.eventName === 'card_preview_interaction' ||
+      event.eventName === 'card_full_click' ||
+      event.eventName === 'home_arcade_click' ||
+      event.eventName === 'explorar_arcade_click' ||
+      event.eventName === 'quick_to_arcade_click' ||
+      event.eventName === 'home_primary_play_click' ||
+      event.eventName === 'above_fold_game_click';
+
+    if (isExposureEvent) {
+      const arcadeSlug = resolveArcadeSlugFromEvent(event.eventName, event.slug, event.metadata);
+      if (arcadeSlug && (arcadeSlug === 'tarifa-zero-corredor' || arcadeSlug === 'mutirao-do-bairro')) {
+        rows[arcadeSlug as ArcadeSlug].exposureSignals += 1;
+        if (event.eventName !== 'card_preview_interaction') {
+          rows[arcadeSlug as ArcadeSlug].intentClicks += 1;
+        }
+      }
+    }
+
+    if (event.eventName === 'arcade_run_start') {
+      const runSlugRaw = String(event.metadata?.arcadeSlug || event.slug || '');
+      const runSlug = runSlugRaw === 'tarifa-zero-rj' ? 'tarifa-zero-corredor' : runSlugRaw;
+      if (runSlug === 'tarifa-zero-corredor' || runSlug === 'mutirao-do-bairro') {
+        rows[runSlug].starts += 1;
+      }
+    }
+  }
+
+  const effectiveByGame = effectiveRuns?.effectiveRunsByGame;
+  if (effectiveByGame) {
+    rows['tarifa-zero-corredor'].effectiveStarts = effectiveByGame.get('tarifa-zero-corredor')?.effectiveRuns || 0;
+    rows['mutirao-do-bairro'].effectiveStarts = effectiveByGame.get('mutirao-do-bairro')?.effectiveRuns || 0;
+  }
+
+  const scorecards = [rows['tarifa-zero-corredor'], rows['mutirao-do-bairro']].map((row) => ({
+    ...row,
+  }));
+  const totalExposure = scorecards.reduce((sum, row) => sum + row.exposureSignals, 0);
+  const totalRuns = scorecards.reduce((sum, row) => sum + row.starts, 0);
+
+  for (const row of scorecards) {
+    row.exposureToIntentRate = row.exposureSignals > 0 ? Math.round((row.intentClicks / row.exposureSignals) * 100) : 0;
+    row.intentToStartRate = row.intentClicks > 0 ? Math.round((row.starts / row.intentClicks) * 100) : 0;
+    row.exposureToStartRate = row.exposureSignals > 0 ? Math.round((row.starts / row.exposureSignals) * 100) : 0;
+    row.exposureToEffectiveRate = row.exposureSignals > 0 ? Math.round((row.effectiveStarts / row.exposureSignals) * 100) : 0;
+    row.shareOfExposure = totalExposure > 0 ? Math.round((row.exposureSignals / totalExposure) * 100) : 0;
+    row.shareOfRuns = totalRuns > 0 ? Math.round((row.starts / totalRuns) * 100) : 0;
+  }
+
+  const tarifa = scorecards[0];
+  const mutirao = scorecards[1];
+  const exposureDeltaPct = Math.abs(tarifa.shareOfExposure - mutirao.shareOfExposure);
+  const runsDeltaPct = Math.abs(tarifa.shareOfRuns - mutirao.shareOfRuns);
+  const minExposureForFairWindow = 30;
+  const minRunsForDecision = arcadeLineDecision.sample.minRunsForSignal;
+  const minExposure = Math.min(tarifa.exposureSignals, mutirao.exposureSignals);
+  const minRuns = Math.min(tarifa.starts, mutirao.starts);
+
+  const underexposedArcade: ArcadeExposureDuel['fairness']['underexposedArcade'] =
+    tarifa.exposureSignals === mutirao.exposureSignals
+      ? null
+      : tarifa.exposureSignals < mutirao.exposureSignals
+      ? 'tarifa-zero-corredor'
+      : 'mutirao-do-bairro';
+
+  const recommendedExposureBoost = underexposedArcade ? Math.ceil(Math.abs(tarifa.exposureSignals - mutirao.exposureSignals) / 2) : 0;
+
+  let status: ArcadeFairStatus = 'fair_comparison_window';
+  if (exposureDeltaPct >= 35 || minExposure < 12) {
+    status = 'unbalanced_exposure';
+  } else if (exposureDeltaPct > 15 || minExposure < minExposureForFairWindow) {
+    status = 'exposure_correction_in_progress';
+  } else if (minRuns >= minRunsForDecision) {
+    status = 'decision_ready';
+  }
+
+  let summary = 'Janela de comparacao justa aberta por exposicao; aguardar consolidacao de runs para decisao oficial.';
+  if (status === 'unbalanced_exposure') {
+    summary = `Duelo enviesado por exposicao (${exposureDeltaPct}pp de gap); corrigir distribuicao antes de declarar vencedor.`;
+  } else if (status === 'exposure_correction_in_progress') {
+    summary = `Correcao de exposicao em andamento (${exposureDeltaPct}pp de gap); manter pareamento de vitrine.`;
+  } else if (status === 'decision_ready') {
+    summary = 'Exposicao equilibrada e amostra minima de runs atendida; comparacao oficial pronta.';
+  }
+
+  const winnerByValue = (tarifaValue: number, mutiraoValue: number): 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' => {
+    if (tarifaValue === mutiraoValue) {
+      return 'technical_tie';
+    }
+    return tarifaValue > mutiraoValue ? 'tarifa-zero-corredor' : 'mutirao-do-bairro';
+  };
+
+  return {
+    compared: {
+      tarifaSlug: 'tarifa-zero-corredor',
+      mutiraoSlug: 'mutirao-do-bairro',
+    },
+    scorecards,
+    totals: {
+      exposureSignals: totalExposure,
+      starts: totalRuns,
+    },
+    fairness: {
+      status,
+      minExposureForFairWindow,
+      minRunsForDecision,
+      exposureDeltaPct,
+      runsDeltaPct,
+      underexposedArcade,
+      recommendedExposureBoost,
+      summary,
+      actions: [
+        underexposedArcade
+          ? `Aumentar distribuicao de ${underexposedArcade} em pelo menos +${recommendedExposureBoost} sinais de exposicao na proxima janela.`
+          : 'Manter distribuicao pareada entre os dois arcades na vitrine principal.',
+        'Usar as mesmas superfices (home, explorar e quick->arcade) para evitar vies de entrada.',
+        'Declarar vencedor oficial apenas com exposicao equilibrada e amostra minima de runs.',
+      ],
+    },
+    contextLeaders: {
+      volumeLeader: winnerByValue(tarifa.starts, mutirao.starts),
+      efficiencyLeader: winnerByValue(tarifa.exposureToStartRate, mutirao.exposureToStartRate),
+      campaignLeader: (arcadeLineDecision.campaignStrength.winner as ArcadeExposureDuel['contextLeaders']['campaignLeader']) || 'technical_tie',
+    },
+  };
+}
+
+function getArcadeConvergenceScorecard(
+  arcadeLineDecision: ArcadeLineDecision,
+  arcadeExposureDuel: ArcadeExposureDuel,
+  arcadeRows: ArcadeRow[],
+): ArcadeConvergenceScorecard {
+  const tariffaRow = arcadeRows.find((r) => r.slug === 'tarifa-zero-corredor');
+  const mutiraoRow = arcadeRows.find((r) => r.slug === 'mutirao-do-bairro');
+  
+  if (!tariffaRow || !mutiraoRow) {
+    // Fallback: insufficient data
+    return {
+      compared: { tarifaSlug: 'tarifa-zero-corredor', mutiraoSlug: 'mutirao-do-bairro' },
+      sample: {
+        totalEffectiveRuns: 0,
+        tarifaEffectiveRuns: 0,
+        mutiraoEffectiveRuns: 0,
+        minEffectiveRunsPerArcade: 30,
+        sampleSufficiency: 'insufficient',
+        sampleGapDeduction: 100,
+      },
+      exposure: { isBalanced: false, exposureDeltaPct: 0, minBalanceThreshold: 15 },
+      dimensions: [],
+      convergence: { alignedDimensions: 0, totalDimensions: 6, alignmentRatio: 0, divergentDimensions: [] },
+      confidence: {
+        rawScore: 0,
+        sampleDeduction: 100,
+        exposureDeduction: 0,
+        finalScore: 0,
+        state: 'insufficient_fair_sample',
+        summary: 'Dados insuficientes.',
+        warnings: ['Amostra muito pequena para decisão.'],
+      },
+      decision: {
+        readyToDecide: false,
+        recommendedLeader: 'maintain parity',
+        rationale: 'Amostra inadequada.',
+        nextActionIfNotReady: 'Continuar coleta com distribuição pareada.',
+      },
+    };
+  }
+
+  // T39: 6 Dimensions of Convergence
+  const tarifaEffective = tariffaRow.runs; // Placeholder: use effective runs if available
+  const mutiraoEffective = mutiraoRow.runs;
+  const totalEffectiveRuns = tarifaEffective + mutiraoEffective;
+  const minEffectiveRunsPerArcade = 30;
+
+  // Dimension 1: Volume (raw starts)
+  const volumeLead = tariffaRow.runs > mutiraoRow.runs ? tariffaRow.runs - mutiraoRow.runs : mutiraoRow.runs - tariffaRow.runs;
+  const volumeMargin = totalEffectiveRuns > 0 ? (volumeLead / totalEffectiveRuns) * 100 : 0;
+  const volumeLeader = tariffaRow.runs === mutiraoRow.runs ? 'technical_tie' : tariffaRow.runs > mutiraoRow.runs ? 'tarifa-zero-corredor' : 'mutirao-do-bairro';
+  const volumeSignal: ArcadeConvergenceDimension['signal'] = volumeMargin >= 15 ? 'strong' : volumeMargin >= 8 ? 'moderate' : volumeMargin >= 3 ? 'weak' : 'absent';
+
+  // Dimension 2: Exposure (from T38)
+  const exposureLeader = arcadeExposureDuel.contextLeaders.volumeLeader; // exposure context leader
+  const exposureDeltaPct = arcadeExposureDuel.fairness.exposureDeltaPct;
+  const exposureSignal: ArcadeConvergenceDimension['signal'] = exposureDeltaPct >= 20 ? 'strong' : exposureDeltaPct >= 10 ? 'moderate' : 'weak';
+
+  // Dimension 3: Exposure Efficiency (exposure -> start rate)
+  const efficiencyLeader = arcadeExposureDuel.contextLeaders.efficiencyLeader;
+  const tarifaEffRate = arcadeExposureDuel.scorecards[0]?.exposureToStartRate || 0;
+  const mutiraoEffRate = arcadeExposureDuel.scorecards[1]?.exposureToStartRate || 0;
+  const effMargin = Math.abs(tarifaEffRate - mutiraoEffRate);
+  const efficiencySignal: ArcadeConvergenceDimension['signal'] = effMargin >= 8 ? 'strong' : effMargin >= 4 ? 'moderate' : effMargin >= 1 ? 'weak' : 'absent';
+
+  // Dimension 4: Effective Runs (replay + completion driven)
+  const tarifaReplays = tariffaRow.replayClicks;
+  const mutiraoReplays = mutiraoRow.replayClicks;
+  const effectiveRunsLeader = tarifaReplays === mutiraoReplays ? 'technical_tie' : tarifaReplays > mutiraoReplays ? 'tarifa-zero-corredor' : 'mutirao-do-bairro';
+  const replayMargin = Math.max(tarifaReplays, mutiraoReplays) > 0 ? (Math.abs(tarifaReplays - mutiraoReplays) / Math.max(tarifaReplays, mutiraoReplays)) * 100 : 0;
+  const replaySignal: ArcadeConvergenceDimension['signal'] = replayMargin >= 20 ? 'strong' : replayMargin >= 10 ? 'moderate' : replayMargin >= 3 ? 'weak' : 'absent';
+
+  // Dimension 5: Campaign Strength (from T37)
+  const campaignLeader = arcadeLineDecision.campaignStrength.winner;
+  const campaignScoreDelta = arcadeLineDecision.campaignStrength.scoreDelta;
+  const campaignSignal: ArcadeConvergenceDimension['signal'] = campaignScoreDelta >= 10 ? 'strong' : campaignScoreDelta >= 5 ? 'moderate' : campaignScoreDelta >= 1 ? 'weak' : 'absent';
+
+  // Dimension 6: QR / Final Card Engagement (placeholder for future)
+  const qrLeader: 'tarifa-zero-corredor' | 'mutirao-do-bairro' | 'technical_tie' | 'insufficient_data' = 'insufficient_data';
+  const qrSignal: ArcadeConvergenceDimension['signal'] = 'absent';
+
+  const dimensions: ArcadeConvergenceDimension[] = [
+    {
+      key: 'volume',
+      label: 'Volume de Runs',
+      tarifaValue: tariffaRow.runs,
+      mutiraoValue: mutiraoRow.runs,
+      leader: volumeLeader,
+      margin: volumeMargin,
+      weight: 0.25,
+      signal: volumeSignal,
+    },
+    {
+      key: 'exposure',
+      label: 'Exposição (sinais)',
+      tarifaValue: arcadeExposureDuel.scorecards[0]?.exposureSignals || 0,
+      mutiraoValue: arcadeExposureDuel.scorecards[1]?.exposureSignals || 0,
+      leader: exposureLeader,
+      margin: exposureDeltaPct,
+      weight: 0.15,
+      signal: exposureSignal,
+    },
+    {
+      key: 'exposure_efficiency',
+      label: 'Eficiência (exposição → start)',
+      tarifaValue: tarifaEffRate,
+      mutiraoValue: mutiraoEffRate,
+      leader: efficiencyLeader,
+      margin: effMargin,
+      weight: 0.2,
+      signal: efficiencySignal,
+    },
+    {
+      key: 'effective_runs',
+      label: 'Engajamento (replays)',
+      tarifaValue: tarifaReplays,
+      mutiraoValue: mutiraoReplays,
+      leader: effectiveRunsLeader,
+      margin: replayMargin,
+      weight: 0.2,
+      signal: replaySignal,
+    },
+    {
+      key: 'campaign_strength',
+      label: 'Força de Campanha (T37)',
+      tarifaValue: arcadeLineDecision.campaignStrength.tarifa.weightedScore,
+      mutiraoValue: arcadeLineDecision.campaignStrength.mutirao.weightedScore,
+      leader: campaignLeader,
+      margin: campaignScoreDelta,
+      weight: 0.15,
+      signal: campaignSignal,
+    },
+    {
+      key: 'qr_final_card',
+      label: 'QR / Final Card (futuro)',
+      tarifaValue: 0,
+      mutiraoValue: 0,
+      leader: qrLeader,
+      margin: 0,
+      weight: 0.05,
+      signal: qrSignal,
+    },
+  ];
+
+  // Compute convergence
+  const alignedDimensions = dimensions.filter((d) => d.leader === campaignLeader && d.signal !== 'absent').length;
+  const alignmentRatio = dimensions.length > 0 ? alignedDimensions / dimensions.length : 0;
+  const divergentDimensions = dimensions
+    .filter((d) => d.leader !== campaignLeader && d.leader !== 'technical_tie' && d.leader !== 'insufficient_data' && d.signal !== 'absent')
+    .map((d) => d.label);
+
+  // Sample sufficiency check
+  const sampleSufficiency: ArcadeConvergenceScorecard['sample']['sampleSufficiency'] =
+    tarifaEffective >= minEffectiveRunsPerArcade && mutiraoEffective >= minEffectiveRunsPerArcade
+      ? 'strong'
+      : tarifaEffective >= minEffectiveRunsPerArcade * 0.5 && mutiraoEffective >= minEffectiveRunsPerArcade * 0.5
+      ? 'adequate'
+      : 'insufficient';
+
+  const sampleGapDeduction = sampleSufficiency === 'insufficient' ? 40 : sampleSufficiency === 'adequate' ? 20 : 0;
+
+  // Exposure balance check
+  const isExposureBalanced = arcadeExposureDuel.fairness.status === 'fair_comparison_window' || arcadeExposureDuel.fairness.status === 'decision_ready';
+  const exposureDeduction = !isExposureBalanced ? 30 : 0;
+
+  // Compute confidence score (0-100)
+  let rawScore = 100;
+
+  // Apply signal strengths
+  dimensions.forEach((dim) => {
+    if (dim.signal === 'strong') rawScore += 0; // already 100 base
+    else if (dim.signal === 'moderate') rawScore -= 5;
+    else if (dim.signal === 'weak') rawScore -= 10;
+    else rawScore -= 20; // absent
+  });
+
+  // Apply convergence bonus/penalty
+  if (alignmentRatio >= 0.83) rawScore += 15; // 5+/6 aligned
+  else if (alignmentRatio >= 0.67) rawScore += 10; // 4/6 aligned
+  else if (alignmentRatio >= 0.5) rawScore += 0; // 3/6 aligned
+  else rawScore -= 20; // < 2/6 aligned (divergent)
+
+  rawScore = Math.max(0, Math.min(100, rawScore)); // Clamp 0-100
+
+  const finalScore = Math.max(0, rawScore - sampleGapDeduction - exposureDeduction);
+
+  // Determine confidence state
+  let state: ArcadeConvergenceConfidence = 'insufficient_fair_sample';
+  if (sampleSufficiency !== 'insufficient' && isExposureBalanced) {
+    if (alignmentRatio >= 0.83 && finalScore >= 85) {
+      state = 'ready_for_next_step';
+    } else if (alignmentRatio >= 0.67 && finalScore >= 75) {
+      state = 'decision_candidate';
+    } else if (alignmentRatio >= 0.5) {
+      state = 'directional_alignment';
+    } else {
+      state = 'fair_sample_but_divergent';
+    }
+  }
+
+  // Build summary and warnings
+  let summary = '';
+  const warnings: string[] = [];
+
+  if (state === 'insufficient_fair_sample') {
+    summary = `Amostra insuficiente (${tarifaEffective}/${minEffectiveRunsPerArcade} runs Tarifa, ${mutiraoEffective}/${minEffectiveRunsPerArcade} Mutirao). Exposição ${isExposureBalanced ? '' : 'des'}equilibrada.`;
+    warnings.push('Continuar coleta com distribuição pareada antes de decisão.');
+  } else if (state === 'fair_sample_but_divergent') {
+    summary = `Amostra justa (${totalEffectiveRuns} total), mas líderes divergem em ${divergentDimensions.length} dimensão(ões): ${divergentDimensions.join(', ')}.`;
+    warnings.push('Avaliar qualidade de produto e posicionamento antes de declarar vencedor.');
+  } else if (state === 'directional_alignment') {
+    summary = `Sinais alinhados em ${alignedDimensions}/6 dimensões. Confiança ${finalScore}/100.`;
+    warnings.push('Monitorar próximas semanas para consolidação.');
+  } else if (state === 'decision_candidate') {
+    summary = `${alignedDimensions}/6 dimensões convergem. Recomendação: ${campaignLeader} como arcade focal.`;
+    warnings.push('Validar convergência por mais 7 dias antes de concentrar distribuição.');
+  } else if (state === 'ready_for_next_step') {
+    summary = `Convergência forte (${alignedDimensions}/6 dimensões, ${finalScore}/100). ${campaignLeader} é arcade confiável para T40.`;
+    warnings.push('Aprovado para próxima fase com segurança operacional alta.');
+  }
+
+  return {
+    compared: {
+      tarifaSlug: 'tarifa-zero-corredor',
+      mutiraoSlug: 'mutirao-do-bairro',
+    },
+    sample: {
+      totalEffectiveRuns,
+      tarifaEffectiveRuns: tarifaEffective,
+      mutiraoEffectiveRuns: mutiraoEffective,
+      minEffectiveRunsPerArcade,
+      sampleSufficiency,
+      sampleGapDeduction,
+    },
+    exposure: {
+      isBalanced: isExposureBalanced,
+      exposureDeltaPct: arcadeExposureDuel.fairness.exposureDeltaPct,
+      minBalanceThreshold: 15,
+    },
+    dimensions,
+    convergence: {
+      alignedDimensions,
+      totalDimensions: dimensions.length,
+      alignmentRatio,
+      divergentDimensions,
+    },
+    confidence: {
+      rawScore,
+      sampleDeduction: sampleGapDeduction,
+      exposureDeduction,
+      finalScore,
+      state,
+      summary,
+      warnings,
+    },
+    decision: {
+      readyToDecide: state === 'decision_candidate' || state === 'ready_for_next_step',
+      recommendedLeader:
+        state === 'ready_for_next_step' || state === 'decision_candidate'
+          ? (campaignLeader && campaignLeader !== 'technical_tie' ? campaignLeader : 'no consensus')
+          : state === 'directional_alignment'
+          ? (alignedDimensions >= 3 && campaignLeader && campaignLeader !== 'technical_tie' ? campaignLeader : 'no consensus')
+          : 'maintain parity',
+      rationale: summary,
+      nextActionIfNotReady:
+        sampleSufficiency === 'insufficient'
+          ? `Aumentar para ${minEffectiveRunsPerArcade} runs por arcade com distribuição pareada.`
+          : !isExposureBalanced
+          ? `Rebalancear exposição (gap: ${arcadeExposureDuel.fairness.exposureDeltaPct}pp).`
+          : `Monitorar convergência de ${divergentDimensions.join(', ')} nas próximas semanas.`,
+    },
+  };
+}
+
+function buildFinalArcadeDecision(
+  arcadeLineDecision: ArcadeLineDecision,
+  arcadeExposureDuel: ArcadeExposureDuel,
+  arcadeConvergenceScorecard: ArcadeConvergenceScorecard | undefined
+): ArcadeFinalDecision {
+  // Default fallback if convergence not provided
+  const convergence = arcadeConvergenceScorecard || {
+    compared: { tarifaSlug: 'tarifa-zero-corredor', mutiraoSlug: 'mutirao-do-bairro' },
+    sample: { totalEffectiveRuns: 0, tarifaEffectiveRuns: 0, mutiraoEffectiveRuns: 0, minEffectiveRunsPerArcade: 30, sampleSufficiency: 'insufficient', sampleGapDeduction: 0 },
+    exposure: { isBalanced: false, exposureDeltaPct: 0, minBalanceThreshold: 15 },
+    dimensions: [],
+    convergence: { alignedDimensions: 0, totalDimensions: 0, alignmentRatio: 0, divergentDimensions: [] },
+    confidence: { rawScore: 0, sampleDeduction: 0, exposureDeduction: 0, finalScore: 0, state: 'insufficient_fair_sample', summary: '', warnings: [] },
+    decision: { readyToDecide: false, recommendedLeader: 'no consensus', rationale: '', nextActionIfNotReady: '' },
+  };
+
+  const officialLeader = arcadeLineDecision.duel?.leader || 'insufficient_sample';
+  const officialState = arcadeLineDecision.decision?.state || 'insufficient_sample';
+  const officialConfidence = arcadeLineDecision.duel?.confidence || 'insufficient_sample';
+  const fairnessStatus = arcadeExposureDuel.fairness?.status || 'unbalanced_exposure';
+  const exposureDeltaPct = arcadeExposureDuel.fairness?.exposureDeltaPct || 0;
+  const convergenceState = convergence.confidence.state;
+  const alignedDimensions = convergence.convergence.alignedDimensions;
+  const totalDimensions = convergence.convergence.totalDimensions;
+  const convergenceScore = convergence.confidence.finalScore;
+
+  const tarifaRuns = convergence.sample.tarifaEffectiveRuns;
+  const mutiraoRuns = convergence.sample.mutiraoEffectiveRuns;
+  const totalRuns = convergence.sample.totalEffectiveRuns;
+  const minRunsForSignal = convergence.sample.minEffectiveRunsPerArcade;
+
+  // Determine blockers and enablers
+  const blockers: string[] = [];
+  const enablers: string[] = [];
+
+  // Blocker: Insufficient sample
+  if (convergence.sample.sampleSufficiency === 'insufficient') {
+    blockers.push(`Amostra insuficiente (${totalRuns} runs total, mínimo recomendado: ${minRunsForSignal * 1.5})`);
+  }
+
+  // Blocker: Exposure imbalance
+  if (fairnessStatus === 'unbalanced_exposure' && exposureDeltaPct > 15) {
+    blockers.push(`Exposição desbalanceada (Δ=${Math.round(exposureDeltaPct)}pp). Reavaliar após rebalancear.`);
+  }
+
+  // Blocker: Divergence in key dimensions
+  if (convergenceState === 'fair_sample_but_divergent') {
+    blockers.push(`Líderes divergem em múltiplas dimensões. Investigar antes de decidir.`);
+  }
+
+  // Enabler: Strong convergence
+  if (convergenceState === 'directional_alignment') {
+    enablers.push(`Sinais alinhados em ${alignedDimensions}/${totalDimensions} dimensões.`);
+  } else if (convergenceState === 'decision_candidate' || convergenceState === 'ready_for_next_step') {
+    enablers.push(`✅ Convergência forte (${alignedDimensions}/${totalDimensions} dims, score ${convergenceScore}/100).`);
+  }
+
+  // Enabler: Exposure balanced
+  if (fairnessStatus === 'fair_comparison_window' || fairnessStatus === 'decision_ready') {
+    enablers.push(`Exposição balanceada (Δ=${Math.round(exposureDeltaPct)}pp).`);
+  }
+
+  // Enabler: Official decision clear
+  if (officialLeader !== 'technical_tie' && officialLeader !== 'insufficient_sample') {
+    enablers.push(`Liderança oficial clara: ${officialLeader === 'tarifa-zero-corredor' ? 'Tarifa Zero RJ' : 'Mutirão do Bairro'}.`);
+  }
+
+  // Decision Logic
+  let finalDecision: 'focus_tarifa_zero' | 'focus_mutirao' | 'maintain_dual_arcade' | 'defer_new_product' = 'defer_new_product';
+  let decisionRationale = '';
+  let decisionConfidence = 0;
+
+  if (blockers.length === 0 && enablers.length >= 3) {
+    // Ready to decide
+    if (officialLeader === 'tarifa-zero-corredor') {
+      finalDecision = 'focus_tarifa_zero';
+      decisionRationale = `Tarifa Zero RJ lidera oficialmente com confiança ${officialConfidence}, exposição justa, e convergência forte (${alignedDimensions}/${totalDimensions} dims).`;
+      decisionConfidence = Math.min(convergenceScore, 95);
+    } else if (officialLeader === 'mutirao-do-bairro') {
+      finalDecision = 'focus_mutirao';
+      decisionRationale = `Mutirão do Bairro lidera oficialmente com confiança ${officialConfidence}, exposição justa, e convergência forte (${alignedDimensions}/${totalDimensions} dims).`;
+      decisionConfidence = Math.min(convergenceScore, 95);
+    } else {
+      finalDecision = 'maintain_dual_arcade';
+      decisionRationale = `Empate técnico. Ambos arcades demonstram força comparável. Manter estratégia pareada.`;
+      decisionConfidence = Math.round(convergenceScore * 0.8);
+    }
+  } else if (blockers.length === 0 && convergenceState === 'directional_alignment') {
+    // Directional but not fully ready
+    finalDecision = 'maintain_dual_arcade';
+    decisionRationale = `Sinais parciais (${alignedDimensions}/${totalDimensions} dims alinhadas). Manter parity pero validar por 7 dias adicionais.`;
+    decisionConfidence = Math.round(convergenceScore * 0.6);
+  } else if (blockers.length > 0) {
+    // Explicit blockers
+    finalDecision = 'defer_new_product';
+    decisionRationale = `Decisão bloqueada por: ${blockers.join(' ')}`;
+    decisionConfidence = 0;
+  } else {
+    // Insufficient enablers
+    finalDecision = convergenceState === 'decision_candidate' ? 'maintain_dual_arcade' : 'defer_new_product';
+    decisionRationale = `Estado T39: ${convergenceState}. Validar por 7 dias adicionais.`;
+    decisionConfidence = Math.round(convergenceScore * 0.6);
+  }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    window: '7d',
+    decision: finalDecision,
+    confidence: Math.round(decisionConfidence),
+    rationale: decisionRationale,
+    blockers,
+    enablers,
+    t37: {
+      leader: officialLeader as any,
+      state: officialState,
+      confidence: officialConfidence,
+      summary: arcadeLineDecision.decision?.summary || 'Sem decisão consolidada.',
+    },
+    t38: {
+      fairnessStatus: fairnessStatus as any,
+      exposureDeltaPct: Math.round(exposureDeltaPct * 100) / 100,
+      volumeLeader: (arcadeExposureDuel.contextLeaders?.volumeLeader || 'technical_tie') as any,
+      efficiencyLeader: (arcadeExposureDuel.contextLeaders?.efficiencyLeader || 'technical_tie') as any,
+    },
+    t39: {
+      state: convergenceState,
+      alignedDimensions,
+      totalDimensions,
+      score: convergenceScore,
+      dimensions: convergence.dimensions.map(d => ({
+        key: d.key,
+        label: d.label,
+        leader: d.leader as any,
+        margin: d.margin,
+        signal: d.signal as any,
+      })),
+    },
+    sample: {
+      tarifaRuns,
+      mutiraoRuns,
+      totalRuns,
+      minRunsForSignal,
+      sufficient: totalRuns >= minRunsForSignal * 1.5,
+    },
+    recommendation: {
+      actionIfDecidable:
+        finalDecision === 'focus_tarifa_zero'
+          ? 'Concentrar recursos em Tarifa Zero RJ. Redirect visitor flow. Monitor para T41 next phase.'
+          : finalDecision === 'focus_mutirao'
+          ? 'Concentrar recursos em Mutirão do Bairro. Redirect visitor flow. Monitor para T41 next phase.'
+          : finalDecision === 'maintain_dual_arcade'
+          ? 'Manter estratégia pareada. Ambos arcades continuam em equal exposure. Reavaliar em 7 dias.'
+          : 'Aguardar coleta adicional pareada Tarifa vs Mutirão. Reavaliar em 7 dias.',
+      actionIfDeferred: 'Continuar coleta pareada Tarifa vs Mutirão. Reavaliar em 7 dias.',
+      campaignFocus:
+        finalDecision === 'focus_tarifa_zero'
+          ? 'concentrate_tarifa'
+          : finalDecision === 'focus_mutirao'
+          ? 'concentrate_mutirao'
+          : finalDecision === 'maintain_dual_arcade'
+          ? 'maintain_parity'
+          : 'defer_and_retest',
+    },
+  };
 }
 
 interface NormalizedEvent {
@@ -1262,6 +2345,7 @@ export function collectLocalMetrics(
     window,
   );
   const arcadeInsights = getArcadeInsights(gamesCatalog, normalizedEvents);
+  const arcadeLineDecision = getArcadeLineDecision(arcadeInsights.byArcadeGame);
 
   // Tijolo 33: Effective Runs Analysis
   let effectiveRuns: EffectiveRunsAnalysis | undefined;
@@ -1281,6 +2365,10 @@ export function collectLocalMetrics(
     // Se falhar, continua sem effective runs
     effectiveRuns = undefined;
   }
+
+  const arcadeExposureDuel = getArcadeExposureDuel(normalizedEvents, arcadeLineDecision, effectiveRuns);
+  const arcadeConvergenceScorecard = getArcadeConvergenceScorecard(arcadeLineDecision, arcadeExposureDuel, arcadeInsights.byArcadeGame);
+  const arcadeFinalDecision = buildFinalArcadeDecision(arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard);
 
   return {
     source: 'local',
@@ -1310,7 +2398,11 @@ export function collectLocalMetrics(
     experimentScorecards,
     quickInsights,
     arcadeInsights,
-      effectiveRuns,
+    arcadeLineDecision,
+    arcadeExposureDuel,
+    arcadeConvergenceScorecard,
+    arcadeFinalDecision,
+    effectiveRuns,
     generatedAt: new Date().toISOString(),
   };
 }
@@ -1631,6 +2723,10 @@ async function collectRemoteMetrics(
           effectiveRuns = undefined;
         }
     const arcadeInsights = getArcadeInsights(gamesCatalog, normalizedEvents);
+    const arcadeLineDecision = getArcadeLineDecision(arcadeInsights.byArcadeGame);
+    const arcadeExposureDuel = getArcadeExposureDuel(normalizedEvents, arcadeLineDecision, effectiveRuns);
+    const arcadeConvergenceScorecard = getArcadeConvergenceScorecard(arcadeLineDecision, arcadeExposureDuel, arcadeInsights.byArcadeGame);
+    const arcadeFinalDecision = buildFinalArcadeDecision(arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard);
 
     return {
       source: 'supabase',
@@ -1660,6 +2756,10 @@ async function collectRemoteMetrics(
       experimentScorecards,
       quickInsights,
       arcadeInsights,
+      arcadeLineDecision,
+      arcadeExposureDuel,
+      arcadeConvergenceScorecard,
+      arcadeFinalDecision,
       effectiveRuns,
       generatedAt: new Date().toISOString(),
     };

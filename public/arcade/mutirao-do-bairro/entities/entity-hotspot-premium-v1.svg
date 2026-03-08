@@ -1,0 +1,42 @@
+<svg width="120" height="145" viewBox="0 0 120 145" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E3A4C"/>
+      <stop offset="100%" stop-color="#123D59"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.8"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  
+  <!-- Frame octogonal externo -->
+  <polygon points="30,5 90,5 115,30 115,115 90,140 30,140 5,115 5,30" 
+           fill="none" stroke="#123D59" stroke-width="3"/>
+  
+  <!-- Frame interno (dinamico por estado - aqui estado neutro) -->
+  <polygon points="32,8 88,8 112,32 112,113 88,137 32,137 8,113 8,32" 
+           fill="url(#cardBg)" stroke="#7FD36E" stroke-width="2"/>
+  
+  <!-- Icone central placeholder - sera variante por tipo (agua/energia/mobilidade) -->
+  <circle cx="60" cy="50" r="24" fill="#2F5D50" opacity="0.4"/>
+  <circle cx="60" cy="50" r="18" fill="#7FD36E" opacity="0.6"/>
+  
+  <!-- Simbolo generico (sera substituido por agua/energia/mobilidade) -->
+  <circle cx="60" cy="50" r="12" fill="none" stroke="#C9F27B" stroke-width="3"/>
+  <circle cx="60" cy="50" r="6" fill="#C9F27B"/>
+  
+  <!-- Barra de integrity (inferior) -->
+  <rect x="15" y="120" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="120" width="68" height="8" rx="4" fill="#7FD36E"/>
+  
+  <!-- Barra de danger (superior) -->
+  <rect x="15" y="90" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="90" width="32" height="8" rx="4" fill="#F18F4E"/>
+  
+  <!-- Label placeholder -->
+  <text x="60" y="112" font-family="sans-serif" font-size="11" font-weight="600" 
+        fill="#C9F27B" text-anchor="middle">HOTSPOT</text>
+</svg>

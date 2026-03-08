@@ -9,6 +9,10 @@ interface FinalShareCardProps {
   resultTitle: string;
   resultSummary: string;
   resultId?: string;
+  theme?: 'default' | 'tarifa-zero-premium' | 'mutirao-bairro-premium';
+  metrics?: Array<{ label: string; value: string }>;
+  ctaLabel?: string;
+  ctaSecondaryLabel?: string;
   onDownload?: () => void;
   showAvatar?: boolean;
   showQR?: boolean;
@@ -20,12 +24,23 @@ export function FinalShareCard({
   resultTitle,
   resultSummary,
   resultId,
+  theme = 'default',
+  metrics,
+  ctaLabel,
+  ctaSecondaryLabel,
   showAvatar = true,
   showQR = true,
   onQrClick,
 }: FinalShareCardProps) {
+  const isPremiumTheme = theme === 'tarifa-zero-premium' || theme === 'mutirao-bairro-premium';
+  const isMutiraoTheme = theme === 'mutirao-bairro-premium';
+
   return (
-    <div className={styles.card} data-result-id={resultId}>
+    <div
+      className={`${styles.card} ${isPremiumTheme ? styles.cardPremium : ''} ${isMutiraoTheme ? styles.cardMutirao : ''}`}
+      data-result-id={resultId}
+      data-theme={theme}
+    >
       <div className={styles.header}>
         {showAvatar && (
           <div className={styles.avatarSection}>
@@ -42,6 +57,16 @@ export function FinalShareCard({
       <div className={styles.result}>
         <h3 className={styles.resultTitle}>{resultTitle}</h3>
         <p className={styles.resultSummary}>{resultSummary}</p>
+        {isPremiumTheme && metrics && metrics.length > 0 ? (
+          <div className={styles.metricsGrid}>
+            {metrics.map((metric) => (
+              <div className={styles.metricCard} key={metric.label}>
+                <span>{metric.label}</span>
+                <strong>{metric.value}</strong>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       <div className={styles.metadata}>
@@ -70,11 +95,11 @@ export function FinalShareCard({
       <div className={styles.footer}>
         <div className={styles.footerLeft}>
           <CampaignMark compact />
-          <p className={styles.cta}>Pre-campanha Alexandre Fonseca para Deputado Estadual RJ</p>
+          <p className={styles.cta}>{ctaLabel || 'Pre-campanha Alexandre Fonseca para Deputado Estadual RJ'}</p>
           <p className={styles.ctaSecondary}>
-            {showQR
+            {ctaSecondaryLabel || (showQR
               ? 'Jogue, compare, compartilhe e reentre pelo QR'
-              : 'Jogue, compare e compartilhe com quem vive essa realidade'}
+              : 'Jogue, compare e compartilhe com quem vive essa realidade')}
           </p>
         </div>
         {showQR && (

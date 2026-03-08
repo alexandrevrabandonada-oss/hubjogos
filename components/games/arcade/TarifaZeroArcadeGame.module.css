@@ -14,6 +14,18 @@
     linear-gradient(180deg, rgba(10, 31, 46, 0.98) 0%, rgba(14, 32, 45, 0.98) 100%);
   border: 1px solid rgba(249, 207, 74, 0.18);
   box-shadow: 0 24px 40px rgba(8, 18, 29, 0.3);
+  .campaignCta {
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, rgba(124, 224, 174, 0.12) 0%, rgba(124, 224, 174, 0.08) 100%);
+    border-color: rgba(124, 224, 174, 0.35);
+    color: #5bc893;
+  }
+  .campaignCta:hover {
+    background: linear-gradient(135deg, rgba(124, 224, 174, 0.18) 0%, rgba(124, 224, 174, 0.12) 100%);
+    border-color: rgba(124, 224, 174, 0.5);
+    color: #7ce0ae;
+  }
 }
 
 .introShell::before {
@@ -373,6 +385,20 @@
   background:
     linear-gradient(135deg, rgba(255, 234, 161, 0.98) 0%, rgba(249, 207, 74, 0.98) 100%),
     url('/arcade/tarifa-zero/ui/ui-button-replay.svg') center/cover no-repeat;
+}
+
+.replayPulse {
+  animation: replayPulseGlow 1.9s ease-in-out infinite;
+}
+
+@keyframes replayPulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 8px 18px rgba(240, 186, 56, 0.26);
+  }
+  50% {
+    box-shadow: 0 11px 24px rgba(255, 227, 127, 0.36);
+  }
 }
 
 .premiumNextLink {

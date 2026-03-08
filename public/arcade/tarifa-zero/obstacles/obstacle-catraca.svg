@@ -1,15 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none">
   <defs>
-    <linearGradient id="gateBody" x1="18" x2="42" y1="18" y2="78" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#435564"/>
-      <stop offset="1" stop-color="#1F2F3E"/>
+    <linearGradient id="pedestal" x1="14" x2="48" y1="16" y2="80" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#536879"/>
+      <stop offset="1" stop-color="#223446"/>
+    </linearGradient>
+    <linearGradient id="warning" x1="44" x2="75" y1="26" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF9F8D"/>
+      <stop offset="1" stop-color="#F45F5F"/>
     </linearGradient>
   </defs>
-  <rect x="14" y="16" width="30" height="62" rx="6" fill="url(#gateBody)" stroke="#E9EEF2" stroke-opacity="0.4" stroke-width="3"/>
-  <rect x="22" y="26" width="14" height="16" rx="3" fill="#F4CF57" stroke="#102736" stroke-width="2"/>
-  <path d="M44 38H68" stroke="#D7DDE2" stroke-width="5" stroke-linecap="round"/>
-  <path d="M44 52H70" stroke="#D7DDE2" stroke-width="5" stroke-linecap="round" transform="rotate(-28 44 52)"/>
-  <path d="M44 52H70" stroke="#D7DDE2" stroke-width="5" stroke-linecap="round" transform="rotate(28 44 52)"/>
-  <rect x="10" y="78" width="62" height="8" rx="4" fill="#0F2A3D" fill-opacity="0.5"/>
-  <path d="M18 14H44" stroke="#F45F5F" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="45" cy="82" rx="34" ry="7" fill="#08121D" fill-opacity="0.22"/>
+  <rect x="14" y="16" width="30" height="62" rx="8" fill="url(#pedestal)" stroke="#E9EEF2" stroke-opacity="0.38" stroke-width="3"/>
+  <rect x="20" y="24" width="18" height="18" rx="4" fill="#F4CF57" stroke="#102736" stroke-width="2.5"/>
+  <path d="M26 33H32" stroke="#102736" stroke-width="3" stroke-linecap="round"/>
+  <path d="M44 40H70" stroke="#E8EDF2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M44 52H74" stroke="#E8EDF2" stroke-width="6" stroke-linecap="round" transform="rotate(-28 44 52)"/>
+  <path d="M44 52H74" stroke="#E8EDF2" stroke-width="6" stroke-linecap="round" transform="rotate(28 44 52)"/>
+  <circle cx="44" cy="52" r="8" fill="#102736" stroke="#F0F5FF" stroke-width="2.5"/>
+  <path d="M49 18H73" stroke="#F45F5F" stroke-width="5" stroke-linecap="round"/>
+  <path d="M50 24H76" stroke="url(#warning)" stroke-width="7" stroke-linecap="round" stroke-dasharray="7 7"/>
+  <rect x="11" y="78" width="66" height="8" rx="4" fill="#0F2A3D" fill-opacity="0.55"/>
 </svg>

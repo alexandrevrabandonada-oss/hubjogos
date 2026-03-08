@@ -16,6 +16,87 @@
   margin: 0 auto;
 }
 
+.cardPremium {
+  background:
+    linear-gradient(140deg, rgba(8, 18, 29, 0.97) 0%, rgba(18, 61, 89, 0.94) 55%, rgba(9, 36, 52, 0.96) 100%),
+    url('/arcade/tarifa-zero/ui/ui-final-card-premium.svg') center/cover no-repeat;
+  border: 2px solid rgba(249, 207, 74, 0.42);
+  box-shadow: 0 16px 30px rgba(8, 18, 29, 0.32);
+}
+
+.cardPremium .header,
+.cardPremium .footer {
+  border-color: rgba(249, 207, 74, 0.2);
+}
+
+.cardPremium .gameTitle,
+.cardPremium .resultSummary,
+.cardPremium .cta {
+  color: #f0f5ff;
+}
+
+.cardPremium .gameSubtitle,
+.cardPremium .ctaSecondary {
+  color: #ccdeea;
+}
+
+.cardPremium .resultTitle {
+  color: #f9cf4a;
+}
+
+.cardPremium .chip {
+  background: rgba(8, 18, 29, 0.52);
+  border-color: rgba(249, 207, 74, 0.38);
+  color: #f2e7b4;
+}
+
+.cardPremium .watermark {
+  color: #f7e7ac;
+}
+
+.cardMutirao {
+  background:
+    linear-gradient(140deg, rgba(15, 30, 43, 0.98) 0%, rgba(47, 93, 80, 0.94) 58%, rgba(18, 61, 89, 0.96) 100%),
+    radial-gradient(circle at 18% 24%, rgba(201, 242, 123, 0.22) 0%, rgba(201, 242, 123, 0) 48%);
+  border-color: rgba(201, 242, 123, 0.42);
+}
+
+.cardMutirao .resultTitle,
+.cardMutirao .metricCard strong {
+  color: #c9f27b;
+}
+
+.cardMutirao .chip {
+  border-color: rgba(201, 242, 123, 0.4);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+
+.metricCard {
+  display: grid;
+  gap: 2px;
+  border-radius: 12px;
+  border: 1px solid rgba(249, 207, 74, 0.34);
+  background: rgba(8, 18, 29, 0.48);
+  padding: 8px 10px;
+}
+
+.metricCard span {
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ccdeea;
+}
+
+.metricCard strong {
+  font-size: var(--text-base);
+  color: #f9cf4a;
+}
+
 .header {
   display: flex;
   gap: var(--space-md);
@@ -167,6 +248,10 @@
 
   .resultTitle {
     font-size: var(--text-xl);
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
   }
 
   .footer {

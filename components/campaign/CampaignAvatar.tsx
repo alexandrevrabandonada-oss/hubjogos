@@ -25,29 +25,15 @@ const SIZE_MAP: Record<AvatarSize, number> = {
 };
 
 /**
- * Resolve quale asset SVG usar baseado nos props
- * V2 assets prefere expressões diferentes
- * Fallback para v1 base.svg se necessário
+ * Usa a foto oficial recortada da pre-campanha como fonte unica do avatar.
  */
 function resolveAvatarSrc(
   expression: AvatarExpression,
   glasses: AvatarGlasses
 ): string {
-  // Se glasses=on, sempre usa portrait-glasses
-  if (glasses === 'on') {
-    return '/campaign/avatar/v2/portrait-glasses.svg';
-  }
-
-  // ResolveExpression (glasses=auto ou off)
-  switch (expression) {
-    case 'smile':
-      return '/campaign/avatar/v2/portrait-smile.svg';
-    case 'determined':
-      return '/campaign/avatar/v2/portrait-determined.svg';
-    case 'neutral':
-    default:
-      return '/campaign/avatar/v2/portrait-neutral.svg';
-  }
+  void expression;
+  void glasses;
+  return '/campaign/avatar/BackgroundEraser_20260304_164030810.png';
 }
 
 export function CampaignAvatar({

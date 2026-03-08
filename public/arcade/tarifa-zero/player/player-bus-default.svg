@@ -1,26 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
   <defs>
-    <linearGradient id="body" x1="20" x2="104" y1="26" y2="86" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFE37F"/>
+    <linearGradient id="body" x1="18" x2="109" y1="24" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF1A8"/>
+      <stop offset="0.55" stop-color="#F9CF4A"/>
+      <stop offset="1" stop-color="#E49E2C"/>
+    </linearGradient>
+    <linearGradient id="roof" x1="64" x2="64" y1="24" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE9A2"/>
       <stop offset="1" stop-color="#F0BA38"/>
     </linearGradient>
-    <linearGradient id="glass" x1="48" x2="88" y1="32" y2="70" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D6F4FF"/>
-      <stop offset="1" stop-color="#5DA2C3"/>
+    <linearGradient id="glass" x1="44" x2="96" y1="34" y2="74" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8FAFF"/>
+      <stop offset="0.65" stop-color="#95CDE5"/>
+      <stop offset="1" stop-color="#4F86A8"/>
     </linearGradient>
   </defs>
-  <ellipse cx="64" cy="110" rx="36" ry="8" fill="#08121D" fill-opacity="0.28"/>
-  <path d="M20 44C20 33.507 28.507 25 39 25H86C97.598 25 108.245 31.445 113 41.746L116 48V81C116 90.389 108.389 98 99 98H33C25.82 98 20 92.18 20 85V44Z" fill="url(#body)" stroke="#0F2A3D" stroke-width="4"/>
-  <path d="M42 33H84C92.837 33 101.01 37.684 105.455 45.311L108 49V71H40V37C40 34.791 41.791 33 44 33H42Z" fill="url(#glass)" stroke="#123D59" stroke-width="3"/>
-  <rect x="24" y="52" width="16" height="26" rx="4" fill="#0F2A3D" fill-opacity="0.16"/>
-  <rect x="44" y="52" width="15" height="18" rx="3" fill="#0F2A3D" fill-opacity="0.2"/>
-  <rect x="62" y="52" width="15" height="18" rx="3" fill="#0F2A3D" fill-opacity="0.2"/>
-  <rect x="80" y="52" width="15" height="18" rx="3" fill="#0F2A3D" fill-opacity="0.2"/>
-  <path d="M27 80H104" stroke="#123D59" stroke-opacity="0.48" stroke-width="3"/>
-  <circle cx="39" cy="98" r="10" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
-  <circle cx="92" cy="98" r="10" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
-  <path d="M93 84H109V94H85L93 84Z" fill="#F9CF4A" stroke="#123D59" stroke-width="3"/>
-  <rect x="24" y="84" width="28" height="10" rx="5" fill="#7CE0AE" stroke="#123D59" stroke-width="3"/>
-  <circle cx="58" cy="43" r="10" fill="#123D59"/>
-  <text x="58" y="47" fill="#F9CF4A" font-family="Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle">AF</text>
+  <ellipse cx="64" cy="111" rx="38" ry="9" fill="#08121D" fill-opacity="0.3"/>
+  <path d="M18 48C18 33.641 29.641 22 44 22H83C97.283 22 109.942 31.195 115.094 44.516L118 52V86C118 95.941 109.941 104 100 104H36C26.059 104 18 95.941 18 86V48Z" fill="url(#body)" stroke="#0F2A3D" stroke-width="4"/>
+  <path d="M45 28H85C97.48 28 109.073 34.446 115.729 45.063L117 47V54H20L21.669 47.325C26.566 35.349 35.909 28 45 28Z" fill="url(#roof)"/>
+  <path d="M44 34H86C96.837 34 106.876 39.684 112.455 49.311L115 53V74H40V38C40 35.791 41.791 34 44 34Z" fill="url(#glass)" stroke="#123D59" stroke-width="3"/>
+  <path d="M28 82H108" stroke="#123D59" stroke-opacity="0.5" stroke-width="4"/>
+  <rect x="24" y="56" width="15" height="27" rx="4" fill="#113248" fill-opacity="0.18"/>
+  <rect x="44" y="56" width="15" height="18" rx="3" fill="#113248" fill-opacity="0.22"/>
+  <rect x="62" y="56" width="15" height="18" rx="3" fill="#113248" fill-opacity="0.22"/>
+  <rect x="80" y="56" width="15" height="18" rx="3" fill="#113248" fill-opacity="0.22"/>
+  <path d="M96 85H111V95H88L96 85Z" fill="#F7D35E" stroke="#123D59" stroke-width="3"/>
+  <rect x="23" y="85" width="31" height="11" rx="5.5" fill="#7CE0AE" stroke="#123D59" stroke-width="3"/>
+  <circle cx="39" cy="104" r="10" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
+  <circle cx="92" cy="104" r="10" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
+  <circle cx="58" cy="44" r="10" fill="#123D59"/>
+  <text x="58" y="47.5" fill="#F9CF4A" font-family="Arial, sans-serif" font-size="10" font-weight="700" text-anchor="middle">AF</text>
+  <path d="M64 30H99" stroke="#FFF6DB" stroke-width="4" stroke-linecap="round"/>
+  <path d="M21 49H118" stroke="#0F2A3D" stroke-opacity="0.15" stroke-width="3"/>
 </svg>

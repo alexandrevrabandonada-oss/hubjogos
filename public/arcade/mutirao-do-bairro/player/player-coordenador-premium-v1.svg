@@ -1,0 +1,46 @@
+<svg width="80" height="100" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="baseGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#C9F27B" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#C9F27B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Base circular para leitura de posicao -->
+  <ellipse cx="40" cy="90" rx="28" ry="8" fill="url(#baseGlow)"/>
+  
+  <!-- Corpo - roupa em verde infraestrutura -->
+  <ellipse cx="40" cy="54" rx="18" ry="26" fill="#2F5D50"/>
+  
+  <!-- Braco esquerdo segurando prancheta -->
+  <rect x="20" y="50" width="8" height="28" rx="4" fill="#2F5D50"/>
+  <rect x="16" y="70" width="16" height="20" rx="3" fill="#7FD36E"/>
+  <line x1="18" y1="74" x2="30" y2="74" stroke="#C9F27B" stroke-width="1.5"/>
+  <line x1="18" y1="78" x2="28" y2="78" stroke="#C9F27B" stroke-width="1.5"/>
+  <line x1="18" y1="82" x2="30" y2="82" stroke="#C9F27B" stroke-width="1.5"/>
+  
+  <!-- Braco direito com radio -->
+  <rect x="52" y="48" width="8" height="26" rx="4" fill="#2F5D50"/>
+  <rect x="54" y="44" width="10" height="8" rx="2" fill="#F9CF4A"/>
+  <circle cx="59" cy="46" r="1.5" fill="#123D59"/>
+  
+  <!-- Pernas -->
+  <rect x="32" y="78" width="7" height="20" rx="3.5" fill="#123D59"/>
+  <rect x="41" y="78" width="7" height="20" rx="3.5" fill="#123D59"/>
+  
+  <!-- Cabeca -->
+  <circle cx="40" cy="28" r="14" fill="#7FD36E"/>
+  
+  <!-- Rosto - expressao determinada -->
+  <ellipse cx="35" cy="26" rx="2" ry="3" fill="#123D59"/>
+  <ellipse cx="45" cy="26" rx="2" ry="3" fill="#123D59"/>
+  <path d="M 32 34 Q 40 36 48 34" stroke="#123D59" stroke-width="2" stroke-linecap="round" fill="none"/>
+  
+  <!-- Megafone pequeno (acessorio de mobilizacao) -->
+  <path d="M 62 38 L 70 36 L 70 42 L 62 40 Z" fill="#F9CF4A"/>
+  <rect x="56" y="38" width="6" height="4" fill="#F9CF4A"/>
+  
+  <!-- Distintivo de campanha -->
+  <circle cx="40" cy="48" r="4" fill="#F9CF4A"/>
+  <text x="40" y="52" font-size="6" font-weight="bold" fill="#123D59" text-anchor="middle">AF</text>
+</svg>

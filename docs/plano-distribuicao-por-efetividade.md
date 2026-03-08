@@ -237,6 +237,19 @@ open https://hub-jogos-pre-campanha.vercel.app/estado
 
 ---
 
+## Duelo Arcade Justo (Tijolo 38)
+
+Para comparar `tarifa-zero-corredor` vs `mutirao-do-bairro` sem viés de vitrine:
+- medir por arcade: `exposureSignals`, `intentClicks`, `starts` e `effectiveStarts`;
+- acompanhar gap de exposição (objetivo <= 15pp);
+- aplicar boost corretivo no arcade subexposto antes de decidir vencedor oficial.
+
+Estados operacionais:
+- `unbalanced_exposure`: não declarar vencedor; corrigir distribuição imediatamente.
+- `exposure_correction_in_progress`: manter ajuste de vitrine por 7 dias.
+- `fair_comparison_window`: janela justa aberta; aguardar massa de runs.
+- `decision_ready`: exposição justa + amostra mínima de runs para leitura oficial.
+
 ## Evolução futura (após coleta 7–14 dias)
 
 Quando scorecards atingirem `directional_signal` ou `useful_signal` de forma consistente:

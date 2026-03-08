@@ -1,0 +1,44 @@
+<svg width="220" height="42" viewBox="0 0 220 42" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="chargeGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7FD36E"/>
+      <stop offset="100%" stop-color="#C9F27B"/>
+    </linearGradient>
+    <radialGradient id="readyGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#F9CF4A" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#F9CF4A" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="pulseEffect">
+      <feGaussianBlur stdDeviation="2.5"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="1.5"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  
+  <!-- Container -->
+  <rect x="2" y="2" width="216" height="38" rx="19" fill="#0F1E2B" opacity="0.8"/>
+  <rect x="4" y="4" width="212" height="34" rx="17" fill="none" stroke="#123D59" stroke-width="2.5"/>
+  
+  <!--  Barra de carga (exemplo em 76%) -->
+  <rect x="8" y="8" width="152" height="26" rx="13" fill="url(#chargeGradient)"/>
+  
+  <!-- Icone de raios coletivos convergindo -->
+  <g transform="translate(30, 21)">
+    <line x1="-10" y1="-8" x2="0" y2="0" stroke="#C9F27B" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="10" y1="-8" x2="0" y2="0" stroke="#C9F27B" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="-8" y1="6" x2="0" y2="0" stroke="#C9F27B" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="8" y1="6" x2="0" y2="0" stroke="#C9F27B" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="3" fill="#F9CF4A"/>
+  </g>
+  
+  <!-- Label -->
+  <text x="110" y="26" font-family="sans-serif" font-size="11" font-weight="600" 
+        fill="#C9F27B" text-anchor="middle">MUTIRAO</text>
+  
+  <!-- Estado pronto (glow pulsante quando 100%) - aqui invisivel -->
+  <circle cx="190" cy="21" r="18" fill="url(#readyGlow)" filter="url(#pulseEffect)" opacity="0"/>
+  <circle cx="190" cy="21" r="12" fill="#F9CF4A" opacity="0"/>
+  <text x="190" y="26" font-family="sans-serif" font-size="12" font-weight="bold" 
+        fill="#123D59" text-anchor="middle" opacity="0">OK</text>
+</svg>

@@ -139,6 +139,8 @@ export interface Game {
   campaignFrame: CampaignFrame;
   visualVersion?: string;
   assetSet?: string;
+  premiumTheme?: string;
+  audioProfile?: string;
 }
 
 export const games: Game[] = [
@@ -171,8 +173,44 @@ export const games: Game[] = [
     collectiveSolutionType: 'tarifa-zero',
     commonVsMarket: 'comum',
     campaignFrame: 'defesa-dos-comuns',
-    visualVersion: 'T35D-assets-v2',
-    assetSet: 'corredor-do-povo-v2',
+    visualVersion: 'T35E-premium-v7',
+    assetSet: 'corredor-do-povo-v6',
+    premiumTheme: 'tarifa-zero-premium',
+    audioProfile: 'tarifa-zero-sfx-v1',
+  },
+  {
+    id: 'mutirao-do-bairro',
+    slug: 'mutirao-do-bairro',
+    title: 'Mutirao do Bairro - Defesa do Comum',
+    description:
+      'Arcade de coordenacao territorial em sessao curta. Organize brigadas, repare hotspots e sustente o bairro em mutirao sob pressao.',
+    shortDescription: 'Arcade de coordenacao, reparo e defesa territorial',
+    theme: 'city',
+    icon: '🛠️',
+    cover: '/games/mutirao-do-bairro.jpg',
+    status: 'live',
+    runtimeState: 'real',
+    estimatedMinutes: 2,
+    duration: '1-2 min',
+    participants: 1,
+    difficulty: 'medium',
+    tags: ['arcade', 'mutirao', 'autogestao', 'bairro', 'defesa do comum'],
+    cta: 'Coordenar',
+    color: '#2F5D50',
+    kind: 'arcade',
+    engineId: 'mutirao-do-bairro-v1',
+    pace: 'quick',
+    line: 'organizacao-popular',
+    territoryScope: 'estado-rj',
+    series: 'serie-solucoes-coletivas',
+    politicalAxis: 'poder-popular',
+    collectiveSolutionType: 'ajuda-mutua',
+    commonVsMarket: 'comum',
+    campaignFrame: 'comunidade-em-luta',
+    visualVersion: 'T36C-premium-v1',
+    assetSet: 'mutirao-bairro-premium',
+    premiumTheme: 'mutirao-bairro-premium',
+    audioProfile: 'mutirao-bairro-sfx-v1',
   },
   {
     id: 'passe-livre-nacional',

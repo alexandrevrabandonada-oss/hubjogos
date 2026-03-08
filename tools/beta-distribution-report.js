@@ -56,6 +56,8 @@ function renderMarkdown(data) {
   const bySeries = collectionStatus.bySeries || {};
   const byTerritory = collectionStatus.byTerritory || {};
   const qrExperiment = collectionStatus.qrExperiment || {};
+  const arcadeExposureDuel = data.arcadeExposureDuel || {};
+  const arcadeConvergenceScorecard = data.arcadeConvergenceScorecard || {};
 
   const warnings = quickInsights.warnings || [];
   const window = data.window || '7d';
@@ -183,6 +185,34 @@ ${Object.entries(qrExperiment.progressByVariant || {})
 
 ---
 
+## 🕹️ Duelo justo Tarifa vs Mutirao (T38)
+
+- **Status:** ${arcadeExposureDuel.fairness?.status || 'unbalanced_exposure'}
+- **Resumo:** ${arcadeExposureDuel.fairness?.summary || 'Sem leitura de exposicao consolidada.'}
+- **Gap de exposicao:** ${arcadeExposureDuel.fairness?.exposureDeltaPct || 0}pp
+- **Arcade subexposto:** ${arcadeExposureDuel.fairness?.underexposedArcade || 'nenhum'}
+- **Boost recomendado:** +${arcadeExposureDuel.fairness?.recommendedExposureBoost || 0} sinais de exposicao
+- **Lider por volume:** ${arcadeExposureDuel.contextLeaders?.volumeLeader || 'technical_tie'}
+- **Lider por eficiencia:** ${arcadeExposureDuel.contextLeaders?.efficiencyLeader || 'technical_tie'}
+- **Lider por forca de campanha:** ${arcadeExposureDuel.contextLeaders?.campaignLeader || 'technical_tie'}
+
+${(arcadeExposureDuel.scorecards || [])
+  .map((row) => `- ${row.slug}: exposicao ${row.exposureSignals}, interesse ${row.intentClicks}, starts ${row.starts}, expo->start ${row.exposureToStartRate}%`)
+  .join('\n') || '- Sem scorecards de exposicao por arcade'}
+
+---
+
+## 🎯 Decisão de Convergência (T39)
+
+- **Estado:** ${arcadeConvergenceScorecard.confidence?.state || 'insufficient_fair_sample'}
+- **Escore:** ${arcadeConvergenceScorecard.confidence?.finalScore || 0}/100
+- **Dimensões alinhadas:** ${arcadeConvergenceScorecard.convergence?.alignedDimensions || 0}/${arcadeConvergenceScorecard.convergence?.totalDimensions || 6}
+- **Pronto para decidir?:** ${arcadeConvergenceScorecard.decision?.readyToDecide ? 'Sim ✅' : 'Não ⏳'}
+- **Líder recomendado:** ${arcadeConvergenceScorecard.decision?.recommendedLeader || 'maintain parity'}
+- **Próxima ação:** ${arcadeConvergenceScorecard.decision?.nextActionIfNotReady || 'Consolidar convergência'}
+
+---
+
 ## ⚠️ Alertas e Recomendações
 
 ### Alertas de amostra
@@ -197,6 +227,9 @@ ${(() => {
   const topBridge = (effectiveRuns.crossGameBridges || []).slice(0, 1);
   const channels = (effectiveRuns.byChannel || []).slice(0, 1);
   const territories = (effectiveRuns.byTerritory || []).slice(0, 1);
+  const fairStatus = arcadeExposureDuel.fairness?.status || 'unbalanced_exposure';
+  const underexposedArcade = arcadeExposureDuel.fairness?.underexposedArcade;
+  const boostNeeded = arcadeExposureDuel.fairness?.recommendedExposureBoost || 0;
 
   const previewStatus = scorecards.previewToPlay?.status || 'insufficient_data';
   const replayStatus = scorecards.replayEffectiveness?.status || 'insufficient_data';
@@ -210,6 +243,12 @@ ${(() => {
     weeklyPlan.push('- Manter plano atual de coleta por mais 7 dias (sem abrir novo jogo/formato).');
     weeklyPlan.push('- Objetivo da semana: aumentar `effective_run_start` e `effective_replay` sem mudar narrativa central.');
     weeklyPlan.push('- Regra operacional: nao interpretar vencedor quick vs arcade enquanto scorecards estiverem em `insufficient_data`.');
+  }
+
+  if (fairStatus === 'unbalanced_exposure' || fairStatus === 'exposure_correction_in_progress') {
+    weeklyPlan.push(`- **Correcao de duelo arcade:** reforcar ${underexposedArcade || 'arcade subexposto'} com +${boostNeeded} sinais de exposicao antes de declarar vencedor oficial.`);
+  } else {
+    weeklyPlan.push('- **Duelo arcade em janela justa:** manter comparacao pareada e priorizar eficiencia (exposicao -> start).');
   }
 
   if (topRuns.length > 0) {
@@ -408,6 +447,7 @@ function renderJSON(data) {
       byTerritory: (effectiveRuns.byTerritory || []).slice(0, 5),
       warnings: effectiveRuns.warnings || [],
     },
+    arcadeExposureDuel: data.arcadeExposureDuel || {},
     readySeries: Object.entries(quickInsights.collectionStatus?.bySeries || {})
       .filter(([, status]) => status.status === 'pronto-para-priorizacao')
       .map(([key]) => key),

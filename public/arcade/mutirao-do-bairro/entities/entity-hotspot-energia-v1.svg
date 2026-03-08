@@ -1,0 +1,48 @@
+<svg width="120" height="145" viewBox="0 0 120 145" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="energiaBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E3A4C"/>
+      <stop offset="100%" stop-color="#123D59"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Frame octogonal externo -->
+  <polygon points="30,5 90,5 115,30 115,115 90,140 30,140 5,115 5,30" 
+           fill="none" stroke="#123D59" stroke-width="3"/>
+  
+  <!-- Frame interno -->
+  <polygon points="32,8 88,8 112,32 112,113 88,137 32,137 8,113 8,32" 
+           fill="url(#energiaBg)" stroke="#F9CF4A" stroke-width="2"/>
+  
+  <!-- Icone de energia - raio/lampada -->
+  <circle cx="60" cy="45" r="18" fill="#F9CF4A" opacity="0.3"/>
+  <path d="M 60 28 L 52 48 L 62 48 L 54 68" 
+        stroke="#F9CF4A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="60" cy="45" r="8" fill="#C9F27B" opacity="0.6"/>
+  
+  <!-- Linhas de energia irradiando -->
+  <line x1="60" y1="28" x2="60" y2="22" stroke="#F9CF4A" stroke-width="2" opacity="0.5"/>
+  <line x1="72" y1="33" x2="77" y2="28" stroke="#F9CF4A" stroke-width="2" opacity="0.5"/>
+  <line x1="48" y1="33" x2="43" y2="28" stroke="#F9CF4A" stroke-width="2" opacity="0.5"/>
+  <line x1="78" y1="45" x2="84" y2="45" stroke="#F9CF4A" stroke-width="2" opacity="0.5"/>
+  <line x1="42" y1="45" x2="36" y2="45" stroke="#F9CF4A" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Simbolo de circuito -->
+  <rect x="52" y="72" width="16" height="12" rx="2" fill="#2F5D50" opacity="0.6"/>
+  <line x1="54" y1="76" x2="58" y2="76" stroke="#F9CF4A" stroke-width="1.5"/>
+  <line x1="54" y1="80" x2="58" y2="80" stroke="#F9CF4A" stroke-width="1.5"/>
+  <line x1="62" y1="76" x2="66" y2="76" stroke="#F9CF4A" stroke-width="1.5"/>
+  <line x1="62" y1="80" x2="66" y2="80" stroke="#F9CF4A" stroke-width="1.5"/>
+  
+  <!-- Barra de integrity (inferior) - placeholder em 68% -->
+  <rect x="15" y="120" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="120" width="61" height="8" rx="4" fill="#7FD36E"/>
+  
+  <!-- Barra de danger (superior) - placeholder em 42% -->
+  <rect x="15" y="90" width="90" height="8" rx="4" fill="#123D59" opacity="0.5"/>
+  <rect x="15" y="90" width="38" height="8" rx="4" fill="#F18F4E"/>
+  
+  <!-- Label -->
+  <text x="60" y="112" font-family="sans-serif" font-size="11" font-weight="600" 
+        fill="#F9CF4A" text-anchor="middle">ENERGIA</text>
+</svg>

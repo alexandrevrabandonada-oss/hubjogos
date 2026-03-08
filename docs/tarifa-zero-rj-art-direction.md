@@ -1,15 +1,15 @@
 # Tarifa Zero RJ - Corredor do Povo: Direção de Arte
 
-**Status:** Fundação profissional (T35A)  
+**Status:** Premium coeso (T35E)  
 **Tipo:** Arcade de corrida/coletividade  
 **Duração:** 55 segundos  
 **Plataforma:** Mobile-first, desktop bom  
 
-## T35D - Production Pass ativo
+## T35E - Premium Pass ativo
 
-Asset set em produção: `corredor-do-povo-v1`
+Asset set em produção: `corredor-do-povo-v6`
 
-Versão visual ativa no runtime: `T35D-assets-v1`
+Versão visual ativa no runtime: `T35E-premium-v7`
 
 Assets já integrados:
 - Linha A: `bg-skyline-far.svg`, `bg-skyline-mid.svg`, `bg-corredor-road.svg`
@@ -20,10 +20,22 @@ Assets já integrados:
 Fallback preservado:
 - todo asset integrado continua com desenho em canvas como backstop em caso de falha de carregamento
 
+Novidades T35E:
+- variantes dedicadas: `obstacle-bloqueio-sequencia.svg` e `pickup-individualismo-cluster.svg`.
+- transição de fase curta e premium validada na run (overlay contextual por fase).
+- final de run refinado com melhor hierarquia visual e CTAs de reentrada.
+- smoke e2e do arcade em viewport desktop e mobile, com screenshots em `reports/validation/`.
+
 Infra preparada para o próximo pass:
 - flash por lane já direcionado
 - badge de fase no HUD
 - banner de evento separado
+
+Novidades T35F:
+- tema formal premium para card final: `theme="tarifa-zero-premium"`;
+- CTA de replay com pulso visual para reforcar reentrada imediata;
+- HUD com estado de som (`Som: on/off`) integrado ao visual do runtime;
+- baseline visual de run/final consolidada em desktop e mobile em `reports/validation/baselines/`.
 
 ---
 
