@@ -21,6 +21,9 @@ import {
   trackArcadeScore,
   trackFinalCardQRClick,
   trackFinalCardQRView,
+  trackTarifaZeroComboPeak,
+  trackTarifaZeroPhaseDeaths,
+  trackTarifaZeroDepthMetrics,
 } from '@/lib/analytics/track';
 import styles from './TarifaZeroArcadeGame.module.css';
 
@@ -80,6 +83,33 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
       bloqueios: nextResult.stats.bloqueios,
       individualismos: nextResult.stats.individualismos,
     }).catch(console.error);
+
+    // Track depth metrics
+    if (nextResult.stats.comboMultiplierPeak !== undefined) {
+      await trackTarifaZeroComboPeak(game, {
+        comboMultiplierPeak: nextResult.stats.comboMultiplierPeak,
+        perfectStreakPeakMs: nextResult.stats.perfectStreakPeak || 0,
+        apoioSequencePeak: nextResult.stats.apoioSequencePeak || 0,
+        eventsTriggered: nextResult.stats.eventsTriggered || 0,
+      }).catch(console.error);
+
+      await trackTarifaZeroPhaseDeaths(
+        game,
+        nextResult.stats.currentPhase || 'final',
+        nextResult.stats.durationMs,
+        nextResult.stats.collectiveRate
+      ).catch(console.error);
+
+      await trackTarifaZeroDepthMetrics(game, {
+        comboMultiplierPeak: nextResult.stats.comboMultiplierPeak,
+        perfectStreakPeakMs: nextResult.stats.perfectStreakPeak || 0,
+        apoioSequencePeak: nextResult.stats.apoioSequencePeak || 0,
+        totalCollisions: nextResult.stats.totalCollisions || 0,
+        eventsTriggered: nextResult.stats.eventsTriggered || 0,
+        collectiveRate: nextResult.stats.collectiveRate,
+        phase: nextResult.stats.currentPhase || 'unknown',
+      }).catch(console.error);
+    }
 
     await trackFinalCardQRView(game, nextResult.resultId).catch(console.error);
   }

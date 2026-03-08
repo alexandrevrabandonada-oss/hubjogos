@@ -588,3 +588,59 @@ export async function trackArcadeToQuickClick(game: Game, quickSlug: string, pla
     }),
   );
 }
+
+// Tarifa Zero depth metrics (T35C)
+export async function trackTarifaZeroComboPeak(
+  game: Game,
+  data: {
+    comboMultiplierPeak: number;
+    perfectStreakPeakMs: number;
+    apoioSequencePeak: number;
+    eventsTriggered: number;
+  },
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'tarifa_zero_combo_peak',
+      metadata: data,
+    }),
+  );
+}
+
+export async function trackTarifaZeroPhaseDeaths(
+  game: Game,
+  currentPhase: 'abertura' | 'escalada' | 'pressao' | 'final',
+  durationMs: number,
+  collectiveRate: number,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'tarifa_zero_phase_death',
+      metadata: {
+        phase: currentPhase,
+        durationMs,
+        collectiveRate,
+      },
+    }),
+  );
+}
+
+export async function trackTarifaZeroDepthMetrics(
+  game: Game,
+  data: {
+    comboMultiplierPeak: number;
+    perfectStreakPeakMs: number;
+    apoioSequencePeak: number;
+    totalCollisions: number;
+    eventsTriggered: number;
+    collectiveRate: number;
+    phase: string;
+  },
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'tarifa_zero_depth_metrics',
+      metadata: data,
+    }),
+  );
+}

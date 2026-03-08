@@ -42,6 +42,13 @@ export interface ArcadeRunResult {
     individualismos: number;
     collectiveRate: number;
     durationMs: number;
+    // Depth metrics (optional for backward compat)
+    comboMultiplierPeak?: number;
+    perfectStreakPeak?: number;
+    apoioSequencePeak?: number;
+    eventsTriggered?: number;
+    totalCollisions?: number;
+    currentPhase?: 'abertura' | 'escalada' | 'pressao' | 'final';
   };
 }
 
