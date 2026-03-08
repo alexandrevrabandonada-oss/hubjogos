@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 760" fill="none">
+  <defs>
+    <linearGradient id="farGlow" x1="210" x2="210" y1="110" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFECB2" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#123D59" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="stack" x1="0" x2="0" y1="180" y2="510" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E7D6AF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#0F2A3D" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="222" cy="158" rx="148" ry="78" fill="url(#farGlow)"/>
+  <path d="M0 412L24 386H40L54 302H84L96 252H110L122 336H138L152 210H194L208 130H232L244 232H274L286 174H322L336 286H350L362 236H388L408 336H420V760H0V412Z" fill="url(#stack)"/>
+  <path d="M18 380H60V760H18V380ZM118 328H160V760H118V328ZM188 210H244V760H188V210ZM290 260H334V760H290V260ZM360 344H402V760H360V344Z" fill="#102B3D" fill-opacity="0.28"/>
+  <path d="M0 466C62 450 118 438 188 438C252 438 320 450 420 478V760H0V466Z" fill="#0B2232" fill-opacity="0.24"/>
+</svg>

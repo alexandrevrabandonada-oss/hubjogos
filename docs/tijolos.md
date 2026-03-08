@@ -66,6 +66,33 @@ npm run test:e2e
 - Tijolo 33 ✅ run efetiva e distribuição guiada
 - Tijolo 34 ✅ efetividade em operação de campanha
 - Tijolo 35A ✅ fundação visual profissional do primeiro arcade
+- Tijolo 35D ✅ produção visual de assets profissionais integrada ao Tarifa Zero RJ
+
+## Tijolo 35D - Produção visual de assets profissionais ✅
+
+### Objetivo
+
+Transformar os concepts das linhas A-D do Tarifa Zero RJ em assets reais integráveis, mantendo estabilidade do runtime arcade e fallback seguro.
+
+### Entregues
+
+- Assetização real em `public/arcade/tarifa-zero/`:
+  - `bg/` com skyline distante, camada urbana média e corredor/pista.
+  - `player/` com ônibus-player estilizado.
+  - `transport/` com ônibus principal, compacto e variante de evento.
+  - `obstacles/` com catraca, barreira pesada e zona de pressão.
+  - `pickups/` com apoio, apoio em cadeia, mutirão, individualismo, chance rara e chance-virada.
+  - `ui/` com peças de HUD, badges, frame premium, QR frame e botões premium.
+- Runtime do Tarifa Zero migrado para renderização asset-first com fallback canvas.
+- Feedback lane-specific em colisões preparado para etapa seguinte de polish visual.
+- Pós-run premium com score, fase, combo e CTA de próximo arcade.
+- `/estado` com leitura de versão visual ativa por jogo arcade.
+
+### Nao inclui
+
+- reescrita da lógica do gameplay
+- novo arcade
+- abandono do fallback em canvas
 
 ## Tijolo 20 - Cockpit Temporal ✅
 

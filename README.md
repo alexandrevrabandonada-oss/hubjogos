@@ -2,7 +2,7 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: Tijolo 35A concluído - fundação visual profissional do primeiro arcade (Tarifa Zero RJ) com direção de arte coerente, HUD forte, feedback visual claro e experiência sólida mobile/desktop, mantendo operação de distribuição por efetividade ativa.
+Status atual: Tijolo 35D concluído - production pass real de assets do Tarifa Zero RJ integrado ao runtime arcade, com fundo em camadas, sprites reais para player, pickups e obstáculos, HUD premium e fallback canvas preservado.
 
 ## Estado do Produto
 
@@ -10,11 +10,16 @@ Status atual: Tijolo 35A concluído - fundação visual profissional do primeiro
 - 2 runtimes arcade reais em `/arcade/[slug]` com canvas loop reutilizavel:
   - `tarifa-zero-corredor` (55s, lane-based collect/avoid, tarifa zero + apoio coletivo) - **fundação visual profissional** com direção de arte campanha, HUD forte e feedback claro
   - `passe-livre-nacional` (90s, positioning/coordination, sindicato + transporte público)
-- Fundação visual arcade estabelecida: paleta oficial (#f9cf4a, #123d59, #7ce0ae, #f45f5f), shape language, pipeline de assets.
+- Fundação visual arcade estabelecida e colocada em produção: paleta oficial (#f9cf4a, #123d59, #7ce0ae, #f45f5f), shape language, pipeline de assets e asset set `corredor-do-povo-v1` ativo no Tarifa Zero RJ.
+- Tarifa Zero RJ com pass de assetização T35D:
+  - background em layers (`bg-skyline-far`, `bg-skyline-mid`, `bg-corredor-road`)
+  - player/ônibus amarelo estilizado integrado ao canvas
+  - pickups e obstáculos reais em SVG com fallback seguro
+  - HUD principal, badges de fase/evento e pós-run premium
 - Avatar oficial da campanha como personagem recorrente.
 - Card final universal compartilhavel em todos os jogos.
 - Card final com QR code dinamico para reentrada.
-- Pipeline de assets de campanha organizado (`public/campaign/`, `docs/assets/`).
+- Pipeline de assets de campanha organizado (`public/campaign/`, `docs/assets/`) e pipeline local do Tarifa Zero formalizado em `public/arcade/tarifa-zero/README.md`.
 - Minigames quick ativos: `custo-de-viver`, `quem-paga-a-conta` e `cidade-em-comum` (1-2 min, rejogaveis, compartilhaveis).
 - Home reposicionada para entrada imediata com bloco `Jogue agora` acima da dobra, prioridade visual de arcades e entrada quick em paralelo.
 - Preview vivo nos cards: animações CSS de pulso, glow, bounce para sensação de jogo real antes do clique.

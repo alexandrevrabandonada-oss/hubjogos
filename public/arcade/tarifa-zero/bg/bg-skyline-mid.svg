@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 760" fill="none">
+  <defs>
+    <linearGradient id="midUrban" x1="210" x2="210" y1="240" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DEC79A" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#163B53" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <path d="M0 454L26 430H44L52 408H72L84 426H94L106 372H130L142 392H164L180 340H208L222 376H248L264 330H290L300 350H320L336 396H350L362 374H388L404 432H420V760H0V454Z" fill="url(#midUrban)"/>
+  <path d="M20 482H76V760H20V482ZM92 450H148V760H92V450ZM166 414H228V760H166V414ZM238 436H302V760H238V436ZM316 466H392V760H316V466Z" fill="#123D59" fill-opacity="0.22"/>
+  <path d="M0 520C70 492 120 486 186 486C250 486 308 500 420 542V760H0V520Z" fill="#173B52" fill-opacity="0.26"/>
+  <path d="M50 532H120" stroke="#FFD765" stroke-opacity="0.2" stroke-width="4" stroke-linecap="round"/>
+  <path d="M228 548H286" stroke="#7CE0AE" stroke-opacity="0.18" stroke-width="4" stroke-linecap="round"/>
+  <path d="M304 530H346" stroke="#F9CF4A" stroke-opacity="0.16" stroke-width="4" stroke-linecap="round"/>
+</svg>

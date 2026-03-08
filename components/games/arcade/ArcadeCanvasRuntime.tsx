@@ -15,6 +15,8 @@ interface ArcadeCanvasRuntimeProps<State> {
   onRunEnd: (result: ArcadeRunResult) => void;
   onFirstInput: (elapsedMs: number, kind: ArcadeInputKind) => void;
   onPowerupCollect?: (powerupId: string) => void;
+  hudBadge?: string;
+  hudDetail?: string;
 }
 
 interface InputBuffer {
@@ -107,6 +109,8 @@ export function ArcadeCanvasRuntime<State>({
   onRunEnd,
   onFirstInput,
   onPowerupCollect,
+  hudBadge,
+  hudDetail,
 }: ArcadeCanvasRuntimeProps<State>) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -318,6 +322,12 @@ export function ArcadeCanvasRuntime<State>({
           <span className={styles.hudLabel}>Score</span>
           <span className={styles.hudValue}>{score}</span>
         </div>
+        {hudBadge || hudDetail ? (
+          <div className={styles.hudMeta}>
+            {hudBadge ? <span className={styles.hudBadge}>{hudBadge}</span> : null}
+            {hudDetail ? <span className={styles.hudDetail}>{hudDetail}</span> : null}
+          </div>
+        ) : null}
         <div className={styles.hudStatus}>
           {paused ? '⏸ Pausado' : '▶ Em jogo'}
         </div>

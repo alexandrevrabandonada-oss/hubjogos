@@ -212,6 +212,12 @@
   font-weight: 500;
 }
 
+.tableNote {
+  font-size: 0.74rem;
+  color: var(--text-secondary, #667085);
+  line-height: 1.35;
+}
+
 .numeric {
   text-align: center;
   font-family: monospace;

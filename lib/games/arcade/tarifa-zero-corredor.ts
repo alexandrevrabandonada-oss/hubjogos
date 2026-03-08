@@ -5,6 +5,7 @@ import type {
   ArcadeRunResult,
   ArcadeTickResult,
 } from './types';
+import { drawTarifaZeroAsset } from './tarifa-zero-assets';
 
 type TarifaEntityType = 
   | 'apoio' | 'apoio-cadeia' | 'apoio-territorial'
@@ -517,6 +518,7 @@ function processEntityCollision(
     result.state.collectiveMeterTarget = clamp(state.collectiveMeterTarget - 14, 0, 100);
     result.state.score = Math.max(0, state.score - 18);
     result.state.laneFlashMs = 260;
+    result.state.lastFlashLane = entity.lane;
     result.state.perfectStreakMs = 0; // Break perfect streak
     result.state.apoioSequenceCount = 0; // Break apoio sequence
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
@@ -529,6 +531,7 @@ function processEntityCollision(
     result.state.collectiveMeterTarget = clamp(state.collectiveMeterTarget + penalty, 0, 100);
     result.state.score = Math.max(0, state.score - 28);
     result.state.laneFlashMs = 400;
+    result.state.lastFlashLane = entity.lane;
     result.state.perfectStreakMs = 0;
     result.state.apoioSequenceCount = 0;
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
@@ -541,6 +544,7 @@ function processEntityCollision(
     result.state.collectiveMeterTarget = clamp(state.collectiveMeterTarget + penalty, 0, 100);
     result.state.score = Math.max(0, state.score - 15);
     result.state.laneFlashMs = 280;
+    result.state.lastFlashLane = entity.lane;
     result.state.perfectStreakMs = 0;
     result.state.apoioSequenceCount = 0;
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
@@ -553,6 +557,7 @@ function processEntityCollision(
     result.state.zonaPressaoHits = state.zonaPressaoHits + 1;
     result.state.collectiveMeterTarget = clamp(state.collectiveMeterTarget + penalty, 0, 100);
     result.state.score = Math.max(0, state.score - 12);
+    result.state.lastFlashLane = entity.lane;
     // Don't break perfect streak (you chose to traverse)
     result.state.recentFeedback = [...state.recentFeedback, createFeedback(entity.type, entity.lane, entity.y)];
   }
@@ -755,6 +760,504 @@ function hexToRgb(hex: string): string {
   return '160, 160, 160'; // Default gray fallback
 }
 
+function fillRoundedRect(
+  canvasCtx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+) {
+  canvasCtx.beginPath();
+  canvasCtx.roundRect(x, y, width, height, radius);
+  canvasCtx.fill();
+}
+
+function strokeRoundedRect(
+  canvasCtx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+) {
+  canvasCtx.beginPath();
+  canvasCtx.roundRect(x, y, width, height, radius);
+  canvasCtx.stroke();
+}
+
+function getPhaseTheme(phase: RunPhase) {
+  switch (phase) {
+    case 'abertura':
+      return { label: 'FASE 1  ABERTURA', color: '#7ce0ae' };
+    case 'escalada':
+      return { label: 'FASE 2  ESCALADA', color: '#f9cf4a' };
+    case 'pressao':
+      return { label: 'FASE 3  PRESSAO', color: '#ffb380' };
+    case 'final':
+      return { label: 'FASE 4  FINAL', color: '#ffd765' };
+  }
+}
+
+function getEventTheme(event: RunEvent) {
+  switch (event) {
+    case 'mutirao-ativo':
+      return { label: 'MUTIRAO ATIVO', color: '#ffd765', bg: 'rgba(255, 215, 101, 0.2)' };
+    case 'onda-bloqueio':
+      return { label: 'ONDA DE BLOQUEIO', color: '#f45f5f', bg: 'rgba(244, 95, 95, 0.18)' };
+    case 'corredor-livre':
+      return { label: 'CORREDOR LIVRE', color: '#7ce0ae', bg: 'rgba(124, 224, 174, 0.18)' };
+    case 'janela-chance':
+      return { label: 'JANELA DE CHANCE', color: '#00d9ff', bg: 'rgba(0, 217, 255, 0.18)' };
+    case 'forca-coletiva':
+      return { label: 'FORCA COLETIVA', color: '#f9cf4a', bg: 'rgba(249, 207, 74, 0.2)' };
+    case 'catraca-fechando':
+      return { label: 'CATRACA FECHANDO', color: '#ff8080', bg: 'rgba(168, 52, 52, 0.22)' };
+    default:
+      return null;
+  }
+}
+
+function drawBackground(
+  canvasCtx: CanvasRenderingContext2D,
+  state: TarifaZeroState,
+  width: number,
+  height: number,
+  laneWidth: number,
+) {
+  const background = canvasCtx.createLinearGradient(0, 0, 0, height);
+  background.addColorStop(0, '#08121d');
+  background.addColorStop(0.45, '#123d59');
+  background.addColorStop(1, '#102736');
+  canvasCtx.fillStyle = background;
+  canvasCtx.fillRect(0, 0, width, height);
+
+  drawTarifaZeroAsset(canvasCtx, 'bg-skyline-far', 0, 0, width, height, { alpha: 0.95 });
+  drawTarifaZeroAsset(canvasCtx, 'bg-skyline-mid', 0, 0, width, height, { alpha: 0.98 });
+  drawTarifaZeroAsset(canvasCtx, 'bg-corredor-road', 0, 0, width, height, { alpha: 1 });
+
+  const haze = canvasCtx.createLinearGradient(0, 0, 0, height * 0.38);
+  haze.addColorStop(0, 'rgba(255, 239, 183, 0.2)');
+  haze.addColorStop(1, 'rgba(255, 239, 183, 0)');
+  canvasCtx.fillStyle = haze;
+  canvasCtx.fillRect(0, 0, width, height * 0.38);
+
+  for (let lane = 0; lane < LANE_COUNT; lane += 1) {
+    const x = lane * laneWidth;
+    const isPlayerLane = lane === state.playerLane;
+    canvasCtx.fillStyle = isPlayerLane ? 'rgba(249, 207, 74, 0.12)' : 'rgba(255, 255, 255, 0.03)';
+    canvasCtx.fillRect(x + 4, 0, laneWidth - 8, height);
+
+    if (lane > 0) {
+      canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+      canvasCtx.lineWidth = 2;
+      canvasCtx.setLineDash([10, 14]);
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(x, 0);
+      canvasCtx.lineTo(x, height);
+      canvasCtx.stroke();
+      canvasCtx.setLineDash([]);
+    }
+  }
+}
+
+function drawEntitySprite(
+  canvasCtx: CanvasRenderingContext2D,
+  entity: TarifaEntity,
+  width: number,
+) {
+  const x = laneCenterX(entity.lane, width);
+
+  if (entity.type === 'apoio') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio', x - 26, entity.y - 26, 52, 52)) {
+      return;
+    }
+    const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, 15);
+    gradient.addColorStop(0, '#7ce0ae');
+    gradient.addColorStop(1, '#5bc893');
+    canvasCtx.fillStyle = gradient;
+    canvasCtx.beginPath();
+    canvasCtx.arc(x, entity.y, 14, 0, Math.PI * 2);
+    canvasCtx.fill();
+    canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    canvasCtx.lineWidth = 2;
+    canvasCtx.stroke();
+    return;
+  }
+
+  if (entity.type === 'apoio-cadeia') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio-cadeia', x - 34, entity.y - 24, 68, 48)) {
+      return;
+    }
+    canvasCtx.fillStyle = '#94e9bc';
+    canvasCtx.beginPath();
+    canvasCtx.arc(x - 10, entity.y, 12, 0, Math.PI * 2);
+    canvasCtx.arc(x + 10, entity.y, 12, 0, Math.PI * 2);
+    canvasCtx.fill();
+    return;
+  }
+
+  if (entity.type === 'apoio-territorial') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio', x - 28, entity.y - 28, 56, 56)) {
+      canvasCtx.fillStyle = '#123d59';
+      canvasCtx.font = '700 11px system-ui, sans-serif';
+      canvasCtx.textAlign = 'center';
+      canvasCtx.textBaseline = 'middle';
+      canvasCtx.fillText('VR', x, entity.y + 1);
+      return;
+    }
+    canvasCtx.fillStyle = '#6fd1f0';
+    canvasCtx.beginPath();
+    canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
+    canvasCtx.fill();
+    return;
+  }
+
+  if (entity.type === 'bloqueio') {
+    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-catraca', x - 28, entity.y - 28, 56, 56)) {
+      return;
+    }
+    canvasCtx.fillStyle = '#f45f5f';
+    canvasCtx.fillRect(x - 16, entity.y - 16, 32, 32);
+    return;
+  }
+
+  if (entity.type === 'bloqueio-pesado') {
+    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 34, entity.y - 30, 68, 60)) {
+      return;
+    }
+    canvasCtx.fillStyle = '#d84545';
+    canvasCtx.fillRect(x - 20, entity.y - 20, 40, 40);
+    return;
+  }
+
+  if (entity.type === 'bloqueio-sequencia') {
+    const drewTop = drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 26, entity.y - 34, 52, 24);
+    const drewBottom = drawTarifaZeroAsset(canvasCtx, 'obstacle-barreira-pesada', x - 26, entity.y + 8, 52, 24);
+    if (drewTop && drewBottom) {
+      canvasCtx.strokeStyle = 'rgba(244, 95, 95, 0.8)';
+      canvasCtx.lineWidth = 2;
+      canvasCtx.setLineDash([3, 3]);
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(x, entity.y - 8);
+      canvasCtx.lineTo(x, entity.y + 8);
+      canvasCtx.stroke();
+      canvasCtx.setLineDash([]);
+      return;
+    }
+    canvasCtx.fillStyle = '#f47575';
+    canvasCtx.fillRect(x - 14, entity.y - 22, 28, 14);
+    canvasCtx.fillRect(x - 14, entity.y + 8, 28, 14);
+    return;
+  }
+
+  if (entity.type === 'zona-pressao') {
+    const rectHeight = entity.height || 60;
+    if (drawTarifaZeroAsset(canvasCtx, 'obstacle-zona-pressao', x - 24, entity.y - rectHeight / 2, 48, rectHeight)) {
+      return;
+    }
+    canvasCtx.fillStyle = 'rgba(244, 95, 95, 0.25)';
+    canvasCtx.fillRect(x - 18, entity.y - rectHeight / 2, 36, rectHeight);
+    return;
+  }
+
+  if (entity.type === 'mutirao' || entity.type === 'mutirao-bairro' || entity.type === 'mutirao-sindical') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-mutirao', x - 28, entity.y - 28, 56, 56)) {
+      if (entity.type !== 'mutirao') {
+        canvasCtx.fillStyle = '#123d59';
+        canvasCtx.font = '700 9px system-ui, sans-serif';
+        canvasCtx.textAlign = 'center';
+        canvasCtx.textBaseline = 'middle';
+        canvasCtx.fillText(entity.type === 'mutirao-bairro' ? 'BA' : 'SI', x, entity.y + 16);
+      }
+      return;
+    }
+    canvasCtx.fillStyle = '#ffd765';
+    canvasCtx.beginPath();
+    canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
+    canvasCtx.fill();
+    return;
+  }
+
+  if (entity.type === 'individualismo' || entity.type === 'individualismo-tentador') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 24, entity.y - 24, 48, 48)) {
+      return;
+    }
+    canvasCtx.fillStyle = '#b8c5d0';
+    canvasCtx.beginPath();
+    canvasCtx.arc(x, entity.y, 13, 0, Math.PI * 2);
+    canvasCtx.fill();
+    return;
+  }
+
+  if (entity.type === 'individualismo-cluster') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 30, entity.y - 22, 24, 24)) {
+      drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 12, entity.y - 26, 24, 24);
+      drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x + 6, entity.y - 22, 24, 24);
+      return;
+    }
+    const positions = [{ dx: -10, dy: -6 }, { dx: 10, dy: -6 }, { dx: 0, dy: 8 }];
+    for (const pos of positions) {
+      canvasCtx.fillStyle = '#b8c5d0';
+      canvasCtx.beginPath();
+      canvasCtx.arc(x + pos.dx, entity.y + pos.dy, 8, 0, Math.PI * 2);
+      canvasCtx.fill();
+    }
+    return;
+  }
+
+  if (entity.type === 'chance' || entity.type === 'chance-abertura') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-chance-rara', x - 30, entity.y - 30, 60, 60)) {
+      if (entity.type === 'chance-abertura') {
+        canvasCtx.fillStyle = '#123d59';
+        canvasCtx.font = '700 16px system-ui, sans-serif';
+        canvasCtx.textAlign = 'center';
+        canvasCtx.textBaseline = 'middle';
+        canvasCtx.fillText('UP', x, entity.y + 1);
+      }
+      return;
+    }
+    canvasCtx.fillStyle = '#00d9ff';
+    canvasCtx.beginPath();
+    canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
+    canvasCtx.fill();
+    return;
+  }
+
+  if (entity.type === 'chance-virada') {
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-chance-virada', x - 30, entity.y - 30, 60, 60)) {
+      return;
+    }
+    canvasCtx.fillStyle = '#ffd700';
+    canvasCtx.beginPath();
+    canvasCtx.arc(x, entity.y, 18, 0, Math.PI * 2);
+    canvasCtx.fill();
+  }
+}
+
+function drawHud(
+  canvasCtx: CanvasRenderingContext2D,
+  state: TarifaZeroState,
+  width: number,
+  height: number,
+) {
+  const progress = clamp(state.elapsedMs / RUN_DURATION_MS, 0, 1);
+  const barMargin = 14;
+  const barWidth = width - 2 * barMargin;
+  const barHeight = 20;
+
+  if (!drawTarifaZeroAsset(canvasCtx, 'ui-hud-progress-frame', barMargin, 10, barWidth, barHeight + 12)) {
+    canvasCtx.fillStyle = 'rgba(10, 31, 46, 0.85)';
+    fillRoundedRect(canvasCtx, barMargin, 12, barWidth, barHeight, 10);
+  }
+
+  canvasCtx.save();
+  canvasCtx.beginPath();
+  canvasCtx.rect(barMargin + 8, 18, Math.max(0, (barWidth - 16) * progress), barHeight - 6);
+  canvasCtx.clip();
+  if (!drawTarifaZeroAsset(canvasCtx, 'ui-hud-progress-fill', barMargin, 10, barWidth, barHeight + 12)) {
+    const progressGradient = canvasCtx.createLinearGradient(barMargin, 12, barMargin + barWidth, 12);
+    progressGradient.addColorStop(0, '#7ce0ae');
+    progressGradient.addColorStop(0.6, '#f9cf4a');
+    progressGradient.addColorStop(1, '#ffd765');
+    canvasCtx.fillStyle = progressGradient;
+    fillRoundedRect(canvasCtx, barMargin + 4, 16, barWidth - 8, barHeight - 8, 8);
+  }
+  canvasCtx.restore();
+
+  const phaseTheme = getPhaseTheme(state.currentPhase);
+  const phaseBadgeWidth = Math.min(160, width * 0.34);
+  const phaseBadgeX = width - phaseBadgeWidth - 42;
+  if (drawTarifaZeroAsset(canvasCtx, 'ui-badge-phase', phaseBadgeX, 42, phaseBadgeWidth, 28)) {
+    canvasCtx.fillStyle = phaseTheme.color;
+    canvasCtx.font = '700 10px system-ui, sans-serif';
+    canvasCtx.textAlign = 'center';
+    canvasCtx.textBaseline = 'middle';
+    canvasCtx.fillText(phaseTheme.label, phaseBadgeX + phaseBadgeWidth / 2, 56);
+  }
+
+  const meterHeight = height * 0.32;
+  const meterWidth = 26;
+  const meterX = width - meterWidth - 12;
+  const meterY = height * 0.34;
+  const meterFill = clamp(state.collectiveMeter / 100, 0, 1);
+  const fillHeight = (meterHeight - 12) * meterFill;
+
+  if (!drawTarifaZeroAsset(canvasCtx, 'ui-hud-meter-frame', meterX - 8, meterY - 8, meterWidth + 16, meterHeight + 16)) {
+    canvasCtx.fillStyle = 'rgba(10, 31, 46, 0.7)';
+    fillRoundedRect(canvasCtx, meterX, meterY, meterWidth, meterHeight, 12);
+    canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+    canvasCtx.lineWidth = 2;
+    strokeRoundedRect(canvasCtx, meterX, meterY, meterWidth, meterHeight, 12);
+  }
+
+  const meterGradient = canvasCtx.createLinearGradient(0, meterY + meterHeight, 0, meterY);
+  meterGradient.addColorStop(0, '#7ce0ae');
+  meterGradient.addColorStop(0.6, '#f9cf4a');
+  meterGradient.addColorStop(1, '#ffd765');
+  canvasCtx.fillStyle = meterGradient;
+  fillRoundedRect(canvasCtx, meterX + 5, meterY + meterHeight - 6 - fillHeight, meterWidth - 10, fillHeight, 8);
+
+  canvasCtx.fillStyle = '#f0f5ff';
+  canvasCtx.font = '700 10px system-ui, sans-serif';
+  canvasCtx.textAlign = 'center';
+  canvasCtx.textBaseline = 'bottom';
+  canvasCtx.fillText('COMUM', meterX + meterWidth / 2, meterY - 8);
+  canvasCtx.textBaseline = 'top';
+  canvasCtx.fillText(`${Math.round(state.collectiveMeter)}%`, meterX + meterWidth / 2, meterY + meterHeight + 6);
+
+  const statsY = height - 74;
+  canvasCtx.fillStyle = 'rgba(8, 18, 29, 0.8)';
+  fillRoundedRect(canvasCtx, 12, statsY, 220, 64, 14);
+  canvasCtx.strokeStyle = 'rgba(233, 224, 176, 0.25)';
+  canvasCtx.lineWidth = 2;
+  strokeRoundedRect(canvasCtx, 12, statsY, 220, 64, 14);
+  drawTarifaZeroAsset(canvasCtx, 'ui-icon-score', 18, statsY + 8, 22, 22);
+
+  canvasCtx.fillStyle = '#f0f5ff';
+  canvasCtx.font = '700 11px system-ui, sans-serif';
+  canvasCtx.textAlign = 'left';
+  canvasCtx.textBaseline = 'top';
+  canvasCtx.fillText(`Apoios ${state.apoio + state.apoioChain + state.apoioTerritorial}`, 46, statsY + 8);
+  canvasCtx.fillText(`Mutiroes ${state.mutiroes + state.mutiroesBairro + state.mutiroesSindical}`, 46, statsY + 24);
+  canvasCtx.fillText(`Bloqueios ${state.bloqueios + state.bloqueiosPesado + state.bloqueiosSequencia}`, 46, statsY + 40);
+
+  if (state.apoioSequenceCount > 0) {
+    canvasCtx.fillStyle = '#7ce0ae';
+    canvasCtx.fillText(`Seq ${state.apoioSequenceCount}`, 154, statsY + 8);
+  }
+
+  if (state.comboMultiplier > 1.0) {
+    drawTarifaZeroAsset(canvasCtx, 'ui-icon-combo', 150, statsY + 24, 18, 18);
+    canvasCtx.fillStyle = '#ffd765';
+    canvasCtx.fillText(`${state.comboMultiplier.toFixed(2)}x`, 172, statsY + 24);
+  }
+
+  if (state.comboTimerMs > 0) {
+    const comboIntensity = Math.min(1, state.comboTimerMs / 2000);
+    canvasCtx.fillStyle = `rgba(249, 207, 74, ${0.4 + comboIntensity * 0.4})`;
+    fillRoundedRect(canvasCtx, width / 2 - 114, height - 118, 228, 40, 16);
+    canvasCtx.strokeStyle = '#f9cf4a';
+    canvasCtx.lineWidth = 2;
+    strokeRoundedRect(canvasCtx, width / 2 - 114, height - 118, 228, 40, 16);
+    drawTarifaZeroAsset(canvasCtx, 'ui-icon-combo', width / 2 - 88, height - 112, 24, 24);
+    canvasCtx.fillStyle = '#0a1f2e';
+    canvasCtx.font = '700 14px system-ui, sans-serif';
+    canvasCtx.textAlign = 'left';
+    canvasCtx.textBaseline = 'middle';
+    canvasCtx.fillText('COMBO ATIVO', width / 2 - 58, height - 97);
+    canvasCtx.fillStyle = 'rgba(10, 31, 46, 0.4)';
+    fillRoundedRect(canvasCtx, width / 2 - 88, height - 80, 176, 6, 3);
+    canvasCtx.fillStyle = '#0a1f2e';
+    fillRoundedRect(canvasCtx, width / 2 - 88, height - 80, 176 * Math.min(1, state.comboTimerMs / 8000), 6, 3);
+  }
+
+  if (state.perfectStreakMs > 5000) {
+    const streakSec = Math.floor(state.perfectStreakMs / 1000);
+    canvasCtx.fillStyle = 'rgba(124, 224, 174, 0.82)';
+    fillRoundedRect(canvasCtx, width / 2 - 78, 82, 156, 24, 12);
+    canvasCtx.strokeStyle = '#7ce0ae';
+    canvasCtx.lineWidth = 2;
+    strokeRoundedRect(canvasCtx, width / 2 - 78, 82, 156, 24, 12);
+    canvasCtx.fillStyle = '#0a1f2e';
+    canvasCtx.font = '700 11px system-ui, sans-serif';
+    canvasCtx.textAlign = 'center';
+    canvasCtx.textBaseline = 'middle';
+    canvasCtx.fillText(`PERFEITO ${streakSec}s`, width / 2, 94);
+  }
+}
+
+function drawEventLayer(
+  canvasCtx: CanvasRenderingContext2D,
+  state: TarifaZeroState,
+  width: number,
+  height: number,
+) {
+  if (!state.activeEvent.active) {
+    return;
+  }
+
+  const theme = getEventTheme(state.activeEvent.active);
+  if (!theme) {
+    return;
+  }
+
+  if (state.activeEvent.active === 'forca-coletiva') {
+    canvasCtx.save();
+    canvasCtx.shadowColor = '#ffc744';
+    canvasCtx.shadowBlur = 26;
+    canvasCtx.fillStyle = 'rgba(255, 199, 68, 0.06)';
+    canvasCtx.fillRect(0, 0, width, height);
+    canvasCtx.restore();
+  }
+
+  if (state.activeEvent.active === 'catraca-fechando') {
+    const vignetteGradient = canvasCtx.createRadialGradient(
+      width / 2,
+      height / 2,
+      Math.min(width, height) * 0.28,
+      width / 2,
+      height / 2,
+      Math.min(width, height) * 0.74,
+    );
+    vignetteGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    vignetteGradient.addColorStop(1, 'rgba(164, 44, 44, 0.22)');
+    canvasCtx.fillStyle = vignetteGradient;
+    canvasCtx.fillRect(0, 0, width, height);
+  }
+
+  const bannerWidth = Math.min(width - 36, 290);
+  const bannerX = (width - bannerWidth) / 2;
+  const bannerY = 42;
+  if (!drawTarifaZeroAsset(canvasCtx, 'ui-badge-event', bannerX, bannerY, bannerWidth, 30)) {
+    canvasCtx.fillStyle = theme.bg;
+    fillRoundedRect(canvasCtx, bannerX, bannerY, bannerWidth, 28, 12);
+    canvasCtx.strokeStyle = theme.color;
+    canvasCtx.lineWidth = 2;
+    strokeRoundedRect(canvasCtx, bannerX, bannerY, bannerWidth, 28, 12);
+  }
+
+  canvasCtx.fillStyle = theme.color;
+  canvasCtx.font = '700 11px system-ui, sans-serif';
+  canvasCtx.textAlign = 'center';
+  canvasCtx.textBaseline = 'middle';
+  canvasCtx.fillText(theme.label, width / 2, bannerY + 13);
+  canvasCtx.fillStyle = '#f0f5ff';
+  canvasCtx.font = '700 10px system-ui, sans-serif';
+  canvasCtx.fillText(`${Math.ceil(state.activeEvent.timeLeftMs / 1000)}s`, width / 2, bannerY + 27);
+}
+
+function drawPlayer(
+  canvasCtx: CanvasRenderingContext2D,
+  state: TarifaZeroState,
+  width: number,
+  playerY: number,
+) {
+  const playerX = laneCenterX(state.playerLane, width);
+  if (drawTarifaZeroAsset(canvasCtx, 'player-bus-default', playerX - 34, playerY - 32, 68, 68)) {
+    return;
+  }
+
+  canvasCtx.shadowColor = '#f9cf4a';
+  canvasCtx.shadowBlur = 12;
+  const playerGradient = canvasCtx.createRadialGradient(playerX, playerY, 0, playerX, playerY, 20);
+  playerGradient.addColorStop(0, '#f9cf4a');
+  playerGradient.addColorStop(1, '#f0ba38');
+  canvasCtx.fillStyle = playerGradient;
+  canvasCtx.beginPath();
+  canvasCtx.arc(playerX, playerY, 18, 0, Math.PI * 2);
+  canvasCtx.fill();
+  canvasCtx.shadowBlur = 0;
+  canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+  canvasCtx.lineWidth = 3;
+  canvasCtx.stroke();
+  canvasCtx.fillStyle = '#0a1f2e';
+  canvasCtx.font = '700 13px system-ui, sans-serif';
+  canvasCtx.textAlign = 'center';
+  canvasCtx.textBaseline = 'middle';
+  canvasCtx.fillText('AF', playerX, playerY);
+}
+
 export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
   createInitialState() {
     return {
@@ -955,391 +1458,17 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
 
     canvasCtx.clearRect(0, 0, width, height);
 
-    // Background: azul profundo da direção de arte
-    const background = canvasCtx.createLinearGradient(0, 0, 0, height);
-    background.addColorStop(0, '#0a1f2e');
-    background.addColorStop(0.5, '#123d59');
-    background.addColorStop(1, '#1a4d6b');
-    canvasCtx.fillStyle = background;
-    canvasCtx.fillRect(0, 0, width, height);
-
-    // Lanes com melhor contraste
-    for (let lane = 0; lane < LANE_COUNT; lane += 1) {
-      const x = lane * laneWidth;
-      const isPlayerLane = lane === state.playerLane;
-      
-      // Highlight player lane com amarelo campanha
-      canvasCtx.fillStyle = isPlayerLane 
-        ? 'rgba(249, 207, 74, 0.15)' 
-        : 'rgba(255, 255, 255, 0.04)';
-      canvasCtx.fillRect(x + 3, 0, laneWidth - 6, height);
-
-      // Lane dividers
-      if (lane > 0) {
-        canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.setLineDash([8, 12]);
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(x, 0);
-        canvasCtx.lineTo(x, height);
-        canvasCtx.stroke();
-        canvasCtx.setLineDash([]);
-      }
-    }
-
-    // Render entities com visual profissional
+    drawBackground(canvasCtx, state, width, height, laneWidth);
     for (const entity of state.entities) {
-      const x = laneCenterX(entity.lane, width);
-
-      // === APOIO TYPES ===
-      if (entity.type === 'apoio') {
-        const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, 15);
-        gradient.addColorStop(0, '#7ce0ae');
-        gradient.addColorStop(1, '#5bc893');
-        canvasCtx.fillStyle = gradient;
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, 14, 0, Math.PI * 2);
-        canvasCtx.fill();
-        
-        canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 13px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('+', x, entity.y);
-      }
-
-      if (entity.type === 'apoio-cadeia') {
-        const chainIndex = entity.chainIndex || 0;
-        const size = 12 + chainIndex * 2;
-        
-        const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, size);
-        gradient.addColorStop(0, '#a0efc8');
-        gradient.addColorStop(1, '#7ce0ae');
-        canvasCtx.fillStyle = gradient;
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, size, 0, Math.PI * 2);
-        canvasCtx.fill();
-        
-        canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 11px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('++', x, entity.y);
-      }
-
-      if (entity.type === 'apoio-territorial') {
-        const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, 17);
-        gradient.addColorStop(0, '#6fd1f0');
-        gradient.addColorStop(1, '#55b8d6');
-        canvasCtx.fillStyle = gradient;
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
-        canvasCtx.fill();
-        
-        canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-        canvasCtx.lineWidth = 2.5;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 14px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('T', x, entity.y);
-      }
-
-      // === BLOQUEIO TYPES ===
-      if (entity.type === 'bloqueio') {
-        canvasCtx.fillStyle = '#f45f5f';
-        canvasCtx.fillRect(x - 16, entity.y - 16, 32, 32);
-        
-        canvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.strokeRect(x - 16, entity.y - 16, 32, 32);
-        
-        canvasCtx.strokeStyle = '#ffe2e2';
-        canvasCtx.lineWidth = 3;
-        canvasCtx.lineCap = 'round';
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(x - 10, entity.y - 10);
-        canvasCtx.lineTo(x + 10, entity.y + 10);
-        canvasCtx.moveTo(x + 10, entity.y - 10);
-        canvasCtx.lineTo(x - 10, entity.y + 10);
-        canvasCtx.stroke();
-      }
-
-      if (entity.type === 'bloqueio-pesado') {
-        canvasCtx.fillStyle = '#d84545';
-        canvasCtx.fillRect(x - 20, entity.y - 20, 40, 40);
-        
-        canvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-        canvasCtx.lineWidth = 3;
-        canvasCtx.strokeRect(x - 20, entity.y - 20, 40, 40);
-        
-        canvasCtx.strokeStyle = '#ffe2e2';
-        canvasCtx.lineWidth = 5;
-        canvasCtx.lineCap = 'round';
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(x - 12, entity.y - 12);
-        canvasCtx.lineTo(x + 12, entity.y + 12);
-        canvasCtx.moveTo(x + 12, entity.y - 12);
-        canvasCtx.lineTo(x - 12, entity.y + 12);
-        canvasCtx.stroke();
-      }
-
-      if (entity.type === 'bloqueio-sequencia') {
-        // 2 connected blocks
-        canvasCtx.fillStyle = '#f47575';
-        canvasCtx.fillRect(x - 14, entity.y - 22, 28, 14);
-        canvasCtx.fillRect(x - 14, entity.y + 8, 28, 14);
-        
-        canvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.strokeRect(x - 14, entity.y - 22, 28, 14);
-        canvasCtx.strokeRect(x - 14, entity.y + 8, 28, 14);
-        
-        // Connector line
-        canvasCtx.strokeStyle = '#f45f5f';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.setLineDash([3, 2]);
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(x, entity.y - 8);
-        canvasCtx.lineTo(x, entity.y + 8);
-        canvasCtx.stroke();
-        canvasCtx.setLineDash([]);
-      }
-
-      if (entity.type === 'zona-pressao') {
-        const rectHeight = entity.height || 60;
-        canvasCtx.fillStyle = 'rgba(244, 95, 95, 0.25)';
-        canvasCtx.fillRect(x - 18, entity.y - rectHeight / 2, 36, rectHeight);
-        
-        canvasCtx.strokeStyle = 'rgba(244, 95, 95, 0.5)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.setLineDash([4, 4]);
-        canvasCtx.strokeRect(x - 18, entity.y - rectHeight / 2, 36, rectHeight);
-        canvasCtx.setLineDash([]);
-        
-        canvasCtx.fillStyle = '#f45f5f';
-        canvasCtx.font = 'bold 10px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('!', x, entity.y);
-      }
-
-      // === MUTIRAO TYPES ===
-      if (entity.type === 'mutirao') {
-        const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, 17);
-        gradient.addColorStop(0, '#ffd765');
-        gradient.addColorStop(1, '#f9cf4a');
-        canvasCtx.fillStyle = gradient;
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
-        canvasCtx.fill();
-        
-        canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-        canvasCtx.lineWidth = 2.5;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 13px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('M', x, entity.y);
-      }
-
-      if (entity.type === 'mutirao-bairro') {
-        const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, 17);
-        gradient.addColorStop(0, '#ffe180');
-        gradient.addColorStop(1, '#ffd055');
-        canvasCtx.fillStyle = gradient;
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, 16, 0, Math.PI * 2);
-        canvasCtx.fill();
-        
-        canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        canvasCtx.lineWidth = 2.5;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 10px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('MB', x, entity.y);
-      }
-
-      if (entity.type === 'mutirao-sindical') {
-        const gradient = canvasCtx.createRadialGradient(x, entity.y, 0, x, entity.y, 18);
-        gradient.addColorStop(0, '#ffc844');
-        gradient.addColorStop(1, '#f0b030');
-        canvasCtx.fillStyle = gradient;
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, 17, 0, Math.PI * 2);
-        canvasCtx.fill();
-        
-        canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        canvasCtx.lineWidth = 3;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 14px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('S', x, entity.y);
-      }
-
-      // === INDIVIDUALISMO TYPES ===
-      if (entity.type === 'individualismo') {
-        canvasCtx.fillStyle = '#b8c5d0';
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, 13, 0, Math.PI * 2);
-        canvasCtx.fill();
-        
-        canvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#2a3d4d';
-        canvasCtx.font = 'bold 12px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('$', x, entity.y);
-      }
-
-      if (entity.type === 'individualismo-tentador') {
-        canvasCtx.fillStyle = '#d4dfe8';
-        canvasCtx.shadowColor = '#d4dfe8';
-        canvasCtx.shadowBlur = 4;
-        canvasCtx.beginPath();
-        canvasCtx.arc(x, entity.y, 14, 0, Math.PI * 2);
-        canvasCtx.fill();
-        canvasCtx.shadowBlur = 0;
-        
-        canvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-        canvasCtx.lineWidth = 2;
-        canvasCtx.stroke();
-        
-        canvasCtx.fillStyle = '#2a3d4d';
-        canvasCtx.font = 'bold 11px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('$$', x, entity.y);
-      }
-
-      if (entity.type === 'individualismo-cluster') {
-        // 3 small circles
-        const positions = [
-          { dx: -10, dy: -6 },
-          { dx: 10, dy: -6 },
-          { dx: 0, dy: 8 }
-        ];
-        
-        for (const pos of positions) {
-          canvasCtx.fillStyle = '#b8c5d0';
-          canvasCtx.beginPath();
-          canvasCtx.arc(x + pos.dx, entity.y + pos.dy, 8, 0, Math.PI * 2);
-          canvasCtx.fill();
-          
-          canvasCtx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-          canvasCtx.lineWidth = 1.5;
-          canvasCtx.stroke();
-        }
-      }
-
-      // === CHANCE TYPES ===
-      if (entity.type === 'chance') {
-        canvasCtx.fillStyle = '#00d9ff';
-        canvasCtx.shadowColor = '#00d9ff';
-        canvasCtx.shadowBlur = 8;
-        canvasCtx.beginPath();
-        const size = 17;
-        for (let i = 0; i < 5; i += 1) {
-          const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
-          const px = x + size * Math.cos(angle);
-          const py = entity.y + size * Math.sin(angle);
-          if (i === 0) {
-            canvasCtx.moveTo(px, py);
-          } else {
-            canvasCtx.lineTo(px, py);
-          }
-        }
-        canvasCtx.closePath();
-        canvasCtx.fill();
-        canvasCtx.shadowBlur = 0;
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 12px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('?', x, entity.y);
-      }
-
-      if (entity.type === 'chance-virada') {
-        canvasCtx.fillStyle = '#ffd700';
-        canvasCtx.shadowColor = '#ffd700';
-        canvasCtx.shadowBlur = 10;
-        canvasCtx.beginPath();
-        const size = 18;
-        for (let i = 0; i < 5; i += 1) {
-          const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
-          const px = x + size * Math.cos(angle);
-          const py = entity.y + size * Math.sin(angle);
-          if (i === 0) {
-            canvasCtx.moveTo(px, py);
-          } else {
-            canvasCtx.lineTo(px, py);
-          }
-        }
-        canvasCtx.closePath();
-        canvasCtx.fill();
-        canvasCtx.shadowBlur = 0;
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 14px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('!', x, entity.y);
-      }
-
-      if (entity.type === 'chance-abertura') {
-        canvasCtx.fillStyle = '#4df0d0';
-        canvasCtx.shadowColor = '#4df0d0';
-        canvasCtx.shadowBlur = 9;
-        canvasCtx.beginPath();
-        const size = 17;
-        for (let i = 0; i < 5; i += 1) {
-          const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
-          const px = x + size * Math.cos(angle);
-          const py = entity.y + size * Math.sin(angle);
-          if (i === 0) {
-            canvasCtx.moveTo(px, py);
-          } else {
-            canvasCtx.lineTo(px, py);
-          }
-        }
-        canvasCtx.closePath();
-        canvasCtx.fill();
-        canvasCtx.shadowBlur = 0;
-        
-        canvasCtx.fillStyle = '#0a1f2e';
-        canvasCtx.font = 'bold 13px sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('↑', x, entity.y);
-      }
+      drawEntitySprite(canvasCtx, entity, width);
     }
 
-    // Flash de dano
-    const flash = state.laneFlashMs > 0 ? state.laneFlashMs / 260 : 0;
+    const flash = state.laneFlashMs > 0 ? state.laneFlashMs / 320 : 0;
     if (flash > 0) {
-      canvasCtx.fillStyle = `rgba(244, 95, 95, ${flash * 0.22})`;
+      const flashLane = state.lastFlashLane ?? state.playerLane;
+      canvasCtx.fillStyle = `rgba(244, 95, 95, ${flash * 0.28})`;
+      canvasCtx.fillRect(flashLane * laneWidth + 4, 0, laneWidth - 8, height);
+      canvasCtx.fillStyle = `rgba(255, 108, 108, ${flash * 0.14})`;
       canvasCtx.fillRect(0, 0, width, height);
     }
 
@@ -1395,237 +1524,9 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
       }
     }
 
-    // Event visual feedback
-    if (state.activeEvent.active) {
-      const eventAlpha = Math.min(1, state.activeEvent.timeLeftMs / 1000);
-      let eventBg = 'rgba(249, 207, 74, 0.15)';
-      let eventColor = '#f9cf4a';
-      let eventLabel = '';
-      
-      switch (state.activeEvent.active) {
-        case 'mutirao-ativo':
-          eventBg = 'rgba(255, 215, 101, 0.18)';
-          eventColor = '#ffd765';
-          eventLabel = '⭐ MUTIRÃO ATIVO';
-          break;
-        case 'onda-bloqueio':
-          eventBg = 'rgba(244, 95, 95, 0.15)';
-          eventColor = '#f45f5f';
-          eventLabel = '⚠️ ONDA DE BLOQUEIO';
-          break;
-        case 'corredor-livre':
-          eventBg = 'rgba(124, 224, 174, 0.18)';
-          eventColor = '#7ce0ae';
-          eventLabel = '✨ CORREDOR LIVRE';
-          break;
-        case 'janela-chance':
-          eventBg = 'rgba(0, 217, 255, 0.15)';
-          eventColor = '#00d9ff';
-          eventLabel = '🌟 JANELA DE CHANCE';
-          break;
-        case 'forca-coletiva':
-          eventBg = 'rgba(255, 199, 68, 0.2)';
-          eventColor = '#ffc744';
-          eventLabel = '🛡️ FORÇA COLETIVA';
-          // Aura around player
-          canvasCtx.shadowColor = '#ffc744';
-          canvasCtx.shadowBlur = 25;
-          break;
-        case 'catraca-fechando':
-          eventBg = 'rgba(164, 44, 44, 0.18)';
-          eventColor = '#d84545';
-          eventLabel = '🔴 CATRACA FECHANDO';
-          // Red vignette
-          const vignetteGradient = canvasCtx.createRadialGradient(width / 2, height / 2, Math.min(width, height) * 0.3, width / 2, height / 2, Math.min(width, height) * 0.7);
-          vignetteGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-          vignetteGradient.addColorStop(1, 'rgba(164, 44, 44, 0.25)');
-          canvasCtx.fillStyle = vignetteGradient;
-          canvasCtx.fillRect(0, 0, width, height);
-          break;
-      }
-      
-      // Event banner at top
-      canvasCtx.fillStyle = eventBg;
-      canvasCtx.fillRect(0, 38, width, 28);
-      
-      canvasCtx.fillStyle = eventColor;
-      canvasCtx.font = 'bold 12px sans-serif';
-      canvasCtx.textAlign = 'center';
-      canvasCtx.textBaseline = 'middle';
-      canvasCtx.globalAlpha = eventAlpha;
-      canvasCtx.fillText(eventLabel, width / 2, 52);
-      canvasCtx.globalAlpha = 1;
-      
-      // Event timer
-      const timerSec = Math.ceil(state.activeEvent.timeLeftMs / 1000);
-      canvasCtx.font = 'bold 10px sans-serif';
-      canvasCtx.fillText(`${timerSec}s`, width / 2, 64);
-      
-      canvasCtx.shadowBlur = 0;
-    }
-
-    // Player: amarelo campanha, maior e mais visível
-    const playerX = laneCenterX(state.playerLane, width);
-    
-    // Sombra/glow do player
-    canvasCtx.shadowColor = '#f9cf4a';
-    canvasCtx.shadowBlur = 12;
-    
-    const playerGradient = canvasCtx.createRadialGradient(playerX, playerY, 0, playerX, playerY, 20);
-    playerGradient.addColorStop(0, '#f9cf4a');
-    playerGradient.addColorStop(1, '#f0ba38');
-    canvasCtx.fillStyle = playerGradient;
-    canvasCtx.beginPath();
-    canvasCtx.arc(playerX, playerY, 18, 0, Math.PI * 2);
-    canvasCtx.fill();
-    
-    canvasCtx.shadowBlur = 0;
-    
-    // Borda branca
-    canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-    canvasCtx.lineWidth = 3;
-    canvasCtx.stroke();
-    
-    // Iniciais AF
-    canvasCtx.fillStyle = '#0a1f2e';
-    canvasCtx.font = 'bold 13px sans-serif';
-    canvasCtx.textAlign = 'center';
-    canvasCtx.textBaseline = 'middle';
-    canvasCtx.fillText('AF', playerX, playerY);
-
-    // Progress bar: barra de tempo no topo
-    const progress = clamp(state.elapsedMs / RUN_DURATION_MS, 0, 1);
-    const barHeight = 20;
-    const barMargin = 14;
-    
-    // Background da barra
-    canvasCtx.fillStyle = 'rgba(10, 31, 46, 0.85)';
-    canvasCtx.fillRect(barMargin, 12, width - 2 * barMargin, barHeight);
-    
-    // Progresso verde
-    const progressGradient = canvasCtx.createLinearGradient(
-      barMargin, 12, 
-      barMargin + (width - 2 * barMargin) * progress, 12
-    );
-    progressGradient.addColorStop(0, '#7ce0ae');
-    progressGradient.addColorStop(1, '#5bc893');
-    canvasCtx.fillStyle = progressGradient;
-    canvasCtx.fillRect(barMargin, 12, (width - 2 * barMargin) * progress, barHeight);
-    
-    // Borda da barra
-    canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-    canvasCtx.lineWidth = 2;
-    canvasCtx.strokeRect(barMargin, 12, width - 2 * barMargin, barHeight);
-
-    // Meter coletivo: barra lateral
-    const meterHeight = height * 0.3;
-    const meterWidth = 24;
-    const meterX = width - meterWidth - 12;
-    const meterY = height * 0.35;
-    const meterFill = clamp(state.collectiveMeter / 100, 0, 1);
-    
-    // Background do meter
-    canvasCtx.fillStyle = 'rgba(10, 31, 46, 0.7)';
-    canvasCtx.fillRect(meterX, meterY, meterWidth, meterHeight);
-    
-    // Fill do meter (de baixo para cima)
-    const fillHeight = meterHeight * meterFill;
-    const meterGradient = canvasCtx.createLinearGradient(0, meterY + meterHeight, 0, meterY + meterHeight - fillHeight);
-    meterGradient.addColorStop(0, '#f9cf4a');
-    meterGradient.addColorStop(1, '#ffd765');
-    canvasCtx.fillStyle = meterGradient;
-    canvasCtx.fillRect(meterX, meterY + meterHeight - fillHeight, meterWidth, fillHeight);
-    
-    // Borda do meter
-    canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-    canvasCtx.lineWidth = 2;
-    canvasCtx.strokeRect(meterX, meterY, meterWidth, meterHeight);
-    
-    // Label do meter
-    canvasCtx.save();
-    canvasCtx.translate(meterX + meterWidth / 2, meterY - 10);
-    canvasCtx.fillStyle = '#f0f5ff';
-    canvasCtx.font = 'bold 9px sans-serif';
-    canvasCtx.textAlign = 'center';
-    canvasCtx.textBaseline = 'bottom';
-    canvasCtx.fillText('COMUM', 0, 0);
-    canvasCtx.restore();
-    
-    // Porcentagem do meter
-    canvasCtx.fillStyle = '#f0f5ff';
-    canvasCtx.font = 'bold 11px sans-serif';
-    canvasCtx.textAlign = 'center';
-    canvasCtx.textBaseline = 'top';
-    canvasCtx.fillText(`${Math.round(state.collectiveMeter)}%`, meterX + meterWidth / 2, meterY + meterHeight + 6);
-
-    // Stats info (canto inferior esquerdo)
-    const statsY = height - 65;
-    canvasCtx.fillStyle = 'rgba(10, 31, 46, 0.75)';
-    canvasCtx.fillRect(10, statsY, 200, 58);
-    
-    canvasCtx.fillStyle = '#f0f5ff';
-    canvasCtx.font = 'bold 10px sans-serif';
-    canvasCtx.textAlign = 'left';
-    canvasCtx.textBaseline = 'top';
-    canvasCtx.fillText(`Apoios ${state.apoio + state.apoioChain + state.apoioTerritorial}`, 16, statsY + 6);
-    canvasCtx.fillText(`Mutirões ${state.mutiroes + state.mutiroesBairro + state.mutiroesSindical}`, 16, statsY + 20);
-    canvasCtx.fillText(`Bloqueios ${state.bloqueios + state.bloqueiosPesado + state.bloqueiosSequencia}`, 16, statsY + 34);
-    
-    // Sequence counter
-    if (state.apoioSequenceCount > 0) {
-      canvasCtx.fillStyle = '#7ce0ae';
-      canvasCtx.fillText(`Sequência: ${state.apoioSequenceCount}`, 120, statsY + 6);
-    }
-    
-    // Multiplier
-    if (state.comboMultiplier > 1.0) {
-      canvasCtx.fillStyle = '#ffd765';
-      canvasCtx.fillText(`${state.comboMultiplier.toFixed(2)}x`, 120, statsY + 20);
-    }
-
-    // Combo indicator (destaque quando ativo)
-    if (state.comboTimerMs > 0) {
-      const comboIntensity = Math.min(1, state.comboTimerMs / 2000);
-      const comboAlpha = 0.5 + comboIntensity * 0.5;
-      
-      canvasCtx.fillStyle = `rgba(249, 207, 74, ${comboAlpha})`;
-      canvasCtx.fillRect(width / 2 - 100, height - 100, 200, 38);
-      
-      canvasCtx.strokeStyle = '#f9cf4a';
-      canvasCtx.lineWidth = 2;
-      canvasCtx.strokeRect(width / 2 - 100, height - 100, 200, 38);
-      
-      canvasCtx.fillStyle = '#0a1f2e';
-      canvasCtx.font = 'bold 14px sans-serif';
-      canvasCtx.textAlign = 'center';
-      canvasCtx.textBaseline = 'middle';
-      canvasCtx.fillText('🔥 COMBO ATIVO', width / 2, height - 90);
-      
-      // Timer bar
-      const timerWidth = 180;
-      const timerFill = Math.min(1, state.comboTimerMs / 8000);
-      canvasCtx.fillStyle = 'rgba(10, 31, 46, 0.4)';
-      canvasCtx.fillRect(width / 2 - timerWidth / 2, height - 72, timerWidth, 6);
-      canvasCtx.fillStyle = '#f9cf4a';
-      canvasCtx.fillRect(width / 2 - timerWidth / 2, height - 72, timerWidth * timerFill, 6);
-    }
-    
-    // Perfect streak indicator
-    if (state.perfectStreakMs > 5000) {
-      const streakSec = Math.floor(state.perfectStreakMs / 1000);
-      canvasCtx.fillStyle = 'rgba(124, 224, 174, 0.8)';
-      canvasCtx.fillRect(width / 2 - 70, 80, 140, 22);
-      
-      canvasCtx.strokeStyle = '#7ce0ae';
-      canvasCtx.lineWidth = 2;
-      canvasCtx.strokeRect(width / 2 - 70, 80, 140, 22);
-      
-      canvasCtx.fillStyle = '#0a1f2e';
-      canvasCtx.font = 'bold 11px sans-serif';
-      canvasCtx.textAlign = 'center';
-      canvasCtx.textBaseline = 'middle';
-      canvasCtx.fillText(`✨ PERFEITO ${streakSec}s`, width / 2, 91);
-    }
+    drawEventLayer(canvasCtx, state, width, height);
+    drawPlayer(canvasCtx, state, width, playerY);
+    drawHud(canvasCtx, state, width, height);
 
     // Recent feedback flash
     for (const feedback of state.recentFeedback) {

@@ -137,6 +137,8 @@ export interface Game {
   collectiveSolutionType: CollectiveSolutionType;
   commonVsMarket: CommonVsMarket;
   campaignFrame: CampaignFrame;
+  visualVersion?: string;
+  assetSet?: string;
 }
 
 export const games: Game[] = [
@@ -169,6 +171,8 @@ export const games: Game[] = [
     collectiveSolutionType: 'tarifa-zero',
     commonVsMarket: 'comum',
     campaignFrame: 'defesa-dos-comuns',
+    visualVersion: 'T35D-assets-v1',
+    assetSet: 'corredor-do-povo-v1',
   },
   {
     id: 'passe-livre-nacional',

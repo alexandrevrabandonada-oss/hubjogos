@@ -5,6 +5,26 @@
 **Duração:** 55 segundos  
 **Plataforma:** Mobile-first, desktop bom  
 
+## T35D - Production Pass ativo
+
+Asset set em produção: `corredor-do-povo-v1`
+
+Versão visual ativa no runtime: `T35D-assets-v1`
+
+Assets já integrados:
+- Linha A: `bg-skyline-far.svg`, `bg-skyline-mid.svg`, `bg-corredor-road.svg`
+- Linha B: `player-bus-default.svg`, `transport-bus-main.svg`, `transport-bus-compact.svg`, `transport-bus-event.svg`
+- Linha C: catraca, barreira pesada, zona de pressão, apoio, apoio em cadeia, mutirão, individualismo, chance rara e chance-virada
+- Linha D: progress frame/fill, meter frame, badges de fase/evento, combo icon, frame premium, QR frame e botões premium
+
+Fallback preservado:
+- todo asset integrado continua com desenho em canvas como backstop em caso de falha de carregamento
+
+Infra preparada para o próximo pass:
+- flash por lane já direcionado
+- badge de fase no HUD
+- banner de evento separado
+
 ---
 
 ## Fantasia Visual

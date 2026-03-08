@@ -1085,6 +1085,7 @@ export default function EstadoPage() {
                 <thead>
                   <tr>
                     <th>Arcade</th>
+                    <th>Visual</th>
                     <th>Runs</th>
                     <th>RunEnd%</th>
                     <th>Score médio</th>
@@ -1094,17 +1095,31 @@ export default function EstadoPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {metrics.arcadeInsights.byArcadeGame.map((row) => (
-                    <tr key={row.slug}>
-                      <td className={styles.gameTitle}>{row.title}</td>
-                      <td className={styles.numeric}>{row.runs}</td>
-                      <td className={styles.numeric}>{row.runEndRate}%</td>
-                      <td className={styles.numeric}>{row.scoreAverage}</td>
-                      <td className={styles.numeric}>{row.replayRate}%</td>
-                      <td className={styles.numeric}>{row.firstInputAvgMs}ms</td>
-                      <td className={styles.numeric}>{row.campaignCtaClicks}</td>
-                    </tr>
-                  ))}
+                  {metrics.arcadeInsights.byArcadeGame.map((row) => {
+                    const arcadeMeta = games.find((game) => game.slug === row.slug);
+
+                    return (
+                      <tr key={row.slug}>
+                        <td className={styles.gameTitle}>{row.title}</td>
+                        <td>
+                          {arcadeMeta?.visualVersion ? (
+                            <>
+                              <div className={styles.gameTitle}>{arcadeMeta.visualVersion}</div>
+                              <div className={styles.tableNote}>{arcadeMeta.assetSet}</div>
+                            </>
+                          ) : (
+                            <span className={styles.tableNote}>canvas base</span>
+                          )}
+                        </td>
+                        <td className={styles.numeric}>{row.runs}</td>
+                        <td className={styles.numeric}>{row.runEndRate}%</td>
+                        <td className={styles.numeric}>{row.scoreAverage}</td>
+                        <td className={styles.numeric}>{row.replayRate}%</td>
+                        <td className={styles.numeric}>{row.firstInputAvgMs}ms</td>
+                        <td className={styles.numeric}>{row.campaignCtaClicks}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

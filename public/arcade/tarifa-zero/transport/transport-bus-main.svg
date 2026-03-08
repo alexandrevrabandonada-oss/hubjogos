@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 128" fill="none">
+  <defs>
+    <linearGradient id="busMain" x1="18" x2="130" y1="20" y2="94" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE37F"/>
+      <stop offset="1" stop-color="#F2BE42"/>
+    </linearGradient>
+    <linearGradient id="busGlass" x1="58" x2="118" y1="28" y2="78" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E5F7FF"/>
+      <stop offset="1" stop-color="#679EBA"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="84" cy="116" rx="46" ry="8" fill="#08121D" fill-opacity="0.24"/>
+  <path d="M18 48C18 31.431 31.431 18 48 18H108C127.423 18 145.096 29.241 153 46.982L156 54V88C156 99.046 147.046 108 136 108H38C26.954 108 18 99.046 18 88V48Z" fill="url(#busMain)" stroke="#102736" stroke-width="4"/>
+  <path d="M56 28H110C124.824 28 138.446 36.173 145.438 49.246L148 54V78H52V32C52 29.791 53.791 28 56 28Z" fill="url(#busGlass)" stroke="#123D59" stroke-width="3"/>
+  <rect x="25" y="60" width="24" height="34" rx="5" fill="#0F2A3D" fill-opacity="0.14" stroke="#123D59" stroke-opacity="0.3"/>
+  <rect x="57" y="58" width="18" height="22" rx="3" fill="#0F2A3D" fill-opacity="0.2"/>
+  <rect x="79" y="58" width="18" height="22" rx="3" fill="#0F2A3D" fill-opacity="0.2"/>
+  <rect x="101" y="58" width="18" height="22" rx="3" fill="#0F2A3D" fill-opacity="0.2"/>
+  <path d="M122 58H142V94H114L122 58Z" fill="#F7D05A" stroke="#123D59" stroke-width="3"/>
+  <path d="M24 87H117" stroke="#123D59" stroke-opacity="0.4" stroke-width="3"/>
+  <rect x="24" y="85" width="38" height="13" rx="6.5" fill="#7CE0AE" stroke="#123D59" stroke-width="3"/>
+  <path d="M67 38H97" stroke="#FFEFB7" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="48" cy="107" r="11" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
+  <circle cx="118" cy="107" r="11" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
+</svg>

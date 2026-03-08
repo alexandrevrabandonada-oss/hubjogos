@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="compactBody" x1="20" x2="100" y1="30" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE37F"/>
+      <stop offset="1" stop-color="#F0BA38"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="64" cy="112" rx="34" ry="7" fill="#08121D" fill-opacity="0.24"/>
+  <path d="M18 50C18 35.641 29.641 24 44 24H83C96.474 24 108.88 31.217 115.507 42.91L118 47V84C118 92.837 110.837 100 102 100H34C25.163 100 18 92.837 18 84V50Z" fill="url(#compactBody)" stroke="#102736" stroke-width="4"/>
+  <path d="M45 34H86C96.196 34 105.675 39.232 111.106 47.869L113 51V71H41V38C41 35.791 42.791 34 45 34Z" fill="#A1CEE4" stroke="#123D59" stroke-width="3"/>
+  <rect x="24" y="55" width="16" height="26" rx="4" fill="#0F2A3D" fill-opacity="0.16"/>
+  <rect x="45" y="55" width="14" height="16" rx="3" fill="#0F2A3D" fill-opacity="0.22"/>
+  <rect x="63" y="55" width="14" height="16" rx="3" fill="#0F2A3D" fill-opacity="0.22"/>
+  <rect x="81" y="55" width="14" height="16" rx="3" fill="#0F2A3D" fill-opacity="0.22"/>
+  <rect x="24" y="84" width="26" height="10" rx="5" fill="#7CE0AE" stroke="#123D59" stroke-width="3"/>
+  <circle cx="39" cy="99" r="10" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
+  <circle cx="90" cy="99" r="10" fill="#102736" stroke="#F0F5FF" stroke-width="3"/>
+  <path d="M90 83H108V95H82L90 83Z" fill="#F8D463" stroke="#123D59" stroke-width="3"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 760" fill="none">
+  <defs>
+    <linearGradient id="road" x1="210" x2="210" y1="270" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#203A4C" stop-opacity="0.05"/>
+      <stop offset="0.14" stop-color="#223A4D" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#08121D" stop-opacity="0.92"/>
+    </linearGradient>
+    <linearGradient id="laneGlow" x1="0" x2="0" y1="330" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD765" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#F9CF4A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M124 322L296 322L378 760H42L124 322Z" fill="url(#road)"/>
+  <path d="M140 336L210 760" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="3" stroke-dasharray="18 22"/>
+  <path d="M280 336L210 760" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="3" stroke-dasharray="18 22"/>
+  <path d="M196 334L210 760" stroke="url(#laneGlow)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M224 334L210 760" stroke="url(#laneGlow)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M68 678C162 630 256 630 352 678" stroke="#123D59" stroke-opacity="0.35" stroke-width="18" stroke-linecap="round"/>
+  <path d="M46 736H374" stroke="#0F2A3D" stroke-opacity="0.72" stroke-width="22" stroke-linecap="round"/>
+</svg>

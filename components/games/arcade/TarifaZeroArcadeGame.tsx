@@ -10,6 +10,10 @@ import { Card } from '@/components/ui/Card';
 import { ArcadeCanvasRuntime } from '@/components/games/arcade/ArcadeCanvasRuntime';
 import { getGameBySlug, type Game } from '@/lib/games/catalog';
 import { tarifaZeroCorredorLogic } from '@/lib/games/arcade/tarifa-zero-corredor';
+import {
+  TARIFA_ZERO_ASSET_SET,
+  TARIFA_ZERO_VISUAL_VERSION,
+} from '@/lib/games/arcade/tarifa-zero-assets';
 import type { ArcadeInputKind, ArcadeRunResult } from '@/lib/games/arcade/types';
 import {
   trackArcadeCampaignCtaClick,
@@ -29,6 +33,21 @@ import styles from './TarifaZeroArcadeGame.module.css';
 
 interface TarifaZeroArcadeGameProps {
   game: Game;
+}
+
+function formatPhaseLabel(phase?: ArcadeRunResult['stats']['currentPhase']) {
+  switch (phase) {
+    case 'abertura':
+      return 'Fase 1 · Abertura';
+    case 'escalada':
+      return 'Fase 2 · Escalada';
+    case 'pressao':
+      return 'Fase 3 · Pressao';
+    case 'final':
+      return 'Fase 4 · Final';
+    default:
+      return 'Fase encerrada';
+  }
 }
 
 export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
@@ -180,6 +199,8 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
           onRunEnd={handleRunEnd}
           onFirstInput={handleFirstInput}
           onPowerupCollect={handlePowerupCollect}
+          hudBadge={TARIFA_ZERO_VISUAL_VERSION}
+          hudDetail={TARIFA_ZERO_ASSET_SET}
         />
       </div>
     );
@@ -191,7 +212,7 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
 
   return (
     <div className={styles.wrap}>
-      <Card className={styles.resultTop}>
+      <Card className={`${styles.resultTop} ${styles.resultPremium}`}>
         <span className="eyebrow">Fim da run</span>
         <h3>{result.title}</h3>
         <p>{result.summary}</p>
@@ -200,30 +221,63 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
           Apoio {result.stats.apoio} • Mutirões {result.stats.mutiroes} • Bloqueios {result.stats.bloqueios} •
           Coletivo {result.stats.collectiveRate}%
         </p>
+        <div className={styles.visualMeta}>
+          <span className={styles.visualTag}>{TARIFA_ZERO_VISUAL_VERSION}</span>
+          <span className={styles.visualTag}>{TARIFA_ZERO_ASSET_SET}</span>
+        </div>
+        <div className={styles.scoreboardGrid}>
+          <div className={styles.scoreboardCard}>
+            <span>Score</span>
+            <strong>{result.score}</strong>
+          </div>
+          <div className={styles.scoreboardCard}>
+            <span>Fase</span>
+            <strong>{formatPhaseLabel(result.stats.currentPhase)}</strong>
+          </div>
+          <div className={styles.scoreboardCard}>
+            <span>Combo pico</span>
+            <strong>{result.stats.comboMultiplierPeak?.toFixed(2) ?? '1.00'}x</strong>
+          </div>
+        </div>
         <CampaignMark compact />
       </Card>
 
-      <div ref={cardRef}>
-        <FinalShareCard
-          game={gameForCard}
-          resultId={result.resultId}
-          resultTitle={result.title}
-          resultSummary={`${result.campaignLine} ${result.summary}`}
-          onQrClick={() => {
-            void trackFinalCardQRClick(game, result.resultId);
-          }}
-          showQR
-          showAvatar
-        />
+      <div className={styles.finalCardShell}>
+        <div className={styles.finalCardHeading}>
+          <span>Final card premium</span>
+          <span>QR e reentrada prontos</span>
+        </div>
+        <div ref={cardRef} className={styles.finalCardFrame}>
+          <FinalShareCard
+            game={gameForCard}
+            resultId={result.resultId}
+            resultTitle={result.title}
+            resultSummary={`${result.campaignLine} ${result.summary}`}
+            onQrClick={() => {
+              void trackFinalCardQRClick(game, result.resultId);
+            }}
+            showQR
+            showAvatar
+          />
+        </div>
       </div>
 
       <div className={styles.actions}>
-        <Button onClick={restartRun}>Jogar de novo</Button>
+        <Button onClick={restartRun} className={styles.premiumReplayButton}>Jogar de novo</Button>
         <DownloadCardButton
           cardContainerRef={cardRef}
           gameSlug={game.slug}
           resultId={result.resultId}
         />
+        <Link
+          href="/arcade/passe-livre-nacional"
+          className={`${styles.linkPrimary} ${styles.premiumNextLink}`}
+          onClick={() => {
+            void trackArcadeCampaignCtaClick(game, 'passe-livre-nacional', 'arcade-next-game');
+          }}
+        >
+          Proximo jogo
+        </Link>
         <Link
           href={shareHref}
           className={styles.linkPrimary}

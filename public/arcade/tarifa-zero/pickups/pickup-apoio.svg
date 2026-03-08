@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none">
+  <defs>
+    <radialGradient id="apoioGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(48 44) rotate(90) scale(34)">
+      <stop stop-color="#A8F0D3"/>
+      <stop offset="1" stop-color="#5AC48F"/>
+    </radialGradient>
+  </defs>
+  <circle cx="48" cy="48" r="30" fill="url(#apoioGlow)" stroke="#F0F5FF" stroke-width="4"/>
+  <circle cx="39" cy="42" r="5" fill="#123D59"/>
+  <circle cx="57" cy="42" r="5" fill="#123D59"/>
+  <path d="M30 62C34 52.667 40 48 48 48C56 48 62 52.667 66 62" stroke="#123D59" stroke-width="6" stroke-linecap="round"/>
+</svg>

@@ -210,6 +210,21 @@ Entregas:
 8. documentacao atualizada em README, roadmap, tijolos, linha-arcade e linha-de-jogos.
 9. validacao tecnica completa: lint, type-check, test:unit, build, verify - todos passando.
 
+## Tijolo 35D (concluido)
+
+Objetivo:
+- transformar os concepts do Tarifa Zero RJ em assets reais integrados ao runtime, sem abrir novo jogo e sem reescrever a lógica central.
+
+Entregas:
+1. pipeline local consolidado em `public/arcade/tarifa-zero/` com pastas de `bg`, `player`, `transport`, `obstacles`, `pickups` e `ui`.
+2. asset set `corredor-do-povo-v1` e versão visual `T35D-assets-v1` publicados e expostos no runtime.
+3. background em camadas com skyline industrial/urbano e corredor vertical integrado ao canvas.
+4. player/ônibus amarelo estilizado, pickups e obstáculos em SVG com fallback canvas preservado.
+5. HUD principal e feedback de fase/evento reforçados com assets reais.
+6. pós-run premium com score, fase, combo, frame final e CTA de replay/próximo jogo.
+7. `/estado` ampliado com indicador simples de versão visual por arcade.
+8. documentação operacional e artística atualizada para o pass de produção.
+
 ## Próximo ciclo (Tijolo 34)
 
 Foco sugerido:

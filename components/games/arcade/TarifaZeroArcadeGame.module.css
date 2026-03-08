@@ -57,10 +57,33 @@
   padding: 1.5rem;
 }
 
+.resultPremium {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(10, 31, 46, 0.96) 0%, rgba(18, 61, 89, 0.92) 100%),
+    url('/arcade/tarifa-zero/ui/ui-final-card-premium.svg') center/cover no-repeat;
+  border: 2px solid rgba(249, 207, 74, 0.5);
+  box-shadow: 0 16px 34px rgba(8, 18, 29, 0.22);
+}
+
+.resultPremium::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 239, 183, 0.06) 0%, rgba(255, 239, 183, 0) 44%);
+  pointer-events: none;
+}
+
+.resultPremium > * {
+  position: relative;
+  z-index: 1;
+}
+
 .scoreLine {
   margin: 0.8rem 0 0.3rem;
   font-size: 1.3rem;
-  color: #123d59;
+  color: #f0f5ff;
 }
 
 .scoreLine strong {
@@ -74,10 +97,86 @@
   margin: 0;
   font-size: 0.92rem;
   font-weight: 600;
-  color: #3a5f77;
-  background: rgba(18, 61, 89, 0.06);
+  color: #d5e5ef;
+  background: rgba(10, 31, 46, 0.38);
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
+}
+
+.visualMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.visualTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.72rem;
+  border-radius: 999px;
+  border: 1px solid rgba(249, 207, 74, 0.45);
+  background: rgba(8, 18, 29, 0.44);
+  color: #f7e8ab;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.scoreboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.scoreboardCard {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(249, 207, 74, 0.34);
+  background: rgba(8, 18, 29, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 239, 183, 0.08);
+}
+
+.scoreboardCard span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #d4dfeb;
+}
+
+.scoreboardCard strong {
+  font-size: 1.15rem;
+  color: #f9cf4a;
+}
+
+.finalCardShell {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.finalCardHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #123d59;
+}
+
+.finalCardFrame {
+  padding: 1rem;
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, rgba(10, 31, 46, 0.92) 0%, rgba(18, 61, 89, 0.9) 100%),
+    url('/arcade/tarifa-zero/ui/ui-final-card-premium.svg') center/cover no-repeat;
+  border: 2px solid rgba(249, 207, 74, 0.42);
+  box-shadow: 0 16px 28px rgba(8, 18, 29, 0.16);
 }
 
 .bullets {
@@ -94,6 +193,28 @@
   align-items: center;
   gap: 0.75rem;
   margin-top: 0.5rem;
+}
+
+.premiumReplayButton {
+  background:
+    linear-gradient(135deg, rgba(255, 227, 127, 0.98) 0%, rgba(240, 186, 56, 0.98) 100%),
+    url('/arcade/tarifa-zero/ui/ui-button-replay.svg') center/cover no-repeat;
+  border: 1px solid rgba(18, 61, 89, 0.2);
+  color: #102736;
+  box-shadow: 0 8px 18px rgba(240, 186, 56, 0.26);
+}
+
+.premiumReplayButton:hover {
+  background:
+    linear-gradient(135deg, rgba(255, 234, 161, 0.98) 0%, rgba(249, 207, 74, 0.98) 100%),
+    url('/arcade/tarifa-zero/ui/ui-button-replay.svg') center/cover no-repeat;
+}
+
+.premiumNextLink {
+  background:
+    linear-gradient(135deg, rgba(18, 61, 89, 0.96) 0%, rgba(31, 94, 132, 0.96) 100%),
+    url('/arcade/tarifa-zero/ui/ui-button-next.svg') center/cover no-repeat;
+  border: 1px solid rgba(249, 207, 74, 0.3);
 }
 
 .linkPrimary,
@@ -128,4 +249,15 @@
 .linkGhost:hover {
   background: rgba(18, 61, 89, 0.06);
   border-color: #195173;
+}
+
+@media (max-width: 720px) {
+  .scoreboardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .finalCardHeading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
