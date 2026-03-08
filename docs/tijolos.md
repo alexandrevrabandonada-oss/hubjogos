@@ -71,6 +71,31 @@ npm run test:e2e
 - Tijolo 36A ✅ pre-producao completa do proximo arcade forte (`Mutirao do Bairro`)
 - Tijolo 36B ✅ vertical slice jogavel do Mutirao do Bairro com assets P0
 - Tijolo 36C ✅ fechamento premium operacional do Mutirao com reports + testes + gates
+- Tijolo 41 ✅ fabrica planejada de jogos (catalogo mestre + temporadas + matriz + governanca)
+
+## Tijolo 41 - Fabrica planejada do hub ✅
+
+### Objetivo
+
+Organizar o Hub como portfolio planejado de jogos politicos, com pre-producao antes de implementacao e sem abrir novo jogo neste ciclo.
+
+### Entregues
+
+- Catalogo mestre oficial: `docs/catalogo-mestre-do-hub.md`.
+- Temporadas e colecoes: `docs/temporadas-do-hub.md`.
+- Matriz de priorizacao e shortlist: `docs/matriz-priorizacao-jogos.md`.
+- Pre-producao curta de 3 candidatos:
+  - `cooperativa-na-pressao`
+  - `bairro-resiste`
+  - `orcamento-do-comum`
+- Regra de governanca da fabrica: `docs/governanca-da-fabrica-de-jogos.md`.
+- Ajuste leve no `/explorar` para separar live, validacao e pipeline editorial.
+
+### Nao inclui
+
+- abertura de terceiro arcade implementado;
+- nova engine;
+- mudanca de escopo para auth/CMS/admin.
 
 ## Tijolo 36B - Vertical slice jogavel do Mutirao do Bairro ✅
 

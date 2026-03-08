@@ -47,6 +47,7 @@ export type CollectiveSolutionType =
   | 'controle-popular';
 export type CommonVsMarket = 'mercado' | 'misto' | 'comum';
 export type CampaignFrame = 'projeto-coletivo' | 'comunidade-em-luta' | 'defesa-dos-comuns';
+export type PortfolioStage = 'live' | 'validating' | 'coming' | 'pre-production' | 'cold-backlog';
 
 export const GAME_PACE_LABELS: Record<GamePace, string> = {
   quick: '30s-2min',
@@ -141,6 +142,19 @@ export interface Game {
   assetSet?: string;
   premiumTheme?: string;
   audioProfile?: string;
+}
+
+export interface PlannedGameCandidate {
+  slug: string;
+  title: string;
+  type: 'arcade' | 'session';
+  status: 'pre-producao' | 'backlog-frio';
+  territoryScope: TerritoryScope;
+  series: GameSeries;
+  politicalAxis: PoliticalAxis;
+  campaignRole: string;
+  funnelRole: 'entrada' | 'retencao' | 'aprofundamento';
+  rationale: string;
 }
 
 export const games: Game[] = [
@@ -538,6 +552,58 @@ export function getGamesByTerritory(scope: TerritoryScope): Game[] {
 export function getGamesByPoliticalAxis(axis: PoliticalAxis): Game[] {
   return games.filter((game) => game.politicalAxis === axis);
 }
+
+export function getPortfolioStage(game: Game): PortfolioStage {
+  if (game.slug === 'mutirao-do-bairro') {
+    return 'validating';
+  }
+  if (game.status === 'live') {
+    return 'live';
+  }
+  if (game.status === 'beta') {
+    return 'validating';
+  }
+  return 'coming';
+}
+
+export const plannedGameCandidates: PlannedGameCandidate[] = [
+  {
+    slug: 'cooperativa-na-pressao',
+    title: 'Cooperativa na Pressao',
+    type: 'arcade',
+    status: 'pre-producao',
+    territoryScope: 'estado-rj',
+    series: 'serie-trabalho-sobrevivencia',
+    politicalAxis: 'poder-popular',
+    campaignRole: 'Mostrar organizacao produtiva coletiva sob ataque de mercado.',
+    funnelRole: 'retencao',
+    rationale: 'Maximo contraste de verbo frente aos arcades atuais com alta reutilizacao de pipeline arcade.',
+  },
+  {
+    slug: 'bairro-resiste',
+    title: 'Bairro Resiste',
+    type: 'arcade',
+    status: 'pre-producao',
+    territoryScope: 'baixada',
+    series: 'serie-rio-de-janeiro',
+    politicalAxis: 'poder-popular',
+    campaignRole: 'Conectar defesa territorial com mutirao, risco e solidariedade metropolitana.',
+    funnelRole: 'retencao',
+    rationale: 'Forte potencial territorial e de compartilhamento com risco de escopo controlavel.',
+  },
+  {
+    slug: 'orcamento-do-comum',
+    title: 'Orcamento do Comum',
+    type: 'session',
+    status: 'backlog-frio',
+    territoryScope: 'estado-rj',
+    series: 'serie-campanha-missoes-estado',
+    politicalAxis: 'reforma-estatal',
+    campaignRole: 'Traduzir disputa orcamentaria em decisao coletiva de medio prazo.',
+    funnelRole: 'aprofundamento',
+    rationale: 'Excelente potencia politica, mas depende de maturidade maior de UX e balanceamento.',
+  },
+];
 
 export function getGamesByCollectiveSolution(solution: CollectiveSolutionType): Game[] {
   return games.filter((game) => game.collectiveSolutionType === solution);

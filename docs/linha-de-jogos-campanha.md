@@ -146,3 +146,25 @@ Como isso informa distribuicao:
 - quicks e arcades com maior taxa de run efetiva sobem prioridade semanal;
 - direcao quick -> arcade vs arcade -> quick passa a orientar ordem de CTA pós-run;
 - sinais abaixo de amostra minima ficam em `monitoring` e nao justificam pivot estrutural.
+
+## Atualizacao Tijolo 41 - fabrica planejada e catalogo mestre
+
+Objetivo aplicado:
+- sair de crescimento ad-hoc e operar o hub como linha editorial/produtiva.
+
+Entregas de governanca:
+- catalogo mestre consolidado em `docs/catalogo-mestre-do-hub.md`;
+- temporadas e colecoes em `docs/temporadas-do-hub.md`;
+- matriz de priorizacao em `docs/matriz-priorizacao-jogos.md`;
+- regra de capacidade da fabrica em `docs/governanca-da-fabrica-de-jogos.md`.
+
+Shortlist oficial para proxima leva (sem abrir implementacao neste tijolo):
+1. `cooperativa-na-pressao` (candidato priorizado para T42);
+2. `bairro-resiste` (pre-producao ativa);
+3. `orcamento-do-comum` (backlog frio).
+
+Guardrail reforcado:
+- no maximo 1 jogo em validacao forte;
+- no maximo 1 jogo em implementacao ativa;
+- 1-2 em pre-producao;
+- restante em backlog frio.

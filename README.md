@@ -4,6 +4,8 @@ Produto politico-jogavel para transformar pauta publica em decisao, consequencia
 
 Status atual: Tijolo 38 concluido - duelo arcade `tarifa-zero-corredor` vs `mutirao-do-bairro` agora usa leitura de exposicao justa, com status de viés/correcao (`unbalanced_exposure`, `exposure_correction_in_progress`, `fair_comparison_window`, `decision_ready`) e recomendacoes corretivas propagadas para `/estado` e reports operacionais.
 
+Status de organizacao do portfolio: Tijolo 41 em andamento/fechamento - hub reorganizado como fabrica planejada com catalogo mestre, temporadas, matriz de priorizacao e pre-producao formal dos proximos candidatos sem abrir implementacao nova.
+
 ## Estado do Produto
 
 - 4 engines reais publicas em `/play/[slug]` (quiz, branching, simulation, map).
@@ -181,6 +183,22 @@ DocumentoArcade (Tijolo 29)
 - Taxonomia oficial por tempo (`quick`, `session`, `deep`, `future-flagship`).
 - Linhas editoriais e series para navegacao de campanha.
 - Escala territorial planejada: Volta Redonda -> Sul Fluminense -> Baixada -> Capital -> Estado do RJ.
+
+## Fabrica Planejada de Jogos (T41)
+
+- Catalogo mestre: `docs/catalogo-mestre-do-hub.md`
+- Temporadas e colecoes: `docs/temporadas-do-hub.md`
+- Matriz de priorizacao: `docs/matriz-priorizacao-jogos.md`
+- Governanca da fabrica: `docs/governanca-da-fabrica-de-jogos.md`
+- Pre-producao curta dos candidatos:
+  - `docs/cooperativa-na-pressao-concept.md`
+  - `docs/bairro-resiste-concept.md`
+  - `docs/orcamento-do-comum-concept.md`
+
+Regra do ciclo:
+- sem terceiro jogo implementado agora;
+- consolidar decisao T37/T38/T39/T40;
+- subir so 1 candidato para implementacao ativa por vez.
 
 Componentes visuais de campanha:
 - `CampaignAvatar`: avatar oficial reutilizavel da campanha

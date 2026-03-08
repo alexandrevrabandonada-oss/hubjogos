@@ -10,6 +10,8 @@ import {
   games,
   GAME_SERIES_LABELS,
   TERRITORY_SCOPE_LABELS,
+  getPortfolioStage,
+  plannedGameCandidates,
   type GameSeries,
   type TerritoryScope,
 } from '@/lib/games/catalog';
@@ -31,13 +33,16 @@ export default function ExplorarPage() {
   const [selectedTerritory, setSelectedTerritory] = useState<TerritoryScope | 'all'>('all');
   const [selectedKind, setSelectedKind] = useState<KindFilter>('all');
 
-  const liveGames = games.filter((g) => g.status === 'live');
-  const arcadeGames = liveGames.filter((g) => g.kind === 'arcade');
-  const quickGames = liveGames.filter((g) => g.pace === 'quick' && g.kind !== 'arcade');
+  const playableGames = games.filter((g) => g.runtimeState === 'real' && (g.status === 'live' || g.status === 'beta'));
+  const liveGames = games.filter((g) => getPortfolioStage(g) === 'live');
+  const validatingGames = games.filter((g) => getPortfolioStage(g) === 'validating');
+  const comingGames = games.filter((g) => getPortfolioStage(g) === 'coming');
+  const arcadeGames = playableGames.filter((g) => g.kind === 'arcade');
+  const quickGames = playableGames.filter((g) => g.pace === 'quick' && g.kind !== 'arcade');
   const referenceGame = games[0];
 
   const filteredGames = useMemo(() => {
-    return liveGames.filter((game) => {
+    return playableGames.filter((game) => {
       if (selectedSeries !== 'all' && game.series !== selectedSeries) {
         return false;
       }
@@ -52,7 +57,7 @@ export default function ExplorarPage() {
       }
       return true;
     });
-  }, [liveGames, selectedSeries, selectedTerritory, selectedKind]);
+  }, [playableGames, selectedSeries, selectedTerritory, selectedKind]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -131,6 +136,35 @@ export default function ExplorarPage() {
       >
         <CampaignMark compact />
       </PageHero>
+
+      <Section
+        eyebrow="Estado do portfolio"
+        title="Fabrica do hub: live, validacao e pre-producao"
+        description="Jogos jogaveis ficam visiveis como live/validacao. Pre-producao aparece como pipeline editorial, sem prometer release imediata."
+      >
+        <div className={styles.portfolioStageGrid}>
+          <article className={styles.portfolioStageCard}>
+            <strong>Live</strong>
+            <p>{liveGames.length} jogos</p>
+            <span>Prontos para distribuicao ampla.</span>
+          </article>
+          <article className={styles.portfolioStageCard}>
+            <strong>Em validacao forte</strong>
+            <p>{validatingGames.length} jogos</p>
+            <span>Jogavel com monitoramento de decisao e fairness.</span>
+          </article>
+          <article className={styles.portfolioStageCard}>
+            <strong>Em breve</strong>
+            <p>{comingGames.length} jogos</p>
+            <span>Conceito mapeado, sem publicacao como pronto.</span>
+          </article>
+          <article className={styles.portfolioStageCard}>
+            <strong>Pre-producao</strong>
+            <p>{plannedGameCandidates.filter((g) => g.status === 'pre-producao').length} candidatos</p>
+            <span>Shortlist de fabrica para proximos tijolos.</span>
+          </article>
+        </div>
+      </Section>
 
       <Section
         eyebrow="🎮 Arcades"
@@ -246,6 +280,39 @@ export default function ExplorarPage() {
         ) : (
           <EmptyState title="Sem quick games ativos" description="A linha quick está em atualização." />
         )}
+      </Section>
+
+      <Section
+        eyebrow="Pipeline editorial"
+        title="Em validacao e pre-producao"
+        description="Sem inflar escopo: o hub mostra o que esta jogavel agora e o que esta em preparo."
+      >
+        <div className={styles.pipelineGrid}>
+          {validatingGames.map((game) => (
+            <article key={`validating-${game.id}`} className={styles.pipelineCard}>
+              <span className={styles.pipelineBadge}>VALIDACAO</span>
+              <h4>{game.icon} {game.title}</h4>
+              <p>{game.shortDescription}</p>
+              <div className={styles.arcadeMeta}>
+                <span>Tipo: {game.kind}</span>
+                <span>Serie: {GAME_SERIES_LABELS[game.series]}</span>
+                <span>Territorio: {TERRITORY_SCOPE_LABELS[game.territoryScope]}</span>
+              </div>
+            </article>
+          ))}
+          {plannedGameCandidates.map((candidate) => (
+            <article key={candidate.slug} className={styles.pipelineCardMuted}>
+              <span className={styles.pipelineBadgeMuted}>{candidate.status === 'pre-producao' ? 'PRE-PRODUCAO' : 'BACKLOG FRIO'}</span>
+              <h4>{candidate.title}</h4>
+              <p>{candidate.rationale}</p>
+              <div className={styles.arcadeMeta}>
+                <span>Tipo: {candidate.type}</span>
+                <span>Serie: {GAME_SERIES_LABELS[candidate.series]}</span>
+                <span>Territorio: {TERRITORY_SCOPE_LABELS[candidate.territoryScope]}</span>
+              </div>
+            </article>
+          ))}
+        </div>
       </Section>
 
       <Section

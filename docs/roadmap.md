@@ -403,3 +403,32 @@ Recomendação para o próximo ciclo:
 - retomar formato médio (Tijolo 29) apenas após confirmação de narrativa central com massa crítica de run real.
 
 Última atualização: 2026-03-08 (Tijolo 36B)
+
+## Tijolo 41 (concluido)
+
+Objetivo:
+- organizar o hub como fabrica planejada de jogos politicos, sem abrir implementacao nova antes da hora.
+
+Entregas:
+1. diagnostico do estado atual de quick, arcades, series e territorios.
+2. catalogo mestre consolidado em `docs/catalogo-mestre-do-hub.md`.
+3. sistema de temporadas/colecoes em `docs/temporadas-do-hub.md`.
+4. matriz de priorizacao e shortlist em `docs/matriz-priorizacao-jogos.md`.
+5. pre-producao curta de candidatos:
+   - `docs/cooperativa-na-pressao-concept.md`
+   - `docs/bairro-resiste-concept.md`
+   - `docs/orcamento-do-comum-concept.md`
+6. governanca duravel da fabrica em `docs/governanca-da-fabrica-de-jogos.md`.
+7. ajuste leve da descoberta em `/explorar` para refletir:
+   - live
+   - validacao
+   - em breve
+   - pre-producao
+8. docs principais atualizadas (`README`, `tijolos`, linhas de jogos/arcade).
+
+Recomendacao para o proximo ciclo (T42):
+- subir `cooperativa-na-pressao` para implementacao ativa;
+- manter `bairro-resiste` em pre-producao;
+- manter `orcamento-do-comum` em backlog frio.
+
+Última atualização: 2026-03-08 (Tijolo 41)

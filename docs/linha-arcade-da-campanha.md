@@ -224,3 +224,19 @@ Camada nova T38:
 Propagacao operacional:
 - `/estado` com card dedicado de exposicao arcade;
 - `beta:snapshot`, `beta:export`, `beta:circulation-report`, `beta:distribution-report` e `beta:campaign-brief` com leitura T38.
+
+## Atualizacao Tijolo 41 - linha arcade dentro da fabrica
+
+Decisao de portfolio:
+- nao abrir terceiro arcade implementado neste tijolo;
+- consolidar a janela de comparacao Tarifa vs Mutirao com regras T37/T38/T39/T40;
+- preparar a proxima leva em pre-producao e nao em codificacao imediata.
+
+Candidatos arcade em pre-producao:
+1. `cooperativa-na-pressao` (prioritario para T42);
+2. `bairro-resiste` (segunda opcao apos estabilizacao de escopo).
+
+Governanca aplicada na linha arcade:
+- maximo 1 arcade em validacao forte ao mesmo tempo;
+- maximo 1 arcade em implementacao ativa;
+- novas entradas arcade exigem concept + systems + art direction minimos antes de codigo.
