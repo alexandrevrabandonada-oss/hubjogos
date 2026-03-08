@@ -171,8 +171,8 @@ export const games: Game[] = [
     collectiveSolutionType: 'tarifa-zero',
     commonVsMarket: 'comum',
     campaignFrame: 'defesa-dos-comuns',
-    visualVersion: 'T35D-assets-v1',
-    assetSet: 'corredor-do-povo-v1',
+    visualVersion: 'T35D-assets-v2',
+    assetSet: 'corredor-do-povo-v2',
   },
   {
     id: 'passe-livre-nacional',

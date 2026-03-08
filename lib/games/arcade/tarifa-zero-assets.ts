@@ -11,9 +11,14 @@ export type TarifaZeroAssetKey =
   | 'obstacle-zona-pressao'
   | 'pickup-apoio'
   | 'pickup-apoio-cadeia'
+  | 'pickup-apoio-territorial'
   | 'pickup-mutirao'
+  | 'pickup-mutirao-bairro'
+  | 'pickup-mutirao-sindical'
   | 'pickup-chance-rara'
+  | 'pickup-chance-abertura'
   | 'pickup-individualismo'
+  | 'pickup-individualismo-tentador'
   | 'pickup-chance-virada'
   | 'ui-hud-progress-frame'
   | 'ui-hud-progress-fill'
@@ -27,8 +32,8 @@ export type TarifaZeroAssetKey =
   | 'ui-button-replay'
   | 'ui-button-next';
 
-export const TARIFA_ZERO_ASSET_SET = 'corredor-do-povo-v1';
-export const TARIFA_ZERO_VISUAL_VERSION = 'T35D-assets-v1';
+export const TARIFA_ZERO_ASSET_SET = 'corredor-do-povo-v2';
+export const TARIFA_ZERO_VISUAL_VERSION = 'T35D-assets-v2';
 
 const assetPaths: Record<TarifaZeroAssetKey, string> = {
   'bg-skyline-far': '/arcade/tarifa-zero/bg/bg-skyline-far.svg',
@@ -43,9 +48,14 @@ const assetPaths: Record<TarifaZeroAssetKey, string> = {
   'obstacle-zona-pressao': '/arcade/tarifa-zero/obstacles/obstacle-zona-pressao.svg',
   'pickup-apoio': '/arcade/tarifa-zero/pickups/pickup-apoio.svg',
   'pickup-apoio-cadeia': '/arcade/tarifa-zero/pickups/pickup-apoio-cadeia.svg',
+  'pickup-apoio-territorial': '/arcade/tarifa-zero/pickups/pickup-apoio-territorial.svg',
   'pickup-mutirao': '/arcade/tarifa-zero/pickups/pickup-mutirao.svg',
+  'pickup-mutirao-bairro': '/arcade/tarifa-zero/pickups/pickup-mutirao-bairro.svg',
+  'pickup-mutirao-sindical': '/arcade/tarifa-zero/pickups/pickup-mutirao-sindical.svg',
   'pickup-chance-rara': '/arcade/tarifa-zero/pickups/pickup-chance-rara.svg',
+  'pickup-chance-abertura': '/arcade/tarifa-zero/pickups/pickup-chance-abertura.svg',
   'pickup-individualismo': '/arcade/tarifa-zero/pickups/pickup-individualismo.svg',
+  'pickup-individualismo-tentador': '/arcade/tarifa-zero/pickups/pickup-individualismo-tentador.svg',
   'pickup-chance-virada': '/arcade/tarifa-zero/pickups/pickup-chance-virada.svg',
   'ui-hud-progress-frame': '/arcade/tarifa-zero/ui/ui-hud-progress-frame.svg',
   'ui-hud-progress-fill': '/arcade/tarifa-zero/ui/ui-hud-progress-fill.svg',

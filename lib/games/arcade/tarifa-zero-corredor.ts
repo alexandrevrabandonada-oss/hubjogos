@@ -22,6 +22,7 @@ interface TarifaEntity {
   lane: number;
   y: number;
   speed: number;
+  ageMs: number;
   type: TarifaEntityType;
   chainIndex?: number; // For apoio-cadeia
   height?: number; // For zona-pressao
@@ -32,6 +33,7 @@ interface RecentFeedback {
   type: TarifaEntityType;
   ageMs: number;
   value?: number; // Score/meter change
+  lane?: number;
   x?: number; // Particle origin X
   y?: number; // Particle origin Y
 }
@@ -44,6 +46,8 @@ interface RunEventState {
 
 export interface TarifaZeroState {
   playerLane: number;
+  playerVisualLane: number;
+  playerTravelMomentum: number;
   entities: TarifaEntity[];
   spawnCooldownMs: number;
   score: number;
@@ -120,6 +124,41 @@ function normalizeLane(pointerLane: number | null) {
 
 function randomLane() {
   return Math.floor(Math.random() * LANE_COUNT);
+}
+
+function isHazardEntity(type: TarifaEntityType) {
+  return type === 'bloqueio' || type === 'bloqueio-pesado' || type === 'bloqueio-sequencia' || type === 'zona-pressao';
+}
+
+function chooseSpawnLane(state: TarifaZeroState, entityType: TarifaEntityType) {
+  const topOccupiedLanes = new Set(state.entities.filter((entity) => entity.y < 124).map((entity) => entity.lane));
+  let lane = randomLane();
+
+  if (isHazardEntity(entityType) && state.elapsedMs < 9_000 && lane === state.playerLane) {
+    lane = (lane + (Math.random() < 0.5 ? 1 : 2)) % LANE_COUNT;
+  }
+
+  if (topOccupiedLanes.has(lane) && topOccupiedLanes.size < LANE_COUNT) {
+    const alternatives = Array.from({ length: LANE_COUNT }, (_, index) => index).filter((candidate) => !topOccupiedLanes.has(candidate));
+    if (alternatives.length > 0) {
+      lane = alternatives[Math.floor(Math.random() * alternatives.length)];
+    }
+  }
+
+  return lane;
+}
+
+function getPhaseMotionFactor(phase: RunPhase) {
+  switch (phase) {
+    case 'abertura':
+      return 0.75;
+    case 'escalada':
+      return 1;
+    case 'pressao':
+      return 1.25;
+    case 'final':
+      return 1.5;
+  }
 }
 
 // === PHASE & EVENT SYSTEM ===
@@ -382,9 +421,10 @@ function spawnEntity(state: TarifaZeroState): TarifaEntity {
   // Special handling for certain entity types
   const entity: TarifaEntity = {
     id: generateId('arcade-entidade'),
-    lane: randomLane(),
+    lane: chooseSpawnLane(state, entityType),
     y: -40,
     speed,
+    ageMs: 0,
     type: entityType,
   };
   
@@ -426,7 +466,7 @@ function createFeedback(type: TarifaEntityType, lane: number, y: number, value?:
     type,
     ageMs: 0,
     value,
-    x: laneCenterX(lane, 400), // Will be overridden in render with actual canvas width
+    lane,
     y,
   };
 }
@@ -836,6 +876,9 @@ function drawBackground(
   drawTarifaZeroAsset(canvasCtx, 'bg-skyline-mid', 0, 0, width, height, { alpha: 0.98 });
   drawTarifaZeroAsset(canvasCtx, 'bg-corredor-road', 0, 0, width, height, { alpha: 1 });
 
+  const motionFactor = getPhaseMotionFactor(state.currentPhase);
+  const streakOffset = (state.elapsedMs * 0.24 * motionFactor) % 56;
+
   const haze = canvasCtx.createLinearGradient(0, 0, 0, height * 0.38);
   haze.addColorStop(0, 'rgba(255, 239, 183, 0.2)');
   haze.addColorStop(1, 'rgba(255, 239, 183, 0)');
@@ -858,7 +901,39 @@ function drawBackground(
       canvasCtx.stroke();
       canvasCtx.setLineDash([]);
     }
+
+    canvasCtx.strokeStyle = `rgba(249, 207, 74, ${lane === state.playerLane ? 0.18 : 0.08})`;
+    canvasCtx.lineWidth = lane === state.playerLane ? 4 : 3;
+    canvasCtx.lineCap = 'round';
+    for (let y = height; y > height * 0.22; y -= 56) {
+      const streakY = y + streakOffset;
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(x + laneWidth * 0.42, streakY);
+      canvasCtx.lineTo(x + laneWidth * 0.58, streakY - 26 * motionFactor);
+      canvasCtx.stroke();
+    }
   }
+}
+
+function drawSpawnTelegraph(
+  canvasCtx: CanvasRenderingContext2D,
+  entity: TarifaEntity,
+  width: number,
+) {
+  if (entity.ageMs > 260 && entity.y > 96) {
+    return;
+  }
+
+  const laneWidth = width / LANE_COUNT;
+  const laneX = entity.lane * laneWidth;
+  const telegraphAlpha = Math.max(0, 0.46 - entity.ageMs / 700);
+  const tone = isHazardEntity(entity.type) ? '244, 95, 95' : entity.type.startsWith('chance') ? '0, 217, 255' : '124, 224, 174';
+
+  canvasCtx.fillStyle = `rgba(${tone}, ${telegraphAlpha})`;
+  fillRoundedRect(canvasCtx, laneX + 10, 88, laneWidth - 20, 10, 5);
+  canvasCtx.strokeStyle = `rgba(${tone}, ${telegraphAlpha + 0.14})`;
+  canvasCtx.lineWidth = 2;
+  strokeRoundedRect(canvasCtx, laneX + 10, 88, laneWidth - 20, 10, 5);
 }
 
 function drawEntitySprite(
@@ -867,6 +942,13 @@ function drawEntitySprite(
   width: number,
 ) {
   const x = laneCenterX(entity.lane, width);
+
+  drawSpawnTelegraph(canvasCtx, entity, width);
+
+  canvasCtx.fillStyle = 'rgba(8, 18, 29, 0.22)';
+  canvasCtx.beginPath();
+  canvasCtx.ellipse(x, entity.y + 21, 18, 7, 0, 0, Math.PI * 2);
+  canvasCtx.fill();
 
   if (entity.type === 'apoio') {
     if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio', x - 26, entity.y - 26, 52, 52)) {
@@ -898,12 +980,7 @@ function drawEntitySprite(
   }
 
   if (entity.type === 'apoio-territorial') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio', x - 28, entity.y - 28, 56, 56)) {
-      canvasCtx.fillStyle = '#123d59';
-      canvasCtx.font = '700 11px system-ui, sans-serif';
-      canvasCtx.textAlign = 'center';
-      canvasCtx.textBaseline = 'middle';
-      canvasCtx.fillText('VR', x, entity.y + 1);
+    if (drawTarifaZeroAsset(canvasCtx, 'pickup-apoio-territorial', x - 29, entity.y - 29, 58, 58)) {
       return;
     }
     canvasCtx.fillStyle = '#6fd1f0';
@@ -962,14 +1039,13 @@ function drawEntitySprite(
   }
 
   if (entity.type === 'mutirao' || entity.type === 'mutirao-bairro' || entity.type === 'mutirao-sindical') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-mutirao', x - 28, entity.y - 28, 56, 56)) {
-      if (entity.type !== 'mutirao') {
-        canvasCtx.fillStyle = '#123d59';
-        canvasCtx.font = '700 9px system-ui, sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText(entity.type === 'mutirao-bairro' ? 'BA' : 'SI', x, entity.y + 16);
-      }
+    const assetKey = entity.type === 'mutirao-bairro'
+      ? 'pickup-mutirao-bairro'
+      : entity.type === 'mutirao-sindical'
+      ? 'pickup-mutirao-sindical'
+      : 'pickup-mutirao';
+
+    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 28, entity.y - 28, 56, 56)) {
       return;
     }
     canvasCtx.fillStyle = '#ffd765';
@@ -980,7 +1056,8 @@ function drawEntitySprite(
   }
 
   if (entity.type === 'individualismo' || entity.type === 'individualismo-tentador') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-individualismo', x - 24, entity.y - 24, 48, 48)) {
+    const assetKey = entity.type === 'individualismo-tentador' ? 'pickup-individualismo-tentador' : 'pickup-individualismo';
+    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 24, entity.y - 24, 48, 48)) {
       return;
     }
     canvasCtx.fillStyle = '#b8c5d0';
@@ -1007,14 +1084,8 @@ function drawEntitySprite(
   }
 
   if (entity.type === 'chance' || entity.type === 'chance-abertura') {
-    if (drawTarifaZeroAsset(canvasCtx, 'pickup-chance-rara', x - 30, entity.y - 30, 60, 60)) {
-      if (entity.type === 'chance-abertura') {
-        canvasCtx.fillStyle = '#123d59';
-        canvasCtx.font = '700 16px system-ui, sans-serif';
-        canvasCtx.textAlign = 'center';
-        canvasCtx.textBaseline = 'middle';
-        canvasCtx.fillText('UP', x, entity.y + 1);
-      }
+    const assetKey = entity.type === 'chance-abertura' ? 'pickup-chance-abertura' : 'pickup-chance-rara';
+    if (drawTarifaZeroAsset(canvasCtx, assetKey, x - 30, entity.y - 30, 60, 60)) {
       return;
     }
     canvasCtx.fillStyle = '#00d9ff';
@@ -1233,8 +1304,25 @@ function drawPlayer(
   width: number,
   playerY: number,
 ) {
-  const playerX = laneCenterX(state.playerLane, width);
-  if (drawTarifaZeroAsset(canvasCtx, 'player-bus-default', playerX - 34, playerY - 32, 68, 68)) {
+  const playerX = laneCenterX(state.playerVisualLane, width);
+  const tilt = state.playerTravelMomentum * 0.08;
+
+  canvasCtx.fillStyle = 'rgba(8, 18, 29, 0.28)';
+  canvasCtx.beginPath();
+  canvasCtx.ellipse(playerX, playerY + 28, 24, 9, 0, 0, Math.PI * 2);
+  canvasCtx.fill();
+
+  if (Math.abs(state.playerTravelMomentum) > 0.04) {
+    canvasCtx.strokeStyle = `rgba(249, 207, 74, ${0.18 + Math.abs(state.playerTravelMomentum) * 0.2})`;
+    canvasCtx.lineWidth = 5;
+    canvasCtx.lineCap = 'round';
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(playerX - state.playerTravelMomentum * 20, playerY + 16);
+    canvasCtx.lineTo(playerX - state.playerTravelMomentum * 34, playerY + 42);
+    canvasCtx.stroke();
+  }
+
+  if (drawTarifaZeroAsset(canvasCtx, 'player-bus-default', playerX - 34, playerY - 32, 68, 68, { rotation: tilt })) {
     return;
   }
 
@@ -1262,6 +1350,8 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
   createInitialState() {
     return {
       playerLane: 1,
+      playerVisualLane: 1,
+      playerTravelMomentum: 0,
       entities: [],
       spawnCooldownMs: BASE_SPAWN_MS,
       score: 0,
@@ -1305,16 +1395,23 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
   },
 
   update(state, input, ctx): ArcadeTickResult<TarifaZeroState> {
+    const targetLane = applyInput(state, {
+      ...input,
+      pointerLane: normalizeLane(input.pointerLane),
+    });
+
     const next: TarifaZeroState = {
       ...state,
       elapsedMs: state.elapsedMs + ctx.dtMs,
-      playerLane: applyInput(state, {
-        ...input,
-        pointerLane: normalizeLane(input.pointerLane),
-      }),
+      playerLane: targetLane,
       laneFlashMs: Math.max(0, state.laneFlashMs - ctx.dtMs),
       comboTimerMs: Math.max(0, state.comboTimerMs - ctx.dtMs),
     };
+
+    const visualSmoothing = Math.min(1, ctx.dtMs / 92);
+    next.playerVisualLane = state.playerVisualLane + (targetLane - state.playerVisualLane) * visualSmoothing;
+    const desiredMomentum = clamp(targetLane - state.playerVisualLane, -1, 1);
+    next.playerTravelMomentum = state.playerTravelMomentum + (desiredMomentum - state.playerTravelMomentum) * Math.min(1, ctx.dtMs / 120);
     
     // Update phase
     next.currentPhase = getCurrentPhase(next.elapsedMs);
@@ -1407,6 +1504,7 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
       const advanced = {
         ...entity,
         y: entity.y + entity.speed * (ctx.dtMs / 1000),
+        ageMs: entity.ageMs + ctx.dtMs,
       };
 
       const sameLane = advanced.lane === next.playerLane;
@@ -1418,7 +1516,9 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
         Object.assign(next, collisionResult.state);
         
         // Track collision count
-        next.totalCollisionsThisRun += 1;
+        if (isHazardEntity(advanced.type)) {
+          next.totalCollisionsThisRun += 1;
+        }
         
         // Track apoio sequence peak if applicable
         if (advanced.type.startsWith('apoio')) {
@@ -1474,7 +1574,9 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
 
     // Particle feedback for pickups - colorful burst effect
     for (const feedback of state.recentFeedback) {
-      if (!feedback.x || !feedback.y) continue;
+      if (feedback.y === undefined) continue;
+
+      const feedbackX = feedback.lane !== undefined ? laneCenterX(feedback.lane, width) : (feedback.x ?? width / 2);
       
       const alpha = 1 - feedback.ageMs / 500; // Fade out
       const progress = feedback.ageMs / 500; // 0 to 1
@@ -1504,7 +1606,7 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
       for (let i = 0; i < particleCount; i++) {
         const angle = (i / particleCount) * Math.PI * 2;
         const distance = progress * 60; // Travel distance
-        const px = feedback.x + Math.cos(angle) * distance;
+        const px = feedbackX + Math.cos(angle) * distance;
         const py = feedback.y + Math.sin(angle) * distance - progress * 40; // Float upward
         const particleSize = 3 + (1 - progress) * 2; // Shrink
         
@@ -1519,7 +1621,7 @@ export const tarifaZeroCorredorLogic: ArcadeGameLogic<TarifaZeroState> = {
       if (glowSize > 0.5) {
         canvasCtx.fillStyle = `rgba(${hexToRgb(particleColor)}, ${alpha * 0.3})`;
         canvasCtx.beginPath();
-        canvasCtx.arc(feedback.x, feedback.y, glowSize, 0, Math.PI * 2);
+        canvasCtx.arc(feedbackX, feedback.y, glowSize, 0, Math.PI * 2);
         canvasCtx.fill();
       }
     }

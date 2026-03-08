@@ -5,41 +5,194 @@
   margin: 0 auto;
 }
 
+.introShell {
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at top right, rgba(249, 207, 74, 0.16) 0%, rgba(249, 207, 74, 0) 32%),
+    linear-gradient(180deg, rgba(10, 31, 46, 0.98) 0%, rgba(14, 32, 45, 0.98) 100%);
+  border: 1px solid rgba(249, 207, 74, 0.18);
+  box-shadow: 0 24px 40px rgba(8, 18, 29, 0.3);
+}
+
+.introShell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 239, 183, 0.06) 0%, rgba(255, 239, 183, 0) 24%),
+    linear-gradient(90deg, rgba(249, 207, 74, 0.08) 0%, rgba(249, 207, 74, 0) 22%);
+  pointer-events: none;
+}
+
 /* Tela de introdução */
+.introHero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: 1.2rem;
+  align-items: stretch;
+}
+
+.introCopy,
+.introStage {
+  position: relative;
+  z-index: 1;
+}
+
+.introKicker {
+  margin-top: 0.25rem;
+  color: #f9cf4a;
+  font-size: 0.77rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
 .introBrief {
   font-size: 1.05rem;
   line-height: 1.6;
-  color: #2a4a5f;
-  margin: 0.5rem 0 1.5rem;
+  color: #d4e4ee;
+  margin: 0.7rem 0 1rem;
+}
+
+.introRhythm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.introRhythm span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(249, 207, 74, 0.28);
+  background: rgba(8, 18, 29, 0.5);
+  color: #f2e7b4;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.introStage {
+  min-height: 290px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(249, 207, 74, 0.22);
+  background:
+    linear-gradient(180deg, rgba(8, 18, 29, 0.82) 0%, rgba(18, 61, 89, 0.22) 100%),
+    linear-gradient(180deg, #123d59 0%, #08121d 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 239, 183, 0.06);
+}
+
+.introSkyline,
+.introRoad,
+.introSprite {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.introSkyline {
+  inset: 0;
+  background-image:
+    url('/arcade/tarifa-zero/bg/bg-skyline-far.svg'),
+    url('/arcade/tarifa-zero/bg/bg-skyline-mid.svg');
+  background-size: cover, cover;
+  background-position: center, center;
+  opacity: 0.98;
+}
+
+.introRoad {
+  inset: 24% 0 0;
+  background-image: url('/arcade/tarifa-zero/bg/bg-corredor-road.svg');
+  background-size: cover;
+  background-position: center bottom;
+  opacity: 0.98;
+}
+
+.introSprite {
+  filter: drop-shadow(0 14px 24px rgba(8, 18, 29, 0.28));
+}
+
+.introBus {
+  left: 50%;
+  bottom: 16px;
+  width: 128px;
+  height: 128px;
+  transform: translateX(-50%);
+  background-image: url('/arcade/tarifa-zero/player/player-bus-default.svg');
+}
+
+.introApoio {
+  left: 12%;
+  bottom: 108px;
+  width: 62px;
+  height: 62px;
+  background-image: url('/arcade/tarifa-zero/pickups/pickup-apoio.svg');
+}
+
+.introMutirao {
+  right: 14%;
+  bottom: 126px;
+  width: 66px;
+  height: 66px;
+  background-image: url('/arcade/tarifa-zero/pickups/pickup-mutirao-bairro.svg');
+}
+
+.introBloqueio {
+  right: 10%;
+  top: 90px;
+  width: 68px;
+  height: 68px;
+  background-image: url('/arcade/tarifa-zero/obstacles/obstacle-catraca.svg');
+}
+
+.introChance {
+  left: 16%;
+  top: 78px;
+  width: 62px;
+  height: 62px;
+  background-image: url('/arcade/tarifa-zero/pickups/pickup-chance-abertura.svg');
 }
 
 .introFeatures {
   display: grid;
   gap: 1rem;
   margin-bottom: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .feature {
   display: flex;
   align-items: flex-start;
   gap: 0.9rem;
-  padding: 0.9rem;
-  background: linear-gradient(135deg, rgba(18, 61, 89, 0.04) 0%, rgba(18, 61, 89, 0.02) 100%);
-  border-radius: 12px;
-  border: 1.5px solid rgba(18, 61, 89, 0.12);
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(8, 18, 29, 0.62) 0%, rgba(18, 61, 89, 0.32) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(249, 207, 74, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 239, 183, 0.04);
 }
 
-.featureIcon {
-  font-size: 1.8rem;
-  line-height: 1;
+.featureAsset {
+  width: 3rem;
+  height: 3rem;
   flex-shrink: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .feature strong {
   display: block;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #123d59;
+  color: #f0f5ff;
   margin-bottom: 0.25rem;
 }
 
@@ -47,7 +200,19 @@
   margin: 0;
   font-size: 0.88rem;
   line-height: 1.45;
-  color: #3a5f77;
+  color: #b7cfde;
+}
+
+.featureApoio {
+  background-image: url('/arcade/tarifa-zero/pickups/pickup-apoio-territorial.svg');
+}
+
+.featureBloqueio {
+  background-image: url('/arcade/tarifa-zero/obstacles/obstacle-barreira-pesada.svg');
+}
+
+.featureBus {
+  background-image: url('/arcade/tarifa-zero/player/player-bus-default.svg');
 }
 
 /* Tela de resultado */
@@ -252,6 +417,27 @@
 }
 
 @media (max-width: 720px) {
+  .introShell {
+    padding: 1rem;
+  }
+
+  .introHero {
+    grid-template-columns: 1fr;
+  }
+
+  .introStage {
+    min-height: 240px;
+  }
+
+  .introBus {
+    width: 112px;
+    height: 112px;
+  }
+
+  .introFeatures {
+    grid-template-columns: 1fr;
+  }
+
   .scoreboardGrid {
     grid-template-columns: 1fr;
   }

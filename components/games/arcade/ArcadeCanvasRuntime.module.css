@@ -3,6 +3,13 @@
   gap: 0.75rem;
   max-width: 640px;
   margin: 0 auto;
+  padding: 0.75rem;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(249, 207, 74, 0.14) 0%, rgba(249, 207, 74, 0) 28%),
+    linear-gradient(180deg, rgba(8, 18, 29, 0.98) 0%, rgba(14, 32, 45, 0.96) 100%);
+  border: 1px solid rgba(249, 207, 74, 0.16);
+  box-shadow: 0 24px 42px rgba(8, 18, 29, 0.28);
 }
 
 /* HUD profissional */
@@ -11,9 +18,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.7rem 1rem;
-  background: rgba(18, 61, 89, 0.08);
-  border-radius: 12px;
-  border: 1.5px solid rgba(18, 61, 89, 0.15);
+  background: linear-gradient(180deg, rgba(18, 61, 89, 0.42) 0%, rgba(8, 18, 29, 0.68) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(249, 207, 74, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 239, 183, 0.05);
 }
 
 .hudScore {
@@ -38,7 +46,7 @@
   border-radius: 999px;
   background: linear-gradient(135deg, rgba(249, 207, 74, 0.16) 0%, rgba(255, 215, 101, 0.22) 100%);
   border: 1px solid rgba(249, 207, 74, 0.45);
-  color: #123d59;
+  color: #f3e7b0;
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -47,7 +55,7 @@
 
 .hudDetail {
   font-size: 0.72rem;
-  color: #56788f;
+  color: #9bb8ca;
   font-weight: 600;
 }
 
@@ -56,13 +64,13 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: #5a7a8e;
+  color: #9bb8ca;
 }
 
 .hudValue {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #123d59;
+  color: #f0f5ff;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -70,20 +78,20 @@
 .hudStatus {
   font-size: 0.8rem;
   font-weight: 600;
-  color: #5a7a8e;
+  color: #dbe7ef;
   padding: 0.35rem 0.65rem;
-  background: rgba(18, 61, 89, 0.06);
+  background: rgba(249, 207, 74, 0.12);
   border-radius: 8px;
 }
 
 /* Canvas principal */
 .canvas {
   width: 100%;
-  border-radius: 16px;
-  border: 3px solid #123d59;
-  box-shadow: 0 12px 40px rgba(8, 22, 38, 0.24);
+  border-radius: 20px;
+  border: 2px solid rgba(249, 207, 74, 0.26);
+  box-shadow: 0 16px 40px rgba(8, 22, 38, 0.3);
   touch-action: none;
-  background: #e8f2f7;
+  background: #08121d;
 }
 
 /* Controles touch melhorados */
@@ -148,7 +156,7 @@
 .hint {
   margin: 0;
   font-size: 0.8rem;
-  color: #5a7a8e;
+  color: #9bb8ca;
   text-align: center;
   line-height: 1.4;
 }

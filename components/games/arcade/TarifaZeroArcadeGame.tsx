@@ -147,41 +147,60 @@ export function TarifaZeroArcadeGame({ game }: TarifaZeroArcadeGameProps) {
 
   if (phase === 'intro') {
     return (
-      <Card className={styles.wrap}>
-        <span className="eyebrow">Linha arcade da campanha</span>
-        <h2>Tarifa Zero RJ — Corredor do Povo</h2>
-        <p className={styles.introBrief}>
-          Desvie o bloqueio, colete apoio popular e ative mutirão. 
-          O coletivo forte vale mais pontos e estabiliza a corrida — 
-          atalhos individualistas dão ponto rápido, mas sabotam o comum.
-        </p>
-        
+      <Card className={`${styles.wrap} ${styles.introShell}`}>
+        <div className={styles.introHero}>
+          <div className={styles.introCopy}>
+            <span className="eyebrow">Linha arcade da campanha</span>
+            <div className={styles.introKicker}>Mobilidade como direito • Coletivo em movimento</div>
+            <h2>Tarifa Zero RJ — Corredor do Povo</h2>
+            <p className={styles.introBrief}>
+              Desvie o bloqueio, colete apoio popular e ative mutirão. O coletivo forte acelera a corrida,
+              segura a pressão e abre passagem para todo mundo.
+            </p>
+            <div className={styles.introRhythm}>
+              <span>55s de pressão urbana</span>
+              <span>3 lanes de leitura rápida</span>
+              <span>tarifa zero contra catraca</span>
+            </div>
+          </div>
+
+          <div className={styles.introStage} aria-hidden="true">
+            <div className={styles.introSkyline}></div>
+            <div className={styles.introRoad}></div>
+            <div className={`${styles.introSprite} ${styles.introBus}`}></div>
+            <div className={`${styles.introSprite} ${styles.introApoio}`}></div>
+            <div className={`${styles.introSprite} ${styles.introMutirao}`}></div>
+            <div className={`${styles.introSprite} ${styles.introBloqueio}`}></div>
+            <div className={`${styles.introSprite} ${styles.introChance}`}></div>
+          </div>
+        </div>
+
         <div className={styles.introFeatures}>
           <div className={styles.feature}>
-            <span className={styles.featureIcon}>✊</span>
+            <span className={`${styles.featureAsset} ${styles.featureApoio}`} aria-hidden="true"></span>
             <div>
               <strong>Coleta Coletiva</strong>
-              <p>Apoio + Mutirão aumentam seu medidor coletivo</p>
+              <p>Apoio, território e mutirão enchem o medidor comum e sustentam o combo.</p>
             </div>
           </div>
           <div className={styles.feature}>
-            <span className={styles.featureIcon}>🚧</span>
+            <span className={`${styles.featureAsset} ${styles.featureBloqueio}`} aria-hidden="true"></span>
             <div>
-              <strong>Evite Bloqueios</strong>
-              <p>Desvie obstáculos que reduzem seu coletivo</p>
+              <strong>Leia o corredor</strong>
+              <p>Catracas, barreiras e zonas de pressão exigem troca de lane no tempo certo.</p>
             </div>
           </div>
           <div className={styles.feature}>
-            <span className={styles.featureIcon}>🎮</span>
+            <span className={`${styles.featureAsset} ${styles.featureBus}`} aria-hidden="true"></span>
             <div>
-              <strong>Controle Simples</strong>
-              <p>Toque, mouse ou teclado (A/D, setas)</p>
+              <strong>Controle responsivo</strong>
+              <p>Toque, mouse ou teclado (A/D, setas) com partida curta e replay imediato.</p>
             </div>
           </div>
         </div>
-        
+
         <div className={styles.actions}>
-          <Button onClick={startRun}>Começar corrida</Button>
+          <Button onClick={startRun} className={styles.premiumReplayButton}>Começar corrida</Button>
           <Link href="/explorar" className={styles.linkGhost}>
             ← Voltar ao catálogo
           </Link>
