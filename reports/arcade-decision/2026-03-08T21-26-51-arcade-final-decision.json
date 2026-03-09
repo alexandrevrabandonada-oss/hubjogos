@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-03-08T21:26:51.528Z",
+  "window": "7d",
+  "decision": "defer_new_product",
+  "confidence": 0,
+  "rationale": "Decisão bloqueada por: Exposição desequilibrada (100pp). Decisão bloqueada até equilibrar. Líderes divergem em múltiplas dimensões. Investigar antes de decidir.",
+  "blockers": [
+    "Exposição desequilibrada (100pp). Decisão bloqueada até equilibrar.",
+    "Líderes divergem em múltiplas dimensões. Investigar antes de decidir."
+  ],
+  "enablers": [
+    "Amostra adequada (80 runs)."
+  ],
+  "t37": {
+    "leader": "tarifa-zero-corredor",
+    "state": "early_signal",
+    "confidence": "early_signal",
+    "summary": "Sinal inicial aponta Tarifa Zero na frente, ainda sem massa critica."
+  },
+  "t38": {
+    "fairnessStatus": "unbalanced_exposure",
+    "exposureDeltaPct": 100,
+    "volumeLeader": "tarifa-zero-corredor",
+    "efficiencyLeader": "tarifa-zero-corredor"
+  },
+  "t39": {
+    "state": "fair_sample_but_divergent",
+    "alignedDimensions": 2,
+    "totalDimensions": 5,
+    "score": 40,
+    "dimensions": [
+      {
+        "key": "volume",
+        "label": "Volume (runs)",
+        "leader": "mutirao-do-bairro",
+        "signal": "weak"
+      },
+      {
+        "key": "exposure",
+        "label": "Exposição",
+        "leader": "tarifa-zero-corredor",
+        "signal": "strong"
+      },
+      {
+        "key": "efficiency",
+        "label": "Eficiência (exposição→start)",
+        "leader": "tarifa-zero-corredor",
+        "signal": "strong"
+      },
+      {
+        "key": "engagement",
+        "label": "Engajamento (replays)",
+        "leader": "mutirao-do-bairro",
+        "signal": "weak"
+      },
+      {
+        "key": "campaign",
+        "label": "Força de Campanha (T37)",
+        "leader": "technical_tie",
+        "signal": "weak"
+      }
+    ]
+  },
+  "sample": {
+    "tarifaRuns": 68,
+    "mutiraoRuns": 12,
+    "totalRuns": 80,
+    "minRunsForSignal": 30,
+    "sufficient": true
+  },
+  "recommendation": {
+    "actionIfDecidable": "Não autorizar mudança operacional. Continuar coleta pareada com distribuição equilibrada.",
+    "actionIfDeferred": "Continuar coleta pareada Tarifa vs Mutirão. Reavaliar em 7 dias.",
+    "campaignFocus": "Manter foco em consolidar amostra antes de pivotar campanha."
+  }
+}

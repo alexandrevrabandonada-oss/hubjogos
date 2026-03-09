@@ -19,6 +19,7 @@ const {
 } = require('./circulation-utils');
 const { analyzeEffectiveRuns } = require('./effective-runs-utils');
 const { buildMutiraoInsights } = require('./mutirao-report-utils');
+const { buildCooperativaInsights } = require('./cooperativa-report-utils');
 const { buildArcadeRowsFromEvents, buildArcadeLineDecisionFromRows } = require('./arcade-line-utils');
 const { buildArcadeExposureDuelFromEvents } = require('./arcade-exposure-utils');
 
@@ -348,6 +349,7 @@ function aggregateFromLocal(registry, window = 'all') {
     created_at: e.createdAt || e.created_at,
   }));
   const mutiraoInsights = buildMutiraoInsights(normalizedEventRows);
+  const cooperativaInsights = buildCooperativaInsights(normalizedEventRows, effectiveRuns);
   const arcadeLineRows = buildArcadeRowsFromEvents(normalizedEventRows);
   const arcadeLineDecision = buildArcadeLineDecisionFromRows(arcadeLineRows);
   const arcadeExposureDuel = buildArcadeExposureDuelFromEvents(normalizedEventRows, arcadeLineDecision);
@@ -404,6 +406,7 @@ function aggregateFromLocal(registry, window = 'all') {
     quickInsights,
     effectiveRuns,
     mutiraoInsights,
+    cooperativaInsights,
     arcadeLineDecision,
     arcadeExposureDuel,
     qrExperimentSummary,
@@ -433,7 +436,7 @@ async function aggregateFromRemote(registry, window = 'all') {
     supabaseSelect('feedback_records', 'select=rating,comment&limit=1000'),
     supabaseSelect(
       'game_events',
-      'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_run_end,arcade_score,arcade_replay_click,arcade_campaign_cta_click,arcade_first_input_time,mutirao_action_used,mutirao_event_triggered,mutirao_pressure_peak,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click,home_arcade_click,explorar_arcade_click,home_primary_play_click,above_fold_game_click)&limit=10000',
+      'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_run_end,arcade_score,arcade_replay_click,arcade_campaign_cta_click,arcade_first_input_time,mutirao_action_used,mutirao_event_triggered,mutirao_pressure_peak,cooperativa_action_used,cooperativa_event_triggered,cooperativa_pressure_peak,cooperativa_station_selected,cooperativa_station_overload,cooperativa_phase_reached,cooperativa_collapse_reason,cooperativa_mutirao_activated,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,campaign_cta_click_after_run,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click,home_arcade_click,explorar_arcade_click,home_primary_play_click,above_fold_game_click)&limit=10000',
     ),
     supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer,experiments&limit=10000'),
   ]);
@@ -459,6 +462,7 @@ async function aggregateFromRemote(registry, window = 'all') {
     territoryBySlug,
   });
   const mutiraoInsights = buildMutiraoInsights(eventRows || []);
+  const cooperativaInsights = buildCooperativaInsights(eventRows || [], effectiveRuns);
   const arcadeLineRows = buildArcadeRowsFromEvents(eventRows || []);
   const arcadeLineDecision = buildArcadeLineDecisionFromRows(arcadeLineRows);
   const arcadeExposureDuel = buildArcadeExposureDuelFromEvents(eventRows || [], arcadeLineDecision);
@@ -509,6 +513,7 @@ async function aggregateFromRemote(registry, window = 'all') {
     quickInsights,
     effectiveRuns,
     mutiraoInsights,
+    cooperativaInsights,
     arcadeLineDecision,
     arcadeExposureDuel,
     qrExperimentSummary,
@@ -702,6 +707,25 @@ ${(snapshot.effectiveRuns?.warnings || []).map((warning) => `- ${warning}`).join
 - Engajamento: ${snapshot.mutiraoInsights?.comparison?.engagement || 'similar'}
 - Delta score: ${snapshot.mutiraoInsights?.comparison?.scoreDeltaPct || 0}%
 - Delta replay: ${snapshot.mutiraoInsights?.comparison?.replayDeltaPp || 0}pp
+
+## Cooperativa na Pressao - Scorecard de Validacao (T49)
+
+- Runs observadas: ${snapshot.cooperativaInsights?.scorecard?.runs || 0}
+- Runs efetivas: ${snapshot.cooperativaInsights?.scorecard?.effectiveRuns || 0}
+- Survival rate: ${snapshot.cooperativaInsights?.scorecard?.survivalRate || 0}%
+- Collectivity rate: ${snapshot.cooperativaInsights?.scorecard?.collectivityRate || 0}%
+- Mutirao usage: ${snapshot.cooperativaInsights?.scorecard?.mutiraoUsageRate || 0}%
+- Replay rate: ${snapshot.cooperativaInsights?.scorecard?.replayRate || 0}%
+- CTA pos-run rate: ${snapshot.cooperativaInsights?.scorecard?.postRunCtaRate || 0}%
+- First input medio: ${snapshot.cooperativaInsights?.scorecard?.firstInputAvgMs || 0}ms
+- Acao mais usada: ${snapshot.cooperativaInsights?.scorecard?.mostUsedAction || 'none'}
+- Estacao mais critica: ${snapshot.cooperativaInsights?.scorecard?.mostCriticalStation || 'none'}
+- Fase final atingida: ${snapshot.cooperativaInsights?.scorecard?.phaseReachedRate?.final || 0}%
+- Principal causa de colapso: ${snapshot.cooperativaInsights?.scorecard?.topCollapseReason || 'none'} (${snapshot.cooperativaInsights?.scorecard?.topCollapseReasonPct || 0}%)
+- Pico de pressao (media): ${snapshot.cooperativaInsights?.scorecard?.pressurePeaks?.average || 0}
+- Status de decisao: ${snapshot.cooperativaInsights?.decision?.status || 'insufficient_live_usage'}
+- Recomendacao operacional: ${snapshot.cooperativaInsights?.weeklyRecommendation || 'Manter observacao.'}
+- Decisao formal T49: ${snapshot.cooperativaInsights?.decision?.finalDecision || 'keep_observing'}
 
 ## Linha Arcade - Decisao Oficial (T37)
 

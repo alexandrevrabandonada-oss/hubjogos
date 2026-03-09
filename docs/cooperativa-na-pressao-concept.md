@@ -17,6 +17,20 @@ Arcade de coordenacao produtiva: uma cooperativa opera sob pressao de sabotagem 
 - Ganhar folego coletivo e evitar colapso de cooperativa.
 - Fechar run com score de autonomia coletiva.
 
+## Fail state
+
+- colapso por exaustao e backlog fora de controle quando estabilidade/solidariedade ficam em zona critica por tempo continuo.
+
+## Replay promise
+
+- cada run muda por eventos de pressao e pelo ritmo de coordenacao do jogador;
+- promessa: "da para virar uma run ruim com mutirao cooperativo e cuidado de equipe".
+
+## Input do slice (mobile + PC)
+
+- touch/mouse: seleciona estacao e dispara acoes da HUD.
+- teclado: A/D ou setas para selecionar estacao; `1`/`2`/`3` para acoes; `Espaco` para mutirao.
+
 ## Papel politico
 
 Mostrar que autogestao e cooperativismo nao sao utopia abstrata: sao resposta pratica a crise economica.
@@ -37,3 +51,30 @@ Conectar a campanha de Alexandre Fonseca a propostas concretas de economia popul
 - 4 acoes principais
 - 4 eventos de crise
 - run de 60-90s com replay imediato
+
+## Escopo T42 (entra)
+
+- vertical slice jogavel completo (intro -> run -> outcome);
+- HUD minima funcional;
+- telemetria baseline;
+- assets P0 com fallback.
+
+## Escopo T42 (nao entra)
+
+- pass premium final de arte e audio;
+- modos extras e meta-progressao;
+- balanceamento fino de longo prazo.
+
+## Atualizacao T49 - Decisao de produto
+
+Resultado da validacao oficial T49:
+- status: `insufficient_live_usage`;
+- decisao formal: `keep_observing`.
+
+Leitura objetiva:
+- a proposta segue valida como direcao politico-jogavel, mas ainda sem volume real suficiente para decidir premiumizacao.
+- premium pass continua condicionado a evidencia de uso vivo (run_end, replay e CTA pos-run) em janela adicional.
+
+Guardrail mantido:
+- sem abrir novo jogo paralelo;
+- sem promover pass premium por antecipacao.

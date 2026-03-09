@@ -76,9 +76,11 @@ async function generateBrief() {
   const exportData = await buildExport('7d');
   const insights = exportData.quickInsights || {};
   const effectiveRuns = exportData.effectiveRuns || {};
+  const cooperativaInsights = exportData.cooperativaInsights || {};
   const arcadeLineDecision = exportData.arcadeLineDecision || {};
   const arcadeExposureDuel = exportData.arcadeExposureDuel || {};
   const arcadeConvergenceScorecard = exportData.arcadeConvergenceScorecard || {};
+  const arcadeFinalDecision = exportData.arcadeFinalDecision || {}; // T40
 
   const quickRows = insights.quickComparison || [];
   const bySeriesRows = insights.rankedSeries || [];
@@ -141,15 +143,24 @@ async function generateBrief() {
       alertas: arcadeLineDecision?.decision?.warnings || [],
       dueloJusto: arcadeExposureDuel || {},
       convergenciaDecisao: arcadeConvergenceScorecard || {}, // T39
+      decisaoFinal: arcadeFinalDecision || {}, // T40
+    },
+
+    cooperativa: {
+      status: cooperativaInsights?.decision?.status || 'insufficient_live_usage',
+      finalDecision: cooperativaInsights?.decision?.finalDecision || 'keep_observing',
+      recommendation: cooperativaInsights?.weeklyRecommendation || 'Manter observacao por mais 7 dias.',
+      scorecard: cooperativaInsights?.scorecard || {},
+      rationale: cooperativaInsights?.decision?.rationale || 'Sem leitura consolidada.',
     },
     // Recomendação da semana
-    recomendacaoDaSemana: gerarRecomendacao(currentWeek, weekRec, insights, effectiveRuns, arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard),
+    recomendacaoDaSemana: gerarRecomendacao(currentWeek, weekRec, insights, effectiveRuns, cooperativaInsights, arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard, arcadeFinalDecision),
   };
   
   return brief;
 }
 
-function gerarRecomendacao(week, weekRec, insights, effectiveRuns, arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard) {
+function gerarRecomendacao(week, weekRec, insights, effectiveRuns, cooperativaInsights, arcadeLineDecision, arcadeExposureDuel, arcadeConvergenceScorecard, arcadeFinalDecision) {
   const recomendacao = {
     acoes: [],
     alertas: [],
@@ -173,6 +184,8 @@ function gerarRecomendacao(week, weekRec, insights, effectiveRuns, arcadeLineDec
   const underexposedArcade = arcadeExposureDuel?.fairness?.underexposedArcade;
   const recommendedBoost = arcadeExposureDuel?.fairness?.recommendedExposureBoost || 0;
   const arcadeLeader = arcadeLineDecision?.duel?.leader || 'insufficient_sample';
+  const cooperativaStatus = cooperativaInsights?.decision?.status || 'insufficient_live_usage';
+  const cooperativaDecision = cooperativaInsights?.decision?.finalDecision || 'keep_observing';
 
   recomendacao.acoes.push(`Territorio da semana: ${weekRec.territorioLabel}`);
   recomendacao.acoes.push(`Serie da semana: ${weekRec.serieLabel}`);
@@ -242,6 +255,39 @@ function gerarRecomendacao(week, weekRec, insights, effectiveRuns, arcadeLineDec
     recomendacao.proximosPassos.push(`T39 aprovado para T40: ${convergenceRecommendedLeader} é arcade focal com segurança operacional alta.`);
   }
 
+  // T40: Decisão Final da Linha Arcade
+  if (arcadeFinalDecision && arcadeFinalDecision.decision) {
+    const finalDecision = arcadeFinalDecision.decision;
+    const finalConfidence = arcadeFinalDecision.confidence || 0;
+    const blockers = arcadeFinalDecision.blockers || [];
+    const enablers = arcadeFinalDecision.enablers || [];
+
+    if (finalDecision === 'focus_tarifa_zero') {
+      recomendacao.acoes.push(`✅ T40 - Decisão AUTORIZADA: Concentrar distribuição em Tarifa Zero RJ (confiança ${finalConfidence}%).`);
+      recomendacao.proximosPassos.push('T40: Usar Tarifa Zero como flagship arcade. Reduzir prioridade de Mutirão (manter disponível, mas sem push primário).');
+      recomendacao.campaignFocus = 'Foco eleitoral: Transporte público e mobilidade urbana (Tarifa Zero).';
+    } else if (finalDecision === 'focus_mutirao') {
+      recomendacao.acoes.push(`✅ T40 - Decisão AUTORIZADA: Concentrar distribuição em Mutirão do Bairro (confiança ${finalConfidence}%).`);
+      recomendacao.proximosPassos.push('T40: Usar Mutirão como flagship arcade. Reduzir prioridade de Tarifa (manter disponível, mas sem push primário).');
+      recomendacao.campaignFocus = 'Foco eleitoral: Solidariedade comunitária e soluções locais (Mutirão).';
+    } else if (finalDecision === 'maintain_dual_arcade') {
+      recomendacao.acoes.push(`🔄 T40 - MANTER Dual Arcade: Ambos os arcades têm qualidades complementares (confiança ${finalConfidence}%).`);
+      recomendacao.proximosPassos.push('T40: Continuar distribuição pareada Tarifa vs Mutirão. Reavaliar em 7 dias.');
+      recomendacao.campaignFocus = 'Dual focus: Tarifa (sistemas) + Mutirão (comunidade).';
+    } else if (finalDecision === 'defer_new_product') {
+      recomendacao.alertas.push(`⛔ T40 - Decisão BLOQUEADA: ${arcadeFinalDecision.rationale || 'Aguardar condições de decisão.'}`);
+      if (blockers.length > 0) {
+        recomendacao.alertas.push(`Blocadores T40: ${blockers.join(' | ')}`);
+      }
+      recomendacao.proximosPassos.push('T40: Não autorizar mudança operacional. Continuar coleta pareada com distribuição equilibrada.');
+    }
+
+    // Always show enablers if present
+    if (enablers.length > 0) {
+      recomendacao.acoes.push(`Habilitadores T40: ${enablers.join(' | ')}`);
+    }
+  }
+
   const quickRows = insights?.quickComparison || [];
   if (!quickRows || quickRows.length === 0) {
     recomendacao.alertas.push('Sem sessoes quick na janela 7d; iniciar distribuicao imediatamente.');
@@ -271,6 +317,14 @@ function gerarRecomendacao(week, weekRec, insights, effectiveRuns, arcadeLineDec
 
   if ((effectiveRuns?.warnings || []).length > 0) {
     recomendacao.alertas.push(`Avisos de amostra: ${(effectiveRuns.warnings || []).join(' | ')}`);
+  }
+
+  if (cooperativaStatus === 'ready_for_premium_pass') {
+    recomendacao.acoes.push('Cooperativa: status ready_for_premium_pass. Preparar premium pass incremental sem abrir novo jogo.');
+  } else if (cooperativaStatus === 'needs_more_tuning' || cooperativaDecision === 'run_one_more_tuning_cycle') {
+    recomendacao.acoes.push('Cooperativa: executar um ciclo curto de tuning orientado por colapso dominante e replay.');
+  } else {
+    recomendacao.acoes.push('Cooperativa: manter observacao por mais 7 dias, sem forcar premiumizacao.');
   }
 
   recomendacao.proximosPassos.push('Abrir pacote de distribuicao do territorio da semana e iniciar 1o push em ate 48h.');
@@ -451,6 +505,18 @@ function formatAsMarkdown(brief) {
   }
 
   const dueloJusto = brief.linhaArcade?.dueloJusto || {};
+  md += `## 🏭 Cooperativa na Pressão - Decisão T49\n\n`;
+  md += `- Status: ${brief.cooperativa?.status || 'insufficient_live_usage'}\n`;
+  md += `- Decisão formal: ${brief.cooperativa?.finalDecision || 'keep_observing'}\n`;
+  md += `- Runs observadas: ${brief.cooperativa?.scorecard?.runs || 0}\n`;
+  md += `- Survival: ${brief.cooperativa?.scorecard?.survivalRate || 0}%\n`;
+  md += `- Collectivity: ${brief.cooperativa?.scorecard?.collectivityRate || 0}%\n`;
+  md += `- Mutirão usage: ${brief.cooperativa?.scorecard?.mutiraoUsageRate || 0}%\n`;
+  md += `- Replay: ${brief.cooperativa?.scorecard?.replayRate || 0}%\n`;
+  md += `- CTA pós-run: ${brief.cooperativa?.scorecard?.postRunCtaRate || 0}%\n`;
+  md += `- Causa principal de colapso: ${brief.cooperativa?.scorecard?.topCollapseReason || 'none'}\n`;
+  md += `- Recomendação: ${brief.cooperativa?.recommendation || 'Manter observação.'}\n\n`;
+
   md += `### Duelo Justo por Exposição (T38)\n\n`;
   md += `- Status: ${dueloJusto.fairness?.status || 'unbalanced_exposure'}\n`;
   md += `- Resumo: ${dueloJusto.fairness?.summary || 'Sem leitura de exposição consolidada.'}\n`;

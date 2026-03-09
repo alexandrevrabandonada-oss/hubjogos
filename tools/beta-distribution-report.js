@@ -58,6 +58,7 @@ function renderMarkdown(data) {
   const qrExperiment = collectionStatus.qrExperiment || {};
   const arcadeExposureDuel = data.arcadeExposureDuel || {};
   const arcadeConvergenceScorecard = data.arcadeConvergenceScorecard || {};
+  const arcadeFinalDecision = data.arcadeFinalDecision || {}; // T40
 
   const warnings = quickInsights.warnings || [];
   const window = data.window || '7d';
@@ -210,6 +211,43 @@ ${(arcadeExposureDuel.scorecards || [])
 - **Pronto para decidir?:** ${arcadeConvergenceScorecard.decision?.readyToDecide ? 'Sim ✅' : 'Não ⏳'}
 - **Líder recomendado:** ${arcadeConvergenceScorecard.decision?.recommendedLeader || 'maintain parity'}
 - **Próxima ação:** ${arcadeConvergenceScorecard.decision?.nextActionIfNotReady || 'Consolidar convergência'}
+
+---
+
+## 🏁 Decisão Final da Linha Arcade (T40)
+
+${arcadeFinalDecision.decision ? `
+- **Decisão:** ${(() => {
+  switch (arcadeFinalDecision.decision) {
+    case 'focus_tarifa_zero': return '✅ Concentrar em Tarifa Zero RJ';
+    case 'focus_mutirao': return '✅ Concentrar em Mutirão do Bairro';
+    case 'maintain_dual_arcade': return '🔄 Manter Dual Arcade';
+    case 'defer_new_product': return '⛔ Adiar Decisão';
+    default: return arcadeFinalDecision.decision;
+  }
+})()}
+- **Confiança:** ${arcadeFinalDecision.confidence}%
+- **Rationale:** ${arcadeFinalDecision.rationale || 'N/A'}
+${arcadeFinalDecision.blockers && arcadeFinalDecision.blockers.length > 0 ? `
+- **Blocadores:** ${arcadeFinalDecision.blockers.map(b => `\n  - ${b}`).join('')}` : ''}
+${arcadeFinalDecision.enablers && arcadeFinalDecision.enablers.length > 0 ? `
+- **Habilitadores:** ${arcadeFinalDecision.enablers.map(e => `\n  - ${e}`).join('')}` : ''}
+
+### Recomendação Operacional
+${arcadeFinalDecision.decision === 'focus_tarifa_zero' || arcadeFinalDecision.decision === 'focus_mutirao' ? `
+✅ **AUTORIZADO**: Concentrar distribuição semanal no arcade líder.
+- Push primário no arcade focal
+- Arcade secundário fica disponível mas sem push ativo
+- Reavaliar em 14 dias` : arcadeFinalDecision.decision === 'maintain_dual_arcade' ? `
+🔄 **DUAL STRATEGY**: Manter distribuição pareada.
+- Ambos arcades recebem exposição equilibrada
+- Monitorar convergência contínua
+- Reavaliar em 7 dias` : `
+⛔ **BLOQUEADO**: Não autorizar mudança operacional.
+- Continuar coleta pareada
+- Equalizar exposição se necessário
+- Reavaliar condições em 7 dias`}
+` : '- Decisão final não disponível (rodar npm run beta:arcade-final-decision)'}
 
 ---
 

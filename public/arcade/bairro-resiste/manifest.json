@@ -1,0 +1,42 @@
+{
+  "game": {
+    "slug": "bairro-resiste",
+    "line": "arcade",
+    "packSlug": "bairro-resiste",
+    "title": "Bairro Resiste"
+  },
+  "version": {
+    "manifestVersion": "1.0.0",
+    "visualVersion": "T51-preproducao-v1",
+    "assetSet": "bairro-resiste-p0-placeholders"
+  },
+  "assets": {
+    "bg-base": "/arcade/bairro-resiste/bg/bg-bairro-base-v1.svg",
+    "player-brigada": "/arcade/bairro-resiste/player/player-brigada-base-v1.svg",
+    "hotspot-agua": "/arcade/bairro-resiste/entities/entity-hotspot-agua-v1.svg",
+    "hotspot-moradia": "/arcade/bairro-resiste/entities/entity-hotspot-moradia-v1.svg",
+    "hotspot-mobilidade": "/arcade/bairro-resiste/entities/entity-hotspot-mobilidade-v1.svg",
+    "hotspot-saude": "/arcade/bairro-resiste/entities/entity-hotspot-saude-v1.svg",
+    "ui-hud-integridade": "/arcade/bairro-resiste/ui/ui-hud-integridade-v1.svg",
+    "ui-hud-rede": "/arcade/bairro-resiste/ui/ui-hud-rede-v1.svg",
+    "ui-hud-pressao": "/arcade/bairro-resiste/ui/ui-hud-pressao-v1.svg",
+    "ui-hud-mutirao": "/arcade/bairro-resiste/ui/ui-hud-mutirao-v1.svg",
+    "ui-alerta-critico": "/arcade/bairro-resiste/ui/ui-alerta-critico-v1.svg",
+    "fx-virada-comunitaria": "/arcade/bairro-resiste/fx/fx-virada-comunitaria-v1.svg"
+  },
+  "fallback": {
+    "default": "/arcade/bairro-resiste/bg/bg-bairro-base-v1.svg",
+    "byKey": {
+      "player-brigada": "/arcade/bairro-resiste/bg/bg-bairro-base-v1.svg",
+      "ui-alerta-critico": "/arcade/bairro-resiste/ui/ui-hud-integridade-v1.svg",
+      "fx-virada-comunitaria": "/arcade/bairro-resiste/ui/ui-hud-mutirao-v1.svg"
+    }
+  },
+  "metadata": {
+    "externalPipeline": true,
+    "runtimeFallback": "canvas-first",
+    "mobileSafe": true,
+    "updatedAt": "2026-03-08",
+    "status": "preproducao-forte"
+  }
+}

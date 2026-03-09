@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-03-09T01:01:17.987Z",
+  "results": [
+    {
+      "game": "Cooperativa na Pressao",
+      "slug": "cooperativa-na-pressao",
+      "packSlug": "cooperativa-na-pressao",
+      "status": "ok",
+      "issues": [],
+      "stats": {
+        "totalAssets": 6,
+        "validAssets": 6,
+        "missingAssets": 0,
+        "orphanFiles": 0
+      }
+    },
+    {
+      "game": "Mutirao do Bairro - Defesa do Comum",
+      "slug": "mutirao-do-bairro",
+      "packSlug": "mutirao-do-bairro",
+      "status": "ok",
+      "issues": [],
+      "stats": {
+        "totalAssets": 20,
+        "validAssets": 20,
+        "missingAssets": 0,
+        "orphanFiles": 0
+      }
+    },
+    {
+      "game": "Tarifa Zero RJ - Corredor do Povo",
+      "slug": "tarifa-zero-corredor",
+      "packSlug": "tarifa-zero",
+      "status": "ok",
+      "issues": [],
+      "stats": {
+        "totalAssets": 34,
+        "validAssets": 34,
+        "missingAssets": 0,
+        "orphanFiles": 0
+      }
+    }
+  ]
+}

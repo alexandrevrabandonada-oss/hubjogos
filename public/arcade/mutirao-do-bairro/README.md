@@ -1,65 +1,82 @@
-# Mutirao do Bairro - Asset Pipeline (T36C)
+# Asset Pack - Mutirao do Bairro
 
-Status: premium integrado e em validacao operacional.
-Escopo: manter inventario de assets ativos do runtime, fallback e checklist de validacao.
+Local: `public/arcade/mutirao-do-bairro/`
 
-## Estrutura
+Manifest oficial: `public/arcade/mutirao-do-bairro/manifest.json`
 
-- `bg/`: fundos do territorio.
-- `player/`: coordenador e avatar de run.
-- `entities/`: hotspots territoriais.
-- `ui/`: botoes de acao, HUD e overlays de evento.
+## Estado atual
 
-## Inventario premium ativo (14)
+- visualVersion: `T36C-premium-v1`
+- assetSet: `mutirao-bairro-premium`
+- loader: `lib/games/arcade/mutirao-assets.ts` + `lib/games/assets/asset-pack-loader.ts`
+- fallback de runtime: canvas-first
 
-Pacote principal conectado ao runtime (`lib/games/arcade/mutirao-do-bairro.ts`):
+## Estrutura padrao do pack
 
-1. `bg/bg-bairro-premium-v1.svg`
-2. `player/player-coordenador-premium-v1.svg`
-3. `entities/entity-hotspot-agua-v1.svg`
-4. `entities/entity-hotspot-energia-v1.svg`
-5. `entities/entity-hotspot-mobilidade-v1.svg`
-6. `ui/ui-action-reparar-v2.svg`
-7. `ui/ui-action-defender-v2.svg`
-8. `ui/ui-action-mobilizar-v2.svg`
-9. `ui/ui-action-mutirao-v2.svg`
-10. `ui/ui-hud-pressure-bar-v2.svg`
-11. `ui/ui-hud-mutirao-charge-v2.svg`
-12. `ui/ui-event-chuva-forte-v2.svg`
-13. `ui/ui-event-boato-panico-v2.svg`
-14. `ui/ui-event-onda-solidaria-v2.svg`
+```
+public/arcade/mutirao-do-bairro/
+├── bg/
+├── player/
+├── entities/
+├── pickups/
+├── obstacles/
+├── ui/
+├── fx/
+├── audio/
+├── manifest.json
+└── README.md
+```
 
-Observacao:
-- `ui/ui-event-tranco-sabotagem-v2.svg` e `entities/entity-hotspot-premium-v1.svg` existem como suporte complementar no pack local.
+## Convencao de nomes
 
-## Fallback e resiliencia
+Formato obrigatorio:
 
-- O runtime segue politica de fallback canvas-first: ausencia de SVG nao interrompe gameplay.
-- `tryLoadImage` faz carga defensiva e reaproveita `imageCache`.
-- Se um asset falhar, o render usa formas/cores base para preservar leitura de estado.
-- Guardrail: nunca acoplar logica de jogo ao carregamento de imagem.
+`<categoria>-<nome>-v<versao>.<ext>`
 
-## HUD e overlays
+Exemplos:
+- `entity-hotspot-agua-v1.svg`
+- `ui-event-chuva-forte-v2.svg`
+- `player-coordenador-premium-v1.svg`
+- `sfx-alerta-pressao-v1.ogg`
 
-- HUD principal de run: tempo, estabilidade, confianca, pressao e carga de mutirao.
-- Overlay de evento com badges de crise (`chuva`, `boato`, `onda`, `tranco`).
-- Tela final premium via `FinalShareCard` com tema `mutirao-bairro-premium`.
+## Inventario por prioridade
 
-## Smoke e validacao
+P0 (obrigatorio para runtime atual):
+- `bg/bg-bairro-premium-v1.svg`
+- `player/player-coordenador-premium-v1.svg`
+- `entities/entity-hotspot-*.svg`
+- `ui/ui-action-*.svg`
+- `ui/ui-hud-*.svg`
+- `ui/ui-event-*.svg`
 
-- Unit tests: `tests/unit/mutirao-do-bairro.test.ts` (28 casos de logica).
-- E2E: `tests/e2e/mutirao-do-bairro-slice.spec.ts`:
-	- smoke desktop
-	- smoke mobile
-	- validacao premium de assets
-	- validacao de tela final premium
+P1 (consistencia visual):
+- `bg/bg-bairro-base-v1.svg`
+- `player/player-coordenador-active.svg`
+- `entities/entity-hotspot-base-v1.svg`
 
-Suite final do ciclo:
-- `npm run test:unit` -> 43/43
-- `npm run test:e2e` -> 25/25
+P2 (expansao futura):
+- `pickups/*`
+- `obstacles/*`
+- `fx/*`
+- `audio/*`
 
-## Proximos passos (T37)
+## Formatos aceitos
 
-1. manter coleta de 7-14 dias para leitura de efetividade em producao.
-2. revisar assets complementares nao conectados ao pack principal (limpeza/rotina de curadoria).
-3. avaliar A/B de onboarding/controles apenas com amostra minima atingida.
+- vetorial: `.svg` (preferencial)
+- raster: `.png` (fallback quando necessario)
+- audio: `.ogg`/`.mp3` (quando pass de audio for liberado)
+
+## Fallback atual
+
+- loader resolve caminho do manifest e fallback por chave/default.
+- se o asset premium falhar, o runtime usa asset base ou render canvas.
+- jogo segue jogavel sem dependencia de carregamento perfeito.
+
+## Checklist de QA visual
+
+- [ ] desktop: intro, run e outcome carregam sem distorcao
+- [ ] mobile: hotspots e HUD legiveis
+- [ ] overlays de evento aparecem sem quebrar layout
+- [ ] manifest cobre todos assets usados no runtime
+- [ ] fallback de `bg` e `player` funciona sem crash
+- [ ] sem regressao de performance em eventos de pico

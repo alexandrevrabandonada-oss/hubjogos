@@ -36,9 +36,10 @@ Validacao forte -> live estavel:
 - decisao operacional explicita (seguir, manter dual, ou despriorizar);
 - documentacao e runbook atualizados.
 
-## Aplicacao imediata no T41
+## Aplicacao imediata no T43
 
 - validacao forte atual: `mutirao-do-bairro`.
-- implementacao ativa atual: nenhuma nova aberta neste tijolo.
-- pre-producao ativa: `cooperativa-na-pressao`, `bairro-resiste`.
-- backlog frio: `orcamento-do-comum` e conceitos legacy nao priorizados.
+- implementacao ativa atual: `cooperativa-na-pressao` (em janela de observacao pos-T42B).
+- pre-producao forte: `bairro-resiste`.
+- backlog frio maduro: `orcamento-do-comum`.
+- conceito futuro: `rj-do-comum`.

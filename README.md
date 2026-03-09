@@ -2,9 +2,16 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: Tijolo 38 concluido - duelo arcade `tarifa-zero-corredor` vs `mutirao-do-bairro` agora usa leitura de exposicao justa, com status de viés/correcao (`unbalanced_exposure`, `exposure_correction_in_progress`, `fair_comparison_window`, `decision_ready`) e recomendacoes corretivas propagadas para `/estado` e reports operacionais.
+Status atual: **Tijolo 45 concluido** - assetização completa do hub com integração real da Cooperativa, auditoria automática de manifests, e pipeline reduzido ao erro humano (manifest por jogo, loader reutilizavel com fallback seguro, smoke com validação de versão, e auditoria pre-deploy), separando Codex/VS Code da producao visual externa com zero quebra de jogos existentes.
 
-Status de organizacao do portfolio: Tijolo 41 em andamento/fechamento - hub reorganizado como fabrica planejada com catalogo mestre, temporadas, matriz de priorizacao e pre-producao formal dos proximos candidatos sem abrir implementacao nova.
+Atualizacao T48 (blindagem operacional do pipeline de assets):
+- alerta automatico de review da allowlist no CI (informativo, sem bloquear sozinho);
+- summary curto no GitHub Actions com status/warnings/review/packs afetados;
+- smoke seletivo automatico quando PR toca assets criticos de runtime;
+- politica oficial de criticidade em `docs/assets-criticos-runtime.md`;
+- politica operacional formalizada para manter CI util sem virar ruido.
+
+Status de organizacao do portfolio: Hub reorganizado como fabrica planejada com catalogo mestre, temporadas, matriz de priorizacao e pre-producao formal dos proximos candidatos sem abrir implementacao nova (T41).
 
 ## Estado do Produto
 
@@ -226,6 +233,7 @@ npm run beta:snapshot
 npm run beta:export
 npm run beta:circulation-report
 npm run beta:distribution-report
+npm run beta:arcade-final-decision # T40: Decisão final da linha arcade
 npm run ops:check-alerts
 npm run ops:export-audit
 ```
@@ -311,3 +319,201 @@ Entregas operacionais consolidadas:
   - `npm run test:e2e` 25/25
 
 Escopo de implementacao fica para T36B (vertical slice jogavel).
+
+## Implementacao T42 - Cooperativa na Pressao (vertical slice)
+
+Decisao aplicada:
+- abrir apenas `cooperativa-na-pressao` como unico jogo em implementacao ativa do ciclo;
+- manter `mutirao-do-bairro` em validacao forte;
+- manter `bairro-resiste` em pre-producao e `orcamento-do-comum` em backlog frio.
+
+Entregas do slice:
+- rota jogavel: `/arcade/cooperativa-na-pressao`;
+- loop distinto focado em coordenacao de producao coletiva (fila, exaustao, solidariedade);
+- input equivalente mobile + mouse + teclado;
+- HUD minima funcional;
+- assets P0 + fallback canvas;
+- outcome com replay/proximo jogo/share/CTA de campanha;
+- telemetria baseline:
+  - `arcade_run_start`
+  - `arcade_run_end`
+  - `arcade_first_input_time`
+  - `cooperativa_action_used`
+  - `cooperativa_event_triggered`
+  - `cooperativa_pressure_peak`
+  - `arcade_replay_click`
+  - `campaign_cta_click_after_run`
+
+Documentacao do slice:
+- `docs/cooperativa-na-pressao-concept.md`
+- `docs/cooperativa-na-pressao-systems-design.md`
+- `docs/cooperativa-na-pressao-art-direction.md`
+- `public/arcade/cooperativa-na-pressao/README.md`
+
+Fora do escopo T42:
+- pass premium final de arte/audio;
+- novo formato medio;
+- segunda implementacao ativa no mesmo ciclo.
+
+## Implementacao T42B - Cooperativa na Pressao (tuning e polish)
+
+Evolucao do slice T42 para jogo mais justo, legivel e prazeroso:
+
+**Balanceamento T42B:**
+- Grace period: 6s → 9s (50% aumento).
+- Pressure curves: redução ~15% em todas as fases.
+- Mutirão accessibility: threshold 100% → 85%, boost 1.3x → 1.5x, duration 7.5s → 10s.
+- Action potency: organizar +22%, redistribuir +20%, cuidar +25%, mutirão +33% score.
+- Phase timing: abertura 20s, ritmo 55s, pressão 75s.
+- Collapse thresholds ajustados para dar 50% mais margem antes do colapso.
+
+**UX e Polish:**
+- Station critical state highlighting (>75% = orange glow).
+- HUD hierarchy com variable bar heights.
+- Collapse warning overlay ("⚠ COLAPSO IMINENTE").
+- Action feedback pulse (800ms green accent).
+- Intro screen com numbered actions e usage tips.
+- Outcome screen com conditional feedback e dynamic replay CTA.
+
+**Telemetria expandida:**
+- 6 novos eventos: `cooperativa_station_selected`, `cooperativa_station_overload`, `cooperativa_phase_reached`, `cooperativa_collapse_reason`, `cooperativa_mutirao_activated`, (plus existing `cooperativa_action_used`).
+- Dashboard `/estado` com Cooperativa effectiveness card (7 metrics).
+- Tracking functions em `lib/analytics/track.ts`.
+
+**Success criteria:**
+- Survival rate: 40% → 65% (target).
+- Collectivity rate: 60% → 75% (target).
+- Mutirão usage: 20% → 60%+ (target).
+
+Fora do escopo T42B:
+- Assets SVG/PNG customizados (mantém canvas drawing profissional).
+- Novo jogo ou formato médio.
+- Animações complexas ou particles.
+- Som e música.
+
+## Organizacao T43 - Proxima leva sem improviso
+
+Decisao aplicada:
+- nao abrir novo jogo em codigo neste tijolo;
+- preservar hard cap da fabrica (1 validando forte, 1 implementacao ativa, 1-2 pre-producao);
+- fortalecer diversidade real da proxima leva.
+
+Entregas T43:
+- pre-producao forte de `bairro-resiste`:
+  - `docs/bairro-resiste-concept.md`
+  - `docs/bairro-resiste-systems-design.md`
+  - `docs/bairro-resiste-art-direction.md`
+- pre-producao madura de `orcamento-do-comum` (mantido backlog frio):
+  - `docs/orcamento-do-comum-concept.md`
+  - `docs/orcamento-do-comum-systems-design.md`
+  - `docs/orcamento-do-comum-art-direction.md`
+- terceiro conceito futuro estadual:
+  - `docs/rj-do-comum-concept.md`
+- governanca de diversidade e subida:
+  - `docs/matriz-diversidade-do-hub.md`
+  - `docs/plano-de-subida-da-proxima-leva.md`
+
+Ajustes leves de superficie publica:
+- `/explorar` agora explicita `backlog frio` separado de `pre-producao`.
+- pipeline editorial evita vender conceito como release pronto.
+
+Recomendacao operacional:
+- proximo candidato real apos janela T42B: `bairro-resiste`.
+- `orcamento-do-comum` segue backlog frio ate reduzir risco UX/sistemas.
+- `rj-do-comum` segue como horizonte estadual e nao sobe ainda.
+
+## Pipeline T44 - Asset packs padronizados
+
+Direcao aplicada:
+- criar padrao unico de ingestao/organizacao/integracao de assets para o hub.
+- separar responsabilidades:
+  - VS Code/Codex: estrutura, manifests, loader, fallback, testes.
+  - pipeline externo: producao de arte/audio e entrega nas pastas corretas.
+
+Entregas T44:
+- padrao global em `docs/pipeline-de-assets-do-hub.md`.
+- `manifest.json` por jogo em:
+  - `public/arcade/tarifa-zero/manifest.json`
+  - `public/arcade/mutirao-do-bairro/manifest.json`
+  - `public/arcade/cooperativa-na-pressao/manifest.json`
+- loader reutilizavel:
+  - `lib/games/assets/asset-pack-loader.ts`
+- integracao do loader em jogos vivos:
+  - `lib/games/arcade/tarifa-zero-assets.ts`
+  - `lib/games/arcade/mutirao-assets.ts`
+  - `lib/games/arcade/mutirao-do-bairro.ts`
+- estrutura padrao dos packs completada (`bg`, `player`, `entities`, `pickups`, `obstacles`, `ui`, `fx`, `audio`).
+- READMEs locais padronizados com inventario P0/P1/P2, naming, fallback e checklist QA.
+- smoke visual padrao:
+  - `tests/e2e/assets-pipeline-smoke.spec.ts`
+  - `tests/unit/asset-pack-loader.test.ts`
+  - `npm run test:assets-smoke`
+
+Resultado:
+- previsibilidade para encaixar assets externos sem bagunca.
+- fallback canvas-first preservado para estabilidade mobile/desktop.
+- Codex focado em runtime/integracao, nao em fabricacao de arte final.
+
+## Tijolo 47 - Institucionalizacao do Pipeline de Assets
+
+Estado oficial do repositorio:
+- CI dedicado ativo: `.github/workflows/assets-audit.yml`
+- Gate oficial: `npm run assets:audit`
+- Regra de bloqueio: `error` bloqueia, `warning` nao bloqueia
+- Regra de escopo: PRs com mudancas em `public/arcade/**` e arquivos de pipeline rodam gate automaticamente
+
+Fluxo oficial de ingestao:
+`gerar -> pasta correta -> manifest -> audit -> smoke -> merge`
+
+Documentos oficiais:
+- `docs/pipeline-de-assets-do-hub.md`
+- `docs/ci-gate-assets.md`
+- `docs/politica-de-auditoria-de-assets.md`
+- `docs/checklist-oficial-ingestao-assets.md`
+- `docs/templates/asset-pack-template/`
+
+## Atualizacao T49 - Validacao de produto da Cooperativa
+
+Fechamento oficial da janela T49 (7d) para `cooperativa-na-pressao`:
+- status de decisao: `insufficient_live_usage`;
+- decisao formal: `keep_observing`;
+- premium pass: **nao liberar neste ciclo**.
+
+Leitura objetiva da janela:
+- runs observadas: 0;
+- runs efetivas: 0;
+- survival, collectivity, mutirao usage, replay e CTA pos-run em 0%;
+- principal conclusao: ainda nao existe base real de uso para promover premiumizacao.
+
+Acao operacional imediata:
+- manter distribuicao leve por mais 7 dias com foco em `arcade_run_end`, `arcade_replay_click` e `campaign_cta_click_after_run`;
+- manter hard cap da fabrica (sem abrir novo jogo em paralelo);
+- revisar decisao no T50 apenas se houver massa minima observavel.
+
+## Atualizacao T51 - Bairro Resiste em pre-producao forte
+
+Escopo deste tijolo:
+- sem abrir implementacao nova;
+- amadurecer `bairro-resiste` para subida rapida quando o T50 fechar;
+- reduzir risco de producao com contrato de slice, checklist e pipeline pronto.
+
+Entregas de maturidade:
+- concept consolidado: `docs/bairro-resiste-concept.md`
+- systems consolidado: `docs/bairro-resiste-systems-design.md`
+- art direction consolidada: `docs/bairro-resiste-art-direction.md`
+- contrato de vertical slice: `docs/bairro-resiste-vertical-slice-contract.md`
+- checklist de go-live: `docs/bairro-resiste-go-live-checklist.md`
+
+Pipeline de assets preparado (sem integracao runtime):
+- `public/arcade/bairro-resiste/README.md`
+- `public/arcade/bairro-resiste/manifest.json`
+- pastas `bg/`, `player/`, `entities/`, `ui/`, `fx/`
+
+Status de portfolio atualizado:
+- `bairro-resiste` = pre-producao forte pronta para subida condicional;
+- subida depende do fechamento do T50 e liberacao de capacidade da fabrica.
+
+O que fica para T52:
+- abrir implementacao do slice apenas se T50 liberar slot;
+- plugar telemetria baseline e smoke/e2e minimo;
+- manter quick line e arcades live sem regressao.

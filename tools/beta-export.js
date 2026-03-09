@@ -19,6 +19,7 @@ const {
 } = require('./circulation-utils');
 const { analyzeEffectiveRuns } = require('./effective-runs-utils');
 const { buildMutiraoInsights } = require('./mutirao-report-utils');
+const { buildCooperativaInsights } = require('./cooperativa-report-utils');
 const { buildArcadeRowsFromEvents, buildArcadeLineDecisionFromRows } = require('./arcade-line-utils');
 const { buildArcadeExposureDuelFromEvents } = require('./arcade-exposure-utils');
 
@@ -268,7 +269,7 @@ async function buildExport(window = 'all') {
         supabaseSelect('ops_audit_log', 'select=action_type'),
         supabaseSelect(
           'game_events',
-          'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_run_end,arcade_score,arcade_replay_click,arcade_campaign_cta_click,arcade_first_input_time,mutirao_action_used,mutirao_event_triggered,mutirao_pressure_peak,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click,home_arcade_click,explorar_arcade_click,home_primary_play_click,above_fold_game_click)&limit=10000',
+          'select=session_id,event_name,slug,engine_kind,cta_id,metadata,created_at&event_name=in.(game_start,arcade_run_start,arcade_run_end,arcade_score,arcade_replay_click,arcade_campaign_cta_click,arcade_first_input_time,mutirao_action_used,mutirao_event_triggered,mutirao_pressure_peak,cooperativa_action_used,cooperativa_event_triggered,cooperativa_pressure_peak,cooperativa_station_selected,cooperativa_station_overload,cooperativa_phase_reached,cooperativa_collapse_reason,cooperativa_mutirao_activated,game_complete,outcome_view,primary_cta_click,secondary_cta_click,campaign_cta_click_after_game,campaign_cta_click_after_run,share_page_view,share_page_play_click,next_game_click,hub_return_click,result_copy,link_copy,final_card_view,final_card_download,final_card_share_click,final_card_qr_view,final_card_qr_click,quick_minigame_replay,replay_click,replay_after_run_click,outcome_replay_intent,first_interaction_time,card_preview_interaction,card_full_click,click_to_play_time,next_game_after_run_click,quick_to_arcade_click,arcade_to_quick_click,home_arcade_click,explorar_arcade_click,home_primary_play_click,above_fold_game_click)&limit=10000',
         ),
         supabaseSelect('game_sessions', 'select=session_id,slug,engine_kind,status,utm_source,referrer,experiments&limit=10000'),
       ]);
@@ -308,6 +309,7 @@ async function buildExport(window = 'all') {
       territoryBySlug,
     });
     const mutiraoInsights = buildMutiraoInsights(windowEvents);
+    const cooperativaInsights = buildCooperativaInsights(windowEvents, effectiveRuns);
     const arcadeLineRows = buildArcadeRowsFromEvents(windowEvents);
     const arcadeLineDecision = buildArcadeLineDecisionFromRows(arcadeLineRows);
     const arcadeExposureDuel = buildArcadeExposureDuelFromEvents(windowEvents, arcadeLineDecision);
@@ -329,6 +331,7 @@ async function buildExport(window = 'all') {
       quickInsights,
       effectiveRuns,
       mutiraoInsights,
+      cooperativaInsights,
       arcadeLineDecision,
       arcadeExposureDuel,
       qrExperimentSummary,
@@ -420,17 +423,18 @@ async function buildExport(window = 'all') {
       territoryBySlug,
     },
   );
-  const mutiraoInsights = buildMutiraoInsights(
-    windowEvents.map((e) => ({
-      session_id: e.sessionId,
-      event_name: e.event,
-      slug: e.slug,
-      engine_kind: e.engineKind,
-      cta_id: e.ctaId,
-      metadata: e.metadata,
-      created_at: e.createdAt || e.created_at,
-    })),
-  );
+  const normalizedWindowEvents = windowEvents.map((e) => ({
+    session_id: e.sessionId,
+    event_name: e.event,
+    slug: e.slug,
+    engine_kind: e.engineKind,
+    cta_id: e.ctaId,
+    metadata: e.metadata,
+    created_at: e.createdAt || e.created_at,
+  }));
+
+  const mutiraoInsights = buildMutiraoInsights(normalizedWindowEvents);
+  const cooperativaInsights = buildCooperativaInsights(normalizedWindowEvents, effectiveRuns);
   const arcadeLineRows = buildArcadeRowsFromEvents(
     windowEvents.map((e) => ({
       session_id: e.sessionId,
@@ -478,6 +482,7 @@ async function buildExport(window = 'all') {
     quickInsights,
     effectiveRuns,
     mutiraoInsights,
+    cooperativaInsights,
     arcadeLineDecision,
     arcadeExposureDuel,
     qrExperimentSummary,

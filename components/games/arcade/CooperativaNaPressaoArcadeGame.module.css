@@ -1,0 +1,115 @@
+.wrap {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.introCard {
+  display: grid;
+  gap: 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(134, 214, 179, 0.3);
+  background: linear-gradient(180deg, rgba(16, 34, 46, 0.96) 0%, rgba(27, 56, 64, 0.96) 100%);
+}
+
+.introHeader h2 {
+  margin: 0.2rem 0 0.6rem;
+  color: #eef5fb;
+}
+
+.introHeader p {
+  margin: 0;
+  color: #c7dae6;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.feature {
+  border-radius: 12px;
+  padding: 0.75rem;
+  border: 1px solid rgba(134, 214, 179, 0.24);
+  background: rgba(10, 23, 34, 0.76);
+}
+
+.feature strong {
+  display: block;
+  color: #86d6b3;
+  margin-bottom: 0.2rem;
+}
+
+.feature p {
+  margin: 0;
+  color: #dbe7ef;
+  font-size: 0.88rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.playButton {
+  background: linear-gradient(135deg, #2e7d5b 0%, #4fa37b 100%);
+  border: none;
+}
+
+.linkPrimary,
+.linkGhost {
+  border-radius: 10px;
+  padding: 0.48rem 0.75rem;
+  font-size: 0.88rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.linkPrimary {
+  color: #f0f5ff;
+  background: #123d59;
+}
+
+.linkGhost {
+  color: #dbe7ef;
+  background: rgba(8, 22, 35, 0.6);
+}
+
+.resultCard {
+  border-radius: 16px;
+  border: 1px solid rgba(134, 214, 179, 0.3);
+  background: linear-gradient(180deg, rgba(16, 34, 46, 0.98) 0%, rgba(24, 52, 60, 0.98) 100%);
+}
+
+.resultCard h3 {
+  margin-top: 0.3rem;
+  color: #f0f5ff;
+}
+
+.resultCard p {
+  color: #dbe7ef;
+}
+
+.scoreLine {
+  margin-top: 0.55rem;
+}
+
+.statsLine {
+  margin-bottom: 0;
+  font-size: 0.92rem;
+}
+
+.finalCardShell {
+  border-radius: 14px;
+  border: 1px solid rgba(134, 214, 179, 0.2);
+  padding: 0.55rem;
+  background: rgba(8, 18, 29, 0.75);
+}
+
+@media (max-width: 760px) {
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -17,6 +17,7 @@ import { formatTimeAgo } from '@/lib/analytics/windowing';
 import { isSupabaseConfigured } from '@/lib/supabase/client';
 import { listAllExperiments } from '@/lib/experiments/config';
 import { calculateMutiraoEffectiveness, compareMutiraoVsTarifaZero } from '@/lib/games/arcade/mutirao-effectiveness';
+import { calculateCooperativaEffectiveness, resolveCooperativaDecision } from '@/lib/games/arcade/cooperativa-effectiveness';
 import { getLocalArray } from '@/lib/storage/local-session';
 import type { AnalyticsEventPayload } from '@/lib/analytics/events';
 import { Section } from '@/components/ui/Section';
@@ -452,9 +453,11 @@ export default function EstadoPage() {
   const mutiraoEvents = metrics.eventsByType['mutirao_event_triggered'] || 0;
   const mutiraoPressurePeak = metrics.eventsByType['mutirao_pressure_peak'] || 0;
 
-  // T36C: Mutirao effectiveness
+  // T36C/T49: Arcade effectiveness scorecards from tracked events
   const events = getLocalArray<AnalyticsEventPayload>('events');
   const mutiraoEffectiveness = calculateMutiraoEffectiveness(events);
+  const cooperativaEffectiveness = calculateCooperativaEffectiveness(events);
+  const cooperativaDecision = resolveCooperativaDecision(cooperativaEffectiveness);
   
   // Calculate Tarifa Zero metrics for comparison
   const tarifaZeroScores = events
@@ -1475,6 +1478,28 @@ export default function EstadoPage() {
               </div>
             )}
 
+            {arcadeFinalDecision.stability && (
+              <div className={styles.warningBox} style={{ 
+                backgroundColor: '#FFF9C4', 
+                borderColor: '#F9A825',
+                marginTop: '1rem'
+              }}>
+                <strong>📊 Estabilidade & Persistência (T40):</strong>
+                <br />
+                • Estado atual há {arcadeFinalDecision.stability.stateDurationDays} dias ({arcadeFinalDecision.stability.decisionStable ? '✅ Estável' : '⏳ Flutuando'})
+                <br />
+                • Persistência como candidato: {arcadeFinalDecision.stability.candidatePersistenceDays} dias ({arcadeFinalDecision.stability.candidateReadyForPromotion ? '✅ Autorizado (7d)' : '⏳ Aguardando 7d'})
+                <br />
+                • Mudanças de estado: {arcadeFinalDecision.stability.stateChanges} (período: {arcadeFinalDecision.stability.observationPeriod}, histórico: {arcadeFinalDecision.stability.historySize} snapshots)
+                {arcadeFinalDecision.stability.lastStateChange && (
+                  <>
+                    <br />
+                    • Última mudança: {new Date(arcadeFinalDecision.stability.lastStateChange).toLocaleString('pt-BR')}
+                  </>
+                )}
+              </div>
+            )}
+
             <div className={styles.tableWrap}>
               <table className={styles.table}>
                 <thead>
@@ -1693,6 +1718,146 @@ export default function EstadoPage() {
             </p>
           </Card>
         )}
+
+        {cooperativaEffectiveness.runs > 0 && (
+          <Card className={styles.fullCard}>
+            <h3>🏭 Cooperativa na Pressão - Scorecard de decisão (T49)</h3>
+            <div className={styles.signalGrid}>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Status de decisão</p>
+                <p className={styles.signalValue}>{cooperativaDecision.status}</p>
+                <p className={styles.signalNote}>{cooperativaDecision.rationale}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Decisão formal</p>
+                <p className={styles.signalValue}>{cooperativaDecision.finalDecision}</p>
+                <p className={styles.signalNote}>{cooperativaDecision.recommendation}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Runs observadas</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.runs}</p>
+                <p className={styles.signalNote}>Run ends: {cooperativaEffectiveness.runEnds}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Survival rate</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.survivalRate}%</p>
+                <p className={styles.signalNote}>{cooperativaEffectiveness.survivalCount} sobrevivencias / {cooperativaEffectiveness.collapseCount} colapsos</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Collectivity rate</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.collectivityRate}%</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Mutirão usage</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.mutiraoUsageRate}%</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Replay rate</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.replayRate}%</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>CTA pós-run</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.postRunCtaRate}%</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>First input médio</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.firstInputAvgMs}ms</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Ação mais usada</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.mostUsedAction}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Estação mais crítica</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.mostCriticalStation}</p>
+              </div>
+              <div className={styles.signalItem}>
+                <p className={styles.signalLabel}>Fase final atingida</p>
+                <p className={styles.signalValue}>{cooperativaEffectiveness.phaseReachedRate.final}%</p>
+              </div>
+            </div>
+
+            {cooperativaEffectiveness.collapseReasons.length > 0 && (
+              <div className={styles.tableWrap}>
+                <h4>Principais causas de colapso</h4>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Causa</th>
+                      <th>Ocorrências</th>
+                      <th>% dos colapsos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cooperativaEffectiveness.collapseReasons.map((row) => (
+                      <tr key={row.reason}>
+                        <td className={styles.gameTitle}>{row.reason}</td>
+                        <td className={styles.numeric}>{row.count}</td>
+                        <td className={styles.numeric}>{row.rate}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <p className={styles.techNote}>
+              Leitura T49 focada em dados reais de run: survival, coletividade, mutirão, replay, CTA pós-run e colapsos.
+              Sem premiumização automática enquanto status não atingir `ready_for_premium_pass`.
+            </p>
+          </Card>
+        )}
+
+        <Card className={styles.fullCard}>
+          <h3>🔄 Janela T50 - Cooperativa em Observação (7 dias)</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Status T50</p>
+              <p className={styles.signalValue}>Ativo</p>
+              <p className={styles.signalNote}>Período: 09/03 - 16/03 (23:30)</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Dias restantes</p>
+              <p className={styles.signalValue}>↳ Revisar</p>
+              <p className={styles.signalNote}>Checkpoint mid-point: 12/03</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Sinais mínimos de vida</p>
+              <p className={styles.signalValue}>{cooperativaEffectiveness.runs > 0 ? 'EM COLETA' : 'NENHUM'}</p>
+              <p className={styles.signalNote}>Runs completas, replay ou CTA pós-run</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Runs observadas</p>
+              <p className={styles.signalValue}>{cooperativaEffectiveness.runs}</p>
+              <p className={styles.signalNote}>Meta T50: ≥5 conclusões</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Survival rate</p>
+              <p className={styles.signalValue}>{cooperativaEffectiveness.survivalRate}%</p>
+              <p className={styles.signalNote}>Meta: ≥20% para vida mínima</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Collectivity rate</p>
+              <p className={styles.signalValue}>{cooperativaEffectiveness.collectivityRate}%</p>
+              <p className={styles.signalNote}>Meta premium: ≥60%</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Mutirão activado</p>
+              <p className={styles.signalValue}>{cooperativaEffectiveness.mutiraoUsageRate}%</p>
+              <p className={styles.signalNote}>Sinal de coordenação coletiva</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Replay espontâneo</p>
+              <p className={styles.signalValue}>{cooperativaEffectiveness.replayRate}%</p>
+              <p className={styles.signalNote}>Sinal crítico de diversão</p>
+            </div>
+          </div>
+
+          <p className={styles.techNote}>
+            <strong>Recomendação operacional:</strong> Manter observação ativa. Sem novo jogo paralelo. Sem premiumizar cedo.
+            Decisão final ao fim de 7 dias: <code>promote_to_premium_pass</code>, <code>run_short_tuning_cycle</code>, ou <code>archive_to_cold_backlog</code>.
+          </p>
+        </Card>
 
         <Card className={styles.fullCard}>
           <h3>Front-stage da Home e Explorar</h3>

@@ -1,0 +1,63 @@
+{
+  "game": {
+    "slug": "tarifa-zero-corredor",
+    "line": "arcade",
+    "packSlug": "tarifa-zero",
+    "title": "Tarifa Zero RJ - Corredor do Povo"
+  },
+  "version": {
+    "manifestVersion": "1.0.0",
+    "visualVersion": "T35E-premium-v7",
+    "assetSet": "corredor-do-povo-v6"
+  },
+  "assets": {
+    "bg-skyline-far": "/arcade/tarifa-zero/bg/bg-skyline-far.svg",
+    "bg-skyline-mid": "/arcade/tarifa-zero/bg/bg-skyline-mid.svg",
+    "bg-corredor-road": "/arcade/tarifa-zero/bg/bg-corredor-road.svg",
+    "player-bus-default": "/arcade/tarifa-zero/player/player-bus-default.svg",
+    "transport-bus-main": "/arcade/tarifa-zero/transport/transport-bus-main.svg",
+    "transport-bus-compact": "/arcade/tarifa-zero/transport/transport-bus-compact.svg",
+    "transport-bus-event": "/arcade/tarifa-zero/transport/transport-bus-event.svg",
+    "obstacle-catraca": "/arcade/tarifa-zero/obstacles/obstacle-catraca.svg",
+    "obstacle-barreira-pesada": "/arcade/tarifa-zero/obstacles/obstacle-barreira-pesada.svg",
+    "obstacle-bloqueio-sequencia": "/arcade/tarifa-zero/obstacles/obstacle-bloqueio-sequencia.svg",
+    "obstacle-zona-pressao": "/arcade/tarifa-zero/obstacles/obstacle-zona-pressao.svg",
+    "pickup-apoio": "/arcade/tarifa-zero/pickups/pickup-apoio.svg",
+    "pickup-apoio-cadeia": "/arcade/tarifa-zero/pickups/pickup-apoio-cadeia.svg",
+    "pickup-apoio-territorial": "/arcade/tarifa-zero/pickups/pickup-apoio-territorial.svg",
+    "pickup-mutirao": "/arcade/tarifa-zero/pickups/pickup-mutirao.svg",
+    "pickup-mutirao-bairro": "/arcade/tarifa-zero/pickups/pickup-mutirao-bairro.svg",
+    "pickup-mutirao-sindical": "/arcade/tarifa-zero/pickups/pickup-mutirao-sindical.svg",
+    "pickup-chance-rara": "/arcade/tarifa-zero/pickups/pickup-chance-rara.svg",
+    "pickup-chance-abertura": "/arcade/tarifa-zero/pickups/pickup-chance-abertura.svg",
+    "pickup-chance-virada": "/arcade/tarifa-zero/pickups/pickup-chance-virada.svg",
+    "pickup-individualismo": "/arcade/tarifa-zero/pickups/pickup-individualismo.svg",
+    "pickup-individualismo-tentador": "/arcade/tarifa-zero/pickups/pickup-individualismo-tentador.svg",
+    "pickup-individualismo-cluster": "/arcade/tarifa-zero/pickups/pickup-individualismo-cluster.svg",
+    "ui-hud-progress-frame": "/arcade/tarifa-zero/ui/ui-hud-progress-frame.svg",
+    "ui-hud-progress-fill": "/arcade/tarifa-zero/ui/ui-hud-progress-fill.svg",
+    "ui-hud-meter-frame": "/arcade/tarifa-zero/ui/ui-hud-meter-frame.svg",
+    "ui-icon-combo": "/arcade/tarifa-zero/ui/ui-icon-combo.svg",
+    "ui-icon-score": "/arcade/tarifa-zero/ui/ui-icon-score.svg",
+    "ui-badge-phase": "/arcade/tarifa-zero/ui/ui-badge-phase.svg",
+    "ui-badge-event": "/arcade/tarifa-zero/ui/ui-badge-event.svg",
+    "ui-final-card-premium": "/arcade/tarifa-zero/ui/ui-final-card-premium.svg",
+    "ui-qr-frame": "/arcade/tarifa-zero/ui/ui-qr-frame.svg",
+    "ui-button-replay": "/arcade/tarifa-zero/ui/ui-button-replay.svg",
+    "ui-button-next": "/arcade/tarifa-zero/ui/ui-button-next.svg"
+  },
+  "fallback": {
+    "default": "/arcade/tarifa-zero/ui/ui-icon-score.svg",
+    "byKey": {
+      "bg-skyline-far": "/arcade/tarifa-zero/bg/bg-corredor-road.svg",
+      "bg-skyline-mid": "/arcade/tarifa-zero/bg/bg-corredor-road.svg",
+      "pickup-individualismo-cluster": "/arcade/tarifa-zero/pickups/pickup-individualismo.svg"
+    }
+  },
+  "metadata": {
+    "externalPipeline": true,
+    "runtimeFallback": "canvas-first",
+    "mobileSafe": true,
+    "updatedAt": "2026-03-08"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "game": {
+    "slug": "mutirao-do-bairro",
+    "line": "arcade",
+    "packSlug": "mutirao-do-bairro",
+    "title": "Mutirao do Bairro - Defesa do Comum"
+  },
+  "version": {
+    "manifestVersion": "1.0.0",
+    "visualVersion": "T36C-premium-v1",
+    "assetSet": "mutirao-bairro-premium"
+  },
+  "assets": {
+    "bg-premium": "/arcade/mutirao-do-bairro/bg/bg-bairro-premium-v1.svg",
+    "bg-base": "/arcade/mutirao-do-bairro/bg/bg-bairro-base-v1.svg",
+    "player-coordenador": "/arcade/mutirao-do-bairro/player/player-coordenador-premium-v1.svg",
+    "player-active": "/arcade/mutirao-do-bairro/player/player-coordenador-active.svg",
+    "hotspot-generic": "/arcade/mutirao-do-bairro/entities/entity-hotspot-premium-v1.svg",
+    "hotspot-base": "/arcade/mutirao-do-bairro/entities/entity-hotspot-base-v1.svg",
+    "hotspot-agua": "/arcade/mutirao-do-bairro/entities/entity-hotspot-agua-v1.svg",
+    "hotspot-energia": "/arcade/mutirao-do-bairro/entities/entity-hotspot-energia-v1.svg",
+    "hotspot-mobilidade": "/arcade/mutirao-do-bairro/entities/entity-hotspot-mobilidade-v1.svg",
+    "ui-action-reparar": "/arcade/mutirao-do-bairro/ui/ui-action-reparar-v2.svg",
+    "ui-action-defender": "/arcade/mutirao-do-bairro/ui/ui-action-defender-v2.svg",
+    "ui-action-mobilizar": "/arcade/mutirao-do-bairro/ui/ui-action-mobilizar-v2.svg",
+    "ui-action-mutirao": "/arcade/mutirao-do-bairro/ui/ui-action-mutirao-v2.svg",
+    "ui-hud-pressure": "/arcade/mutirao-do-bairro/ui/ui-hud-pressure-bar-v2.svg",
+    "ui-hud-mutirao-charge": "/arcade/mutirao-do-bairro/ui/ui-hud-mutirao-charge-v2.svg",
+    "ui-hud-stability": "/arcade/mutirao-do-bairro/ui/ui-hud-stability-bar.svg",
+    "ui-event-chuva-forte": "/arcade/mutirao-do-bairro/ui/ui-event-chuva-forte-v2.svg",
+    "ui-event-boato-panico": "/arcade/mutirao-do-bairro/ui/ui-event-boato-panico-v2.svg",
+    "ui-event-onda-solidaria": "/arcade/mutirao-do-bairro/ui/ui-event-onda-solidaria-v2.svg",
+    "ui-event-tranco-sabotagem": "/arcade/mutirao-do-bairro/ui/ui-event-tranco-sabotagem-v2.svg"
+  },
+  "fallback": {
+    "default": "/arcade/mutirao-do-bairro/bg/bg-bairro-base-v1.svg",
+    "byKey": {
+      "bg-premium": "/arcade/mutirao-do-bairro/bg/bg-bairro-base-v1.svg",
+      "player-coordenador": "/arcade/mutirao-do-bairro/player/player-coordenador-active.svg",
+      "hotspot-generic": "/arcade/mutirao-do-bairro/entities/entity-hotspot-base-v1.svg"
+    }
+  },
+  "metadata": {
+    "externalPipeline": true,
+    "runtimeFallback": "canvas-first",
+    "mobileSafe": true,
+    "updatedAt": "2026-03-08"
+  }
+}

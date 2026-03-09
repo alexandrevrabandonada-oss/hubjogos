@@ -17,9 +17,109 @@ const fs = require('fs');
 const path = require('path');
 const { buildExport } = require('./beta-export');
 
+// Load previous decision states to track persistence
+function loadDecisionHistory() {
+  const baseDir = path.join(__dirname, '..', 'reports', 'arcade-decision');
+  
+  if (!fs.existsSync(baseDir)) {
+    return [];
+  }
+
+  const files = fs.readdirSync(baseDir)
+    .filter(f => f.endsWith('-arcade-final-decision.json'))
+    .sort()
+    .reverse(); // Most recent first
+
+  const history = [];
+  for (let i = 0; i < Math.min(files.length, 30); i++) { // Last 30 snapshots
+    try {
+      const filePath = path.join(baseDir, files[i]);
+      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      history.push({
+        timestamp: data.generatedAt,
+        decision: data.decision,
+        confidence: data.confidence,
+        t39State: data.t39?.state,
+        t38Status: data.t38?.fairnessStatus,
+        blockers: data.blockers || [],
+      });
+    } catch (error) {
+      // Skip corrupted files
+    }
+  }
+
+  return history;
+}
+
+// Compute stability metrics from decision history
+function computeStabilityMetrics(currentDecision, currentT39State, currentT38Status, history) {
+  if (history.length === 0) {
+    return {
+      stateDurationDays: 0,
+      decisionStable: false,
+      candidatePersistenceDays: 0,
+      candidateReadyForPromotion: false,
+      stateChanges: 0,
+      lastStateChange: null,
+      observationPeriod: '0d',
+    };
+  }
+
+  let stateDurationDays = 0;
+  let candidatePersistenceDays = 0;
+  let stateChanges = 0;
+  let lastStateChange = null;
+
+  // Count how long current state has persisted
+  for (let i = 0; i < history.length; i++) {
+    const prevDecision = history[i];
+    if (prevDecision.decision === currentDecision && prevDecision.t39State === currentT39State) {
+      const hoursDiff = (new Date() - new Date(prevDecision.timestamp)) / (1000 * 60 * 60);
+      stateDurationDays = Math.max(stateDurationDays, hoursDiff / 24);
+    } else {
+      lastStateChange = prevDecision.timestamp;
+      stateChanges++;
+      break;
+    }
+  }
+
+  // Count how long decision_candidate has persisted
+  if (currentT39State === 'decision_candidate') {
+    for (let i = 0; i < history.length; i++) {
+      const prevDecision = history[i];
+      if (prevDecision.t39State === 'decision_candidate') {
+        const hoursDiff = (new Date() - new Date(prevDecision.timestamp)) / (1000 * 60 * 60);
+        candidatePersistenceDays = Math.max(candidatePersistenceDays, hoursDiff / 24);
+      } else {
+        break;
+      }
+    }
+  }
+
+  const decisionStable = stateDurationDays >= 1; // Stable if state held for 1+ days
+  const candidateReadyForPromotion = candidatePersistenceDays >= 7; // Ready if candidate for 7+ days
+
+  const oldestObservation = history[history.length - 1];
+  const observationDays = (new Date() - new Date(oldestObservation.timestamp)) / (1000 * 60 * 60 * 24);
+
+  return {
+    stateDurationDays: Math.round(stateDurationDays * 10) / 10,
+    decisionStable,
+    candidatePersistenceDays: Math.round(candidatePersistenceDays * 10) / 10,
+    candidateReadyForPromotion,
+    stateChanges,
+    lastStateChange,
+    observationPeriod: `${Math.round(observationDays)}d`,
+    historySize: history.length,
+  };
+}
+
 async function getFinalArcadeDecision() {
   try {
     const exportData = await buildExport('7d');
+    
+    // Load decision history for stability tracking
+    const history = loadDecisionHistory();
     
     const arcadeLineDecision = exportData.arcadeLineDecision || {};
     const arcadeExposureDuel = exportData.arcadeExposureDuel || {};
@@ -111,6 +211,28 @@ async function getFinalArcadeDecision() {
       decisionConfidence = convergenceScore * 0.6; // Lower confidence if not fully ready
     }
 
+    // Compute stability metrics
+    const stability = computeStabilityMetrics(finalDecision, convergenceState, fairnessStatus, history);
+
+    // Adjust decision based on persistence rule:
+    // If decision_candidate persists for 7+ days, can authorize next step
+    if (convergenceState === 'decision_candidate' && stability.candidateReadyForPromotion) {
+      // Promote to authorized decision
+      if (officialLeader === 'tarifa-zero-corredor') {
+        finalDecision = 'focus_tarifa_zero';
+        decisionRationale = `Tarifa Zero RJ lidera com convergência sustentada (${stability.candidatePersistenceDays}d como candidato). Autorizado por persistência de estado.`;
+        decisionConfidence = Math.min(convergenceScore, 90);
+      } else if (officialLeader === 'mutirao-do-bairro') {
+        finalDecision = 'focus_mutirao';
+        decisionRationale = `Mutirão do Bairro lidera com convergência sustentada (${stability.candidatePersistenceDays}d como candidato). Autorizado por persistência de estado.`;
+        decisionConfidence = Math.min(convergenceScore, 90);
+      } else {
+        finalDecision = 'maintain_dual_arcade';
+        decisionRationale = `Empate sustentado por ${stability.candidatePersistenceDays}d. Manter dual arcade strategy.`;
+        decisionConfidence = 75;
+      }
+    }
+
     // Build Output Object
     const finalDecisionReport = {
       generatedAt: new Date().toISOString(),
@@ -165,6 +287,18 @@ async function getFinalArcadeDecision() {
         actionIfDecidable: decisionRecommendationByDecision(finalDecision),
         actionIfDeferred: 'Continuar coleta pareada Tarifa vs Mutirão. Reavaliar em 7 dias.',
         campaignFocus: decisionCampaignFocus(finalDecision),
+      },
+
+      // T40: Stability & Persistence Context
+      stability: {
+        stateDurationDays: stability.stateDurationDays,
+        decisionStable: stability.decisionStable,
+        candidatePersistenceDays: stability.candidatePersistenceDays,
+        candidateReadyForPromotion: stability.candidateReadyForPromotion,
+        stateChanges: stability.stateChanges,
+        lastStateChange: stability.lastStateChange,
+        observationPeriod: stability.observationPeriod,
+        historySize: stability.historySize,
       },
     };
 
@@ -396,6 +530,15 @@ function formatDecisionAsMarkdown(decision) {
   md += `- **Total:** ${decision.sample.totalRuns} runs\n`;
   md += `- **Meta Mínima:** ${decision.sample.minRunsForSignal * 1.5} runs\n`;
   md += `- **Suficiente?:** ${decision.sample.sufficient ? 'Sim ✅' : 'Não ❌'}\n\n`;
+
+  md += `## Estabilidade & Persistência (T40)\n\n`;
+  md += `- **Duração do Estado Atual:** ${decision.stability.stateDurationDays} dias\n`;
+  md += `- **Estado Estável?:** ${decision.stability.decisionStable ? 'Sim ✅' : 'Não ⏳'}\n`;
+  md += `- **Persistência como Candidato:** ${decision.stability.candidatePersistenceDays} dias\n`;
+  md += `- **Pronto para Promoção (7d rule)?:** ${decision.stability.candidateReadyForPromotion ? 'Sim ✅' : 'Não ⏳'}\n`;
+  md += `- **Mudanças de Estado:** ${decision.stability.stateChanges} (período de ${decision.stability.observationPeriod})\n`;
+  md += `- **Última Mudança:** ${decision.stability.lastStateChange ? new Date(decision.stability.lastStateChange).toLocaleString('pt-BR') : 'N/A'}\n`;
+  md += `- **Histórico Analisado:** ${decision.stability.historySize} snapshots\n\n`;
 
   md += `## Recomendações\n\n`;
   md += `### Ação Imediata\n`;

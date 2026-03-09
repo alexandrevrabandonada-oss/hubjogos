@@ -6,6 +6,7 @@ import { Section } from '@/components/ui/Section';
 import { TarifaZeroArcadeGame } from '@/components/games/arcade/TarifaZeroArcadeGame';
 import { PasseLivreArcadeGame } from '@/components/games/arcade/PasseLivreArcadeGame';
 import { MutiraoDoBairroArcadeGame } from '@/components/games/arcade/MutiraoDoBairroArcadeGame';
+import { CooperativaNaPressaoArcadeGame } from '@/components/games/arcade/CooperativaNaPressaoArcadeGame';
 import { getGameBySlug } from '@/lib/games/catalog';
 import styles from './page.module.css';
 
@@ -52,7 +53,8 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
   const previewFinal =
     searchParams?.preview === 'final' ||
     searchParams?.fixture === 'final-premium' ||
-    searchParams?.fixture === 'final-mutirao';
+    searchParams?.fixture === 'final-mutirao' ||
+    searchParams?.fixture === 'final-cooperativa';
 
   if (!game || game.kind !== 'arcade') {
     notFound();
@@ -66,6 +68,8 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
     gameComponent = <PasseLivreArcadeGame game={game} />;
   } else if (game.slug === 'mutirao-do-bairro') {
     gameComponent = <MutiraoDoBairroArcadeGame game={game} previewFinal={previewFinal} />;
+  } else if (game.slug === 'cooperativa-na-pressao') {
+    gameComponent = <CooperativaNaPressaoArcadeGame game={game} previewFinal={previewFinal} />;
   }
 
   return (

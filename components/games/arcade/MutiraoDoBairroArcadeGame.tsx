@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/Card';
 import { ArcadeCanvasRuntime } from '@/components/games/arcade/ArcadeCanvasRuntime';
 import { getGameBySlug, type Game } from '@/lib/games/catalog';
 import { mutiraoDoBairroLogic } from '@/lib/games/arcade/mutirao-do-bairro';
+import { MUTIRAO_ASSET_SET, MUTIRAO_VISUAL_VERSION } from '@/lib/games/arcade/mutirao-assets';
 import type { ArcadeInputKind, ArcadeRunResult, ArcadeRuntimeEvent } from '@/lib/games/arcade/types';
 import {
   trackArcadeCampaignCtaClick,
@@ -188,8 +189,8 @@ export function MutiraoDoBairroArcadeGame({ game, previewFinal = false }: Mutira
           onRunEnd={handleRunEnd}
           onFirstInput={handleFirstInput}
           onRuntimeEvent={handleRuntimeEvent}
-          hudBadge="T36B-slice-v1"
-          hudDetail="mutirao-bairro-p0"
+          hudBadge={MUTIRAO_VISUAL_VERSION}
+          hudDetail={MUTIRAO_ASSET_SET}
           scoreLabel="Impacto"
           canvasAriaLabel="Jogo arcade Mutirao do Bairro"
           controlScheme="hotspot"

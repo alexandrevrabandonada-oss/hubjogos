@@ -1,0 +1,63 @@
+{
+  "timestamp": "2026-03-09T00:22:42.233Z",
+  "results": [
+    {
+      "game": "Cooperativa na Pressao",
+      "slug": "cooperativa-na-pressao",
+      "packSlug": "cooperativa-na-pressao",
+      "status": "ok",
+      "issues": [],
+      "stats": {
+        "totalAssets": 5,
+        "validAssets": 5,
+        "missingAssets": 0,
+        "orphanFiles": 0
+      }
+    },
+    {
+      "game": "Mutirao do Bairro - Defesa do Comum",
+      "slug": "mutirao-do-bairro",
+      "packSlug": "mutirao-do-bairro",
+      "status": "warning",
+      "issues": [
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade/mutirao-do-bairro/ui/ui-action-defender-v1.svg",
+          "file": "arcade/mutirao-do-bairro/ui/ui-action-defender-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade/mutirao-do-bairro/ui/ui-action-mobilizar-v1.svg",
+          "file": "arcade/mutirao-do-bairro/ui/ui-action-mobilizar-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade/mutirao-do-bairro/ui/ui-action-reparar-v1.svg",
+          "file": "arcade/mutirao-do-bairro/ui/ui-action-reparar-v1.svg"
+        }
+      ],
+      "stats": {
+        "totalAssets": 20,
+        "validAssets": 20,
+        "missingAssets": 0,
+        "orphanFiles": 3
+      }
+    },
+    {
+      "game": "Tarifa Zero RJ - Corredor do Povo",
+      "slug": "tarifa-zero-corredor",
+      "packSlug": "tarifa-zero",
+      "status": "ok",
+      "issues": [],
+      "stats": {
+        "totalAssets": 34,
+        "validAssets": 34,
+        "missingAssets": 0,
+        "orphanFiles": 0
+      }
+    }
+  ]
+}

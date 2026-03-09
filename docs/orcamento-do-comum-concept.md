@@ -1,43 +1,67 @@
-# Orcamento do Comum - Concept
+# Orcamento do Comum - Concept (T43)
 
-## Tese
+## Status
 
-Jogo de sessao curta-media sobre disputa orcamentaria: alocar recursos escassos com criterio de comum, enfrentando pressao privatista e chantagem fiscal.
+- etapa: backlog frio com pre-producao madura
+- tipo alvo: quase-tycoon / simulacao media
+- territorio base: estado-rj
+- linha editorial: serie-campanha-missoes-estado
 
-## Fantasy pillars
+## Fantasia central
 
-- Decidir com base em prioridade coletiva.
-- Expor custo politico de cada escolha.
-- Construir legitimidade popular no longo prazo.
+Conduzir um ciclo orcamentario do estado em disputa aberta: cada decisao de alocacao fortalece o comum ou entrega a cidade para a logica de mercado.
+
+## Pilares de diversao
+
+- trade-off claro: nao existe alocacao "perfeita", apenas prioridade politica explicita.
+- leitura de consequencia: cada rodada revela efeitos sociais e eleitorais acumulados.
+- construcao de bloco popular: legitimidade vem de coerencia com o comum, nao de tecnocracia.
+
+## Tipo provavel
+
+- base: simulacao media em turnos curtos.
+- referencia de ritmo: 3-6 minutos por run.
+- forma: "quase-tycoon" sem excesso de tabelas, focado em escolhas politicas concretas.
 
 ## Loop principal
 
-- Receber rodada de demandas (transporte, saude, moradia, educacao).
-- Distribuir orcamento sob restricoes reais.
-- Lidar com eventos (corte federal, lobby privado, emergencia territorial).
-- Medir impacto em 3 eixos (bem-estar, legitimidade, sustentabilidade).
+1. receber demandas do ciclo (transporte, saude, moradia, educacao, trabalho).
+2. alocar verba limitada entre programas e infraestrutura comum.
+3. reagir a eventos de pressao (lobby privado, corte de receita, emergencia territorial, greve).
+4. acompanhar efeitos em tres eixos: `bem-estar coletivo`, `legitimidade popular`, `sustentabilidade fiscal social`.
+5. fechar run com tipologia de governo gerada e recomendacao de acao politica.
 
 ## Papel politico
 
-Tornar visivel que o conflito central nao e tecnico: e disputa de projeto de sociedade.
+- provar que orcamento e arena de luta de classe, nao planilha neutra.
+- explicitar conflito entre comum e mercantilizacao dos servicos publicos.
+- sustentar eixo anarco-comunista: controle popular, ajuda mutua e autogestao territorial.
 
 ## Papel eleitoral
 
-Aproximar o debate de programa da linguagem de decisao concreta, sem virar panfleto.
+- traduzir programa em decisoes verificaveis (onde investir, quem paga, quem ganha).
+- oferecer narrativa de campanha orientada por compromisso com o comum estadual.
+- criar ponte entre discurso e decisao pratica sem didatismo panfletario.
 
-## Riscos de producao
+## Riscos de UX e sistemas
 
-- alta complexidade de UX para explicar sistemas sem travar entrada.
-- risco de baixa rejogabilidade se a variacao de eventos for limitada.
+- risco de UX alto: excesso de informacao pode travar onboarding.
+- risco sistemico: balanceamento entre eixos pode gerar "estrategia dominante" e reduzir replay.
+- risco narrativo: eventos repetitivos enfraquecem senso de processo politico real.
+- risco de implementacao: estado global com muitas variaveis aumenta custo de QA.
 
-## Escopo minimo futuro
+## Escopo minimo pensavel (futuro)
 
-- 5 rodadas por partida
-- 4 areas de alocacao
-- 6 eventos politicos
-- duracao de 3-5 min
-- final com tipologia de governo do comum
+- 5 rodadas por partida.
+- 4-5 areas de alocacao.
+- 6 eventos politicos com variacao por rodada.
+- 3 indicadores centrais no HUD.
+- 3-4 finais de tipologia de governo.
+- versao inicial sem metagame persistente.
 
-## Status T41
+## Condicao para sair do backlog frio
 
-Backlog frio. Manter em refinamento conceitual ate a fabrica estabilizar novo ciclo arcade.
+- fechar systems design com modelo simplificado (maximo 3 indicadores core).
+- provar onboarding em teste de leitura (primeira decisao em <20s).
+- reduzir risco de producao para >=3 na matriz.
+- nao romper hard cap da fabrica (sem abrir implementacao com cooperativa ainda em janela de observacao).

@@ -284,6 +284,16 @@ interface ArcadeFinalDecision {
     actionIfDeferred: string;
     campaignFocus: 'concentrate_tarifa' | 'concentrate_mutirao' | 'maintain_parity' | 'defer_and_retest';
   };
+  stability?: {
+    stateDurationDays: number;
+    decisionStable: boolean;
+    candidatePersistenceDays: number;
+    candidateReadyForPromotion: boolean;
+    stateChanges: number;
+    lastStateChange: string | null;
+    observationPeriod: string;
+    historySize: number;
+  };
 }
 
 interface CollectionTargets {

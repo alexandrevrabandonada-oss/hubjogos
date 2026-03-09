@@ -52,6 +52,7 @@ function renderMarkdown(data) {
   const qrExperimentSummary = data.qrExperimentSummary || {};
   const effectiveRuns = data.effectiveRuns || {};
   const mutiraoInsights = data.mutiraoInsights || {};
+  const cooperativaInsights = data.cooperativaInsights || {};
   const arcadeLineDecision = data.arcadeLineDecision || {};
   const arcadeExposureDuel = data.arcadeExposureDuel || {};
 
@@ -202,6 +203,22 @@ ${(effectiveRuns.warnings || []).map((warning) => `- ${warning}`).join('\n') || 
 - Engajamento: ${mutiraoInsights.comparison?.engagement || 'similar'}
 - Delta score: ${mutiraoInsights.comparison?.scoreDeltaPct || 0}%
 - Delta replay: ${mutiraoInsights.comparison?.replayDeltaPp || 0}pp
+
+## Cooperativa na Pressao - Scorecard T49
+- Runs observadas: ${cooperativaInsights.scorecard?.runs || 0}
+- Runs efetivas: ${cooperativaInsights.scorecard?.effectiveRuns || 0}
+- Survival rate: ${cooperativaInsights.scorecard?.survivalRate || 0}%
+- Collectivity rate: ${cooperativaInsights.scorecard?.collectivityRate || 0}%
+- Mutirao usage: ${cooperativaInsights.scorecard?.mutiraoUsageRate || 0}%
+- Replay rate: ${cooperativaInsights.scorecard?.replayRate || 0}%
+- CTA pos-run: ${cooperativaInsights.scorecard?.postRunCtaRate || 0}%
+- First input medio: ${cooperativaInsights.scorecard?.firstInputAvgMs || 0}ms
+- Causa principal de colapso: ${cooperativaInsights.scorecard?.topCollapseReason || 'none'} (${cooperativaInsights.scorecard?.topCollapseReasonPct || 0}%)
+- Acao dominante: ${cooperativaInsights.scorecard?.mostUsedAction || 'none'}
+- Estacao mais critica: ${cooperativaInsights.scorecard?.mostCriticalStation || 'none'}
+- Status de decisao: ${cooperativaInsights.decision?.status || 'insufficient_live_usage'}
+- Recomendacao da semana: ${cooperativaInsights.weeklyRecommendation || 'Manter observacao.'}
+- Decisao formal T49: ${cooperativaInsights.decision?.finalDecision || 'keep_observing'}
 
 ## Linha Arcade - decisao comparativa (T37)
 - Estado: ${arcadeLineDecision.decision?.state || 'insufficient_sample'}

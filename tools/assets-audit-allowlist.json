@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Allowlist de órfãos conhecidos que não devem gerar warnings na auditoria",
+  "version": "1.0.0",
+  "description": "Lista explícita de arquivos órfãos permitidos por asset pack. Cada entrada deve ter justificativa clara. Revisar trimestralmente.",
+  "review": {
+    "lastReviewedAt": "2026-03-08",
+    "nextReviewAt": "2026-06-01",
+    "reviewedBy": "asset-pipeline-maintainer",
+    "notes": "Entradas conferidas no T47. Mantidas como rollback safety de mutirao v1 -> v2."
+  },
+  "allowlist": {
+    "mutirao-do-bairro": {
+      "ui-action-reparar-v1.svg": "Legacy variant - rollback safety for v2 action icons (review 2026-06-01)",
+      "ui-action-defender-v1.svg": "Legacy variant - rollback safety for v2 action icons (review 2026-06-01)",
+      "ui-action-mobilizar-v1.svg": "Legacy variant - rollback safety for v2 action icons (review 2026-06-01)"
+    }
+  }
+}

@@ -1,0 +1,419 @@
+{
+  "timestamp": "2026-03-09T00:13:02.163Z",
+  "results": [
+    {
+      "game": "Cooperativa na Pressao",
+      "slug": "cooperativa-na-pressao",
+      "packSlug": "cooperativa-na-pressao",
+      "status": "warning",
+      "issues": [
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\cooperativa-na-pressao\\bg\\bg-cooperativa-base-v1.svg",
+          "file": "arcade\\cooperativa-na-pressao\\bg\\bg-cooperativa-base-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\cooperativa-na-pressao\\entities\\entity-estacao-coop-v1.svg",
+          "file": "arcade\\cooperativa-na-pressao\\entities\\entity-estacao-coop-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\cooperativa-na-pressao\\player\\player-coordenador-coop-v1.svg",
+          "file": "arcade\\cooperativa-na-pressao\\player\\player-coordenador-coop-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\cooperativa-na-pressao\\ui\\ui-hud-estabilidade-v1.svg",
+          "file": "arcade\\cooperativa-na-pressao\\ui\\ui-hud-estabilidade-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\cooperativa-na-pressao\\ui\\ui-hud-pressao-v1.svg",
+          "file": "arcade\\cooperativa-na-pressao\\ui\\ui-hud-pressao-v1.svg"
+        }
+      ],
+      "stats": {
+        "totalAssets": 5,
+        "validAssets": 5,
+        "missingAssets": 0,
+        "orphanFiles": 5
+      }
+    },
+    {
+      "game": "Mutirao do Bairro - Defesa do Comum",
+      "slug": "mutirao-do-bairro",
+      "packSlug": "mutirao-do-bairro",
+      "status": "warning",
+      "issues": [
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\bg\\bg-bairro-base-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\bg\\bg-bairro-base-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\bg\\bg-bairro-premium-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\bg\\bg-bairro-premium-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\entities\\entity-hotspot-agua-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\entities\\entity-hotspot-agua-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\entities\\entity-hotspot-base-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\entities\\entity-hotspot-base-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\entities\\entity-hotspot-energia-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\entities\\entity-hotspot-energia-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\entities\\entity-hotspot-mobilidade-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\entities\\entity-hotspot-mobilidade-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\entities\\entity-hotspot-premium-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\entities\\entity-hotspot-premium-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\player\\player-coordenador-active.svg",
+          "file": "arcade\\mutirao-do-bairro\\player\\player-coordenador-active.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\player\\player-coordenador-premium-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\player\\player-coordenador-premium-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-action-defender-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-action-defender-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-action-defender-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-action-defender-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-action-mobilizar-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-action-mobilizar-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-action-mobilizar-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-action-mobilizar-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-action-mutirao-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-action-mutirao-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-action-reparar-v1.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-action-reparar-v1.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-action-reparar-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-action-reparar-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-event-boato-panico-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-event-boato-panico-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-event-chuva-forte-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-event-chuva-forte-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-event-onda-solidaria-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-event-onda-solidaria-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-event-tranco-sabotagem-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-event-tranco-sabotagem-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-hud-mutirao-charge-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-hud-mutirao-charge-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-hud-pressure-bar-v2.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-hud-pressure-bar-v2.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\mutirao-do-bairro\\ui\\ui-hud-stability-bar.svg",
+          "file": "arcade\\mutirao-do-bairro\\ui\\ui-hud-stability-bar.svg"
+        }
+      ],
+      "stats": {
+        "totalAssets": 20,
+        "validAssets": 20,
+        "missingAssets": 0,
+        "orphanFiles": 23
+      }
+    },
+    {
+      "game": "Tarifa Zero RJ - Corredor do Povo",
+      "slug": "tarifa-zero-corredor",
+      "packSlug": "tarifa-zero",
+      "status": "warning",
+      "issues": [
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\bg\\bg-corredor-road.svg",
+          "file": "arcade\\tarifa-zero\\bg\\bg-corredor-road.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\bg\\bg-skyline-far.svg",
+          "file": "arcade\\tarifa-zero\\bg\\bg-skyline-far.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\bg\\bg-skyline-mid.svg",
+          "file": "arcade\\tarifa-zero\\bg\\bg-skyline-mid.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\obstacles\\obstacle-barreira-pesada.svg",
+          "file": "arcade\\tarifa-zero\\obstacles\\obstacle-barreira-pesada.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\obstacles\\obstacle-bloqueio-sequencia.svg",
+          "file": "arcade\\tarifa-zero\\obstacles\\obstacle-bloqueio-sequencia.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\obstacles\\obstacle-catraca.svg",
+          "file": "arcade\\tarifa-zero\\obstacles\\obstacle-catraca.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\obstacles\\obstacle-zona-pressao.svg",
+          "file": "arcade\\tarifa-zero\\obstacles\\obstacle-zona-pressao.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-apoio-cadeia.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-apoio-cadeia.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-apoio-territorial.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-apoio-territorial.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-apoio.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-apoio.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-chance-abertura.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-chance-abertura.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-chance-rara.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-chance-rara.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-chance-virada.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-chance-virada.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-individualismo-cluster.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-individualismo-cluster.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-individualismo-tentador.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-individualismo-tentador.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-individualismo.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-individualismo.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-mutirao-bairro.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-mutirao-bairro.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-mutirao-sindical.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-mutirao-sindical.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\pickups\\pickup-mutirao.svg",
+          "file": "arcade\\tarifa-zero\\pickups\\pickup-mutirao.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\player\\player-bus-default.svg",
+          "file": "arcade\\tarifa-zero\\player\\player-bus-default.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\transport\\transport-bus-compact.svg",
+          "file": "arcade\\tarifa-zero\\transport\\transport-bus-compact.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\transport\\transport-bus-event.svg",
+          "file": "arcade\\tarifa-zero\\transport\\transport-bus-event.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\transport\\transport-bus-main.svg",
+          "file": "arcade\\tarifa-zero\\transport\\transport-bus-main.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-badge-event.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-badge-event.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-badge-phase.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-badge-phase.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-button-next.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-button-next.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-button-replay.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-button-replay.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-final-card-premium.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-final-card-premium.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-hud-meter-frame.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-hud-meter-frame.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-hud-progress-fill.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-hud-progress-fill.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-hud-progress-frame.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-hud-progress-frame.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-icon-combo.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-icon-combo.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-icon-score.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-icon-score.svg"
+        },
+        {
+          "severity": "warning",
+          "type": "orphan_file",
+          "message": "File not referenced in manifest: arcade\\tarifa-zero\\ui\\ui-qr-frame.svg",
+          "file": "arcade\\tarifa-zero\\ui\\ui-qr-frame.svg"
+        }
+      ],
+      "stats": {
+        "totalAssets": 34,
+        "validAssets": 34,
+        "missingAssets": 0,
+        "orphanFiles": 34
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "game": {
+    "slug": "game-slug",
+    "line": "arcade",
+    "packSlug": "game-pack-slug",
+    "title": "Game Title"
+  },
+  "version": {
+    "manifestVersion": "1.0.0",
+    "visualVersion": "TXX-p0",
+    "assetSet": "game-p0"
+  },
+  "assets": {
+    "bg-base": "/arcade/game-pack-slug/bg/bg-base-v1.svg",
+    "player-main": "/arcade/game-pack-slug/player/player-main-v1.svg",
+    "ui-hud-main": "/arcade/game-pack-slug/ui/ui-hud-main-v1.svg"
+  },
+  "fallback": {
+    "default": "/arcade/game-pack-slug/bg/bg-base-v1.svg",
+    "byKey": {
+      "ui-hud-main": "/arcade/game-pack-slug/ui/ui-hud-main-v1.svg"
+    }
+  },
+  "metadata": {
+    "externalPipeline": true,
+    "runtimeFallback": "canvas-first",
+    "mobileSafe": true,
+    "updatedAt": "2026-03-08"
+  }
+}

@@ -168,3 +168,25 @@ Guardrail reforcado:
 - no maximo 1 jogo em implementacao ativa;
 - 1-2 em pre-producao;
 - restante em backlog frio.
+
+## Atualizacao Tijolo 43 - proxima leva organizada com diversidade
+
+Direcao aplicada:
+- crescer como portfolio vivo, nao como lista caotica;
+- manter o foco no ciclo ativo (`cooperativa-na-pressao`) sem abrir nova implementacao;
+- amadurecer a proxima leva com contraste real de fantasia/loop/territorio.
+
+Pacote de pre-producao entregue:
+1. `bairro-resiste` (territorial/defesa) em pre-producao forte com concept + systems + art.
+2. `orcamento-do-comum` (gestao/coletivizacao) em backlog frio maduro com concept + systems + art.
+3. `rj-do-comum` como terceiro conceito estadual para horizonte de medio prazo.
+
+Governanca e subida:
+- matriz de diversidade criada em `docs/matriz-diversidade-do-hub.md`.
+- plano de subida da proxima leva definido em `docs/plano-de-subida-da-proxima-leva.md`.
+- prioridade de subida apos T42B: `bairro-resiste`, condicionada a estabilidade e capacidade.
+
+T43 nao inclui:
+- novo jogo em codigo;
+- abertura automatica de formato medio;
+- premium pass de arte/audio para `cooperativa-na-pressao`.

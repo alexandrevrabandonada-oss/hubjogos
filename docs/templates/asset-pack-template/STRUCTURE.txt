@@ -1,0 +1,10 @@
+public/<line>/<slug>/bg/.gitkeep
+public/<line>/<slug>/player/.gitkeep
+public/<line>/<slug>/entities/.gitkeep
+public/<line>/<slug>/pickups/.gitkeep
+public/<line>/<slug>/obstacles/.gitkeep
+public/<line>/<slug>/ui/.gitkeep
+public/<line>/<slug>/fx/.gitkeep
+public/<line>/<slug>/audio/.gitkeep
+public/<line>/<slug>/manifest.json
+public/<line>/<slug>/README.md

@@ -44,6 +44,18 @@ export type ArcadeRuntimeEvent =
       type: 'action_used';
       actionId: string;
       hotspotId?: string;
+    }
+  | {
+      type: 'station_select';
+      stationId: string;
+    }
+  | {
+      type: 'station_overload';
+      stationId: string;
+    }
+  | {
+      type: 'collapse';
+      reason: string;
     };
 
 export interface ArcadeTickResult<State> {

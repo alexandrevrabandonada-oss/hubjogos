@@ -5,6 +5,7 @@ import type {
   ArcadeRuntimeEvent,
   ArcadeTickResult,
 } from './types';
+import { getMutiraoAssetPath } from './mutirao-assets';
 
 type MutiraoPhase = 'arranque' | 'pressao' | 'virada' | 'fechamento';
 type MutiraoEventId = 'chuva-forte' | 'boato-de-panico' | 'onda-solidaria' | 'tranco-de-sabotagem';
@@ -65,25 +66,6 @@ const EVENT_DURATION_MS: Record<MutiraoEventId, number> = {
   'tranco-de-sabotagem': 5_500,
 };
 
-const ASSET_PATHS = {
-  bg: '/arcade/mutirao-do-bairro/bg/bg-bairro-premium-v1.svg',
-  player: '/arcade/mutirao-do-bairro/player/player-coordenador-premium-v1.svg',
-  hotspotGeneric: '/arcade/mutirao-do-bairro/entities/entity-hotspot-premium-v1.svg',
-  hotspotAgua: '/arcade/mutirao-do-bairro/entities/entity-hotspot-agua-v1.svg',
-  hotspotEnergia: '/arcade/mutirao-do-bairro/entities/entity-hotspot-energia-v1.svg',
-  hotspotMobilidade: '/arcade/mutirao-do-bairro/entities/entity-hotspot-mobilidade-v1.svg',
-  repair: '/arcade/mutirao-do-bairro/ui/ui-action-reparar-v2.svg',
-  defend: '/arcade/mutirao-do-bairro/ui/ui-action-defender-v2.svg',
-  mobilize: '/arcade/mutirao-do-bairro/ui/ui-action-mobilizar-v2.svg',
-  mutirao: '/arcade/mutirao-do-bairro/ui/ui-action-mutirao-v2.svg',
-  pressureBar: '/arcade/mutirao-do-bairro/ui/ui-hud-pressure-bar-v2.svg',
-  mutiraoCharge: '/arcade/mutirao-do-bairro/ui/ui-hud-mutirao-charge-v2.svg',
-  eventChuvaForte: '/arcade/mutirao-do-bairro/ui/ui-event-chuva-forte-v2.svg',
-  eventBoatoPanico: '/arcade/mutirao-do-bairro/ui/ui-event-boato-panico-v2.svg',
-  eventOndaSolidaria: '/arcade/mutirao-do-bairro/ui/ui-event-onda-solidaria-v2.svg',
-  eventTrancoSabotagem: '/arcade/mutirao-do-bairro/ui/ui-event-tranco-sabotagem-v2.svg',
-};
-
 const imageCache = new Map<string, HTMLImageElement>();
 
 function clamp(value: number, min: number, max: number) {
@@ -108,13 +90,13 @@ function tryLoadImage(path: string) {
 function getHotspotAssetPath(hotspotId: HotspotId): string {
   switch (hotspotId) {
     case 'agua':
-      return ASSET_PATHS.hotspotAgua;
+      return getMutiraoAssetPath('hotspot-agua') || '';
     case 'energia':
-      return ASSET_PATHS.hotspotEnergia;
+      return getMutiraoAssetPath('hotspot-energia') || '';
     case 'mobilidade':
-      return ASSET_PATHS.hotspotMobilidade;
+      return getMutiraoAssetPath('hotspot-mobilidade') || '';
     default:
-      return ASSET_PATHS.hotspotGeneric;
+      return getMutiraoAssetPath('hotspot-generic') || '';
   }
 }
 
@@ -122,13 +104,13 @@ function getEventAssetPath(eventId: MutiraoEventId | null): string | null {
   if (!eventId) return null;
   switch (eventId) {
     case 'chuva-forte':
-      return ASSET_PATHS.eventChuvaForte;
+      return getMutiraoAssetPath('ui-event-chuva-forte');
     case 'boato-de-panico':
-      return ASSET_PATHS.eventBoatoPanico;
+      return getMutiraoAssetPath('ui-event-boato-panico');
     case 'onda-solidaria':
-      return ASSET_PATHS.eventOndaSolidaria;
+      return getMutiraoAssetPath('ui-event-onda-solidaria');
     case 'tranco-de-sabotagem':
-      return ASSET_PATHS.eventTrancoSabotagem;
+      return getMutiraoAssetPath('ui-event-tranco-sabotagem');
     default:
       return null;
   }
@@ -541,7 +523,7 @@ export const mutiraoDoBairroLogic: ArcadeGameLogic<MutiraoState> = {
     canvasCtx.fillStyle = bgGradient;
     canvasCtx.fillRect(0, 0, width, height);
 
-    const bgImage = tryLoadImage(ASSET_PATHS.bg);
+    const bgImage = tryLoadImage(getMutiraoAssetPath('bg-premium') || '');
     if (bgImage && bgImage.complete) {
       canvasCtx.globalAlpha = 0.2;
       canvasCtx.drawImage(bgImage, 0, 0, width, height);
@@ -586,7 +568,7 @@ export const mutiraoDoBairroLogic: ArcadeGameLogic<MutiraoState> = {
       renderHotspot(canvasCtx, state.hotspots[i], i, state.selectedHotspot, width, height);
     }
 
-    const playerImage = tryLoadImage(ASSET_PATHS.player);
+    const playerImage = tryLoadImage(getMutiraoAssetPath('player-coordenador') || '');
     const playerX = 20 + state.selectedHotspot * ((width - 70) / 3);
     const playerY = height * 0.75;
     if (playerImage && playerImage.complete) {

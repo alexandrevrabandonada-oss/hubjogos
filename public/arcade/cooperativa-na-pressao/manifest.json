@@ -1,0 +1,30 @@
+{
+  "game": {
+    "slug": "cooperativa-na-pressao",
+    "line": "arcade",
+    "packSlug": "cooperativa-na-pressao",
+    "title": "Cooperativa na Pressao"
+  },
+  "version": {
+    "manifestVersion": "1.0.0",
+    "visualVersion": "T42B-tuned",
+    "assetSet": "cooperativa-p0"
+  },
+  "assets": {
+    "bg-base": "/arcade/cooperativa-na-pressao/bg/bg-cooperativa-base-v1.svg",
+    "player-coordenador": "/arcade/cooperativa-na-pressao/player/player-coordenador-coop-v1.svg",
+    "entity-estacao": "/arcade/cooperativa-na-pressao/entities/entity-estacao-coop-v1.svg",
+    "ui-hud-estabilidade": "/arcade/cooperativa-na-pressao/ui/ui-hud-estabilidade-v1.svg",
+    "ui-hud-pressao": "/arcade/cooperativa-na-pressao/ui/ui-hud-pressao-v1.svg",
+    "ui-badge-operacional": "/arcade/cooperativa-na-pressao/ui/ui-badge-operacional-v1.svg"
+  },
+  "fallback": {
+    "default": "/arcade/cooperativa-na-pressao/bg/bg-cooperativa-base-v1.svg"
+  },
+  "metadata": {
+    "externalPipeline": true,
+    "runtimeFallback": "canvas-first",
+    "mobileSafe": true,
+    "updatedAt": "2026-03-08"
+  }
+}

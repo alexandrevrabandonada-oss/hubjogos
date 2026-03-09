@@ -415,6 +415,148 @@ export async function trackMutiraoPressurePeak(
   );
 }
 
+export async function trackCooperativaActionUsed(
+  game: Game,
+  actionId: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_action_used',
+      metadata: {
+        actionId,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCooperativaEventTriggered(
+  game: Game,
+  eventId: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_event_triggered',
+      metadata: {
+        eventId,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCooperativaPressurePeak(
+  game: Game,
+  peak: number,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_pressure_peak',
+      metadata: {
+        peak,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCooperativaStationSelected(
+  game: Game,
+  stationId: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_station_selected',
+      metadata: {
+        stationId,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCooperativaStationOverload(
+  game: Game,
+  stationId: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_station_overload',
+      metadata: {
+        stationId,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCooperativaPhaseReached(
+  game: Game,
+  phase: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_phase_reached',
+      metadata: {
+        phase,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCooperativaCollapseReason(
+  game: Game,
+  reason: string,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_collapse_reason',
+      metadata: {
+        reason,
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCooperativaMutiraoActivated(
+  game: Game,
+  metadata?: Record<string, string | number | boolean>,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'cooperativa_mutirao_activated',
+      metadata: {
+        ...(metadata || {}),
+      },
+    }),
+  );
+}
+
+export async function trackCampaignCtaClickAfterRun(
+  game: Game,
+  ctaId: string,
+  placement: string,
+) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'campaign_cta_click_after_run',
+      ctaId,
+      metadata: {
+        placement,
+      },
+    }),
+  );
+}
+
 // Front-stage tracking (Tijolo 31)
 export async function trackHomePrimaryPlayClick(game: Game, targetSlug: string, targetType: string) {
   await trackEvent(

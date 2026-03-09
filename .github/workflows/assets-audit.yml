@@ -1,0 +1,97 @@
+name: Assets Audit
+
+on:
+  pull_request:
+    paths:
+      - "public/arcade/**"
+      - "lib/games/assets/**"
+      - "lib/games/arcade/*assets.ts"
+      - "tools/assets-audit.js"
+      - "tools/assets-audit-allowlist.json"
+      - "tools/assets-health-report.js"
+      - "package.json"
+      - ".github/workflows/assets-audit.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "public/arcade/**"
+      - "lib/games/assets/**"
+      - "lib/games/arcade/*assets.ts"
+      - "tools/assets-audit.js"
+      - "tools/assets-audit-allowlist.json"
+      - "tools/assets-health-report.js"
+      - "package.json"
+      - ".github/workflows/assets-audit.yml"
+  workflow_dispatch:
+
+jobs:
+  assets-audit:
+    name: Asset Pipeline Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Collect changed files in scope
+        id: changed-files
+        shell: bash
+        run: |
+          set -euo pipefail
+          touch changed_files.txt
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+            git diff --name-only "origin/${{ github.base_ref }}...HEAD" > changed_files.txt
+          elif [[ "${{ github.event_name }}" == "push" && "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]]; then
+            git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" > changed_files.txt
+          elif git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
+            git diff --name-only HEAD~1 HEAD > changed_files.txt
+          fi
+
+          {
+            echo "changed_files<<EOF"
+            cat changed_files.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run assets audit (error blocks, warning visible)
+        run: npm run assets:audit
+
+      - name: Run assets health report
+        if: always()
+        run: npm run assets:health-report
+
+      - name: Build CI summary and allowlist review alert
+        if: always()
+        env:
+          ASSET_CHANGED_FILES: ${{ steps.changed-files.outputs.changed_files }}
+        run: node tools/assets-ci-summary.js
+
+      - name: Detect critical asset changes
+        if: always()
+        id: critical-smoke
+        env:
+          ASSET_CHANGED_FILES: ${{ steps.changed-files.outputs.changed_files }}
+        run: node tools/assets-critical-smoke-gate.js
+
+      - name: Run selective smoke for critical assets
+        if: success() && steps.critical-smoke.outputs.should_run == 'true'
+        run: npm run test:assets-smoke
+
+      - name: Upload latest audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assets-audit-report
+          path: reports/assets/*-assets-audit.json
+          retention-days: 14

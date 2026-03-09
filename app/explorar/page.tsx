@@ -37,6 +37,8 @@ export default function ExplorarPage() {
   const liveGames = games.filter((g) => getPortfolioStage(g) === 'live');
   const validatingGames = games.filter((g) => getPortfolioStage(g) === 'validating');
   const comingGames = games.filter((g) => getPortfolioStage(g) === 'coming');
+  const preProductionCandidates = plannedGameCandidates.filter((g) => g.status === 'pre-producao');
+  const coldBacklogCandidates = plannedGameCandidates.filter((g) => g.status === 'backlog-frio');
   const arcadeGames = playableGames.filter((g) => g.kind === 'arcade');
   const quickGames = playableGames.filter((g) => g.pace === 'quick' && g.kind !== 'arcade');
   const referenceGame = games[0];
@@ -160,8 +162,13 @@ export default function ExplorarPage() {
           </article>
           <article className={styles.portfolioStageCard}>
             <strong>Pre-producao</strong>
-            <p>{plannedGameCandidates.filter((g) => g.status === 'pre-producao').length} candidatos</p>
+            <p>{preProductionCandidates.length} candidatos</p>
             <span>Shortlist de fabrica para proximos tijolos.</span>
+          </article>
+          <article className={styles.portfolioStageCard}>
+            <strong>Backlog frio</strong>
+            <p>{coldBacklogCandidates.length} conceitos</p>
+            <span>Pre-producao madura sem promessa de release.</span>
           </article>
         </div>
       </Section>
@@ -284,8 +291,8 @@ export default function ExplorarPage() {
 
       <Section
         eyebrow="Pipeline editorial"
-        title="Em validacao e pre-producao"
-        description="Sem inflar escopo: o hub mostra o que esta jogavel agora e o que esta em preparo."
+        title="Validacao, pre-producao e backlog frio"
+        description="Sem inflar escopo: o hub mostra o que esta jogavel agora e o que esta em preparo, sem vender conceito como pronto."
       >
         <div className={styles.pipelineGrid}>
           {validatingGames.map((game) => (

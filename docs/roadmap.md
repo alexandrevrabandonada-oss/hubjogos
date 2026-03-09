@@ -432,3 +432,275 @@ Recomendacao para o proximo ciclo (T42):
 - manter `orcamento-do-comum` em backlog frio.
 
 Última atualização: 2026-03-08 (Tijolo 41)
+
+## Tijolo 42 (concluido)
+
+Objetivo:
+- abrir implementacao ativa de `cooperativa-na-pressao` com vertical slice minimo, sem inflar escopo e sem abrir segundo jogo em implementacao.
+
+Entregas:
+1. novo arcade jogavel em `/arcade/cooperativa-na-pressao`.
+2. loop central implementado: coordenacao de estacoes, pressao crescente e risco de colapso por exaustao/fila.
+3. input equivalente touch/mouse/teclado com acoes `organizar`, `redistribuir`, `cuidar` e `mutirao`.
+4. HUD minima funcional com estabilidade, solidariedade, pressao e carga de mutirao.
+5. assets P0 com fallback:
+   - `public/arcade/cooperativa-na-pressao/README.md`
+6. outcome screen com score, leitura de run, replay, proximo jogo, share e CTA campanha.
+7. telemetria baseline dedicada (`cooperativa_*` + `campaign_cta_click_after_run`).
+8. smoke/e2e e teste unitario do slice.
+9. docs da linha atualizadas (`README`, `tijolos`, `linha-arcade`).
+
+Recomendacao para o proximo ciclo (T42B/T43):
+- validar 7-14 dias de runs reais para ajustar balanceamento;
+- manter `bairro-resiste` em pre-producao sem abrir codificacao paralela;
+- decidir pass premium do cooperativa apenas apos sinal de replay/retencao.
+
+## Tijolo 42B (concluido)
+
+Objetivo:
+- evoluir `cooperativa-na-pressao` de slice funcional (T42) para slice mais justo, legivel e prazeroso por meio de tuning de balanceamento, polish de UX e telemetria útil.
+- NÃO abrir novo jogo, NÃO abrir formato médio, NÃO inflar escopo com assets premium completos ainda.
+- Foco: balanceamento, clareza do loop, ritmo da run, feedback das ações, legibilidade da pressão/solidariedade, replay.
+
+Entregas:
+1. **Balanceamento T42B** (14 edits simultâneos):
+   - Grace period: 6s → 9s (50% aumento).
+   - Pressure curves: redução ~15% em todas as fases.
+   - Mutirão accessibility: threshold 100% → 85%, boost 1.3x → 1.5x, duration 7.5s → 10s, score 90 → 120.
+   - Action potency: organizar 18→22, redistribuir 10→12, cuidar 12→15, mutirão charge gains aumentados.
+   - Phase timing: abertura 18s→20s, ritmo 50s→55s, pressão 72s→75s.
+   - Collapse thresholds mais generosos: estabilidade <26→<22, solidariedade <24→<20, pressão >92→>94.
+   - Documentação completa em `docs/cooperativa-na-pressao-systems-design.md` (seção T42B com tabelas comparativas T42 vs T42B).
+
+2. **UX e Polish:**
+   - Station legibility: critical state highlighting (>75% backlog/burnout = orange glow), selected station glow effect.
+   - HUD hierarchy: variable bar heights (estabilidade 12px, solidariedade 11px, pressão 10px), mutirão ready highlight.
+   - Collapse warning: red overlay + "⚠ COLAPSO IMINENTE" when burnoutWarning > 3s.
+   - Action feedback: 800ms pulse with green accent line on action use.
+   - Intro screen micro: numbered actions (1-2-3-Espaço), clear objective, usage tips per action.
+   - Outcome screen: conditional feedback (≥75% collectivity = coordination praise, <60% = improvement hint), dynamic replay button text, duration display.
+   - HUD badges: "T42B-tuned" / "cooperativa-v2".
+
+3. **Telemetria T42B**:
+   - 6 novos event types: `cooperativa_station_selected`, `cooperativa_station_overload`, `cooperativa_phase_reached`, `cooperativa_collapse_reason`, `cooperativa_mutirao_activated` (plus existing `cooperativa_action_used`).
+   - Extended `ArcadeRuntimeEvent` with station_select, station_overload, collapse types.
+   - 5 new tracking functions in `lib/analytics/track.ts`.
+   - Component integration in `CooperativaNaPressaoArcadeGame.tsx` with all events wired.
+   - `/estado` integration: Cooperativa effectiveness card with 7 metrics (actions, phases, mutirões, stations, peaks, colapsos, events) + tech note T42B.
+
+4. **Verificação completa:**
+   - Lint: ✅ (0 warnings/errors).
+   - Type-check: ✅ (sem erros TypeScript).
+   - Test:unit: ✅ (48 passed).
+   - Build: ✅ (compilação Next.js 14 sucesso).
+
+5. **Success criteria:**
+   - Survival rate: 40% → 65% (target).
+   - Collectivity rate: 60% → 75% (target).
+   - Mutirão usage: 20% → 60%+ (target).
+   - Replay rate: observar 7 dias pós-deploy.
+
+Recomendacao para o proximo ciclo (T43):
+- observar runs reais T42B por 7 dias para validar balanceamento e polish;
+- consideração de premium pass (assets SVG, audio, particles) apenas após confirmação de balanceamento estável;
+- manter foco em consolidação de efetividade antes de abrir novo jogo ou formato médio.
+
+## Tijolo 43 (concluido)
+
+Objetivo:
+- crescer a fabrica do hub de forma organizada e diversa, aprofundando pre-producao da proxima leva sem abrir implementacao nova.
+
+Entregas:
+1. diagnostico da fabrica atualizado (catalogo, temporadas, matriz e governanca).
+2. `bairro-resiste` promovido para pre-producao forte com 3 docs completos:
+   - `docs/bairro-resiste-concept.md`
+   - `docs/bairro-resiste-systems-design.md`
+   - `docs/bairro-resiste-art-direction.md`
+3. `orcamento-do-comum` amadurecido em backlog frio com pre-producao madura:
+   - `docs/orcamento-do-comum-concept.md`
+   - `docs/orcamento-do-comum-systems-design.md`
+   - `docs/orcamento-do-comum-art-direction.md`
+4. terceiro conceito futuro aberto:
+   - `docs/rj-do-comum-concept.md`
+5. matriz de diversidade criada:
+   - `docs/matriz-diversidade-do-hub.md`
+6. plano de subida da proxima leva criado:
+   - `docs/plano-de-subida-da-proxima-leva.md`
+7. revisao de catalogo e temporadas para refletir linha quick, arcade e media futura.
+8. ajuste leve de superficie publica em `/explorar` para separar `pre-producao` de `backlog frio`.
+
+Recomendacao para o proximo ciclo (T44):
+- manter observacao de `cooperativa-na-pressao` e decidir promocao de `bairro-resiste` apenas com capacidade livre;
+- manter `orcamento-do-comum` em backlog frio ate reduzir risco UX/sistemas;
+- manter `rj-do-comum` como conceito estadual sem promocao prematura.
+
+## Tijolo 44 (concluido)
+
+Objetivo:
+- criar sistema padrao de ingestao, organizacao e integracao de assets para o hub, separando runtime/editor de producao visual externa.
+
+Entregas:
+1. diagnostico dos pipelines existentes de assets (tarifa, mutirao, cooperativa).
+2. padrao global de asset pack formalizado (`public/<line>/<slug>/`).
+3. manifest por jogo implementado (`manifest.json`).
+4. loader utilitario reutilizavel com fallback seguro (`lib/games/assets/asset-pack-loader.ts`).
+5. integracao aplicada em jogos vivos (`tarifa-zero-corredor`, `mutirao-do-bairro`).
+6. READMEs locais padronizados com inventario e checklist de QA.
+7. convencao de nomes consolidada (`<categoria>-<nome>-v<versao>.<ext>`).
+8. rotina padrao de smoke visual criada (`test:assets-smoke`).
+9. documentacao mestre de pipeline criada (`docs/pipeline-de-assets-do-hub.md`).
+
+Recomendacao para o proximo ciclo (T45):
+- manter pass visual externo desacoplado do runtime e promover apenas packs validados no smoke.
+- integrar o manifest da cooperativa no runtime quando o pass premium dela for liberado.
+- estender o padrao para quick line quando houver assets dedicados.
+
+## Tijolo 45 (concluido)
+
+Objetivo:
+- fechar de verdade o pipeline padrao, eliminando dependencia de memoria manual e criando auditoria pre-deployment que valide consistencia entre manifests e arquivos reais.
+
+Entregas:
+1. diagnostico refinado: confirmacao do que esta integrado vs parcial vs legacy.
+2. integracao COMPLETA de `cooperativa-na-pressao` ao runtime (foi "preparada" em T44, agora consumindo manifest realmente).
+3. script de auditoria automatica (`npm run assets:audit`) com severidades e JSON report.
+4. smoke tests melhorados com validacao de manifest metadata (visualVersion, assetSet).
+5. baseline do pipeline por jogo documentado (`reports/assets/baseline-pipeline-state.md`).
+6. documentacao pipeline atualizada com sistema de auditoria e checklist T45.
+7. README.md principal atualizado com status T45.
+
+Entrega tecnica extra:
+- 3 asset wrappers funcionais (tarifa-zero-assets.ts, mutirao-assets.ts, cooperativa-assets.ts)
+- 9 E2E smoke tests (3 games × 3 variants: desktop, mobile, manifest-awareness)
+- Audit CLI com saida console + JSON report em `reports/assets/`
+- Zero quebra em games existentes
+
+Recomendacao para o proximo ciclo (T46):
+- considerar CI/CD gate: `npm run assets:audit` deve rodar antes de deploy.
+- quando houver premium pass para cooperativa: aplicar padrao P1/P2 assets.
+- ao expandir para quick line: usar baseline como template de integracao.
+- normalizar nomes legados incrementalmente (T47+ quando backlog permitir).
+
+Última atualização: 2026-03-08 (Tijolo 45)
+
+## Tijolo 46 (concluido)
+
+Objetivo:
+- endurecer o pipeline de assets para operacao confiavel, com menos ruido e politica clara de auditoria.
+
+Entregas:
+1. correcao critica de cross-platform path normalization no audit (`\\` -> `/`).
+2. politica formal publicada em `docs/politica-de-auditoria-de-assets.md`.
+3. allowlist operacional implementada em `tools/assets-audit-allowlist.json`.
+4. audit atualizado para suportar allowlist por game slug.
+5. gate de CI refinado: exit code 1 para errors, exit code 0 para ok/warning.
+6. health report executivo consolidado no output do `npm run assets:audit`.
+7. pipeline estabilizado com status final `OK: 3 / Warning: 0 / Error: 0`.
+8. guia de gate publicado em `docs/ci-gate-assets.md`.
+
+Recomendacao para o proximo ciclo (T47):
+- revisar allowlist trimestralmente e remover legados sem uso.
+- considerar workflow CI dedicado (`.github/workflows/assets-audit.yml`).
+- manter audit como gate obrigatorio em PRs com mudancas em `public/arcade/**`.
+
+Ultima atualizacao: 2026-03-09 (Tijolo 46)
+## Tijolo 47 (concluido)
+
+Objetivo:
+- institucionalizar o pipeline de assets como regra oficial de repositorio (CI/pre-merge), com fluxo operacional claro e previsivel.
+
+Entregas:
+1. workflow dedicado de gate em `.github/workflows/assets-audit.yml`.
+2. regra de escopo para PRs com mudancas de assets/pipeline.
+3. `assets:audit` evoluido com resumo executivo (packs limpos/warning/debt/allowlist/review).
+4. novo comando `npm run assets:health-report` para leitura operacional.
+5. revisao formal da allowlist com metadata (`lastReviewedAt`, `nextReviewAt`).
+6. checklist oficial de ingestao publicado: `docs/checklist-oficial-ingestao-assets.md`.
+7. template oficial de Asset Pack publicado em `docs/templates/asset-pack-template/`.
+8. validacao end-to-end executada em caso real controlado sem regressao de jogos existentes.
+
+Proximo recomendado (T48):
+- automatizar alerta de review vencida da allowlist no CI.
+- avaliar gate complementar de smoke seletivo para PRs de assets criticos.
+- manter limpeza incremental de legados sem apagar cegamente.
+
+## Tijolo 49 (concluido)
+
+Objetivo:
+- validar com dado real se `cooperativa-na-pressao` deve entrar em premium pass agora, rodar um tuning curto extra, ou seguir em observacao.
+
+Entregas:
+1. scorecard oficial da Cooperativa propagado para `/estado`, `beta:snapshot`, `beta:export`, `beta:circulation-report` e `beta:campaign-brief`.
+2. estado de decisao formal adicionado: `insufficient_live_usage`, `needs_more_tuning`, `promising_but_unstable`, `premium_candidate`, `ready_for_premium_pass`.
+3. decisao final padronizada: `promote_to_premium_pass`, `run_one_more_tuning_cycle`, `keep_observing`.
+4. leitura operacional semanal com recomendacao automatica para campanha.
+
+Decisao oficial T49:
+- status: `insufficient_live_usage`;
+- decisao final: `keep_observing`;
+- premium pass: adiado.
+
+Recomendacao para T50:
+- manter observacao por mais 7 dias com foco em run end/replay/CTA pos-run;
+- acionar tuning curto apenas se o uso aparecer com sinal de instabilidade real;
+- liberar premium pass somente com evidencia consistente de uso vivo.
+
+Ultima atualizacao: 2026-03-09 (Tijolo 49)
+
+## Tijolo 50 (EM ANDAMENTO)
+
+Objetivo:
+- ativar uso real da Cooperativa durante 7 dias (09/03-16/03), medir sinais mínimos de vida e tomar decisão final honesta: premium pass, tuning curto ou arquivamento em backlog frio.
+
+Entregas (esperadas):
+1. Janela operacional T50 consolidada:
+   - `reports/decision/t50-janela-operacional.md`
+   - Critérios de vida, canais de saída, regras de observação
+2. Checkpoint intermediário (12/03 meio-dia):
+   - `reports/decision/cooperativa-t50-midpoint.md`
+   - Responde: há sinais de vida? O jogo está vivo, crítico ou morto?
+3. Decisão final (16/03 23:30):
+   - `reports/decision/cooperativa-t50-final.md`
+   - Escolhe entre: `promote_to_premium_pass`, `run_short_tuning_cycle`, ou `archive_to_cold_backlog`
+4. Melhorias em `/estado`:
+   - Bloco "Janela T50 - Cooperativa em Observação" com status, dias restantes, sinais mínimos
+5. Relatório final:
+   - `reports/YYYY-MM-DD-HHMM-t50-estado-da-nacao.md`
+
+Guardrails:
+- Sem novo jogo aberto em paralelo
+- Sem formato médio
+- Sem premiumizar cedo demais
+- Manter conservador: dados honestamente interpretados
+
+Proxima atualizacao: 2026-03-16 (Decisão T50 oficial)
+
+## Tijolo 51 (concluido)
+
+Objetivo:
+- levar `bairro-resiste` de pre-producao basica para pre-producao forte pronta para subida, sem abrir implementacao durante T50.
+
+Entregas:
+1. consolidacao completa de concept/systems/art:
+   - `docs/bairro-resiste-concept.md`
+   - `docs/bairro-resiste-systems-design.md`
+   - `docs/bairro-resiste-art-direction.md`
+2. contrato de implementacao do primeiro build:
+   - `docs/bairro-resiste-vertical-slice-contract.md`
+3. checklist de promocao pre-producao -> implementacao:
+   - `docs/bairro-resiste-go-live-checklist.md`
+4. pipeline de assets pronto para ingestao:
+   - `public/arcade/bairro-resiste/README.md`
+   - `public/arcade/bairro-resiste/manifest.json`
+   - estrutura `bg/`, `player/`, `entities/`, `ui/`, `fx/`
+5. atualizacao editorial de portfolio:
+   - `docs/catalogo-mestre-do-hub.md`
+   - `docs/plano-de-subida-da-proxima-leva.md`
+
+Resultado:
+- `bairro-resiste` pronto para subir com baixo atrito quando o T50 fechar;
+- governanca preservada (sem segundo jogo em implementacao ativa);
+- decisao pos-T50 mais rapida e objetiva.
+
+Dependencia:
+- subida de `bairro-resiste` so pode ocorrer apos decisao final do T50.
