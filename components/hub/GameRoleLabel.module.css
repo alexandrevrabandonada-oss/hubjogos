@@ -1,0 +1,18 @@
+.roleLabel {
+  display: inline-flex;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ccc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.roleLabel::before {
+  content: '•';
+  margin-right: 0.35rem;
+}
+
+.entry { color: #ffca28; }
+.core { color: #ff5252; }
+.deep { color: #448aff; }
+.default { color: #888; }

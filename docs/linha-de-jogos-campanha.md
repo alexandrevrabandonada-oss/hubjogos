@@ -190,3 +190,12 @@ T43 nao inclui:
 - novo jogo em codigo;
 - abertura automatica de formato medio;
 - premium pass de arte/audio para `cooperativa-na-pressao`.
+
+
+---
+## Atualização T52: Hub Jogos Pré-Campanha (Core e Portfólio)
+* **Campanha em Tudo**: A identidade da pré-campanha de Alexandre Fonseca foi injetada via `CampaignShell` e `CampaignPortalSection`.
+* **Lógica de Portfólio**: Reforçada com novos campos no catálogo (`season`, `campaignRole`, `funRole`).
+* **Distinção de Linhas**: A linha "Quick" funciona como porta de entrada rápida, enquanto a linha "Arcade" consolida-se como a espinha dorsal de retenção. Jogos mais robustos e profundos figuram como horizonte estratégico.
+* **Próximos Passos (Para T53)**: Expansão do portfólio com novos arcades e narrativas engajadoras, sem abrir novo art pass por enquanto, apenas crescimento sustentável sobre essa base consolidada.
+---

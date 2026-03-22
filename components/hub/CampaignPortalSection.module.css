@@ -1,0 +1,46 @@
+.section {
+  padding: 4rem 0;
+  border-top: 2px solid rgba(211, 60, 42, 0.2);
+  border-bottom: 2px solid rgba(211, 60, 42, 0.2);
+  margin: 4rem 0;
+  background: linear-gradient(to bottom, rgba(211, 60, 42, 0.05), transparent);
+}
+
+.header {
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.eyebrow {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-campaign-primary, #d33c2a);
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 0 0 1rem 0;
+  color: var(--color-heading, #fff);
+  line-height: 1.1;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: var(--color-text-muted, #aaa);
+  margin: 0;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}

@@ -1,0 +1,63 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 12px;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.track {
+  position: relative;
+  height: 8px;
+  width: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--progress-color, #4ade80);
+  border-radius: 9999px;
+  transition: width 0.2s ease-out, background-color 0.3s;
+}
+
+/* Colors for specific semantic states */
+.fill.critical {
+  background: #ef4444;
+}
+
+.fill.warning {
+  background: #f59e0b;
+}
+
+.fill.safe {
+  background: #4ade80;
+}
+
+.fill.primary {
+  background: #3b82f6;
+}

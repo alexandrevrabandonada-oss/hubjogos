@@ -142,6 +142,9 @@ export interface Game {
   assetSet?: string;
   premiumTheme?: string;
   audioProfile?: string;
+  season: string;
+  campaignRole: string;
+  funRole: 'entrada' | 'retencao' | 'aprofundamento';
 }
 
 export interface PlannedGameCandidate {
@@ -191,6 +194,9 @@ export const games: Game[] = [
     assetSet: 'corredor-do-povo-v6',
     premiumTheme: 'tarifa-zero-premium',
     audioProfile: 'tarifa-zero-sfx-v1',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'mutirao-do-bairro',
@@ -225,6 +231,9 @@ export const games: Game[] = [
     assetSet: 'mutirao-bairro-premium',
     premiumTheme: 'mutirao-bairro-premium',
     audioProfile: 'mutirao-bairro-sfx-v1',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'cooperativa-na-pressao',
@@ -259,6 +268,9 @@ export const games: Game[] = [
     assetSet: 'cooperativa-p0',
     premiumTheme: 'cooperativa-slice',
     audioProfile: 'cooperativa-sfx-v1',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'passe-livre-nacional',
@@ -289,6 +301,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'autogestao',
     commonVsMarket: 'comum',
     campaignFrame: 'comunidade-em-luta',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'cidade-real',
@@ -319,6 +334,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'controle-popular',
     commonVsMarket: 'misto',
     campaignFrame: 'projeto-coletivo',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'abandonado',
@@ -349,6 +367,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'autogestao',
     commonVsMarket: 'comum',
     campaignFrame: 'comunidade-em-luta',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'trabalho-impossivel',
@@ -379,6 +400,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'nao-definido',
     commonVsMarket: 'mercado',
     campaignFrame: 'projeto-coletivo',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'voto-consciente',
@@ -409,6 +433,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'controle-popular',
     commonVsMarket: 'misto',
     campaignFrame: 'defesa-dos-comuns',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'memoria-coletiva',
@@ -439,6 +466,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'ajuda-mutua',
     commonVsMarket: 'comum',
     campaignFrame: 'comunidade-em-luta',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'transporte-urgente',
@@ -469,6 +499,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'tarifa-zero',
     commonVsMarket: 'misto',
     campaignFrame: 'projeto-coletivo',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'custo-de-viver',
@@ -499,6 +532,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'cooperativismo',
     commonVsMarket: 'misto',
     campaignFrame: 'projeto-coletivo',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'quem-paga-a-conta',
@@ -529,6 +565,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'controle-popular',
     commonVsMarket: 'misto',
     campaignFrame: 'defesa-dos-comuns',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
   {
     id: 'cidade-em-comum',
@@ -559,6 +598,9 @@ export const games: Game[] = [
     collectiveSolutionType: 'autogestao',
     commonVsMarket: 'comum',
     campaignFrame: 'defesa-dos-comuns',
+    season: 's1-verao-26',
+    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    funRole: 'aprofundamento',
   },
 ];
 

@@ -7,8 +7,9 @@ import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { ShellContainer } from '@/components/ui/ShellContainer';
 import { BetaBanner } from '@/components/ui/BetaBanner';
-import { CampaignMark } from '@/components/campaign/CampaignMark';
 import { CampaignAvatar } from '@/components/campaign/CampaignAvatar';
+import { CampaignPortalSection } from '@/components/hub/CampaignPortalSection';
+import { SeasonCollectionRail } from '@/components/hub/SeasonCollectionRail';
 import {
   CAMPAIGN_FRAME_LABELS,
   COMMON_VS_MARKET_LABELS,
@@ -19,7 +20,6 @@ import {
   type GameSeries,
 } from '@/lib/games/catalog';
 import {
-  trackCampaignMarkClick,
   trackSeriesClick,
   trackHomePrimaryPlayClick,
   trackHomeArcadeClick,
@@ -52,12 +52,6 @@ export default function Home() {
       deep: seriesGames.filter((game) => game.pace === 'deep').length,
     };
   });
-
-  async function handleCampaignClick() {
-    await trackCampaignMarkClick({ slug: 'home', kind: 'quiz', engineId: 'campaign-mark' } as any, 'home-hero').catch(
-      console.error,
-    );
-  }
 
   async function handleSeriesClick(series: GameSeries, placement: string) {
     if (!referenceGame) return;
@@ -279,7 +273,7 @@ export default function Home() {
         </div>
       </Section>
 
-      <Section
+      <CampaignPortalSection
         eyebrow="Pré-campanha"
         title="Alexandre Fonseca para Deputado"
         description="Campanha como ferramenta de organização coletiva. Jogos como porta de entrada para debate político concreto."
@@ -307,8 +301,14 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <CampaignMark compact onClick={handleCampaignClick} />
-      </Section>
+      </CampaignPortalSection>
+
+      <SeasonCollectionRail 
+        title="Destaque: Soluções Coletivas" 
+        description="Jogos com alternativas concretas de mutirão, passe livre e cooperativismo contra a privatização do cotidiano."
+        seasonId="S1-VERÃO-26"
+        games={games.filter(g => g.series === 'serie-solucoes-coletivas' && g.status === 'live')}
+      />
 
       <Section
         eyebrow="Séries da campanha"

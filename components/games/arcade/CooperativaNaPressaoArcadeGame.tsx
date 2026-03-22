@@ -8,6 +8,7 @@ import { DownloadCardButton } from '@/components/games/share/DownloadCardButton'
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ArcadeCanvasRuntime } from '@/components/games/arcade/ArcadeCanvasRuntime';
+import { ArcadeProgressBar } from '@/components/games/arcade/ArcadeProgressBar';
 import { getGameBySlug, type Game } from '@/lib/games/catalog';
 import { cooperativaNaPressaoLogic } from '@/lib/games/arcade/cooperativa-na-pressao';
 import { COOPERATIVA_ASSET_SET, COOPERATIVA_VISUAL_VERSION } from '@/lib/games/arcade/cooperativa-assets';
@@ -254,6 +255,15 @@ export function CooperativaNaPressaoArcadeGame({
         <p className={styles.statsLine}>
           Durou {Math.floor(result.stats.durationMs / 1000)}s • {result.stats.apoio} acoes coletivas • {result.stats.bloqueios} eventos
         </p>
+        <div style={{ padding: '0.5rem 0 1rem 0' }}>
+          <ArcadeProgressBar 
+            value={result.stats.collectiveRate} 
+            max={100} 
+            label="Eficiência Coletiva" 
+            colorState={result.stats.collectiveRate >= 75 ? 'safe' : result.stats.collectiveRate > 60 ? 'primary' : 'warning'} 
+            width={160}
+          />
+        </div>
         {result.stats.collectiveRate >= 75 && (
           <p className={styles.highlightLine}>
             ✓ Coordenacao eficiente! Cooperacao superou individualismo.

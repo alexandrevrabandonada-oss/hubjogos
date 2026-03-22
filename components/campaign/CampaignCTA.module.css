@@ -1,0 +1,60 @@
+.campaignCta {
+  background-color: var(--color-surface, #1e1e1e);
+  border: 1px solid var(--color-border, #333);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.markWrap {
+  flex-shrink: 0;
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--color-text, #fff);
+}
+
+.content p {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #aaa);
+  max-width: 500px;
+}
+
+.actionButton {
+  display: inline-block;
+  background-color: var(--color-campaign-primary, #d33c2a);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: opacity 0.2s ease;
+}
+
+.actionButton:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .campaignCta {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .content p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

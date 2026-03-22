@@ -1,0 +1,62 @@
+.railContainer {
+  margin: 3rem 0;
+}
+
+.railHeader {
+  margin-bottom: 1.5rem;
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.seasonBadge {
+  background-color: var(--color-campaign-primary, #d33c2a);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--color-heading, #fff);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-muted, #aaa);
+  max-width: 600px;
+}
+
+.railScroll {
+  overflow-x: auto;
+  padding-bottom: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.railScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.railScroll::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 4px;
+}
+
+.railTracks {
+  display: flex;
+  gap: 1.5rem;
+  min-width: min-content;
+}
+
+.railItem {
+  width: 320px;
+  flex-shrink: 0;
+}

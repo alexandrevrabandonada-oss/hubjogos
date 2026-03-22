@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { PageHero } from '@/components/ui/PageHero';
 import { Section } from '@/components/ui/Section';
 import { CTACluster } from '@/components/ui/CTACluster';
+import { CampaignPortalSection } from '@/components/hub/CampaignPortalSection';
 import {
   games,
   GAME_SERIES_LABELS,
@@ -139,10 +140,10 @@ export default function ExplorarPage() {
         <CampaignMark compact />
       </PageHero>
 
-      <Section
+      <CampaignPortalSection
         eyebrow="Estado do portfolio"
-        title="Fabrica do hub: live, validacao e pre-producao"
-        description="Jogos jogaveis ficam visiveis como live/validacao. Pre-producao aparece como pipeline editorial, sem prometer release imediata."
+        title="Fábrica do hub: live, validação e pré-produção"
+        description="A transparência da campanha: veja o que está jogável agora e projetos em desenvolvimento."
       >
         <div className={styles.portfolioStageGrid}>
           <article className={styles.portfolioStageCard}>
@@ -171,7 +172,7 @@ export default function ExplorarPage() {
             <span>Pre-producao madura sem promessa de release.</span>
           </article>
         </div>
-      </Section>
+      </CampaignPortalSection>
 
       <Section
         eyebrow="🎮 Arcades"

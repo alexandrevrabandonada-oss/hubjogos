@@ -12,8 +12,10 @@ import {
   TERRITORY_SCOPE_LABELS,
 } from '@/lib/games/catalog';
 import { Card } from '@/components/ui/Card';
-import { StatusBadge } from '@/components/ui/StatusBadge';
 import { MetaChip } from '@/components/ui/MetaChip';
+import { GameStatusBadge } from '@/components/hub/GameStatusBadge';
+import { GameTypePill } from '@/components/hub/GameTypePill';
+import { GameRoleLabel } from '@/components/hub/GameRoleLabel';
 import { trackSeriesClick } from '@/lib/analytics/track';
 import styles from './GameCard.module.css';
 
@@ -45,8 +47,8 @@ export function GameCard({ game }: GameCardProps) {
             {game.icon}
           </span>
           <div className={styles.topBadges}>
-            {isArcade ? <span className={styles.arcadeBadge}>ARCADE</span> : null}
-            <StatusBadge status={game.status} />
+            <GameTypePill kind={game.kind} />
+            <GameStatusBadge status={game.status} />
           </div>
         </div>
 
@@ -54,8 +56,8 @@ export function GameCard({ game }: GameCardProps) {
         <p className={styles.description}>{game.shortDescription}</p>
 
         <div className={styles.meta}>
+          <GameRoleLabel role={game.funRole} />
           <MetaChip icon="⏱">{game.duration}</MetaChip>
-          <MetaChip icon="🎮">{isArcade ? 'arcade run' : 'quick'}</MetaChip>
           <MetaChip icon="🗺">{TERRITORY_SCOPE_LABELS[game.territoryScope]}</MetaChip>
           <MetaChip icon="🧱">{GAME_SERIES_LABELS[game.series]}</MetaChip>
           {isArcade ? <MetaChip icon="🔁">replay imediato</MetaChip> : <MetaChip icon="⚡">entrada rápida</MetaChip>}

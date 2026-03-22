@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
+import { CampaignShell } from '@/components/campaign/CampaignShell';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -67,8 +68,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Header />
-        <main>{children}</main>
+        <CampaignShell>
+          <Header />
+          <main>{children}</main>
+        </CampaignShell>
       </body>
     </html>
   );

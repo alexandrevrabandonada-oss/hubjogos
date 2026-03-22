@@ -1,0 +1,37 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.live {
+  background-color: var(--color-success, #2e7d32);
+  color: white;
+}
+
+.beta {
+  background-color: var(--color-warning, #ed6c02);
+  color: white;
+}
+
+.coming {
+  background-color: var(--color-info, #0288d1);
+  color: white;
+}
+
+.pre-production {
+  background-color: var(--color-grey-800, #424242);
+  color: #ccc;
+  border: 1px dotted #ccc;
+}
+
+.cold-backlog {
+  background-color: transparent;
+  color: #666;
+  border: 1px dashed #666;
+}

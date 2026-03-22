@@ -1,0 +1,42 @@
+.campaignShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.campaignFooterRibbon {
+  background-color: var(--color-campaign-primary, #d33c2a);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 100;
+  margin-top: auto;
+}
+
+.ribbonContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ribbonName {
+  font-weight: 800;
+}
+
+.ribbonTagline {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .ribbonContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
+  }
+}

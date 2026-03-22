@@ -8,6 +8,7 @@ import { DownloadCardButton } from '@/components/games/share/DownloadCardButton'
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ArcadeCanvasRuntime } from '@/components/games/arcade/ArcadeCanvasRuntime';
+import { ArcadeProgressBar } from '@/components/games/arcade/ArcadeProgressBar';
 import { getGameBySlug, type Game } from '@/lib/games/catalog';
 import { tarifaZeroCorredorLogic } from '@/lib/games/arcade/tarifa-zero-corredor';
 import {
@@ -264,6 +265,15 @@ export function TarifaZeroArcadeGame({ game, previewFinal = false }: TarifaZeroA
         <p className={styles.statsLine}>
           Apoio territorial {result.stats.apoio} • Mutirões {result.stats.mutiroes} • Taxa coletiva {result.stats.collectiveRate}% • Combo pico {result.stats.comboMultiplierPeak?.toFixed(2) ?? '1.00'}x
         </p>
+        <div style={{ padding: '0.5rem 0 1rem 0' }}>
+          <ArcadeProgressBar 
+            value={result.stats.collectiveRate} 
+            max={100} 
+            label="Taxa Coletiva" 
+            colorState={result.stats.collectiveRate >= 70 ? 'safe' : result.stats.collectiveRate > 50 ? 'primary' : 'warning'} 
+            width={160}
+          />
+        </div>
         <div className={styles.visualMeta}>
           <span className={styles.visualTag}>{TARIFA_ZERO_VISUAL_VERSION}</span>
           <span className={styles.visualTag}>{TARIFA_ZERO_ASSET_SET}</span>

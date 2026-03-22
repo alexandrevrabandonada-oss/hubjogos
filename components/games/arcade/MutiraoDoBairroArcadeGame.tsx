@@ -8,6 +8,7 @@ import { DownloadCardButton } from '@/components/games/share/DownloadCardButton'
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ArcadeCanvasRuntime } from '@/components/games/arcade/ArcadeCanvasRuntime';
+import { ArcadeProgressBar } from '@/components/games/arcade/ArcadeProgressBar';
 import { getGameBySlug, type Game } from '@/lib/games/catalog';
 import { mutiraoDoBairroLogic } from '@/lib/games/arcade/mutirao-do-bairro';
 import { MUTIRAO_ASSET_SET, MUTIRAO_VISUAL_VERSION } from '@/lib/games/arcade/mutirao-assets';
@@ -221,6 +222,15 @@ export function MutiraoDoBairroArcadeGame({ game, previewFinal = false }: Mutira
           Acoes coletivas {result.stats.apoio} • Mutiroes {result.stats.mutiroes} • Eventos {result.stats.bloqueios} •
           Eficiencia coletiva {result.stats.collectiveRate}%
         </p>
+        <div style={{ padding: '0.5rem 0 1rem 0' }}>
+          <ArcadeProgressBar 
+            value={result.stats.collectiveRate} 
+            max={100} 
+            label="Eficiência Coletiva" 
+            colorState={result.stats.collectiveRate >= 70 ? 'safe' : result.stats.collectiveRate > 50 ? 'primary' : 'warning'} 
+            width={160}
+          />
+        </div>
         <CampaignMark compact />
       </Card>
 

@@ -9,32 +9,21 @@ Status atual:
 - implementacao bloqueada ate fechamento do T50
 - contrato pronto para subida rapida quando houver slot de capacidade
 
-## Escopo minimo do slice (entra)
+## Escopo minimo do slice (entra - RIGOROSO)
 
-- 1 mapa unico de bairro (canvas) com 4 hotspots fixos:
-  - agua
-  - moradia
-  - mobilidade
-  - saude
-- 1 run de 90s com 4 fases (arranque, pressao, cerco, limite)
-- 4 acoes jogaveis:
-  - `defender`
-  - `reparar`
-  - `cuidar`
-  - `mobilizar`
-- 6 eventos de fase:
-  - 5 negativos
-  - 1 positivo de virada comunitaria
-- HUD minima operacional:
-  - integridade
-  - rede solidaria
-  - pressao externa
-  - carga de mutirao
-  - fase atual
-- outcome final com:
-  - resultado da run (sobreviveu/colapsou)
-  - leitura territorial curta
-  - CTA de replay e campanha
+- **Mapa Único Estático**: 1 mapa de bairro (canvas) com 4 hotspots fixos:
+  - Água, Moradia, Mobilidade, Saúde
+- **Sessão Curta**: 1 run de exatos 90s, escalonada em 4 fases (arranque, pressão, cerco, limite).
+- **Ações Binárias**: 4 botões fixos de ação correspondentes (defender, reparar, cuidar, mobilizar).
+- **Eventos Hardcoded**: 6 eventos de fase (5 negativos, 1 positivo de virada). Nenhuma rampa de IA.
+- **HUD Mínima Operacional (P0)**:
+  - Barra de Integridade/Colapso (Global).
+  - Medidor de Rede Solidária (Recurso).
+  - Indicadores Visuais nos Hotspots (Alerta, Crítico, Ok).
+  - Timer/Fase Atual.
+- **Outcome Final Unificado**:
+  - Uso obrigatório do `FinalShareCard` padrão.
+  - Resultado (Vitória/Derrota) com CTA de replays e Share.
 
 ## O que precisa estar jogavel
 
@@ -54,23 +43,18 @@ Status atual:
 - assets premium finais (audio autoral, fx pesados)
 - qualquer novo modo paralelo
 
-## Criterios de sucesso do primeiro build
+## Criterios de sucesso do primeiro build (QA)
 
-Criterios de gameplay:
-- loop completo de 90s executa sem crash
-- todas as 4 acoes alteram estado de forma perceptivel
-- ao menos 2 caminhos validos de sobrevivencia (nao 1 script unico)
-- derrota nao parece aleatoria (causa rastreavel)
+**Gameplay:**
+- Loop de 90s completa de ponta a ponta sem crash (P0).
+- Input response em tempo real (< 10ms frame time increase) ao acionar hotspot (P0).
+- HUD atualiza em sync perfeito com o estado lógico (P0).
 
-Criterios de UX:
-- HUD legivel desktop/mobile
-- feedback de evento visivel e curto
-- tela final compreensivel em menos de 5s
-
-Criterios tecnicos:
-- lint/type-check/build/verify verdes
-- sem regressao dos arcades live
-- fallback visual funcional quando asset faltar
+**Técnicos & Baseline:**
+- Fallback visual em tela (caixas provisórias coloridas) caso falte asset P0 final (P0).
+- Passa liso em `npm run type-check`, `npm run lint` e build estático (P0).
+- Smoke Test automático incluído passando na integração contínua (P0).
+- Nenhuma regressão inserida nos arquivos raiz dos Arcades `live` (P0).
 
 ## Metricas minimas a coletar
 

@@ -1277,3 +1277,41 @@ Maturar `bairro-resiste` para subida rapida e organizada no pos-T50, sem abrir i
 - subir `bairro-resiste` apenas se T50 liberar capacidade;
 - implementar slice de 90s conforme contract, sem inflar escopo;
 - ativar telemetria baseline e smoke/e2e minimo no primeiro build.
+
+
+---
+## Atualização T52: Hub Jogos Pré-Campanha (Core e Portfólio)
+* **Campanha em Tudo**: A identidade da pré-campanha de Alexandre Fonseca foi injetada via `CampaignShell` e `CampaignPortalSection`.
+* **Lógica de Portfólio**: Reforçada com novos campos no catálogo (`season`, `campaignRole`, `funRole`).
+* **Distinção de Linhas**: A linha "Quick" funciona como porta de entrada rápida, enquanto a linha "Arcade" consolida-se como a espinha dorsal de retenção. Jogos mais robustos e profundos figuram como horizonte estratégico.
+* **Próximos Passos (Para T53)**: Expansão do portfólio com novos arcades e narrativas engajadoras, sem abrir novo art pass por enquanto, apenas crescimento sustentável sobre essa base consolidada.
+---
+
+
+---
+## Atualização T53: Hub de Jogos como Game Studio (Readiness & Modulos)
+* **Catálogo de Mecânicas**: Documentado em `docs/catalogo-de-mecanicas-arcade.md`. Mecânicas como Hotspot Pressure e Lane Runner catalogadas para reuso.
+* **Matriz de Reutilização**: Utilitários de HUD, Timer (`useArcadeSession`) e Telemetry mapeados em `docs/matriz-reutilizacao-arcade.md` visando extração para *shared modules*.
+* **Bairro Resiste Readiness**: Validação do status de `preproduction-strong`. Restrição explícita de subida de código até liberação de slot e P0 Asset Pack completo. Detalhes no relatório de readiness.
+* **Governança Estrita**: Instituído `docs/regra-de-subida-de-jogos.md` proibindo inícios paralelos não autorizados.
+* **O que fica para T54**: Início de código do `bairro-resiste` APENAS se slot for liberado; se não for, criação física dos *shared packages/modules*.
+---
+
+
+---
+## Atualização T54: Arcade Shared Modules & Readiness
+* **Módulos Compartilhados Executados**: Implementação de `ArcadeHUDContainer`, `ArcadeProgressBar` e `useArcadeTimer` em `components/games/arcade/` e `lib/games/arcade/`.
+* **Redução de Código Nativo**: Refatoração cirúrgica nas telas de resultado do `TarifaZero`, `MutiraoDoBairro` e `CooperativaNaPressao` para consumir visualmente a `ArcadeProgressBar`.
+* **Bairro Resiste - Go/No-Go Estrutural**: Base técnica liberada. Falta exclusivamente o desbloqueio de Slot Operacional e o Merge final do Asset Pack P0 para autorizar o 1º PR de código.
+---
+
+
+---
+## Atualização T55: Bairro Resiste (Gate de Subida)
+* **Status de Implementação**: **NO-GO [Abortado]**. O primeiro commit estrutural do `bairro-resiste` não foi autorizado e a criação do código base foi suspensa.
+* **Bloqueios Identificados**: 
+  1. Ausência do Inventário P0 na pasta do asset pack (`manifest.json` foi criado, porém `public/arcade/bairro-resiste/bg` e demais assets contêm placeholders inexistentes que quebram o manifesto).
+  2. Slot de Produção indisponível segundo governança oficial.
+* **Governança Respeitada**: Nenhum código fantasma (feature parcial baseada em canvas opaco) foi deixado no hub. O jogo se mantém rigidamente como `preproduction-strong`.
+* **Próximões Passos para T56**: Finalizar merge da arte P0 na pasta `public/`, acionar script de capacidade, e somente então rodar a subida de código do slice.
+---
