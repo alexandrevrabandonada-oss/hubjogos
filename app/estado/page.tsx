@@ -458,6 +458,25 @@ export default function EstadoPage() {
   const mutiraoEffectiveness = calculateMutiraoEffectiveness(events);
   const cooperativaEffectiveness = calculateCooperativaEffectiveness(events);
   const cooperativaDecision = resolveCooperativaDecision(cooperativaEffectiveness);
+
+  const bairroResisteRuns = events.filter((e) => e.event === 'arcade_run_end' && e.slug === 'bairro-resiste');
+  const bairroMostCriticalHotspots = bairroResisteRuns.map(e => e.metadata?.bairro_worst_hotspot).filter(Boolean);
+  const bairroPhaseReached = bairroResisteRuns.map(e => e.metadata?.bairro_phase_reached as number).filter(Boolean);
+  const bairroMostUsedAction = bairroResisteRuns.map(e => e.metadata?.bairro_most_used_action).filter(Boolean);
+
+  const getMode = (arr: any[]) => {
+    if (!arr.length) return 'N/A';
+    const counts = arr.reduce((acc, val) => {
+      acc[val] = (acc[val] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+  };
+
+  const bairroAvgPhase = bairroPhaseReached.length ? Math.round(bairroPhaseReached.reduce((a,b)=>a+b,0)/bairroPhaseReached.length) : 0;
+  const bairroWorstHotspotMode = getMode(bairroMostCriticalHotspots);
+  const bairroMostUsedActionMode = getMode(bairroMostUsedAction);
+  const bairroRunCount = bairroResisteRuns.length;
   
   // Calculate Tarifa Zero metrics for comparison
   const tarifaZeroScores = events
@@ -1859,7 +1878,33 @@ export default function EstadoPage() {
           </p>
         </Card>
 
+        
         <Card className={styles.fullCard}>
+          <h3>Insights Bairro Resiste (T58/T59)</h3>
+          <div className={styles.signalGrid}>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Amostra Local</p>
+              <p className={styles.signalValue}>{bairroRunCount}</p>
+              <p className={styles.signalNote}>runs finalizadas</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Maior Ameaça</p>
+              <p className={styles.signalValue}>{String(bairroWorstHotspotMode).toUpperCase()}</p>
+              <p className={styles.signalNote}>hotspot mais colapsado</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Sobrevivência Média</p>
+              <p className={styles.signalValue}>Fase {bairroAvgPhase}</p>
+              <p className={styles.signalNote}>fase de colapso/vitória</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Ação Mais Eficaz</p>
+              <p className={styles.signalValue}>{String(bairroMostUsedActionMode).toUpperCase()}</p>
+              <p className={styles.signalNote}>curas efetuadas</p>
+            </div>
+          </div>
+        </Card>
+<Card className={styles.fullCard}>
           <h3>Front-stage da Home e Explorar</h3>
           <div className={styles.signalGrid}>
             <div className={styles.signalItem}>

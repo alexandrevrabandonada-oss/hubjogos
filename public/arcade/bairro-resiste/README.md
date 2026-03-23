@@ -69,8 +69,12 @@ Regras:
 
 ## Checklist de QA do pack (pre-runtime)
 
-- [ ] estrutura de pastas completa
-- [ ] manifest com chaves e fallback mapeados
-- [ ] naming padronizado
-- [ ] placeholders P0 prontos para drop-in
-- [ ] tamanho de assets adequado para mobile
+- [x] estrutura de pastas completa
+- [x] manifest com chaves e fallback mapeados
+- [x] naming padronizado
+- [x] placeholders P0 prontos para drop-in
+- [x] tamanho de assets adequado para mobile (SVGs)
+
+
+## Atualização T56
+Os SVGs placeholders P0 foram gerados fisicamente para cumprir a validação P0 e remover o bloqueio estrutural.

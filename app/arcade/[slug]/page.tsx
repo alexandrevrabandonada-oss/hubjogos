@@ -7,6 +7,7 @@ import { TarifaZeroArcadeGame } from '@/components/games/arcade/TarifaZeroArcade
 import { PasseLivreArcadeGame } from '@/components/games/arcade/PasseLivreArcadeGame';
 import { MutiraoDoBairroArcadeGame } from '@/components/games/arcade/MutiraoDoBairroArcadeGame';
 import { CooperativaNaPressaoArcadeGame } from '@/components/games/arcade/CooperativaNaPressaoArcadeGame';
+import { BairroResisteArcadeGame } from '@/components/games/arcade/BairroResisteArcadeGame';
 import { getGameBySlug } from '@/lib/games/catalog';
 import styles from './page.module.css';
 
@@ -70,6 +71,8 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
     gameComponent = <MutiraoDoBairroArcadeGame game={game} previewFinal={previewFinal} />;
   } else if (game.slug === 'cooperativa-na-pressao') {
     gameComponent = <CooperativaNaPressaoArcadeGame game={game} previewFinal={previewFinal} />;
+  } else if (game.slug === 'bairro-resiste') {
+    gameComponent = <BairroResisteArcadeGame game={game} />;
   }
 
   return (

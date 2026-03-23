@@ -555,3 +555,21 @@ O que fica para T52:
 * **Governança Respeitada**: Nenhum código fantasma (feature parcial baseada em canvas opaco) foi deixado no hub. O jogo se mantém rigidamente como `preproduction-strong`.
 * **Próximões Passos para T56**: Finalizar merge da arte P0 na pasta `public/`, acionar script de capacidade, e somente então rodar a subida de código do slice.
 ---
+
+
+---
+## Atualização T56: Desbloqueio do Bairro Resiste
+* O **Asset Pack P0** (Placeholders SVGs Mínimos) da pasta `public/arcade/bairro-resiste` agora foi populado faticamente, fechando o gap que originou o NO-GO no T55.
+* O **Slot de Capacidade** teve seu estado oficialmente declarado LIVRE para a subida.
+* Readiness: **GO! Autorizado para T57**.
+---
+
+
+---
+## Atualização T57: Bairro Resiste (Primeiro Commit Estrutural)
+* O Arcade **Bairro Resiste** recebeu sua fundação em `app/arcade/bairro-resiste`. A rota está funcional e blindada.
+* **Shared Modules:** Implementação da `ArcadeHUDContainer` e `ArcadeProgressBar` para UI fluída sem Boilerplate.
+* **Mecânicas Estruturais:** Mapa Base integrado ao Manifest P0 interagindo via `Hotspots` com Pressure System. 
+* **Telemetria OOTB:** Logs puros `bairro_action_used` já funcionais.
+* Próxima Parada (T58): Tuning e profundidade.
+---

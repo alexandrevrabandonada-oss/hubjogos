@@ -1,0 +1,32 @@
+
+> hub-jogos-pre-campanha@0.0.1 build
+> next build
+
+  Ôû▓ Next.js 14.2.35
+  - Environments: .env.local
+  - Experiments (use with caution):
+    ┬À instrumentationHook
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./components/games/arcade/BairroResisteArcadeGame.tsx
+Error: 
+  x You're importing a component that needs useState. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+  | Learn more: https://nextjs.org/docs/getting-started/react-essentials
+  | 
+  | 
+   ,-[C:\Projetos\Hub Jogos Pr├® Camp\components\games\arcade\BairroResisteArcadeGame.tsx:1:1]
+ 1 | import React, { useState, useCallback, useMemo } from 'react';
+   :                 ^^^^^^^^
+ 2 | import Head from 'next/head';
+ 3 | import { type Game } from '@/lib/games/catalog';
+ 4 | import { ResultCard } from '../share/ResultCard';
+   `----
+
+Import trace for requested module:
+./components/games/arcade/BairroResisteArcadeGame.tsx
+./app/arcade/[slug]/page.tsx
+
+
+> Build failed because of webpack errors

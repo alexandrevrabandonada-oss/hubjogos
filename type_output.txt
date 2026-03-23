@@ -1,0 +1,7 @@
+
+> hub-jogos-pre-campanha@0.0.1 type-check
+> tsc --noEmit
+
+components/games/arcade/BairroResisteArcadeGame.tsx(198,13): error TS2322: Type '{ title: string; subtitle: string; score: number; performance: string; onReplay: () => void; }' is not assignable to type 'IntrinsicAttributes & ResultCardProps'.
+  Property 'title' does not exist on type 'IntrinsicAttributes & ResultCardProps'.
+tests/e2e/bairro-resiste.spec.ts(21,11): error TS6133: 'hotspots' is declared but its value is never read.

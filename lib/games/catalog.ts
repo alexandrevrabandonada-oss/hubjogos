@@ -151,7 +151,7 @@ export interface PlannedGameCandidate {
   slug: string;
   title: string;
   type: 'arcade' | 'session';
-  status: 'pre-producao' | 'backlog-frio';
+  status: 'pre-producao' | 'backlog-frio' | 'active-build';
   territoryScope: TerritoryScope;
   series: GameSeries;
   politicalAxis: PoliticalAxis;
@@ -647,7 +647,7 @@ export const plannedGameCandidates: PlannedGameCandidate[] = [
     slug: 'bairro-resiste',
     title: 'Bairro Resiste',
     type: 'arcade',
-    status: 'pre-producao',
+    status: 'active-build',
     territoryScope: 'baixada',
     series: 'serie-rio-de-janeiro',
     politicalAxis: 'poder-popular',
