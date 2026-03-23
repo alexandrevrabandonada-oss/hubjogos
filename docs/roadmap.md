@@ -805,3 +805,9 @@ Dependencia:
 * **Funil**: View -> Start estabilizado em 42% (+20% vs baseline).
 * **Status**: Promovido para HERO_TEST_CANDIDATE.
 ---
+
+## Atualização T66: Hero Promotion Test (Bairro Resiste)
+* **Feature Flag**: hub-hero-variant habilitada.
+* **Variante**: Bairro Resiste promovido a Hero (100% de rollout inicial).
+* **Controle**: Fallback para Tarifa Zero mantido no código.
+---

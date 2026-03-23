@@ -1390,3 +1390,13 @@ Analisar a amostra real de 30+ runs para decidir o destino editorial do `bairro-
 - **Efeito UX**: View -> Start subiu para 42% com novo CTA.
 - **Veredito**: HERO_TEST_CANDIDATE.
 ---
+
+---
+
+## Tijolo 66 - Hero Promotion Test (Bairro Resiste)
+- **Objetivo**: Implementar teste controlado de troca do Hero Banner.
+- **Flag**: hub-hero-variant (bairro-resiste: 100% weight).
+- **Instrumentação**: Track de impressões e cliques do hero com metadados de variante.
+- **UX**: Adição de Trust Signals (micro-sinais) sob o hero.
+- **Veredito**: Experimento ativo.
+---

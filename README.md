@@ -2,7 +2,7 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: **T65 - Validação e Candidate Status (Bairro Resiste)**
+Status atual: **T66 - Hero Promotion Test (Bairro Resiste)**
 
 Atualizacao T48 (blindagem operacional do pipeline de assets):
 - alerta automatico de review da allowlist no CI (informativo, sem bloquear sozinho);

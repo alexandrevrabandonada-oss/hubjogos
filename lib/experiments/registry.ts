@@ -164,6 +164,27 @@ export const experiments: Record<string, ExperimentDefinition> = {
       },
     ],
   },
+
+  'hub-hero-variant': {
+    key: 'hub-hero-variant',
+    name: 'Hub Hero Variant',
+    description: 'Testar performance do Bairro Resiste vs Tarifa Zero no Hero principal.',
+    enabled: true,
+    primaryMetric: 'hero_primary_cta_click',
+    affectedSurface: 'home/hero',
+    variants: [
+      {
+        key: 'tarifa-zero-rj',
+        weight: 0,
+        name: 'Tarifa Zero RJ (Controle)',
+      },
+      {
+        key: 'bairro-resiste',
+        weight: 100,
+        name: 'Bairro Resiste (Desafio)',
+      },
+    ],
+  },
 };
 
 /**

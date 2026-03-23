@@ -29,6 +29,9 @@ import {
   trackArcadeVsQuickPreference,
   trackManifestoExpandClick,
   trackAboveFoldGameClick,
+  trackHeroImpression,
+  trackHeroPrimaryCtaClick,
+  trackHeroSecondaryCtaClick,
 } from '@/lib/analytics/track';
 import { resolveExperimentVariantClient } from '@/lib/experiments/client';
 import styles from './page.module.css';
@@ -39,7 +42,8 @@ export default function Home() {
   const featuredArcade = arcadeGames[0];
   const featuredQuicks = quickGames.slice(0, 3);
   const referenceGame = games[0];
-  const [heroVariant, setHeroVariant] = useState<'explore' | 'discover-now'>('explore');
+  const [heroExperiment, setHeroExperiment] = useState<'tarifa-zero-rj' | 'bairro-resiste'>('tarifa-zero-rj');
+  const [heroCopyVariant, setHeroCopyVariant] = useState<'explore' | 'discover-now'>('explore');
 
   const seriesEntries = Object.entries(GAME_SERIES_LABELS).map(([seriesKey, label]) => {
     const seriesGames = games.filter((game) => game.series === seriesKey);
@@ -95,50 +99,106 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const variant = resolveExperimentVariantClient('home-hero-cta-copy', 'explore');
-    setHeroVariant(variant === 'discover-now' ? 'discover-now' : 'explore');
+    // Resolve experiments
+    const heroVar = resolveExperimentVariantClient('hub-hero-variant', 'tarifa-zero-rj');
+    setHeroExperiment(heroVar as any);
+    
+    const copyVar = resolveExperimentVariantClient('home-hero-cta-copy', 'explore');
+    setHeroCopyVariant(copyVar as any);
+
+    // Track impression
+    const game = games.find(g => g.slug === heroVar) || games[0];
+    trackHeroImpression(game as any, heroVar).catch(console.error);
   }, []);
 
-  const heroTitle =
-    heroVariant === 'discover-now'
+  const getHeroContent = () => {
+    if (heroExperiment === 'bairro-resiste') {
+      return {
+        eyebrow: 'Destaque: MISSÃO VALIDADA 🛡️',
+        title: 'Bairro Resiste: Você aguenta a pressão?',
+        description: 'Segure o colapso sistêmico em um mutirão de alta pressão. Uma simulação real de gestão de crises e prioridades públicas em 2 minutos.',
+        primarySlug: 'bairro-resiste',
+        primaryLabel: '🎯 Iniciar Missão: Bairro Resiste',
+        secondarySlug: 'custo-de-viver',
+        secondaryLabel: '⏱ Quick: Custo de Viver',
+      };
+    }
+
+    // Default: Tarifa Zero
+    const heroTitle = heroCopyVariant === 'discover-now'
       ? 'Descubra e jogue as missões populares do RJ'
       : 'Jogue agora: missões populares do RJ';
-  const heroDescription =
-    heroVariant === 'discover-now'
+    const heroDescription = heroCopyVariant === 'discover-now'
       ? 'Entre em segundos, jogue uma rodada e compare resultados. Quick para descobrir, arcade para replay imediato.'
       : 'Arcade de controle real, quick de descoberta rápida. Escolha, jogue, compartilhe e organize.';
+
+    return {
+      eyebrow: 'Hub de Jogos da Pré-Campanha',
+      title: heroTitle,
+      description: heroDescription,
+      primarySlug: 'tarifa-zero-corredor',
+      primaryLabel: '🚌 Jogar Tarifa Zero RJ',
+      secondarySlug: 'custo-de-viver',
+      secondaryLabel: '⏱ Quick: Custo de Viver',
+    };
+  };
+
+  const heroContent = getHeroContent();
+  const primaryGame = games.find(g => g.slug === heroContent.primarySlug) || games[0];
+  const secondaryGame = games.find(g => g.slug === heroContent.secondarySlug) || games[0];
 
   return (
     <>
       <BetaBanner />
       <PageHero
-        eyebrow="Hub de Jogos da Pré-Campanha"
-        title={heroTitle}
-        description={heroDescription}
+        eyebrow={heroContent.eyebrow}
+        title={heroContent.title}
+        description={heroContent.description}
         actions={
           <CTACluster>
             <Link
-              href="/arcade/tarifa-zero-corredor"
+              href={heroContent.primarySlug.startsWith('play/') ? `/${heroContent.primarySlug}` : `/arcade/${heroContent.primarySlug}`}
               className={styles.ctaPrimary}
-              onClick={() => handlePrimaryPlayClick('tarifa-zero-corredor', 'arcade')}
+              onClick={() => {
+                trackHeroPrimaryCtaClick(primaryGame as any, heroExperiment, heroContent.primarySlug).catch(console.error);
+                handlePrimaryPlayClick(heroContent.primarySlug, 'arcade');
+              }}
             >
-              🚌 Jogar Tarifa Zero RJ
+              {heroContent.primaryLabel}
             </Link>
             <Link
-              href="/play/custo-de-viver"
+              href={`/play/${heroContent.secondarySlug}`}
               className={styles.ctaSecondary}
-              onClick={() => handlePrimaryPlayClick('custo-de-viver', 'quick')}
+              onClick={() => {
+                trackHeroSecondaryCtaClick(secondaryGame as any, heroExperiment, heroContent.secondarySlug).catch(console.error);
+                handlePrimaryPlayClick(heroContent.secondarySlug, 'quick');
+              }}
             >
-              ⏱ Quick: Custo de Viver
+              {heroContent.secondaryLabel}
             </Link>
           </CTACluster>
         }
       >
         <div className={styles.heroPanel}>
-          <CampaignAvatar size="medium" expression="smile" className={styles.heroAvatar} />
+          <CampaignAvatar size="medium" expression={heroExperiment === 'bairro-resiste' ? 'determined' : 'smile'} className={styles.heroAvatar} />
           <p className={styles.heroTagline}>
             <strong>Alexandre Fonseca para Deputado:</strong> campanha como projeto coletivo, não como culto de personalidade.
           </p>
+          
+          <div className={styles.heroSupportRow}>
+            <div className={styles.trustSignal}>
+              <span className={styles.trustSignalIcon}>✅</span>
+              <span>Missão curta (2 min)</span>
+            </div>
+            <div className={styles.trustSignal}>
+              <span className={styles.trustSignalIcon}>✅</span>
+              <span>Validado em +100 sessões</span>
+            </div>
+            <div className={styles.trustSignal}>
+              <span className={styles.trustSignalIcon}>✅</span>
+              <span>Baseado em prioridades reais</span>
+            </div>
+          </div>
         </div>
       </PageHero>
 

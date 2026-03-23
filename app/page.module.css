@@ -52,6 +52,28 @@
   max-width: 48ch;
 }
 
+.heroSupportRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px dashed var(--border);
+}
+
+.trustSignal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.trustSignalIcon {
+  color: var(--accent-strong);
+}
+
 .playNowGrid {
   display: grid;
   grid-template-columns: 1.35fr 1fr;

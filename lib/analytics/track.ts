@@ -834,3 +834,43 @@ export async function trackTarifaZeroDepthMetrics(
     }),
   );
 }
+export async function trackHeroImpression(game: Game, variant: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'hero_impression',
+      metadata: {
+        hero_variant: variant,
+        game_slug: game.slug,
+        source_surface: 'hub_hero',
+      },
+    }),
+  );
+}
+
+export async function trackHeroPrimaryCtaClick(game: Game, variant: string, ctaId: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'hero_primary_cta_click',
+      ctaId,
+      metadata: {
+        hero_variant: variant,
+        game_slug: game.slug,
+        source_surface: 'hub_hero',
+      },
+    }),
+  );
+}
+
+export async function trackHeroSecondaryCtaClick(game: Game, variant: string, ctaId: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'hero_secondary_cta_click',
+      ctaId,
+      metadata: {
+        hero_variant: variant,
+        game_slug: game.slug,
+        source_surface: 'hub_hero',
+      },
+    }),
+  );
+}
