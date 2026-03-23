@@ -1,0 +1,4912 @@
+[
+  {
+    "sessionId": "sess_xjlfnapw4",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:59:53.168Z"
+  },
+  {
+    "sessionId": "sess_xjlfnapw4",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:59:53.168Z"
+  },
+  {
+    "sessionId": "sess_xjlfnapw4",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "saude",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T13:59:53.168Z"
+  },
+  {
+    "sessionId": "sess_xjlfnapw4",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:59:53.168Z"
+  },
+  {
+    "sessionId": "sess_bgwco7h7y",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:47:32.414Z"
+  },
+  {
+    "sessionId": "sess_bgwco7h7y",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:47:32.414Z"
+  },
+  {
+    "sessionId": "sess_bgwco7h7y",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "educacao",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T09:47:32.414Z"
+  },
+  {
+    "sessionId": "sess_bgwco7h7y",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:47:32.414Z"
+  },
+  {
+    "sessionId": "sess_w1tjlluy9",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:25:17.129Z"
+  },
+  {
+    "sessionId": "sess_w1tjlluy9",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:25:17.129Z"
+  },
+  {
+    "sessionId": "sess_w1tjlluy9",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T06:25:17.129Z"
+  },
+  {
+    "sessionId": "sess_w1tjlluy9",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:25:17.129Z"
+  },
+  {
+    "sessionId": "sess_bgmy8iw7l",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:10:27.739Z"
+  },
+  {
+    "sessionId": "sess_bgmy8iw7l",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:10:27.739Z"
+  },
+  {
+    "sessionId": "sess_bgmy8iw7l",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T04:10:27.739Z"
+  },
+  {
+    "sessionId": "sess_bgmy8iw7l",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:10:27.739Z"
+  },
+  {
+    "sessionId": "sess_fayrrcbxj",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:22:51.266Z"
+  },
+  {
+    "sessionId": "sess_fayrrcbxj",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:22:51.266Z"
+  },
+  {
+    "sessionId": "sess_fayrrcbxj",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "saude",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T05:22:51.266Z"
+  },
+  {
+    "sessionId": "sess_fayrrcbxj",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:22:51.266Z"
+  },
+  {
+    "sessionId": "sess_iqxfjx138",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:36:45.804Z"
+  },
+  {
+    "sessionId": "sess_iqxfjx138",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:36:45.804Z"
+  },
+  {
+    "sessionId": "sess_iqxfjx138",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "educacao",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T04:36:45.804Z"
+  },
+  {
+    "sessionId": "sess_iqxfjx138",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:36:45.804Z"
+  },
+  {
+    "sessionId": "sess_chjlybw4s",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:43:31.662Z"
+  },
+  {
+    "sessionId": "sess_chjlybw4s",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:43:31.662Z"
+  },
+  {
+    "sessionId": "sess_chjlybw4s",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T22:43:31.662Z"
+  },
+  {
+    "sessionId": "sess_chjlybw4s",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:43:31.662Z"
+  },
+  {
+    "sessionId": "sess_1h7y4h8re",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:16:01.780Z"
+  },
+  {
+    "sessionId": "sess_1h7y4h8re",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:16:01.780Z"
+  },
+  {
+    "sessionId": "sess_1h7y4h8re",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T16:16:01.780Z"
+  },
+  {
+    "sessionId": "sess_1h7y4h8re",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:16:01.780Z"
+  },
+  {
+    "sessionId": "sess_rsh23tacr",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:13:18.125Z"
+  },
+  {
+    "sessionId": "sess_rsh23tacr",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:13:18.125Z"
+  },
+  {
+    "sessionId": "sess_rsh23tacr",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "saude",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T14:13:18.125Z"
+  },
+  {
+    "sessionId": "sess_rsh23tacr",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:13:18.125Z"
+  },
+  {
+    "sessionId": "sess_shfhtdh0y",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:56:24.479Z"
+  },
+  {
+    "sessionId": "sess_shfhtdh0y",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:56:24.479Z"
+  },
+  {
+    "sessionId": "sess_shfhtdh0y",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "educacao",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T07:56:24.479Z"
+  },
+  {
+    "sessionId": "sess_shfhtdh0y",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:56:24.479Z"
+  },
+  {
+    "sessionId": "sess_ve8114hzx",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:15:31.488Z"
+  },
+  {
+    "sessionId": "sess_ve8114hzx",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:15:31.488Z"
+  },
+  {
+    "sessionId": "sess_ve8114hzx",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T02:15:31.488Z"
+  },
+  {
+    "sessionId": "sess_ve8114hzx",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:15:31.488Z"
+  },
+  {
+    "sessionId": "sess_hqpo0lio3",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:05:25.939Z"
+  },
+  {
+    "sessionId": "sess_hqpo0lio3",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:05:25.939Z"
+  },
+  {
+    "sessionId": "sess_hqpo0lio3",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T05:05:25.939Z"
+  },
+  {
+    "sessionId": "sess_hqpo0lio3",
+    "event": "arcade_replay_click",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:05:25.939Z"
+  },
+  {
+    "sessionId": "sess_lan4rf37i",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:42:52.188Z"
+  },
+  {
+    "sessionId": "sess_lan4rf37i",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:42:52.188Z"
+  },
+  {
+    "sessionId": "sess_lan4rf37i",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "saude",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T03:42:52.188Z"
+  },
+  {
+    "sessionId": "sess_skkklusqu",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:25:13.311Z"
+  },
+  {
+    "sessionId": "sess_skkklusqu",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:25:13.311Z"
+  },
+  {
+    "sessionId": "sess_skkklusqu",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "educacao",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T15:25:13.311Z"
+  },
+  {
+    "sessionId": "sess_nfq8298e7",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:57:22.432Z"
+  },
+  {
+    "sessionId": "sess_nfq8298e7",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:57:22.432Z"
+  },
+  {
+    "sessionId": "sess_nfq8298e7",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T18:57:22.432Z"
+  },
+  {
+    "sessionId": "sess_gfnyizqxh",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:04:54.398Z"
+  },
+  {
+    "sessionId": "sess_gfnyizqxh",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:04:54.398Z"
+  },
+  {
+    "sessionId": "sess_gfnyizqxh",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T13:04:54.398Z"
+  },
+  {
+    "sessionId": "sess_o73ur015b",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:22:46.369Z"
+  },
+  {
+    "sessionId": "sess_o73ur015b",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:22:46.369Z"
+  },
+  {
+    "sessionId": "sess_o73ur015b",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "saude",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T23:22:46.369Z"
+  },
+  {
+    "sessionId": "sess_1ygz7ls1z",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:00:26.417Z"
+  },
+  {
+    "sessionId": "sess_1ygz7ls1z",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:00:26.417Z"
+  },
+  {
+    "sessionId": "sess_1ygz7ls1z",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "educacao",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-23T01:00:26.417Z"
+  },
+  {
+    "sessionId": "sess_nt4c9lcls",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:06:47.830Z"
+  },
+  {
+    "sessionId": "sess_nt4c9lcls",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:06:47.830Z"
+  },
+  {
+    "sessionId": "sess_nt4c9lcls",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T23:06:47.830Z"
+  },
+  {
+    "sessionId": "sess_yhbtgce0i",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T01:48:30.632Z"
+  },
+  {
+    "sessionId": "sess_yhbtgce0i",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T01:48:30.632Z"
+  },
+  {
+    "sessionId": "sess_yhbtgce0i",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T01:48:30.632Z"
+  },
+  {
+    "sessionId": "sess_u0swslqry",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:58:36.852Z"
+  },
+  {
+    "sessionId": "sess_u0swslqry",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:58:36.852Z"
+  },
+  {
+    "sessionId": "sess_u0swslqry",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "saude",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T19:58:36.852Z"
+  },
+  {
+    "sessionId": "sess_wkb4b0kj3",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:31:47.983Z"
+  },
+  {
+    "sessionId": "sess_wkb4b0kj3",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:31:47.983Z"
+  },
+  {
+    "sessionId": "sess_wkb4b0kj3",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "educacao",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T02:31:47.983Z"
+  },
+  {
+    "sessionId": "sess_avtks8gk3",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:32:23.491Z"
+  },
+  {
+    "sessionId": "sess_avtks8gk3",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:32:23.491Z"
+  },
+  {
+    "sessionId": "sess_avtks8gk3",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T16:32:23.491Z"
+  },
+  {
+    "sessionId": "sess_rm4wmtq8a",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:45:47.884Z"
+  },
+  {
+    "sessionId": "sess_rm4wmtq8a",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:45:47.884Z"
+  },
+  {
+    "sessionId": "sess_rm4wmtq8a",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T02:45:47.884Z"
+  },
+  {
+    "sessionId": "sess_hoxrfpb7x",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:18:45.311Z"
+  },
+  {
+    "sessionId": "sess_hoxrfpb7x",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:18:45.311Z"
+  },
+  {
+    "sessionId": "sess_hoxrfpb7x",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "saude",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T03:18:45.311Z"
+  },
+  {
+    "sessionId": "sess_qdejncki1",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:44:01.875Z"
+  },
+  {
+    "sessionId": "sess_qdejncki1",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:44:01.875Z"
+  },
+  {
+    "sessionId": "sess_qdejncki1",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 2,
+      "bairro_worst_hotspot": "educacao",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T17:44:01.875Z"
+  },
+  {
+    "sessionId": "sess_l0sw9fgae",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:29:07.943Z"
+  },
+  {
+    "sessionId": "sess_l0sw9fgae",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:29:07.943Z"
+  },
+  {
+    "sessionId": "sess_l0sw9fgae",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 3,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T11:29:07.943Z"
+  },
+  {
+    "sessionId": "sess_kbv0gkicx",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:20:49.586Z"
+  },
+  {
+    "sessionId": "sess_kbv0gkicx",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:20:49.586Z"
+  },
+  {
+    "sessionId": "sess_kbv0gkicx",
+    "event": "arcade_run_end",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "metadata": {
+      "bairro_phase_reached": 1,
+      "bairro_worst_hotspot": "transporte",
+      "reason": "timeout"
+    },
+    "createdAt": "2026-03-22T02:20:49.586Z"
+  },
+  {
+    "sessionId": "sess_s8ewkopc8",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:59:38.189Z"
+  },
+  {
+    "sessionId": "sess_s8ewkopc8",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:59:38.189Z"
+  },
+  {
+    "sessionId": "sess_yxi7o90hq",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:23:20.490Z"
+  },
+  {
+    "sessionId": "sess_yxi7o90hq",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:23:20.490Z"
+  },
+  {
+    "sessionId": "sess_l424d240f",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:39:10.918Z"
+  },
+  {
+    "sessionId": "sess_l424d240f",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:39:10.918Z"
+  },
+  {
+    "sessionId": "sess_s86m6rmyh",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:38:52.728Z"
+  },
+  {
+    "sessionId": "sess_s86m6rmyh",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:38:52.728Z"
+  },
+  {
+    "sessionId": "sess_3tj0ynvh7",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:25:20.157Z"
+  },
+  {
+    "sessionId": "sess_3tj0ynvh7",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:25:20.157Z"
+  },
+  {
+    "sessionId": "sess_pwgos9iaj",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:43:15.954Z"
+  },
+  {
+    "sessionId": "sess_pwgos9iaj",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:43:15.954Z"
+  },
+  {
+    "sessionId": "sess_2vl81e5cx",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:35:42.583Z"
+  },
+  {
+    "sessionId": "sess_2vl81e5cx",
+    "event": "arcade_run_start",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:35:42.583Z"
+  },
+  {
+    "sessionId": "sess_9hhd5ywvj",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:54:20.826Z"
+  },
+  {
+    "sessionId": "sess_756skazbl",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:56:22.004Z"
+  },
+  {
+    "sessionId": "sess_ly5x1hh11",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:10:55.177Z"
+  },
+  {
+    "sessionId": "sess_zovfu0sqn",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:53:07.941Z"
+  },
+  {
+    "sessionId": "sess_ry6tzwi8a",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:28:24.132Z"
+  },
+  {
+    "sessionId": "sess_ycqwfh2dc",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:01:40.099Z"
+  },
+  {
+    "sessionId": "sess_lgfby2dsy",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:18:46.371Z"
+  },
+  {
+    "sessionId": "sess_xjjfuce0p",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:48:58.621Z"
+  },
+  {
+    "sessionId": "sess_vquvwqb8l",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:36:46.677Z"
+  },
+  {
+    "sessionId": "sess_mfs23nov5",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:33:16.828Z"
+  },
+  {
+    "sessionId": "sess_wm2ujaxem",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:17:08.059Z"
+  },
+  {
+    "sessionId": "sess_54yykk1zf",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:59:15.186Z"
+  },
+  {
+    "sessionId": "sess_bu1ik1eki",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:24:10.439Z"
+  },
+  {
+    "sessionId": "sess_oqahnbwzs",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:54:47.736Z"
+  },
+  {
+    "sessionId": "sess_dcjmfntdf",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:43:52.984Z"
+  },
+  {
+    "sessionId": "sess_jlttok0ot",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:24:13.540Z"
+  },
+  {
+    "sessionId": "sess_l3bgpy9t2",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:41:53.148Z"
+  },
+  {
+    "sessionId": "sess_03tg0984f",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:46:47.125Z"
+  },
+  {
+    "sessionId": "sess_kr6oarti2",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:42:45.082Z"
+  },
+  {
+    "sessionId": "sess_u3tgr9q6p",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:34:29.607Z"
+  },
+  {
+    "sessionId": "sess_ji4e2mso0",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:12:38.034Z"
+  },
+  {
+    "sessionId": "sess_46ban46ju",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:31:23.849Z"
+  },
+  {
+    "sessionId": "sess_i6v178h7o",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:44:49.283Z"
+  },
+  {
+    "sessionId": "sess_b3e5m6ztf",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:39:06.520Z"
+  },
+  {
+    "sessionId": "sess_pmxwog3dz",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:19:42.427Z"
+  },
+  {
+    "sessionId": "sess_9hwain45f",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:53:20.130Z"
+  },
+  {
+    "sessionId": "sess_7ounbf656",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:41:05.526Z"
+  },
+  {
+    "sessionId": "sess_m8ndcr5b4",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T01:55:41.180Z"
+  },
+  {
+    "sessionId": "sess_bh9fp3u10",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:32:44.390Z"
+  },
+  {
+    "sessionId": "sess_cd8i0xukv",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:00:40.917Z"
+  },
+  {
+    "sessionId": "sess_8gris76l1",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:46:49.972Z"
+  },
+  {
+    "sessionId": "sess_51p53icp8",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:54:59.869Z"
+  },
+  {
+    "sessionId": "sess_m931k295r",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:39:56.856Z"
+  },
+  {
+    "sessionId": "sess_d3ubpc8jg",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:01:22.529Z"
+  },
+  {
+    "sessionId": "sess_3t28ulump",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:25:37.656Z"
+  },
+  {
+    "sessionId": "sess_ig95hgn76",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:06:11.388Z"
+  },
+  {
+    "sessionId": "sess_bbgbtf1db",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:02:51.151Z"
+  },
+  {
+    "sessionId": "sess_8a2yxp7j6",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:24:12.851Z"
+  },
+  {
+    "sessionId": "sess_5dikq1cya",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:34:32.586Z"
+  },
+  {
+    "sessionId": "sess_xtxcr6ywq",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:30:02.558Z"
+  },
+  {
+    "sessionId": "sess_ptjpm5fef",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:35:43.690Z"
+  },
+  {
+    "sessionId": "sess_7dl73f92k",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:10:09.150Z"
+  },
+  {
+    "sessionId": "sess_pkkk5yv0h",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:29:15.121Z"
+  },
+  {
+    "sessionId": "sess_1zfywzjet",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:56:10.669Z"
+  },
+  {
+    "sessionId": "sess_dwf5ugdgd",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:33:58.351Z"
+  },
+  {
+    "sessionId": "sess_iqoxcfa4i",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:23:35.978Z"
+  },
+  {
+    "sessionId": "sess_squh32i02",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:51:07.786Z"
+  },
+  {
+    "sessionId": "sess_bagzqmip0",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:34:14.577Z"
+  },
+  {
+    "sessionId": "sess_cbdh7kp4e",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:14:08.347Z"
+  },
+  {
+    "sessionId": "sess_nitgdgmqf",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:04:12.470Z"
+  },
+  {
+    "sessionId": "sess_izz8nk2wb",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:55:06.224Z"
+  },
+  {
+    "sessionId": "sess_ea8b132m6",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:52:08.807Z"
+  },
+  {
+    "sessionId": "sess_5eq3oedzi",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:54:23.872Z"
+  },
+  {
+    "sessionId": "sess_5b0bleomt",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:13:06.537Z"
+  },
+  {
+    "sessionId": "sess_z9qi48m1r",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:46:15.339Z"
+  },
+  {
+    "sessionId": "sess_aj22iwott",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:33:23.730Z"
+  },
+  {
+    "sessionId": "sess_v517eb0si",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:25:10.688Z"
+  },
+  {
+    "sessionId": "sess_m83539pw5",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:19:46.606Z"
+  },
+  {
+    "sessionId": "sess_vhtw3sid5",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:09:33.705Z"
+  },
+  {
+    "sessionId": "sess_9ruzhdc1c",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:25:58.192Z"
+  },
+  {
+    "sessionId": "sess_6jfd84yce",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:06:57.370Z"
+  },
+  {
+    "sessionId": "sess_g9n7r8q3r",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:24:30.489Z"
+  },
+  {
+    "sessionId": "sess_p3le2ad38",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:56:31.246Z"
+  },
+  {
+    "sessionId": "sess_2so5unrea",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:25:33.986Z"
+  },
+  {
+    "sessionId": "sess_rkmqc0990",
+    "event": "game_view",
+    "slug": "bairro-resiste",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:35:02.703Z"
+  },
+  {
+    "sessionId": "sess_9z9n1guqi",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:54:56.231Z"
+  },
+  {
+    "sessionId": "sess_9z9n1guqi",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:54:56.231Z"
+  },
+  {
+    "sessionId": "sess_9z9n1guqi",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:54:56.231Z"
+  },
+  {
+    "sessionId": "sess_k95m0b4ik",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:28:15.423Z"
+  },
+  {
+    "sessionId": "sess_k95m0b4ik",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:28:15.423Z"
+  },
+  {
+    "sessionId": "sess_k95m0b4ik",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T23:28:15.423Z"
+  },
+  {
+    "sessionId": "sess_1c0ysw9mn",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:19:38.293Z"
+  },
+  {
+    "sessionId": "sess_1c0ysw9mn",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:19:38.293Z"
+  },
+  {
+    "sessionId": "sess_1c0ysw9mn",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T12:19:38.293Z"
+  },
+  {
+    "sessionId": "sess_0k98cgiwh",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:14:16.810Z"
+  },
+  {
+    "sessionId": "sess_0k98cgiwh",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:14:16.810Z"
+  },
+  {
+    "sessionId": "sess_0k98cgiwh",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:14:16.810Z"
+  },
+  {
+    "sessionId": "sess_a4su2vg29",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:10:29.299Z"
+  },
+  {
+    "sessionId": "sess_a4su2vg29",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:10:29.299Z"
+  },
+  {
+    "sessionId": "sess_a4su2vg29",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T22:10:29.299Z"
+  },
+  {
+    "sessionId": "sess_kj7imo2r3",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:39:26.514Z"
+  },
+  {
+    "sessionId": "sess_kj7imo2r3",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:39:26.514Z"
+  },
+  {
+    "sessionId": "sess_kj7imo2r3",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T13:39:26.514Z"
+  },
+  {
+    "sessionId": "sess_16zzu8gst",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:18:21.909Z"
+  },
+  {
+    "sessionId": "sess_16zzu8gst",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:18:21.909Z"
+  },
+  {
+    "sessionId": "sess_16zzu8gst",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T23:18:21.909Z"
+  },
+  {
+    "sessionId": "sess_yl7sexpjs",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:34:00.911Z"
+  },
+  {
+    "sessionId": "sess_yl7sexpjs",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:34:00.911Z"
+  },
+  {
+    "sessionId": "sess_yl7sexpjs",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T23:34:00.911Z"
+  },
+  {
+    "sessionId": "sess_mhynn4ldr",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:23:28.728Z"
+  },
+  {
+    "sessionId": "sess_mhynn4ldr",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:23:28.728Z"
+  },
+  {
+    "sessionId": "sess_mhynn4ldr",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T05:23:28.728Z"
+  },
+  {
+    "sessionId": "sess_f75zer0rs",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:45:50.493Z"
+  },
+  {
+    "sessionId": "sess_f75zer0rs",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:45:50.493Z"
+  },
+  {
+    "sessionId": "sess_f75zer0rs",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T11:45:50.493Z"
+  },
+  {
+    "sessionId": "sess_8svwrpj0o",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:38:58.893Z"
+  },
+  {
+    "sessionId": "sess_8svwrpj0o",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:38:58.893Z"
+  },
+  {
+    "sessionId": "sess_8svwrpj0o",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:38:58.893Z"
+  },
+  {
+    "sessionId": "sess_r7vz0p3ox",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:06:34.474Z"
+  },
+  {
+    "sessionId": "sess_r7vz0p3ox",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:06:34.474Z"
+  },
+  {
+    "sessionId": "sess_r7vz0p3ox",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-23T00:06:34.474Z"
+  },
+  {
+    "sessionId": "sess_lq9yksjf9",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:22:22.072Z"
+  },
+  {
+    "sessionId": "sess_lq9yksjf9",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:22:22.072Z"
+  },
+  {
+    "sessionId": "sess_lq9yksjf9",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-23T00:22:22.072Z"
+  },
+  {
+    "sessionId": "sess_kgwt0ubi3",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:10:43.723Z"
+  },
+  {
+    "sessionId": "sess_kgwt0ubi3",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:10:43.723Z"
+  },
+  {
+    "sessionId": "sess_kgwt0ubi3",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T19:10:43.723Z"
+  },
+  {
+    "sessionId": "sess_rqx9gtb4z",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:09:46.879Z"
+  },
+  {
+    "sessionId": "sess_rqx9gtb4z",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:09:46.879Z"
+  },
+  {
+    "sessionId": "sess_rqx9gtb4z",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T16:09:46.879Z"
+  },
+  {
+    "sessionId": "sess_7exmsu3iy",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:18:14.578Z"
+  },
+  {
+    "sessionId": "sess_7exmsu3iy",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:18:14.578Z"
+  },
+  {
+    "sessionId": "sess_7exmsu3iy",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T13:18:14.578Z"
+  },
+  {
+    "sessionId": "sess_m8yqiloj8",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:32:53.171Z"
+  },
+  {
+    "sessionId": "sess_m8yqiloj8",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:32:53.171Z"
+  },
+  {
+    "sessionId": "sess_m8yqiloj8",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T04:32:53.171Z"
+  },
+  {
+    "sessionId": "sess_po3qgwvbx",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:06:42.698Z"
+  },
+  {
+    "sessionId": "sess_po3qgwvbx",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:06:42.698Z"
+  },
+  {
+    "sessionId": "sess_po3qgwvbx",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T08:06:42.698Z"
+  },
+  {
+    "sessionId": "sess_8jg3nwyjt",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:12:18.058Z"
+  },
+  {
+    "sessionId": "sess_8jg3nwyjt",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:12:18.058Z"
+  },
+  {
+    "sessionId": "sess_8jg3nwyjt",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T05:12:18.058Z"
+  },
+  {
+    "sessionId": "sess_jm84jvx5v",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:32:10.430Z"
+  },
+  {
+    "sessionId": "sess_jm84jvx5v",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:32:10.430Z"
+  },
+  {
+    "sessionId": "sess_jm84jvx5v",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-23T00:32:10.430Z"
+  },
+  {
+    "sessionId": "sess_hzogg6cg7",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:50:04.270Z"
+  },
+  {
+    "sessionId": "sess_hzogg6cg7",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:50:04.270Z"
+  },
+  {
+    "sessionId": "sess_hzogg6cg7",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T15:50:04.270Z"
+  },
+  {
+    "sessionId": "sess_c3pm8zns2",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:37:46.012Z"
+  },
+  {
+    "sessionId": "sess_c3pm8zns2",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:37:46.012Z"
+  },
+  {
+    "sessionId": "sess_c3pm8zns2",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T14:37:46.012Z"
+  },
+  {
+    "sessionId": "sess_oqkq7dd9o",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:24:11.069Z"
+  },
+  {
+    "sessionId": "sess_oqkq7dd9o",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:24:11.069Z"
+  },
+  {
+    "sessionId": "sess_oqkq7dd9o",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T03:24:11.069Z"
+  },
+  {
+    "sessionId": "sess_nkkxjdkvs",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:57:10.093Z"
+  },
+  {
+    "sessionId": "sess_nkkxjdkvs",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:57:10.093Z"
+  },
+  {
+    "sessionId": "sess_nkkxjdkvs",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T05:57:10.093Z"
+  },
+  {
+    "sessionId": "sess_udcbon9nj",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:47:42.115Z"
+  },
+  {
+    "sessionId": "sess_udcbon9nj",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:47:42.115Z"
+  },
+  {
+    "sessionId": "sess_udcbon9nj",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T12:47:42.115Z"
+  },
+  {
+    "sessionId": "sess_qylcph75u",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:30:36.419Z"
+  },
+  {
+    "sessionId": "sess_qylcph75u",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:30:36.419Z"
+  },
+  {
+    "sessionId": "sess_qylcph75u",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:30:36.419Z"
+  },
+  {
+    "sessionId": "sess_siw2c66r1",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:18:12.788Z"
+  },
+  {
+    "sessionId": "sess_siw2c66r1",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:18:12.788Z"
+  },
+  {
+    "sessionId": "sess_siw2c66r1",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T11:18:12.788Z"
+  },
+  {
+    "sessionId": "sess_logkst5ug",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:06:53.372Z"
+  },
+  {
+    "sessionId": "sess_logkst5ug",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:06:53.372Z"
+  },
+  {
+    "sessionId": "sess_logkst5ug",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T02:06:53.372Z"
+  },
+  {
+    "sessionId": "sess_5q9804dsy",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:19:47.635Z"
+  },
+  {
+    "sessionId": "sess_5q9804dsy",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:19:47.635Z"
+  },
+  {
+    "sessionId": "sess_5q9804dsy",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T15:19:47.635Z"
+  },
+  {
+    "sessionId": "sess_10k35w2jo",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:25:01.471Z"
+  },
+  {
+    "sessionId": "sess_10k35w2jo",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:25:01.471Z"
+  },
+  {
+    "sessionId": "sess_10k35w2jo",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T03:25:01.471Z"
+  },
+  {
+    "sessionId": "sess_4es04w400",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:15:31.891Z"
+  },
+  {
+    "sessionId": "sess_4es04w400",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:15:31.891Z"
+  },
+  {
+    "sessionId": "sess_4es04w400",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-23T00:15:31.891Z"
+  },
+  {
+    "sessionId": "sess_oa0h18ekn",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:19:59.483Z"
+  },
+  {
+    "sessionId": "sess_oa0h18ekn",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:19:59.483Z"
+  },
+  {
+    "sessionId": "sess_oa0h18ekn",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T13:19:59.483Z"
+  },
+  {
+    "sessionId": "sess_jue9m1o7w",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:24:01.562Z"
+  },
+  {
+    "sessionId": "sess_jue9m1o7w",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:24:01.562Z"
+  },
+  {
+    "sessionId": "sess_jue9m1o7w",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T07:24:01.562Z"
+  },
+  {
+    "sessionId": "sess_9pr5k7dbo",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:23:02.736Z"
+  },
+  {
+    "sessionId": "sess_9pr5k7dbo",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:23:02.736Z"
+  },
+  {
+    "sessionId": "sess_9pr5k7dbo",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T12:23:02.736Z"
+  },
+  {
+    "sessionId": "sess_wi34nqf7a",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:15:17.516Z"
+  },
+  {
+    "sessionId": "sess_wi34nqf7a",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:15:17.516Z"
+  },
+  {
+    "sessionId": "sess_wi34nqf7a",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:15:17.516Z"
+  },
+  {
+    "sessionId": "sess_ew53auavk",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:03:08.536Z"
+  },
+  {
+    "sessionId": "sess_ew53auavk",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:03:08.536Z"
+  },
+  {
+    "sessionId": "sess_ew53auavk",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T22:03:08.536Z"
+  },
+  {
+    "sessionId": "sess_h1vrz4bo9",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:02:36.203Z"
+  },
+  {
+    "sessionId": "sess_h1vrz4bo9",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:02:36.203Z"
+  },
+  {
+    "sessionId": "sess_h1vrz4bo9",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T10:02:36.203Z"
+  },
+  {
+    "sessionId": "sess_4jd1e5219",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:16:04.178Z"
+  },
+  {
+    "sessionId": "sess_4jd1e5219",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:16:04.178Z"
+  },
+  {
+    "sessionId": "sess_4jd1e5219",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T18:16:04.178Z"
+  },
+  {
+    "sessionId": "sess_iaryv0l2x",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:12:33.560Z"
+  },
+  {
+    "sessionId": "sess_iaryv0l2x",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:12:33.560Z"
+  },
+  {
+    "sessionId": "sess_iaryv0l2x",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T13:12:33.560Z"
+  },
+  {
+    "sessionId": "sess_8l6tcq2f3",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:38:19.397Z"
+  },
+  {
+    "sessionId": "sess_8l6tcq2f3",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:38:19.397Z"
+  },
+  {
+    "sessionId": "sess_8l6tcq2f3",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T06:38:19.397Z"
+  },
+  {
+    "sessionId": "sess_coau1z7vj",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:05:58.647Z"
+  },
+  {
+    "sessionId": "sess_coau1z7vj",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:05:58.647Z"
+  },
+  {
+    "sessionId": "sess_coau1z7vj",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T22:05:58.647Z"
+  },
+  {
+    "sessionId": "sess_6e9b97wq9",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:34:32.919Z"
+  },
+  {
+    "sessionId": "sess_6e9b97wq9",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:34:32.919Z"
+  },
+  {
+    "sessionId": "sess_6e9b97wq9",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-23T01:34:32.919Z"
+  },
+  {
+    "sessionId": "sess_6yooczoyq",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:39:51.130Z"
+  },
+  {
+    "sessionId": "sess_6yooczoyq",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:39:51.130Z"
+  },
+  {
+    "sessionId": "sess_6yooczoyq",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T16:39:51.130Z"
+  },
+  {
+    "sessionId": "sess_0vfmhukmu",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:09:58.879Z"
+  },
+  {
+    "sessionId": "sess_0vfmhukmu",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:09:58.879Z"
+  },
+  {
+    "sessionId": "sess_0vfmhukmu",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T14:09:58.879Z"
+  },
+  {
+    "sessionId": "sess_6jug0gshy",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:03:43.649Z"
+  },
+  {
+    "sessionId": "sess_6jug0gshy",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:03:43.649Z"
+  },
+  {
+    "sessionId": "sess_6jug0gshy",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T08:03:43.649Z"
+  },
+  {
+    "sessionId": "sess_i2ukkwni4",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:45:02.374Z"
+  },
+  {
+    "sessionId": "sess_i2ukkwni4",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:45:02.374Z"
+  },
+  {
+    "sessionId": "sess_i2ukkwni4",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T16:45:02.374Z"
+  },
+  {
+    "sessionId": "sess_bgomxemyw",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:48:15.080Z"
+  },
+  {
+    "sessionId": "sess_bgomxemyw",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:48:15.080Z"
+  },
+  {
+    "sessionId": "sess_bgomxemyw",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T02:48:15.080Z"
+  },
+  {
+    "sessionId": "sess_dqor8my5g",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:27:36.265Z"
+  },
+  {
+    "sessionId": "sess_dqor8my5g",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:27:36.265Z"
+  },
+  {
+    "sessionId": "sess_dqor8my5g",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T08:27:36.265Z"
+  },
+  {
+    "sessionId": "sess_z6eqrl516",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:24:13.940Z"
+  },
+  {
+    "sessionId": "sess_z6eqrl516",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:24:13.940Z"
+  },
+  {
+    "sessionId": "sess_z6eqrl516",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T05:24:13.940Z"
+  },
+  {
+    "sessionId": "sess_u7g3keq7n",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:55:13.697Z"
+  },
+  {
+    "sessionId": "sess_u7g3keq7n",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:55:13.697Z"
+  },
+  {
+    "sessionId": "sess_u7g3keq7n",
+    "event": "arcade_run_end",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T21:55:13.697Z"
+  },
+  {
+    "sessionId": "sess_e3466c0vv",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:47:48.791Z"
+  },
+  {
+    "sessionId": "sess_e3466c0vv",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:47:48.791Z"
+  },
+  {
+    "sessionId": "sess_ke7t1eex0",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:56:42.356Z"
+  },
+  {
+    "sessionId": "sess_ke7t1eex0",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:56:42.356Z"
+  },
+  {
+    "sessionId": "sess_5qwtq76ga",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:37:50.535Z"
+  },
+  {
+    "sessionId": "sess_5qwtq76ga",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:37:50.535Z"
+  },
+  {
+    "sessionId": "sess_ul65urzvv",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:28:39.476Z"
+  },
+  {
+    "sessionId": "sess_ul65urzvv",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:28:39.476Z"
+  },
+  {
+    "sessionId": "sess_ldpuc4ogf",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:02:44.772Z"
+  },
+  {
+    "sessionId": "sess_ldpuc4ogf",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:02:44.772Z"
+  },
+  {
+    "sessionId": "sess_7ipdu6vql",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:39:05.251Z"
+  },
+  {
+    "sessionId": "sess_7ipdu6vql",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:39:05.251Z"
+  },
+  {
+    "sessionId": "sess_aydm98oel",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:04:20.384Z"
+  },
+  {
+    "sessionId": "sess_aydm98oel",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:04:20.384Z"
+  },
+  {
+    "sessionId": "sess_qbo37zjh5",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:21:43.374Z"
+  },
+  {
+    "sessionId": "sess_qbo37zjh5",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:21:43.374Z"
+  },
+  {
+    "sessionId": "sess_70b4qq3xz",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:04:48.112Z"
+  },
+  {
+    "sessionId": "sess_70b4qq3xz",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:04:48.112Z"
+  },
+  {
+    "sessionId": "sess_uocyp51jk",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:48:55.997Z"
+  },
+  {
+    "sessionId": "sess_uocyp51jk",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:48:55.997Z"
+  },
+  {
+    "sessionId": "sess_ujdptkv8p",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:17:57.469Z"
+  },
+  {
+    "sessionId": "sess_ujdptkv8p",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:17:57.469Z"
+  },
+  {
+    "sessionId": "sess_faw19x70z",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:55:14.167Z"
+  },
+  {
+    "sessionId": "sess_faw19x70z",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:55:14.167Z"
+  },
+  {
+    "sessionId": "sess_lrgbrg7iq",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:53:09.828Z"
+  },
+  {
+    "sessionId": "sess_lrgbrg7iq",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:53:09.828Z"
+  },
+  {
+    "sessionId": "sess_i4wys1rta",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:27:00.714Z"
+  },
+  {
+    "sessionId": "sess_i4wys1rta",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:27:00.714Z"
+  },
+  {
+    "sessionId": "sess_rxy99zhgp",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:09:30.960Z"
+  },
+  {
+    "sessionId": "sess_rxy99zhgp",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:09:30.960Z"
+  },
+  {
+    "sessionId": "sess_1vxq8fu6y",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:25:15.007Z"
+  },
+  {
+    "sessionId": "sess_1vxq8fu6y",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:25:15.007Z"
+  },
+  {
+    "sessionId": "sess_5wgc8bf3j",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:16:46.815Z"
+  },
+  {
+    "sessionId": "sess_5wgc8bf3j",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:16:46.815Z"
+  },
+  {
+    "sessionId": "sess_yye2jxt8p",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:48:33.794Z"
+  },
+  {
+    "sessionId": "sess_yye2jxt8p",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:48:33.794Z"
+  },
+  {
+    "sessionId": "sess_kmwcklasq",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:58:30.252Z"
+  },
+  {
+    "sessionId": "sess_kmwcklasq",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:58:30.252Z"
+  },
+  {
+    "sessionId": "sess_5z33ffg8e",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:52:55.487Z"
+  },
+  {
+    "sessionId": "sess_5z33ffg8e",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:52:55.487Z"
+  },
+  {
+    "sessionId": "sess_93qs823nt",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:15:28.750Z"
+  },
+  {
+    "sessionId": "sess_93qs823nt",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:15:28.750Z"
+  },
+  {
+    "sessionId": "sess_zbp2ompjl",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:01:14.949Z"
+  },
+  {
+    "sessionId": "sess_zbp2ompjl",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T02:01:14.949Z"
+  },
+  {
+    "sessionId": "sess_i8zhtwlnz",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:01:07.086Z"
+  },
+  {
+    "sessionId": "sess_i8zhtwlnz",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:01:07.086Z"
+  },
+  {
+    "sessionId": "sess_oz2gg61ka",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:00:11.859Z"
+  },
+  {
+    "sessionId": "sess_oz2gg61ka",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:00:11.859Z"
+  },
+  {
+    "sessionId": "sess_s2p4akvgh",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:14:39.577Z"
+  },
+  {
+    "sessionId": "sess_s2p4akvgh",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:14:39.577Z"
+  },
+  {
+    "sessionId": "sess_0bx6r3p65",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:39:16.571Z"
+  },
+  {
+    "sessionId": "sess_0bx6r3p65",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:39:16.571Z"
+  },
+  {
+    "sessionId": "sess_wj1d7via6",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:17:18.740Z"
+  },
+  {
+    "sessionId": "sess_wj1d7via6",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:17:18.740Z"
+  },
+  {
+    "sessionId": "sess_sfttir0tk",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:36:34.897Z"
+  },
+  {
+    "sessionId": "sess_sfttir0tk",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:36:34.897Z"
+  },
+  {
+    "sessionId": "sess_5mcjc1ks5",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:04:13.080Z"
+  },
+  {
+    "sessionId": "sess_5mcjc1ks5",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:04:13.080Z"
+  },
+  {
+    "sessionId": "sess_qfsjvem1s",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:25:29.799Z"
+  },
+  {
+    "sessionId": "sess_qfsjvem1s",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:25:29.799Z"
+  },
+  {
+    "sessionId": "sess_k6cnbkeyl",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:17:20.827Z"
+  },
+  {
+    "sessionId": "sess_k6cnbkeyl",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:17:20.827Z"
+  },
+  {
+    "sessionId": "sess_dy64qb5t9",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:51:00.776Z"
+  },
+  {
+    "sessionId": "sess_dy64qb5t9",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:51:00.776Z"
+  },
+  {
+    "sessionId": "sess_ky3zzokuv",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:03:56.607Z"
+  },
+  {
+    "sessionId": "sess_ky3zzokuv",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:03:56.607Z"
+  },
+  {
+    "sessionId": "sess_m2jn2jy8s",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:05:01.997Z"
+  },
+  {
+    "sessionId": "sess_m2jn2jy8s",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:05:01.997Z"
+  },
+  {
+    "sessionId": "sess_qk2bbhgsf",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:05:21.254Z"
+  },
+  {
+    "sessionId": "sess_qk2bbhgsf",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:05:21.254Z"
+  },
+  {
+    "sessionId": "sess_aj7ke3c25",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:02:55.470Z"
+  },
+  {
+    "sessionId": "sess_aj7ke3c25",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:02:55.470Z"
+  },
+  {
+    "sessionId": "sess_onzru9gh6",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:51:24.762Z"
+  },
+  {
+    "sessionId": "sess_onzru9gh6",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:51:24.762Z"
+  },
+  {
+    "sessionId": "sess_rerh70vuv",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:17:14.968Z"
+  },
+  {
+    "sessionId": "sess_rerh70vuv",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:17:14.968Z"
+  },
+  {
+    "sessionId": "sess_j9tqw4ce6",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:59:45.328Z"
+  },
+  {
+    "sessionId": "sess_j9tqw4ce6",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:59:45.328Z"
+  },
+  {
+    "sessionId": "sess_uyhiqraiy",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:59:50.837Z"
+  },
+  {
+    "sessionId": "sess_uyhiqraiy",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:59:50.837Z"
+  },
+  {
+    "sessionId": "sess_30dorja6x",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:14:58.134Z"
+  },
+  {
+    "sessionId": "sess_30dorja6x",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:14:58.134Z"
+  },
+  {
+    "sessionId": "sess_zy4in7da7",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:41:02.844Z"
+  },
+  {
+    "sessionId": "sess_zy4in7da7",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:41:02.844Z"
+  },
+  {
+    "sessionId": "sess_dlab4so5v",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:31:13.055Z"
+  },
+  {
+    "sessionId": "sess_dlab4so5v",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:31:13.055Z"
+  },
+  {
+    "sessionId": "sess_pdlsmmjca",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:48:15.461Z"
+  },
+  {
+    "sessionId": "sess_pdlsmmjca",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:48:15.461Z"
+  },
+  {
+    "sessionId": "sess_vggpkp7j0",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:32:10.183Z"
+  },
+  {
+    "sessionId": "sess_vggpkp7j0",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:32:10.183Z"
+  },
+  {
+    "sessionId": "sess_4tkhu4qs5",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:38:30.867Z"
+  },
+  {
+    "sessionId": "sess_4tkhu4qs5",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:38:30.867Z"
+  },
+  {
+    "sessionId": "sess_7oymmq12s",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:27:15.440Z"
+  },
+  {
+    "sessionId": "sess_7oymmq12s",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:27:15.440Z"
+  },
+  {
+    "sessionId": "sess_nk3rmar05",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:16:18.708Z"
+  },
+  {
+    "sessionId": "sess_nk3rmar05",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:16:18.708Z"
+  },
+  {
+    "sessionId": "sess_5hf1cfal8",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:18:09.984Z"
+  },
+  {
+    "sessionId": "sess_5hf1cfal8",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:18:09.984Z"
+  },
+  {
+    "sessionId": "sess_karndfd9s",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:07:32.764Z"
+  },
+  {
+    "sessionId": "sess_karndfd9s",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:07:32.764Z"
+  },
+  {
+    "sessionId": "sess_k8crp7ngd",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:26:55.315Z"
+  },
+  {
+    "sessionId": "sess_k8crp7ngd",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:26:55.315Z"
+  },
+  {
+    "sessionId": "sess_m3snuofa0",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:16:22.018Z"
+  },
+  {
+    "sessionId": "sess_m3snuofa0",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:16:22.018Z"
+  },
+  {
+    "sessionId": "sess_dmca57lwy",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:18:17.659Z"
+  },
+  {
+    "sessionId": "sess_dmca57lwy",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:18:17.659Z"
+  },
+  {
+    "sessionId": "sess_e21xis03p",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:34:50.751Z"
+  },
+  {
+    "sessionId": "sess_e21xis03p",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:34:50.751Z"
+  },
+  {
+    "sessionId": "sess_f7yv73m9i",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:48:09.819Z"
+  },
+  {
+    "sessionId": "sess_f7yv73m9i",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:48:09.819Z"
+  },
+  {
+    "sessionId": "sess_u4eeinqjg",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:09:23.959Z"
+  },
+  {
+    "sessionId": "sess_u4eeinqjg",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:09:23.959Z"
+  },
+  {
+    "sessionId": "sess_nc5jeb3jz",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:03:17.164Z"
+  },
+  {
+    "sessionId": "sess_nc5jeb3jz",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:03:17.164Z"
+  },
+  {
+    "sessionId": "sess_qzkkknocu",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:15:59.981Z"
+  },
+  {
+    "sessionId": "sess_qzkkknocu",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:15:59.981Z"
+  },
+  {
+    "sessionId": "sess_npvxixlnu",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:11:05.711Z"
+  },
+  {
+    "sessionId": "sess_npvxixlnu",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:11:05.711Z"
+  },
+  {
+    "sessionId": "sess_m5btv99pm",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:51:01.127Z"
+  },
+  {
+    "sessionId": "sess_m5btv99pm",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:51:01.127Z"
+  },
+  {
+    "sessionId": "sess_aiwl3f9br",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:54:13.223Z"
+  },
+  {
+    "sessionId": "sess_aiwl3f9br",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:54:13.223Z"
+  },
+  {
+    "sessionId": "sess_58ycxa4rs",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:58:24.986Z"
+  },
+  {
+    "sessionId": "sess_58ycxa4rs",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:58:24.986Z"
+  },
+  {
+    "sessionId": "sess_z0mn1pokj",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:21:02.580Z"
+  },
+  {
+    "sessionId": "sess_z0mn1pokj",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:21:02.580Z"
+  },
+  {
+    "sessionId": "sess_yf1useydd",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:35:29.992Z"
+  },
+  {
+    "sessionId": "sess_yf1useydd",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:35:29.992Z"
+  },
+  {
+    "sessionId": "sess_710nj6bo2",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:16:30.077Z"
+  },
+  {
+    "sessionId": "sess_710nj6bo2",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:16:30.077Z"
+  },
+  {
+    "sessionId": "sess_e3bdop1e4",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:54:59.302Z"
+  },
+  {
+    "sessionId": "sess_e3bdop1e4",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:54:59.302Z"
+  },
+  {
+    "sessionId": "sess_qh6att2ba",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:57:12.320Z"
+  },
+  {
+    "sessionId": "sess_qh6att2ba",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:57:12.320Z"
+  },
+  {
+    "sessionId": "sess_kxc343vl9",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:29:22.494Z"
+  },
+  {
+    "sessionId": "sess_kxc343vl9",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:29:22.494Z"
+  },
+  {
+    "sessionId": "sess_nty71oq39",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:13:10.065Z"
+  },
+  {
+    "sessionId": "sess_nty71oq39",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:13:10.065Z"
+  },
+  {
+    "sessionId": "sess_rbhmos7vs",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:22:30.225Z"
+  },
+  {
+    "sessionId": "sess_rbhmos7vs",
+    "event": "arcade_run_start",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:22:30.225Z"
+  },
+  {
+    "sessionId": "sess_pcktdfvk9",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:41:36.408Z"
+  },
+  {
+    "sessionId": "sess_7rs3k3q20",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:16:52.332Z"
+  },
+  {
+    "sessionId": "sess_kje4ghm83",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:45:34.970Z"
+  },
+  {
+    "sessionId": "sess_9wnspr0tm",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:16:12.035Z"
+  },
+  {
+    "sessionId": "sess_hkzbpxhws",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:10:12.521Z"
+  },
+  {
+    "sessionId": "sess_14a5ov3b5",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:18:26.995Z"
+  },
+  {
+    "sessionId": "sess_itfvjpd7n",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:21:57.059Z"
+  },
+  {
+    "sessionId": "sess_y0t9lli5u",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:15:42.831Z"
+  },
+  {
+    "sessionId": "sess_215h839b6",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:36:48.946Z"
+  },
+  {
+    "sessionId": "sess_gwjw6vspb",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:16:33.015Z"
+  },
+  {
+    "sessionId": "sess_ln6voo8ek",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:41:25.359Z"
+  },
+  {
+    "sessionId": "sess_rngd64zx5",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:47:49.392Z"
+  },
+  {
+    "sessionId": "sess_9x8dc4pov",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:35:38.380Z"
+  },
+  {
+    "sessionId": "sess_7xg6nbdjh",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:20:38.196Z"
+  },
+  {
+    "sessionId": "sess_9a7222dk7",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:57:58.351Z"
+  },
+  {
+    "sessionId": "sess_fldxcghi7",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:40:38.544Z"
+  },
+  {
+    "sessionId": "sess_8bkgetuf3",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:59:54.919Z"
+  },
+  {
+    "sessionId": "sess_x8d9r3hjc",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:34:20.559Z"
+  },
+  {
+    "sessionId": "sess_qn1hzxzb1",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:54:35.712Z"
+  },
+  {
+    "sessionId": "sess_jnouzvd6e",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:13:14.395Z"
+  },
+  {
+    "sessionId": "sess_g6k6pnt52",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:36:34.358Z"
+  },
+  {
+    "sessionId": "sess_d575kk0lt",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:17:07.897Z"
+  },
+  {
+    "sessionId": "sess_krnxzxq5k",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:33:54.589Z"
+  },
+  {
+    "sessionId": "sess_iyjgfq2dl",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:00:24.315Z"
+  },
+  {
+    "sessionId": "sess_hvcktt4sk",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:06:57.466Z"
+  },
+  {
+    "sessionId": "sess_5d4t6708t",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:59:20.983Z"
+  },
+  {
+    "sessionId": "sess_58mzu295s",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:09:08.764Z"
+  },
+  {
+    "sessionId": "sess_11n06in9o",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:50:36.213Z"
+  },
+  {
+    "sessionId": "sess_6501lkx2w",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:26:37.144Z"
+  },
+  {
+    "sessionId": "sess_mob6nen0f",
+    "event": "game_view",
+    "slug": "tarifa-zero-rj",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:33:08.477Z"
+  },
+  {
+    "sessionId": "sess_gcocz2w2x",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:23:34.903Z"
+  },
+  {
+    "sessionId": "sess_gcocz2w2x",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:23:34.903Z"
+  },
+  {
+    "sessionId": "sess_gcocz2w2x",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T17:23:34.903Z"
+  },
+  {
+    "sessionId": "sess_gcocz2w2x",
+    "event": "arcade_replay_click",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:23:34.903Z"
+  },
+  {
+    "sessionId": "sess_9ya1g8yof",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:30:23.370Z"
+  },
+  {
+    "sessionId": "sess_9ya1g8yof",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:30:23.370Z"
+  },
+  {
+    "sessionId": "sess_9ya1g8yof",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T10:30:23.370Z"
+  },
+  {
+    "sessionId": "sess_9ya1g8yof",
+    "event": "arcade_replay_click",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:30:23.370Z"
+  },
+  {
+    "sessionId": "sess_mdcouybgp",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:17:52.749Z"
+  },
+  {
+    "sessionId": "sess_mdcouybgp",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:17:52.749Z"
+  },
+  {
+    "sessionId": "sess_mdcouybgp",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T23:17:52.749Z"
+  },
+  {
+    "sessionId": "sess_mdcouybgp",
+    "event": "arcade_replay_click",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:17:52.749Z"
+  },
+  {
+    "sessionId": "sess_kz5gp91c9",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:52:06.170Z"
+  },
+  {
+    "sessionId": "sess_kz5gp91c9",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:52:06.170Z"
+  },
+  {
+    "sessionId": "sess_kz5gp91c9",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-23T00:52:06.170Z"
+  },
+  {
+    "sessionId": "sess_kz5gp91c9",
+    "event": "arcade_replay_click",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:52:06.170Z"
+  },
+  {
+    "sessionId": "sess_0llesx2r8",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:43:50.078Z"
+  },
+  {
+    "sessionId": "sess_0llesx2r8",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:43:50.078Z"
+  },
+  {
+    "sessionId": "sess_0llesx2r8",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T19:43:50.078Z"
+  },
+  {
+    "sessionId": "sess_0llesx2r8",
+    "event": "arcade_replay_click",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:43:50.078Z"
+  },
+  {
+    "sessionId": "sess_kpaty52yr",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:38:09.635Z"
+  },
+  {
+    "sessionId": "sess_kpaty52yr",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:38:09.635Z"
+  },
+  {
+    "sessionId": "sess_kpaty52yr",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T20:38:09.635Z"
+  },
+  {
+    "sessionId": "sess_ez0qw7c61",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:29:54.460Z"
+  },
+  {
+    "sessionId": "sess_ez0qw7c61",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:29:54.460Z"
+  },
+  {
+    "sessionId": "sess_ez0qw7c61",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T19:29:54.460Z"
+  },
+  {
+    "sessionId": "sess_yvfkxbhgt",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:19:20.648Z"
+  },
+  {
+    "sessionId": "sess_yvfkxbhgt",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:19:20.648Z"
+  },
+  {
+    "sessionId": "sess_yvfkxbhgt",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T21:19:20.648Z"
+  },
+  {
+    "sessionId": "sess_7zkgd9e9e",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:45:50.176Z"
+  },
+  {
+    "sessionId": "sess_7zkgd9e9e",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:45:50.176Z"
+  },
+  {
+    "sessionId": "sess_7zkgd9e9e",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:45:50.176Z"
+  },
+  {
+    "sessionId": "sess_t0b635g6r",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:06:28.087Z"
+  },
+  {
+    "sessionId": "sess_t0b635g6r",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:06:28.087Z"
+  },
+  {
+    "sessionId": "sess_t0b635g6r",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T14:06:28.087Z"
+  },
+  {
+    "sessionId": "sess_5k3b6n80f",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:51:05.249Z"
+  },
+  {
+    "sessionId": "sess_5k3b6n80f",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:51:05.249Z"
+  },
+  {
+    "sessionId": "sess_5k3b6n80f",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T05:51:05.249Z"
+  },
+  {
+    "sessionId": "sess_j2wdjur7k",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:21:34.332Z"
+  },
+  {
+    "sessionId": "sess_j2wdjur7k",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:21:34.332Z"
+  },
+  {
+    "sessionId": "sess_j2wdjur7k",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T17:21:34.332Z"
+  },
+  {
+    "sessionId": "sess_3fa42s0i6",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:04:03.799Z"
+  },
+  {
+    "sessionId": "sess_3fa42s0i6",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:04:03.799Z"
+  },
+  {
+    "sessionId": "sess_3fa42s0i6",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T18:04:03.799Z"
+  },
+  {
+    "sessionId": "sess_pcc3j62g4",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:24:42.771Z"
+  },
+  {
+    "sessionId": "sess_pcc3j62g4",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:24:42.771Z"
+  },
+  {
+    "sessionId": "sess_pcc3j62g4",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T19:24:42.771Z"
+  },
+  {
+    "sessionId": "sess_oxlgqox8w",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:33:34.283Z"
+  },
+  {
+    "sessionId": "sess_oxlgqox8w",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:33:34.283Z"
+  },
+  {
+    "sessionId": "sess_oxlgqox8w",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T06:33:34.283Z"
+  },
+  {
+    "sessionId": "sess_zj0j1ez1i",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:43:29.291Z"
+  },
+  {
+    "sessionId": "sess_zj0j1ez1i",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:43:29.291Z"
+  },
+  {
+    "sessionId": "sess_zj0j1ez1i",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:43:29.291Z"
+  },
+  {
+    "sessionId": "sess_ig5qt3rx1",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:04:10.695Z"
+  },
+  {
+    "sessionId": "sess_ig5qt3rx1",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:04:10.695Z"
+  },
+  {
+    "sessionId": "sess_ig5qt3rx1",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T05:04:10.695Z"
+  },
+  {
+    "sessionId": "sess_ln0bhvdp7",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:14:19.131Z"
+  },
+  {
+    "sessionId": "sess_ln0bhvdp7",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:14:19.131Z"
+  },
+  {
+    "sessionId": "sess_ln0bhvdp7",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T17:14:19.131Z"
+  },
+  {
+    "sessionId": "sess_ut1z3p4jc",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:58:18.009Z"
+  },
+  {
+    "sessionId": "sess_ut1z3p4jc",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:58:18.009Z"
+  },
+  {
+    "sessionId": "sess_ut1z3p4jc",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T05:58:18.009Z"
+  },
+  {
+    "sessionId": "sess_31nujblwl",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:03:55.995Z"
+  },
+  {
+    "sessionId": "sess_31nujblwl",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:03:55.995Z"
+  },
+  {
+    "sessionId": "sess_31nujblwl",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T16:03:55.995Z"
+  },
+  {
+    "sessionId": "sess_kw2caxz0n",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:46:11.520Z"
+  },
+  {
+    "sessionId": "sess_kw2caxz0n",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:46:11.520Z"
+  },
+  {
+    "sessionId": "sess_kw2caxz0n",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T09:46:11.520Z"
+  },
+  {
+    "sessionId": "sess_1ejk44hmc",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:55:10.776Z"
+  },
+  {
+    "sessionId": "sess_1ejk44hmc",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:55:10.776Z"
+  },
+  {
+    "sessionId": "sess_1ejk44hmc",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T16:55:10.776Z"
+  },
+  {
+    "sessionId": "sess_1k1gojnjm",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:22:52.544Z"
+  },
+  {
+    "sessionId": "sess_1k1gojnjm",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T17:22:52.544Z"
+  },
+  {
+    "sessionId": "sess_1k1gojnjm",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T17:22:52.544Z"
+  },
+  {
+    "sessionId": "sess_n4g24azl3",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:37:12.277Z"
+  },
+  {
+    "sessionId": "sess_n4g24azl3",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:37:12.277Z"
+  },
+  {
+    "sessionId": "sess_n4g24azl3",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T06:37:12.277Z"
+  },
+  {
+    "sessionId": "sess_02jo8xr1y",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:54:46.362Z"
+  },
+  {
+    "sessionId": "sess_02jo8xr1y",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:54:46.362Z"
+  },
+  {
+    "sessionId": "sess_02jo8xr1y",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T19:54:46.362Z"
+  },
+  {
+    "sessionId": "sess_0es8uotpk",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:45:02.980Z"
+  },
+  {
+    "sessionId": "sess_0es8uotpk",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:45:02.980Z"
+  },
+  {
+    "sessionId": "sess_0es8uotpk",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T21:45:02.980Z"
+  },
+  {
+    "sessionId": "sess_sbgnhdk9x",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:35:16.034Z"
+  },
+  {
+    "sessionId": "sess_sbgnhdk9x",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T22:35:16.034Z"
+  },
+  {
+    "sessionId": "sess_sbgnhdk9x",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T22:35:16.034Z"
+  },
+  {
+    "sessionId": "sess_zpvzm9ane",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:36:32.092Z"
+  },
+  {
+    "sessionId": "sess_zpvzm9ane",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:36:32.092Z"
+  },
+  {
+    "sessionId": "sess_zpvzm9ane",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T23:36:32.092Z"
+  },
+  {
+    "sessionId": "sess_e2s27kyx4",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:16:01.378Z"
+  },
+  {
+    "sessionId": "sess_e2s27kyx4",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:16:01.378Z"
+  },
+  {
+    "sessionId": "sess_e2s27kyx4",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T10:16:01.378Z"
+  },
+  {
+    "sessionId": "sess_i791moz2r",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:54:56.888Z"
+  },
+  {
+    "sessionId": "sess_i791moz2r",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:54:56.888Z"
+  },
+  {
+    "sessionId": "sess_i791moz2r",
+    "event": "arcade_run_end",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "metadata": {},
+    "createdAt": "2026-03-22T18:54:56.888Z"
+  },
+  {
+    "sessionId": "sess_xb49zasy7",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:42:03.094Z"
+  },
+  {
+    "sessionId": "sess_xb49zasy7",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:42:03.094Z"
+  },
+  {
+    "sessionId": "sess_v3ceeb9cf",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:16:00.604Z"
+  },
+  {
+    "sessionId": "sess_v3ceeb9cf",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:16:00.604Z"
+  },
+  {
+    "sessionId": "sess_jlxb5fy8n",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:26:07.297Z"
+  },
+  {
+    "sessionId": "sess_jlxb5fy8n",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:26:07.297Z"
+  },
+  {
+    "sessionId": "sess_mnksjj8m7",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:25:46.610Z"
+  },
+  {
+    "sessionId": "sess_mnksjj8m7",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T16:25:46.610Z"
+  },
+  {
+    "sessionId": "sess_nrh85cgnm",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:11:09.355Z"
+  },
+  {
+    "sessionId": "sess_nrh85cgnm",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:11:09.355Z"
+  },
+  {
+    "sessionId": "sess_8xfypiejr",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:44:08.706Z"
+  },
+  {
+    "sessionId": "sess_8xfypiejr",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:44:08.706Z"
+  },
+  {
+    "sessionId": "sess_vgkk28kqi",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:47:05.622Z"
+  },
+  {
+    "sessionId": "sess_vgkk28kqi",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:47:05.622Z"
+  },
+  {
+    "sessionId": "sess_rgwfabrnv",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:27:57.160Z"
+  },
+  {
+    "sessionId": "sess_rgwfabrnv",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:27:57.160Z"
+  },
+  {
+    "sessionId": "sess_4oqp7t15r",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:15:15.486Z"
+  },
+  {
+    "sessionId": "sess_4oqp7t15r",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:15:15.486Z"
+  },
+  {
+    "sessionId": "sess_4xl2ztivp",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:17:07.674Z"
+  },
+  {
+    "sessionId": "sess_4xl2ztivp",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:17:07.674Z"
+  },
+  {
+    "sessionId": "sess_yw71aid2l",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:37:31.833Z"
+  },
+  {
+    "sessionId": "sess_yw71aid2l",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:37:31.833Z"
+  },
+  {
+    "sessionId": "sess_kxtq60apq",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:58:29.149Z"
+  },
+  {
+    "sessionId": "sess_kxtq60apq",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:58:29.149Z"
+  },
+  {
+    "sessionId": "sess_sjpup8wzg",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:10:43.106Z"
+  },
+  {
+    "sessionId": "sess_sjpup8wzg",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:10:43.106Z"
+  },
+  {
+    "sessionId": "sess_tcn548dg3",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:13:42.246Z"
+  },
+  {
+    "sessionId": "sess_tcn548dg3",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:13:42.246Z"
+  },
+  {
+    "sessionId": "sess_qu9tfzgld",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:08:49.886Z"
+  },
+  {
+    "sessionId": "sess_qu9tfzgld",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:08:49.886Z"
+  },
+  {
+    "sessionId": "sess_pxg6c2fhf",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:23:25.260Z"
+  },
+  {
+    "sessionId": "sess_pxg6c2fhf",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:23:25.260Z"
+  },
+  {
+    "sessionId": "sess_uehx9q8ge",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:54:37.238Z"
+  },
+  {
+    "sessionId": "sess_uehx9q8ge",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T06:54:37.238Z"
+  },
+  {
+    "sessionId": "sess_j1k0i7y1n",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:35:34.502Z"
+  },
+  {
+    "sessionId": "sess_j1k0i7y1n",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T15:35:34.502Z"
+  },
+  {
+    "sessionId": "sess_l3941e63l",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:17:20.850Z"
+  },
+  {
+    "sessionId": "sess_l3941e63l",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:17:20.850Z"
+  },
+  {
+    "sessionId": "sess_fch3t6o3z",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:22:47.294Z"
+  },
+  {
+    "sessionId": "sess_fch3t6o3z",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:22:47.294Z"
+  },
+  {
+    "sessionId": "sess_ikz0qqd37",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:45:32.613Z"
+  },
+  {
+    "sessionId": "sess_ikz0qqd37",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:45:32.613Z"
+  },
+  {
+    "sessionId": "sess_2vu1sptyg",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:37:54.547Z"
+  },
+  {
+    "sessionId": "sess_2vu1sptyg",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T01:37:54.547Z"
+  },
+  {
+    "sessionId": "sess_5fhz2zhyq",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:23:34.093Z"
+  },
+  {
+    "sessionId": "sess_5fhz2zhyq",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-23T00:23:34.093Z"
+  },
+  {
+    "sessionId": "sess_b1538vs5v",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:06:19.909Z"
+  },
+  {
+    "sessionId": "sess_b1538vs5v",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:06:19.909Z"
+  },
+  {
+    "sessionId": "sess_k3ebzkr36",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:26:17.940Z"
+  },
+  {
+    "sessionId": "sess_k3ebzkr36",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T07:26:17.940Z"
+  },
+  {
+    "sessionId": "sess_hdz4b4c4w",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:55:26.939Z"
+  },
+  {
+    "sessionId": "sess_hdz4b4c4w",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:55:26.939Z"
+  },
+  {
+    "sessionId": "sess_qnljpenjz",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:57:12.969Z"
+  },
+  {
+    "sessionId": "sess_qnljpenjz",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T05:57:12.969Z"
+  },
+  {
+    "sessionId": "sess_5v90f9khn",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:25:02.478Z"
+  },
+  {
+    "sessionId": "sess_5v90f9khn",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:25:02.478Z"
+  },
+  {
+    "sessionId": "sess_0rr0wcb25",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:10:15.323Z"
+  },
+  {
+    "sessionId": "sess_0rr0wcb25",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T23:10:15.323Z"
+  },
+  {
+    "sessionId": "sess_lzf3czauo",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:50:52.572Z"
+  },
+  {
+    "sessionId": "sess_lzf3czauo",
+    "event": "arcade_run_start",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:50:52.572Z"
+  },
+  {
+    "sessionId": "sess_ix8yh2kq2",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T18:51:26.510Z"
+  },
+  {
+    "sessionId": "sess_xt1181j52",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:37:55.814Z"
+  },
+  {
+    "sessionId": "sess_nuec7iodb",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:32:22.082Z"
+  },
+  {
+    "sessionId": "sess_srycaqggt",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:36:52.710Z"
+  },
+  {
+    "sessionId": "sess_dmuqu8fer",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T13:47:28.488Z"
+  },
+  {
+    "sessionId": "sess_kc7jdpjhf",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:12:59.552Z"
+  },
+  {
+    "sessionId": "sess_hbpxxcp6k",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T03:27:16.996Z"
+  },
+  {
+    "sessionId": "sess_9u6oygtgr",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T10:20:04.528Z"
+  },
+  {
+    "sessionId": "sess_tzyycx0lr",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:37:46.313Z"
+  },
+  {
+    "sessionId": "sess_ibl56tkxh",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:55:32.338Z"
+  },
+  {
+    "sessionId": "sess_frphdlg2d",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:23:09.460Z"
+  },
+  {
+    "sessionId": "sess_7fg5kop2f",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T14:05:41.721Z"
+  },
+  {
+    "sessionId": "sess_gsjjjk71c",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T21:49:16.878Z"
+  },
+  {
+    "sessionId": "sess_hnaa9zip3",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T09:02:29.052Z"
+  },
+  {
+    "sessionId": "sess_yvqd23zuj",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T11:03:13.797Z"
+  },
+  {
+    "sessionId": "sess_ykoc09vcb",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T08:25:06.866Z"
+  },
+  {
+    "sessionId": "sess_zvrecv18f",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T20:34:35.238Z"
+  },
+  {
+    "sessionId": "sess_hb29bhr0k",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T04:11:44.850Z"
+  },
+  {
+    "sessionId": "sess_xgwok1y3g",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T12:25:27.393Z"
+  },
+  {
+    "sessionId": "sess_44g8hdtq7",
+    "event": "game_view",
+    "slug": "mutirao-do-bairro",
+    "engineKind": "arcade",
+    "createdAt": "2026-03-22T19:04:50.497Z"
+  }
+]

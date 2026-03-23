@@ -302,10 +302,28 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
           <ResultCard
             gameSlug={game.slug}
             resultTitle={integrity > 0 ? "Bairro Resistiu!" : "Colapso do Bairro"}
-            summary={getOutcomeSummary()}
             resultId={Date.now().toString()}
-            showQR={true}
+            summary={getOutcomeSummary()}
           />
+          <div className="mt-8 bg-slate-900/90 border border-slate-700 rounded-xl p-6 w-full max-w-sm mx-auto flex flex-col items-center shadow-2xl backdrop-blur-sm">
+            <span className="text-xs tracking-[0.2em] text-slate-400 uppercase font-semibold mb-1">Diagnóstico Final</span>
+            <div className="text-2xl font-black text-white mb-4 text-center">
+               <span className="opacity-50 text-xl font-normal">Sobreviveu até: </span>
+               Fase {phaseReached}
+            </div>
+            
+            <div className="w-full h-px bg-slate-800 mb-4" />
+            
+            <span className="text-xs tracking-[0.2em] text-red-500/80 uppercase font-bold mb-1">Maior Ameaça Local</span>
+            <div className="flex items-center space-x-2">
+               <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+               <span className="text-xl font-black text-red-400 capitalize">{(() => {
+                  let w = hotspots[0];
+                  for(const h of hotspots) if (h.totalCriticalTime > w.totalCriticalTime) w = h;
+                  return w.id;
+               })()}</span>
+            </div>
+          </div>
           <button 
             onClick={handleReplay}
             className="mt-6 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full text-xl shadow-lg transition-transform active:scale-95"

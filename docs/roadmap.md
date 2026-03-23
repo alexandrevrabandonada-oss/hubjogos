@@ -760,3 +760,35 @@ Dependencia:
 * **Telemetria OOTB:** Logs puros `bairro_action_used` já funcionais.
 * Próxima Parada (T58): Tuning e profundidade.
 ---
+
+## Atualização T58: Bairro Resiste (Tuning e Profundidade)
+* **Balanceamento de Gameplay**: Ajuste na curva de pressão dos hotspots e grace period para primeira sessão.
+* **Feedback de Ação**: Reforço visual no canvas para ações de Reparar e Mobilizar.
+* **Telemetria**: Inclusão de `bairro_phase_reached` e `bairro_worst_hotspot`.
+
+---
+
+## Atualização T60: Bairro Resiste (Premium Pass)
+* **Assets Premium**: Substituição de placeholders por SVGs finais de cenário e personagens.
+* **UI/UX**: Refinamento da HUD e tela final com card de compartilhamento temático.
+
+---
+
+## Atualização T61: Governança e Estado Editorial
+* **Freio de Hype**: Jogo marcado como `LIVE_BUT_EARLY` para evitar promoção prematura.
+* **Manutenção**: Garantia de funcionamento estável fora da hero principal do portal.
+
+---
+
+## Atualização T62: Amostragem e Ativação Controlada
+* **Correção de Tracking**: Implementação de `game_view` no Arcade para sanidade do funil.
+* **Ativação Controlada**: Criação do rail "Novas Missões" na Home para gerar tráfego qualificado.
+* **Cockpit de Amostragem**: Bloco dedicado em `/estado` com meta de 30 runs.
+
+---
+
+## Atualização T63: Re-avaliação e Promoção (LIVE_GROWING)
+* **Scorecard T63**: Validação de amostragem (35% conversão, 43% replay).
+* **Promoção Editorial**: `bairro-resiste` promovido para `LIVE_GROWING`.
+* **Próximo**: Acompanhar escala e decidir inserção na Hero principal.
+---

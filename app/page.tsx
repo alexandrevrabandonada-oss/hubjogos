@@ -304,6 +304,13 @@ export default function Home() {
       </CampaignPortalSection>
 
       <SeasonCollectionRail 
+        title="🚀 Novas Missões em Validação" 
+        description="Amostragem antecipada de novas mecânicas. Jogue agora para ajudar a validar o tuning e o impacto dessas pautas."
+        seasonId="VALIDATION-RJ"
+        games={games.filter(g => g.series === 'serie-rio-de-janeiro' && g.status === 'live')}
+      />
+
+      <SeasonCollectionRail 
         title="Destaque: Soluções Coletivas" 
         description="Jogos com alternativas concretas de mutirão, passe livre e cooperativismo contra a privatização do cotidiano."
         seasonId="S1-VERÃO-26"

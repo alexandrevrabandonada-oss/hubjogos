@@ -50,13 +50,13 @@
 }
 
 .hotspotWarning {
-  filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.8));
-  animation: pulseWarning 1.5s infinite;
+  filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.9));
+  animation: pulseWarningPremium 1.2s infinite ease-in-out;
 }
 
 .hotspotCritical {
-  filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.9));
-  animation: pulseCritical 0.8s infinite;
+  filter: drop-shadow(0 0 25px rgba(220, 38, 38, 1));
+  animation: pulseCriticalPremium 0.6s infinite cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 @keyframes pulseWarning {
@@ -90,8 +90,9 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  box-shadow: inset 0 0 120px rgba(220, 38, 38, 0.5);
-  animation: pulseDanger 1.2s infinite alternate;
+  box-shadow: inset 0 0 150px rgba(220, 38, 38, 0.6);
+  background: radial-gradient(transparent 50%, rgba(150, 0, 0, 0.3) 100%);
+  animation: pulseDangerPremium 1s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
 }
 @keyframes pulseDanger {
@@ -116,4 +117,21 @@
 /* Smooth transition for progress bar */
 .smoothBar {
   transition: width 0.3s ease-out, background-color 0.3s ease;
+}
+
+@keyframes pulseCriticalPremium {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  25% { transform: translate(-50%, -50%) scale(1.15) rotate(-1deg); filter: drop-shadow(0 0 40px rgba(220, 38, 38, 1)); }
+  75% { transform: translate(-50%, -50%) scale(1.15) rotate(1deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+@keyframes pulseWarningPremium {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; filter: drop-shadow(0 0 25px rgba(234, 179, 8, 1)); }
+}
+
+@keyframes pulseDangerPremium {
+  from { opacity: 0.4; backdrop-filter: saturate(1.2); }
+  to { opacity: 0.95; backdrop-filter: saturate(1.5) contrast(1.1); }
 }

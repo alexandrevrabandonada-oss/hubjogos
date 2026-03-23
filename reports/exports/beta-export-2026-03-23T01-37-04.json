@@ -1,0 +1,598 @@
+{
+  "source": "local",
+  "generatedAt": "2026-03-23T01:37:04.709Z",
+  "sessions": [],
+  "events": [],
+  "results": [],
+  "feedback": [],
+  "experiments": [],
+  "scorecards": [
+    {
+      "key": "beta-banner-copy",
+      "name": "Beta Banner Copy",
+      "primaryMetric": "completion_rate",
+      "affectedSurface": "global/beta-banner",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "outcome-primary-cta-copy",
+      "name": "Outcome Primary CTA Copy",
+      "primaryMetric": "ctr",
+      "affectedSurface": "outcome/common-primary-cta",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "share-page-reentry-cta",
+      "name": "Share Page Reentry CTA",
+      "primaryMetric": "share_reentry_rate",
+      "affectedSurface": "share/[game]/[result]-reentry",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "home-hero-cta-copy",
+      "name": "Home Hero CTA Copy",
+      "primaryMetric": "ctr",
+      "affectedSurface": "home/hero-cta",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    },
+    {
+      "key": "final-card-qr-code",
+      "name": "Final Card QR Code",
+      "primaryMetric": "qr_scan_rate",
+      "affectedSurface": "share/final-card-qr",
+      "variants": [],
+      "minSamplePerVariant": 40,
+      "sampleMinReached": false,
+      "bestVariantKey": null,
+      "liftVsSecondPct": 0,
+      "status": "insufficient_data",
+      "rationale": "Amostra mínima não atingida (0/40)."
+    }
+  ],
+  "readingCriteria": {
+    "thresholds": {
+      "minViewsPerVariant": 40,
+      "minClicksPerPlacement": 25,
+      "minSessionsPerSource": 20,
+      "minShareViewsForReentry": 30,
+      "directionalLiftPct": 15,
+      "candidateLiftPct": 25
+    },
+    "checks": {
+      "ctrComparable": false,
+      "shareReentryReadable": false,
+      "sourceCohortsReadable": false,
+      "experimentReadable": false
+    },
+    "warnings": [
+      "CTR cedo demais: 0/25 clicks mínimos.",
+      "Share→reentry cedo demais: 0/30 share views.",
+      "Origens sem volume mínimo para comparação disciplinada.",
+      "Experimentos sem amostra mínima por variante."
+    ]
+  },
+  "circulation": {
+    "ctrByPlacement": {},
+    "topCtas": [],
+    "shareReentry": {
+      "sharePageViews": 0,
+      "nextGameClicks": 0,
+      "hubReturnClicks": 0,
+      "reentryActions": 0,
+      "reentryRate": 0
+    },
+    "exitsBySource": {},
+    "exitsByGame": {},
+    "exitsByEngine": {}
+  },
+  "circulationSummary": {
+    "topCtas": [],
+    "topExitSources": [],
+    "topExitGames": [],
+    "topExitEngines": []
+  },
+  "quickInsights": {
+    "quickComparison": [],
+    "quickRanking": [],
+    "bySeries": {},
+    "byTerritory": {},
+    "byPoliticalAxis": {},
+    "byCommonVsMarket": {},
+    "rankedSeries": [],
+    "rankedTerritory": [],
+    "rankedPoliticalAxis": [],
+    "heuristic": {
+      "weights": {
+        "completionRate": 0.3,
+        "replayRate": 0.2,
+        "shareRate": 0.2,
+        "postGameCtaRate": 0.15,
+        "reentryRate": 0.1,
+        "firstInteractionScore": 0.05
+      },
+      "minSampleSessions": 12,
+      "minQrVariantSessions": 30,
+      "directionalLiftPct": 15
+    },
+    "qrReadout": {
+      "with-qr": {
+        "sessions": 0,
+        "completions": 0,
+        "qrViews": 0,
+        "qrClicks": 0,
+        "completionRate": 0,
+        "qrCtr": 0,
+        "status": "cedo-demais",
+        "deltaVsBaselinePct": 0
+      },
+      "without-qr": {
+        "sessions": 0,
+        "completions": 0,
+        "qrViews": 0,
+        "qrClicks": 0,
+        "completionRate": 0,
+        "qrCtr": 0,
+        "status": "cedo-demais",
+        "deltaVsBaselinePct": 0
+      }
+    },
+    "collectionTargets": {
+      "quick": {
+        "sessions": 200,
+        "starts": 150,
+        "completions": 50,
+        "shares": 15,
+        "replays": 10
+      },
+      "series": {
+        "sessions": 300,
+        "starts": 250,
+        "completions": 80,
+        "shares": 25
+      },
+      "territory": {
+        "sessions": 250,
+        "starts": 200,
+        "completions": 60,
+        "shares": 20
+      },
+      "qrVariant": {
+        "sessions": 200,
+        "qrViews": 60,
+        "qrClicks": 25
+      }
+    },
+    "collectionStatus": {
+      "byQuick": {},
+      "bySeries": {},
+      "byTerritory": {},
+      "qrExperiment": {
+        "status": "coleta-insuficiente",
+        "progressByVariant": {
+          "with-qr": {
+            "sessions": 0,
+            "qrViews": 0,
+            "qrClicks": 0,
+            "progressPct": 0
+          },
+          "without-qr": {
+            "sessions": 0,
+            "qrViews": 0,
+            "qrClicks": 0,
+            "progressPct": 0
+          }
+        }
+      }
+    },
+    "warnings": [
+      "Sem sessões quick na janela atual para comparação entre jogos.",
+      "QR A/B cedo demais (0/30 sessões mínimas por variante)."
+    ],
+    "topStickyGame": null
+  },
+  "effectiveRuns": {
+    "scorecards": {
+      "previewToPlay": {
+        "name": "Preview -> Play efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Preview -> Play efetivo: amostra insuficiente (0 < 10)"
+      },
+      "cardClickToRun": {
+        "name": "Card click -> Run efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Card click -> Run efetivo: amostra insuficiente (0 < 10)"
+      },
+      "replayEffectiveness": {
+        "name": "Replay efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Replay efetivo: amostra insuficiente (0 < 10)"
+      },
+      "crossGameEffectiveness": {
+        "name": "Cross-game efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Cross-game efetivo: amostra insuficiente (0 < 10)"
+      },
+      "quickToArcadeEffective": {
+        "name": "Quick -> Arcade efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Quick -> Arcade efetivo: amostra insuficiente (0 < 10)"
+      },
+      "arcadeToQuickEffective": {
+        "name": "Arcade -> Quick efetivo",
+        "totalClicks": 0,
+        "effectiveConversions": 0,
+        "conversionRate": 0,
+        "status": "insufficient_data",
+        "sampleWarning": "Arcade -> Quick efetivo: amostra insuficiente (0 < 10)"
+      }
+    },
+    "warnings": [
+      "Preview -> Play efetivo: amostra insuficiente (0 < 10)",
+      "Card click -> Run efetivo: amostra insuficiente (0 < 10)",
+      "Replay efetivo: amostra insuficiente (0 < 10)",
+      "Cross-game efetivo: amostra insuficiente (0 < 10)",
+      "Quick -> Arcade efetivo: amostra insuficiente (0 < 10)",
+      "Arcade -> Quick efetivo: amostra insuficiente (0 < 10)"
+    ],
+    "topEffectiveRunsByGame": [],
+    "topEffectiveReplayByGame": [],
+    "crossGameBridges": [],
+    "direction": {
+      "quickToArcade": {
+        "clicks": 0,
+        "effectiveStarts": 0,
+        "effectiveRate": 0
+      },
+      "arcadeToQuick": {
+        "clicks": 0,
+        "effectiveStarts": 0,
+        "effectiveRate": 0
+      }
+    },
+    "directionWinner": "balanced",
+    "byChannel": [],
+    "byTerritory": []
+  },
+  "mutiraoInsights": {
+    "runs": 0,
+    "collapseCount": 0,
+    "survivalCount": 0,
+    "collapseRate": 0,
+    "avgPressurePeak": 0,
+    "avgScore": 0,
+    "avgDurationMs": 0,
+    "collectiveRate": 0,
+    "replayRate": 0,
+    "postRunCtaClicks": 0,
+    "totalActions": 0,
+    "actionBreakdown": {
+      "reparar": 0,
+      "defender": 0,
+      "mobilizar": 0,
+      "mutirao": 0
+    },
+    "actionDiversity": 0,
+    "mostUsedAction": "reparar",
+    "eventCount": 0,
+    "eventBreakdown": {
+      "chuvaForte": 0,
+      "boatoPanico": 0,
+      "ondaSolidaria": 0,
+      "trancoSabotagem": 0
+    },
+    "pressureMilestones": {
+      "peak55": 0,
+      "peak70": 0,
+      "peak85": 0
+    },
+    "comparison": {
+      "against": "tarifa-zero-rj",
+      "engagement": "similar",
+      "scoreDeltaPct": 0,
+      "replayDeltaPp": 0
+    }
+  },
+  "cooperativaInsights": {
+    "slug": "cooperativa-na-pressao",
+    "title": "Cooperativa na Pressao",
+    "scorecard": {
+      "runs": 0,
+      "effectiveRuns": 0,
+      "runEnds": 0,
+      "survivalCount": 0,
+      "collapseCount": 0,
+      "survivalRate": 0,
+      "collectivityRate": 0,
+      "mutiraoUsageRate": 0,
+      "replayRate": 0,
+      "postRunCtaRate": 0,
+      "firstInputAvgMs": 0,
+      "totalActions": 0,
+      "actionBreakdown": {
+        "organizar-turno": 0,
+        "redistribuir-esforco": 0,
+        "cuidar-equipe": 0,
+        "mutirao-cooperativo": 0
+      },
+      "mostUsedAction": "organizar-turno",
+      "phaseReached": {
+        "abertura": 0,
+        "escalada": 0,
+        "pressao": 0,
+        "final": 0
+      },
+      "phaseReachedRate": {
+        "abertura": 0,
+        "escalada": 0,
+        "pressao": 0,
+        "final": 0
+      },
+      "collapseReasons": [],
+      "topCollapseReason": "none",
+      "topCollapseReasonPct": 0,
+      "stationOverload": {
+        "montagem": 0,
+        "logistica": 0,
+        "cuidado": 0,
+        "unknown": 0
+      },
+      "mostCriticalStation": "montagem",
+      "pressurePeaks": {
+        "samples": 0,
+        "average": 0,
+        "max": 0,
+        "pressure55Plus": 0,
+        "pressure70Plus": 0,
+        "pressure85Plus": 0
+      }
+    },
+    "decision": {
+      "status": "insufficient_live_usage",
+      "finalDecision": "keep_observing",
+      "rationale": "Amostra real insuficiente para decidir premium (0/20 runs).",
+      "recommendation": "Manter observacao por mais uma janela de 7 dias com foco em run_end, replay e CTA pos-run.",
+      "thresholds": {
+        "minLiveRuns": 20,
+        "minPremiumRuns": 45,
+        "minReadyRuns": 70
+      }
+    },
+    "weeklyRecommendation": "Manter observacao por mais uma janela de 7 dias com foco em run_end, replay e CTA pos-run.",
+    "generatedAt": "2026-03-23T01:37:04.708Z",
+    "dataQuality": {
+      "hasLiveRuns": false,
+      "hasRunEnds": false,
+      "hasActionSignals": false,
+      "confidence": 0
+    }
+  },
+  "arcadeLineDecision": {
+    "compared": {
+      "tarifaSlug": "tarifa-zero-corredor",
+      "mutiraoSlug": "mutirao-do-bairro"
+    },
+    "sample": {
+      "tarifaRuns": 0,
+      "mutiraoRuns": 0,
+      "minRunsForSignal": 30,
+      "minRunsForReadiness": 80
+    },
+    "campaignStrength": {
+      "tarifa": {
+        "slug": "tarifa-zero-corredor",
+        "title": "Tarifa Zero RJ - Corredor do Povo",
+        "runs": 0,
+        "runEndRate": 0,
+        "replayRate": 0,
+        "campaignCtaRate": 0,
+        "firstInputAvgMs": 0,
+        "weightedScore": 0
+      },
+      "mutirao": {
+        "slug": "mutirao-do-bairro",
+        "title": "Mutirao do Bairro",
+        "runs": 0,
+        "runEndRate": 0,
+        "replayRate": 0,
+        "campaignCtaRate": 0,
+        "firstInputAvgMs": 0,
+        "weightedScore": 0
+      },
+      "winner": "technical_tie",
+      "scoreDelta": 0
+    },
+    "duel": {
+      "leader": "insufficient_sample",
+      "confidence": "insufficient_sample",
+      "tarifaPoints": 0,
+      "mutiraoPoints": 0,
+      "pointsDelta": 0,
+      "dimensions": [
+        {
+          "key": "runs",
+          "label": "Runs",
+          "tarifaValue": 0,
+          "mutiraoValue": 0,
+          "winner": "tie",
+          "weight": 1.5
+        },
+        {
+          "key": "run_end_rate",
+          "label": "Run end rate",
+          "tarifaValue": 0,
+          "mutiraoValue": 0,
+          "winner": "tie",
+          "weight": 1
+        },
+        {
+          "key": "replay_rate",
+          "label": "Replay rate",
+          "tarifaValue": 0,
+          "mutiraoValue": 0,
+          "winner": "tie",
+          "weight": 1.2
+        },
+        {
+          "key": "campaign_cta_rate",
+          "label": "CTA pos-run rate",
+          "tarifaValue": 0,
+          "mutiraoValue": 0,
+          "winner": "tie",
+          "weight": 1.2
+        },
+        {
+          "key": "first_input_time",
+          "label": "First input (menor melhor)",
+          "tarifaValue": 0,
+          "mutiraoValue": 0,
+          "winner": "tie",
+          "weight": 0.7
+        },
+        {
+          "key": "engagement_index",
+          "label": "Indice de engajamento",
+          "tarifaValue": 0,
+          "mutiraoValue": 0,
+          "winner": "tie",
+          "weight": 1.4
+        }
+      ]
+    },
+    "decision": {
+      "state": "insufficient_sample",
+      "recommendation": "insufficient_sample",
+      "readyForNextStep": false,
+      "summary": "Amostra insuficiente para declarar lideranca entre Tarifa Zero e Mutirao.",
+      "warnings": [
+        "Amostra arcade ainda em consolidacao: Tarifa 0/30 runs, Mutirao 0/30 runs."
+      ]
+    }
+  },
+  "arcadeExposureDuel": {
+    "compared": {
+      "tarifaSlug": "tarifa-zero-corredor",
+      "mutiraoSlug": "mutirao-do-bairro"
+    },
+    "scorecards": [
+      {
+        "slug": "tarifa-zero-corredor",
+        "title": "Tarifa Zero RJ - Corredor do Povo",
+        "exposureSignals": 0,
+        "intentClicks": 0,
+        "starts": 0,
+        "effectiveStarts": 0,
+        "exposureToIntentRate": 0,
+        "intentToStartRate": 0,
+        "exposureToStartRate": 0,
+        "exposureToEffectiveRate": 0,
+        "shareOfExposure": 0,
+        "shareOfRuns": 0
+      },
+      {
+        "slug": "mutirao-do-bairro",
+        "title": "Mutirao do Bairro",
+        "exposureSignals": 0,
+        "intentClicks": 0,
+        "starts": 0,
+        "effectiveStarts": 0,
+        "exposureToIntentRate": 0,
+        "intentToStartRate": 0,
+        "exposureToStartRate": 0,
+        "exposureToEffectiveRate": 0,
+        "shareOfExposure": 0,
+        "shareOfRuns": 0
+      }
+    ],
+    "totals": {
+      "exposureSignals": 0,
+      "starts": 0
+    },
+    "fairness": {
+      "status": "unbalanced_exposure",
+      "minExposureForFairWindow": 30,
+      "minRunsForDecision": 30,
+      "exposureDeltaPct": 0,
+      "runsDeltaPct": 0,
+      "underexposedArcade": null,
+      "recommendedExposureBoost": 0,
+      "summary": "Duelo enviesado por exposicao (0pp de gap); corrigir distribuicao antes de interpretar vencedor.",
+      "actions": [
+        "Manter mesma vitrine para os dois arcades (home, explorar e quick->arcade) ate fechar janela justa.",
+        "Comparar vencedor oficial apenas quando exposicao e amostra de runs estiverem niveladas."
+      ]
+    },
+    "contextLeaders": {
+      "volumeLeader": "technical_tie",
+      "efficiencyLeader": "technical_tie",
+      "campaignLeader": "technical_tie"
+    }
+  },
+  "qrExperimentSummary": {
+    "with-qr": {
+      "sessions": 0,
+      "completions": 0,
+      "qrViews": 0,
+      "qrClicks": 0,
+      "finalCardViews": 0,
+      "completionRate": 0,
+      "qrCtr": 0
+    },
+    "without-qr": {
+      "sessions": 0,
+      "completions": 0,
+      "qrViews": 0,
+      "qrClicks": 0,
+      "finalCardViews": 0,
+      "completionRate": 0,
+      "qrCtr": 0
+    }
+  },
+  "audit": {
+    "recent": [],
+    "summary": {
+      "total": 0,
+      "byActionType": {},
+      "byDay": {},
+      "lastAction": null
+    }
+  }
+}

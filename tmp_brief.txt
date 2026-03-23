@@ -1,0 +1,14 @@
+
+> hub-jogos-pre-campanha@0.0.1 beta:campaign-brief
+> node tools/beta-campaign-brief.js
+
+­ƒôï Gerando brief de campanha...
+
+Ô£à Brief salvo em: C:\Projetos\Hub Jogos Pr├® Camp\reports\distribution\briefs\campaign-brief-2026-03-23T00-36-03.md
+
+­ƒôï Resumo do Brief:
+   Semana: 2/2
+   Territ├│rio foco: Volta Redonda
+   S├®rie foco: Trabalho e Sobreviv├¬ncia
+   Quicks priorit├írios: Custo de Viver, Quem Paga a Conta, Cidade em Comum
+

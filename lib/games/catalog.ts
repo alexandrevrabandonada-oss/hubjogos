@@ -162,6 +162,41 @@ export interface PlannedGameCandidate {
 
 export const games: Game[] = [
   {
+    id: 'bairro-resiste',
+    slug: 'bairro-resiste',
+    title: 'Bairro Resiste - Defesa Territorial',
+    description: 'Arcade hardcore de gestão de crise territorial. Administre o cooldown das brigadas, evite falhas em cascata de infraestrutura e segure a pressão sistêmica. O colapso de uma área puxa as demais.',
+    shortDescription: 'Defenda a integridade do bairro em uma gestão de crise extrema',
+    theme: 'city',
+    icon: '🏘️',
+    cover: '/arcade/bairro-resiste/bg/bg-bairro-base-v1.svg',
+    status: 'live',
+    runtimeState: 'real',
+    estimatedMinutes: 2,
+    duration: '1-2 min',
+    participants: 1,
+    difficulty: 'hard',
+    tags: ['arcade', 'defesa territorial', 'crise', 'resistência', 'coletividade'],
+    cta: 'Resistir',
+    color: '#0f172a',
+    kind: 'arcade',
+    engineId: 'bairro-resiste-v1',
+    pace: 'quick',
+    line: 'organizacao-popular',
+    territoryScope: 'baixada',
+    series: 'serie-rio-de-janeiro',
+    politicalAxis: 'poder-popular',
+    collectiveSolutionType: 'ajuda-mutua',
+    commonVsMarket: 'comum',
+    campaignFrame: 'defesa-dos-comuns',
+    visualVersion: 'T60-premium-v1',
+    assetSet: 'bairro-resiste-premium',
+    premiumTheme: 'bairro-resiste-premium',
+    season: 's1-verao-26',
+    campaignRole: 'Conectar defesa territorial com risco eminente e solidariedade.',
+    funRole: 'retencao',
+  },
+  {
     id: 'tarifa-zero-corredor',
     slug: 'tarifa-zero-corredor',
     title: 'Tarifa Zero RJ - Corredor do Povo',
@@ -643,18 +678,7 @@ export function getPortfolioStage(game: Game): PortfolioStage {
 }
 
 export const plannedGameCandidates: PlannedGameCandidate[] = [
-  {
-    slug: 'bairro-resiste',
-    title: 'Bairro Resiste',
-    type: 'arcade',
-    status: 'active-build',
-    territoryScope: 'baixada',
-    series: 'serie-rio-de-janeiro',
-    politicalAxis: 'poder-popular',
-    campaignRole: 'Conectar defesa territorial com mutirao, risco e solidariedade metropolitana.',
-    funnelRole: 'retencao',
-    rationale: 'Forte potencial territorial e de compartilhamento com risco de escopo controlavel.',
-  },
+  
   {
     slug: 'orcamento-do-comum',
     title: 'Orcamento do Comum',

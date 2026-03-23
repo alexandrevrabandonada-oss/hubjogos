@@ -49,6 +49,9 @@ export function generateMetadata({ params }: ArcadePageProps): Metadata {
   };
 }
 
+import { useEffect } from 'react';
+import { trackGameView } from '@/lib/analytics/track';
+
 export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps) {
   const game = getGameBySlug(params.slug);
   const previewFinal =
@@ -56,6 +59,12 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
     searchParams?.fixture === 'final-premium' ||
     searchParams?.fixture === 'final-mutirao' ||
     searchParams?.fixture === 'final-cooperativa';
+
+  useEffect(() => {
+    if (game) {
+      void trackGameView(game);
+    }
+  }, [game]);
 
   if (!game || game.kind !== 'arcade') {
     notFound();

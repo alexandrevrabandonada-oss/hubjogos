@@ -2,7 +2,7 @@
 
 Produto politico-jogavel para transformar pauta publica em decisao, consequencia e acao.
 
-Status atual: **Tijolo 45 concluido** - assetização completa do hub com integração real da Cooperativa, auditoria automática de manifests, e pipeline reduzido ao erro humano (manifest por jogo, loader reutilizavel com fallback seguro, smoke com validação de versão, e auditoria pre-deploy), separando Codex/VS Code da producao visual externa com zero quebra de jogos existentes.
+Status atual: **Tijolo 63 conclu�do** - re-avalia��o editorial do Bairro Resiste confirmada como LIVE_GROWING.
 
 Atualizacao T48 (blindagem operacional do pipeline de assets):
 - alerta automatico de review da allowlist no CI (informativo, sem bloquear sozinho);

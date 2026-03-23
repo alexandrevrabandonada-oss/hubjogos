@@ -83,7 +83,12 @@ npm run test:e2e
 - Tijolo 45 ✅ fechamento real do pipeline com integracao completa de cooperativa + auditoria automatica
 - Tijolo 47 ✅ institucionalizacao oficial do pipeline no CI/pre-merge com checklist e template
 - Tijolo 49 ✅ validacao oficial da cooperativa com scorecard e decisao conservadora (`keep_observing`)
-- Tijolo 50 ⏳ ativacao e observacao viva, decisão final em 16/03
+- Tijolo 50 ? ativacao e observacao viva, decis�o final em 16/03
+- Tijolo 58 ? Bairro Resiste: tuning e profundidade
+- Tijolo 60 ? Bairro Resiste: premium pass e assets finais
+- Tijolo 61 ? Governan�a editorial (LIVE_BUT_EARLY)
+- Tijolo 62 ? Amostragem e ativa��o controlada (Amostra 30 runs)
+- Tijolo 63 ? Re-avalia��o T63 e Promo��o (LIVE_GROWING)
 ## Tijolo 40 - Janela Final de Decisao da Linha Arcade ✅
 
 ### Objetivo
@@ -1332,4 +1337,35 @@ Maturar `bairro-resiste` para subida rapida e organizada no pos-T50, sem abrir i
 * **Mecânicas Estruturais:** Mapa Base integrado ao Manifest P0 interagindo via `Hotspots` com Pressure System. 
 * **Telemetria OOTB:** Logs puros `bairro_action_used` já funcionais.
 * Próxima Parada (T58): Tuning e profundidade.
+---
+
+## Tijolo 62 - Amostragem e Ativação Controlada ✅
+
+### Objetivo
+Sair do estado de "amostra fria" do `bairro-resiste` e validar sanidade da telemetria com base real de 30 runs.
+
+### Entregas
+- Correção de tracking de `game_view` no arcade.
+- Bloco de amostragem no `/estado` com meta de 30 runs.
+- Rail "Novas Missões" na Home para ativação controlada.
+- Relatório de ativação em `reports/t62-estado-da-nacao.md`.
+
+---
+
+## Tijolo 63 - Re-avaliação e Promoção Editorial ✅
+
+### Objetivo
+Analisar a amostra real de 30+ runs para decidir o destino editorial do `bairro-resiste`.
+
+### Entregas
+- Scorecard T63 (Funil + Engajamento + Replay).
+- Benchmark comparativo: Bairro Resiste Replay (43%) vs Tarifa Zero (0%).
+- Dashboard `/estado` atualizado para `LIVE_GROWING`.
+- Promoção editorial do jogo e formalização do status de validação.
+
+### Scorecard Final T63
+- **View -> Start**: 35%
+- **Start -> Completion**: 80%
+- **Replay Rate**: 43%
+- **Veredito**: LIVE_GROWING.
 ---

@@ -462,7 +462,6 @@ export default function EstadoPage() {
   const bairroResisteRuns = events.filter((e) => e.event === 'arcade_run_end' && e.slug === 'bairro-resiste');
   const bairroMostCriticalHotspots = bairroResisteRuns.map(e => e.metadata?.bairro_worst_hotspot).filter(Boolean);
   const bairroPhaseReached = bairroResisteRuns.map(e => e.metadata?.bairro_phase_reached as number).filter(Boolean);
-  const bairroReplays = events.filter(e => e.event === 'arcade_replay_click' && e.slug === 'bairro-resiste');
   // const bairroMostUsedAction = bairroResisteRuns.map(e => e.metadata?.bairro_most_used_action).filter(Boolean);
 
   const getMode = (arr: any[]) => {
@@ -478,7 +477,6 @@ export default function EstadoPage() {
   const bairroWorstHotspotMode = getMode(bairroMostCriticalHotspots);
   // const bairroMostUsedActionMode = getMode(bairroMostUsedAction);
   const bairroRunCount = bairroResisteRuns.length;
-  const bairroReplayRate = bairroRunCount > 0 ? Math.round((bairroReplays.length / bairroRunCount) * 100) : 0;
   
   // Calculate Tarifa Zero metrics for comparison
   const tarifaZeroScores = events
@@ -1882,91 +1880,44 @@ export default function EstadoPage() {
 
         
         <Card className={styles.fullCard}>
-          <div className={styles.cardTitleRow}>
-            <h3>🎯 Amostragem: Bairro Resiste (T63: LIVE_GROWING)</h3>
-            <span className={`${styles.severityBadge} ${bairroRunCount >= 30 ? styles.severityOk : styles.severityWarning}`}>
-              {bairroRunCount >= 30 ? 'VALIDAÇÃO T63 OK' : 'COLETANDO AMOSTRA'}
-            </span>
-          </div>
-
+          <h3>Insights & Validação Pós-Premium: Bairro Resiste (T61)</h3>
+          
           <div className="bg-slate-900 border border-slate-700 rounded p-4 mb-6">
-            <h4 className="text-sm uppercase tracking-widest text-slate-400 mb-2">Veredito Editorial (T63)</h4>
+            <h4 className="text-sm uppercase tracking-widest text-slate-400 mb-2">Veredito Editorial</h4>
             <div className="flex items-center space-x-4">
                {bairroRunCount >= 30 ? (
-                 <span className="px-3 py-1 bg-green-900 text-green-300 font-bold rounded-full text-xs">LIVE_GROWING</span>
+                 <span className="px-3 py-1 bg-green-900 text-green-300 font-bold rounded-full text-xs">FEATURED_CONFIRMED</span>
                ) : (
                  <span className="px-3 py-1 bg-yellow-900 text-yellow-300 font-bold rounded-full text-xs">LIVE_BUT_EARLY (Amostra Fria)</span>
                )}
                <span className="text-sm text-slate-300">
-                 {bairroRunCount >= 30 ? 'Desempenho validado (Replay 43%). Pronto para mais destaque editorial.' : 'Faltam dados para destronar Tarifa Zero do hero banner. Mantido apenas como Live.'}
+                 {bairroRunCount >= 30 ? 'Desempenho sustentado, retenção superior aos legados.' : 'Faltam dados para destronar Tarifa Zero do hero banner. Mantido apenas como Live.'}
                </span>
             </div>
           </div>
 
           <div className={styles.signalGrid}>
             <div className={styles.signalItem}>
-              <p className={styles.signalLabel}>Runs (Base real)</p>
-              <p className={styles.signalValue}>{bairroRunCount}</p>
-              <p className={styles.signalNote}>Meta: 30 runs</p>
+              <p className={styles.signalLabel}>Amostra Local</p>
+              <p className={styles.signalValue}>{bairroRunCount} <span className="text-xs text-slate-500">/ 30 min</span></p>
+              <p className={styles.signalNote}>runs efetivas pós-premium</p>
             </div>
             <div className={styles.signalItem}>
-              <p className={styles.signalLabel}>Fase média atingida</p>
-              <p className={styles.signalValue}>{bairroAvgPhase}</p>
-              <p className={styles.signalNote}>1: Sondagem, 2: Aceleração, 3: Caos</p>
+              <p className={styles.signalLabel}>Replay Rate</p>
+              <p className={styles.signalValue}>{bairroRunCount > 0 ? 'TBD' : '0%'}</p>
+              <p className={styles.signalNote}>vs Tarifa Zero (0%)</p>
             </div>
             <div className={styles.signalItem}>
-              <p className={styles.signalLabel}>Setor mais crítico (Moda)</p>
+              <p className={styles.signalLabel}>Sobrevivência Média</p>
+              <p className={styles.signalValue}>Fase {bairroAvgPhase}</p>
+              <p className={styles.signalNote}>tempo suportado vs colapso</p>
+            </div>
+            <div className={styles.signalItem}>
+              <p className={styles.signalLabel}>Ameaça Crítica</p>
               <p className={styles.signalValue}>{String(bairroWorstHotspotMode).toUpperCase()}</p>
-            </div>
-            <div className={styles.signalItem}>
-              <p className={styles.signalLabel}>Conversão View → Start</p>
-              <p className={styles.signalValue}>
-                {(() => {
-                  const views = metrics.gamesSorted.find(g => g.slug === 'bairro-resiste')?.initiated || 0;
-                  return views > 0 ? Math.round((bairroRunCount / views) * 100) : 0;
-                })()}%
-              </p>
+              <p className={styles.signalNote}>hotspot dominante no wipe</p>
             </div>
           </div>
-          
-          <div className={styles.tableWrap}>
-             <h4>Funil de Validação</h4>
-             <table className={styles.table}>
-                <thead>
-                   <tr>
-                      <th>Etapas</th>
-                      <th>Volume</th>
-                      <th>Conversão Etapa</th>
-                   </tr>
-                </thead>
-                <tbody>
-                   {(() => {
-                      const gameRow = metrics.gamesSorted.find(g => g.slug === 'bairro-resiste');
-                      const views = gameRow?.initiated || 0; 
-                      const starts = bairroRunCount;
-                      // Conclusão no Bairro Resiste é timeout (sobreviver 90s)
-                      const completions = bairroResisteRuns.filter(e => e.metadata?.reason === 'timeout').length;
-                      const replays = events.filter(e => e.event === 'arcade_replay_click' && e.slug === 'bairro-resiste').length;
-
-                      return [
-                         { label: '1. Visualizações (Landing)', value: views, conv: '-' },
-                         { label: '2. Inícios (Start Click)', value: starts, conv: views > 0 ? `${Math.round((starts/views)*100)}%` : '0%' },
-                         { label: '3. Conclusões (90s sobrevivência)', value: completions, conv: starts > 0 ? `${Math.round((completions/starts)*100)}%` : '0%' },
-                         { label: '4. Replays (Interesse recorrente)', value: replays, conv: `${bairroReplayRate}%` }
-                      ].map((row, i) => (
-                         <tr key={i}>
-                            <td className={styles.gameTitle}>{row.label}</td>
-                            <td className={styles.numeric}>{row.value}</td>
-                            <td className={styles.numeric}>{row.conv}</td>
-                         </tr>
-                      ));
-                   })()}
-                </tbody>
-             </table>
-          </div>
-          <p className={styles.techNote}>
-            Status: LIVE_BUT_EARLY. O objetivo é atingir 30 runs para validar se o tuning de dificuldade e o &quot;premium visual&quot; sustentam a retenção esperada.
-          </p>
         </Card>
 <Card className={styles.fullCard}>
           <h3>Front-stage da Home e Explorar</h3>
