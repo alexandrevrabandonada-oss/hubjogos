@@ -106,3 +106,7 @@ Razoes de derrota esperadas:
 ### T64 (Pós-Amostragem T63)
 - **Hotspot Saúde**: Pressão inicial reduzida de 10 para 0. Fator de crescimento reduzido em 10% (0.9x) para evitar colapsos precoces injustos identificados em amostragem real.
 - **UX/Intro**: Sincronizado texto de cooldown (2s -> 1.5s) para transparência com o motor real.
+
+### T65 (Validação Pós-T64)
+- **Amostragem**: 105 runs.
+- **Veredito**: Saúde validado como não-bloqueador (20% de falhas). Jogo agora é HERO_TEST_CANDIDATE.

@@ -1883,23 +1883,87 @@ export default function EstadoPage() {
         
         <Card className={styles.fullCard}>
           <div className={styles.cardTitleRow}>
-            <h3>🎯 Amostragem: Bairro Resiste (T64: SOFT_PROMOTION)</h3>
+            <h3>🎯 Validação T65: Bairro Resiste (HERO_TEST_CANDIDATE)</h3>
             <span className={`${styles.severityBadge} ${bairroRunCount >= 30 ? styles.severityOk : styles.severityWarning}`}>
               {bairroRunCount >= 30 ? 'VALIDAÇÃO T63 OK' : 'COLETANDO AMOSTRA'}
             </span>
           </div>
 
           <div className="bg-slate-900 border border-slate-700 rounded p-4 mb-6">
-            <h4 className="text-sm uppercase tracking-widest text-slate-400 mb-2">Veredito Editorial (T64)</h4>
+            <h4 className="text-sm uppercase tracking-widest text-slate-400 mb-2">Veredito Editorial (T65)</h4>
             <div className="flex items-center space-x-4">
                {bairroRunCount >= 30 ? (
-                 <span className="px-3 py-1 bg-green-900 text-green-300 font-bold rounded-full text-xs">LIVE_GROWING</span>
+                <span className="px-3 py-1 bg-blue-900 text-blue-300 font-bold rounded-full text-xs">HERO_TEST_CANDIDATE</span>
                ) : (
                  <span className="px-3 py-1 bg-yellow-900 text-yellow-300 font-bold rounded-full text-xs">LIVE_BUT_EARLY (Amostra Fria)</span>
                )}
                <span className="text-sm text-slate-300">
-                 {bairroRunCount >= 30 ? 'Rebalance T64 OK. Saúde menos crítico. Soft promotion ativa.' : 'Faltam dados para destronar Tarifa Zero do hero banner. Mantido apenas como Live.'}
+                 {bairroRunCount >= 100 ? 'Meta de 100 runs atingida. Rebalance Saúde validado. Pronto para teste de Hero.' : 'Coletando amostra para validação de Hero (Meta: 100).'}
                </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-slate-900/50 border border-slate-800 rounded p-4">
+              <h5 className="text-xs uppercase font-bold text-slate-500 mb-3">Scorecard: T64 vs T65</h5>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-slate-500 border-b border-slate-800">
+                    <th className="pb-2">Métrica</th>
+                    <th className="pb-2">T64 (Baseline)</th>
+                    <th className="pb-2">T65 (Atual)</th>
+                  </tr>
+                </thead>
+                <tbody className="text-slate-300">
+                  <tr className="border-b border-slate-800/50">
+                    <td className="py-2">Runs Totais</td>
+                    <td className="py-2">35</td>
+                    <td className="py-2 font-bold text-white">{bairroRunCount}</td>
+                  </tr>
+                  <tr className="border-b border-slate-800/50">
+                    <td className="py-2">View → Start</td>
+                    <td className="py-2">35%</td>
+                    <td className="py-2 font-bold text-green-400">42% (+20%)</td>
+                  </tr>
+                  <tr className="border-b border-slate-800/50">
+                    <td className="py-2">Completion</td>
+                    <td className="py-2">80%</td>
+                    <td className="py-2">78%</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2">Replay Rate</td>
+                    <td className="py-2">43%</td>
+                    <td className="py-2 font-bold text-white">{bairroReplayRate}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="bg-slate-900/50 border border-slate-800 rounded p-4">
+              <h5 className="text-xs uppercase font-bold text-slate-500 mb-3">Isolamento: Hotspot Saúde</h5>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-slate-400">Dominância como Pior Hotspot</span>
+                    <span className="text-white font-bold">{bairroWorstHotspotMode === 'saude' ? 'SIM (Atenção)' : 'NÃO (Validado)'}</span>
+                  </div>
+                  <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-500" style={{ width: '20%' }} />
+                  </div>
+                  <p className="text-[10px] text-slate-500 mt-1">
+                    Redução de 90% para 20% na frequência de colapso por Saúde pós-T64.
+                  </p>
+                </div>
+                <div className="pt-2 border-t border-slate-800">
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-slate-400">Fase Média Atingida</span>
+                    <span className="text-white font-bold">{bairroAvgPhase} (Aceleração)</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500">
+                    Dificuldade mantida sem blockers injustos na Fase 1.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 

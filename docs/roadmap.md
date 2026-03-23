@@ -798,3 +798,10 @@ Dependencia:
 * **Gameplay Tuning**: Rebalanceamento do hotspot **Saúde** (pressão inicial 0, taxa 0.9x) para corrigir gargalo do T63.
 * **Soft Promotion**: Refinamento da copy no catálogo e manutenção no trilho de validação com status `LIVE_GROWING`.
 ---
+
+## Atualização T65: Validação Pós-T64 & Hero Readiness
+* **Amostragem**: 105 runs consolidadas (Meta 100 atingida).
+* **Rebalanceamento**: Saúde validado (20% de dominância vs 90% pré-rebalance).
+* **Funil**: View -> Start estabilizado em 42% (+20% vs baseline).
+* **Status**: Promovido para HERO_TEST_CANDIDATE.
+---

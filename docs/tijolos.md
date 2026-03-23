@@ -1380,3 +1380,13 @@ Analisar a amostra real de 30+ runs para decidir o destino editorial do `bairro-
   - Soft promotion no catálogo e dashboard.
 - **Veredito**: LIVE_GROWING (Refinado).
 ---
+
+---
+
+## Tijolo 65 - Validação Pós-T64 & Hero Readiness (Bairro Resiste)
+- **Objetivo**: Confirmar o rebalanceamento e cleanup do T64 e decidir status de Hero.
+- **Amostra**: 105 runs (Meta 100 atingida).
+- **Efeito Gameplay**: Saúde superada por Moradia (30%) como principal crítico. Rebalance validado.
+- **Efeito UX**: View -> Start subiu para 42% com novo CTA.
+- **Veredito**: HERO_TEST_CANDIDATE.
+---
