@@ -1,4 +1,3 @@
-"use client";
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -9,6 +8,7 @@ import { PasseLivreArcadeGame } from '@/components/games/arcade/PasseLivreArcade
 import { MutiraoDoBairroArcadeGame } from '@/components/games/arcade/MutiraoDoBairroArcadeGame';
 import { CooperativaNaPressaoArcadeGame } from '@/components/games/arcade/CooperativaNaPressaoArcadeGame';
 import { BairroResisteArcadeGame } from '@/components/games/arcade/BairroResisteArcadeGame';
+import { ArcadeViewTracker } from '@/components/games/arcade/ArcadeViewTracker';
 import { getGameBySlug } from '@/lib/games/catalog';
 import styles from './page.module.css';
 
@@ -50,8 +50,6 @@ export function generateMetadata({ params }: ArcadePageProps): Metadata {
   };
 }
 
-import { useEffect } from 'react';
-import { trackGameView } from '@/lib/analytics/track';
 
 export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps) {
   const game = getGameBySlug(params.slug);
@@ -61,11 +59,6 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
     searchParams?.fixture === 'final-mutirao' ||
     searchParams?.fixture === 'final-cooperativa';
 
-  useEffect(() => {
-    if (game) {
-      void trackGameView(game);
-    }
-  }, [game]);
 
   if (!game || game.kind !== 'arcade') {
     notFound();
@@ -107,6 +100,7 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
         title={game.title}
         description={game.description}
       >
+        <ArcadeViewTracker game={game} />
         {gameComponent}
       </Section>
     </div>
