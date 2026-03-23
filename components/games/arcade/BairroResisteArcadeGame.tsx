@@ -28,7 +28,7 @@ const INITIAL_HOTSPOTS: Hotspot[] = [
   { id: 'agua', x: 25, y: 35, pressure: 0, cooldownMs: 0, totalCriticalTime: 0, assetBase: '/arcade/bairro-resiste/entities/entity-hotspot-agua-v1.svg' },
   { id: 'moradia', x: 70, y: 40, pressure: 20, cooldownMs: 0, totalCriticalTime: 0, assetBase: '/arcade/bairro-resiste/entities/entity-hotspot-moradia-v1.svg' },
   { id: 'mobilidade', x: 80, y: 75, pressure: 0, cooldownMs: 0, totalCriticalTime: 0, assetBase: '/arcade/bairro-resiste/entities/entity-hotspot-mobilidade-v1.svg' },
-  { id: 'saude', x: 30, y: 80, pressure: 10, cooldownMs: 0, totalCriticalTime: 0, assetBase: '/arcade/bairro-resiste/entities/entity-hotspot-saude-v1.svg' },
+  { id: 'saude', x: 30, y: 80, pressure: 0, cooldownMs: 0, totalCriticalTime: 0, assetBase: '/arcade/bairro-resiste/entities/entity-hotspot-saude-v1.svg' },
 ];
 
 const GAME_DURATION_MS = 90000;
@@ -87,7 +87,8 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
              pressureIncrease += 15; // burst de 15 de pressão súbita
           }
           
-          const newPressure = Math.min(100, h.pressure + pressureIncrease);
+          const factor = h.id === 'saude' ? 0.9 : 1.0;
+          const newPressure = Math.min(100, h.pressure + (pressureIncrease * factor));
           const isCritical = newPressure >= 80;
           
           if (isCritical) activeCriticalCount++;
@@ -230,7 +231,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
             <h3 className="font-bold mb-2 text-slate-200">Como jogar:</h3>
             <ul className="text-left text-sm text-slate-400 space-y-2">
               <li>1. A pressão territorial crescerá em 3 fases (Aceleração e Caos).</li>
-              <li>2. Toque nos pontos Críticos (Vermelhos) para curar. Há um <strong>cooldown de 2s</strong> por ação!</li>
+              <li>2. Toque nos pontos Críticos (Vermelhos) para curar. Há um <strong>cooldown de 1.5s</strong> por ação!</li>
               <li>3. Hotspots no Crítico deterioram ativamente a sua Integridade Global.</li>
             </ul>
           </div>

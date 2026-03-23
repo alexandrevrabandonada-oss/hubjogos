@@ -792,3 +792,9 @@ Dependencia:
 * **Promoção Editorial**: `bairro-resiste` promovido para `LIVE_GROWING`.
 * **Próximo**: Acompanhar escala e decidir inserção na Hero principal.
 ---
+
+## Atualização T64: Rebalanceamento e Cleanup Editorial (Soft Promotion)
+* **Cleanup de UI**: Remoção de duplicações e adição de CTA "Iniciar Missão" acima da dobra em `/arcade/[slug]`.
+* **Gameplay Tuning**: Rebalanceamento do hotspot **Saúde** (pressão inicial 0, taxa 0.9x) para corrigir gargalo do T63.
+* **Soft Promotion**: Refinamento da copy no catálogo e manutenção no trilho de validação com status `LIVE_GROWING`.
+---

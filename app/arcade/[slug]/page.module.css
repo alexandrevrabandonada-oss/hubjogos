@@ -12,10 +12,32 @@
   padding: 0.52rem 0.82rem;
   font-weight: 700;
   text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  background-color: #143d5c;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.52rem 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.ctaPrimary:hover {
+  background-color: #1a4d73;
 }
 
 .heroCopy {
   max-width: 56ch;
   margin: 0;
   color: #2a4e67;
+}
+
+.gameSection {
+  scroll-margin-top: 2rem;
 }

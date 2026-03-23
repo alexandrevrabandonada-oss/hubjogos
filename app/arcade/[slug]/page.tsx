@@ -85,9 +85,14 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
         title={game.title}
         description={game.shortDescription}
         actions={
-          <Link href="/explorar" className={styles.backLink}>
-            ← Voltar ao catálogo
-          </Link>
+          <div className="flex items-center space-x-4">
+            <Link href="#missao" className={styles.ctaPrimary}>
+              🎯 Iniciar Missão
+            </Link>
+            <Link href="/explorar" className={styles.backLink}>
+              ← Voltar ao catálogo
+            </Link>
+          </div>
         }
       >
         <p className={styles.heroCopy}>
@@ -96,9 +101,9 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
       </PageHero>
 
       <Section
-        eyebrow="Vertical slice"
-        title={game.title}
-        description={game.description}
+        id="missao"
+        className={styles.gameSection}
+        eyebrow="Missão em Validação"
       >
         <ArcadeViewTracker game={game} />
         {gameComponent}

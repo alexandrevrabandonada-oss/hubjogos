@@ -1883,14 +1883,14 @@ export default function EstadoPage() {
         
         <Card className={styles.fullCard}>
           <div className={styles.cardTitleRow}>
-            <h3>🎯 Amostragem: Bairro Resiste (T63: LIVE_GROWING)</h3>
+            <h3>🎯 Amostragem: Bairro Resiste (T64: SOFT_PROMOTION)</h3>
             <span className={`${styles.severityBadge} ${bairroRunCount >= 30 ? styles.severityOk : styles.severityWarning}`}>
               {bairroRunCount >= 30 ? 'VALIDAÇÃO T63 OK' : 'COLETANDO AMOSTRA'}
             </span>
           </div>
 
           <div className="bg-slate-900 border border-slate-700 rounded p-4 mb-6">
-            <h4 className="text-sm uppercase tracking-widest text-slate-400 mb-2">Veredito Editorial (T63)</h4>
+            <h4 className="text-sm uppercase tracking-widest text-slate-400 mb-2">Veredito Editorial (T64)</h4>
             <div className="flex items-center space-x-4">
                {bairroRunCount >= 30 ? (
                  <span className="px-3 py-1 bg-green-900 text-green-300 font-bold rounded-full text-xs">LIVE_GROWING</span>
@@ -1898,7 +1898,7 @@ export default function EstadoPage() {
                  <span className="px-3 py-1 bg-yellow-900 text-yellow-300 font-bold rounded-full text-xs">LIVE_BUT_EARLY (Amostra Fria)</span>
                )}
                <span className="text-sm text-slate-300">
-                 {bairroRunCount >= 30 ? 'Desempenho validado (Replay 43%). Pronto para mais destaque editorial.' : 'Faltam dados para destronar Tarifa Zero do hero banner. Mantido apenas como Live.'}
+                 {bairroRunCount >= 30 ? 'Rebalance T64 OK. Saúde menos crítico. Soft promotion ativa.' : 'Faltam dados para destronar Tarifa Zero do hero banner. Mantido apenas como Live.'}
                </span>
             </div>
           </div>

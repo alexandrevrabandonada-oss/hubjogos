@@ -1369,3 +1369,14 @@ Analisar a amostra real de 30+ runs para decidir o destino editorial do `bairro-
 - **Replay Rate**: 43%
 - **Veredito**: LIVE_GROWING.
 ---
+
+---
+
+## Tijolo 64 - Rebalanceamento e Cleanup Editorial (Bairro Resiste)
+- **Objetivo**: Corrigir gargalos de UX e gameplay identificados no T63.
+- **Entregáveis**:
+  - Cleanup da página do jogo (CTA above the fold, remoção de redundâncias).
+  - Rebalanceamento do hotspot Saúde (pressão inicial 0, taxa 0.9x).
+  - Soft promotion no catálogo e dashboard.
+- **Veredito**: LIVE_GROWING (Refinado).
+---

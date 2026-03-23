@@ -166,7 +166,7 @@ export const games: Game[] = [
     slug: 'bairro-resiste',
     title: 'Bairro Resiste - Defesa Territorial',
     description: 'Arcade hardcore de gestão de crise territorial. Administre o cooldown das brigadas, evite falhas em cascata de infraestrutura e segure a pressão sistêmica. O colapso de uma área puxa as demais.',
-    shortDescription: 'Defenda a integridade do bairro em uma gestão de crise extrema',
+    shortDescription: 'Proteja o bairro contra o colapso sistêmico em um mutirão de alta pressão.',
     theme: 'city',
     icon: '🏘️',
     cover: '/arcade/bairro-resiste/bg/bg-bairro-base-v1.svg',

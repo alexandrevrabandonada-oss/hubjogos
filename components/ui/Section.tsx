@@ -3,6 +3,7 @@ import { ShellContainer } from './ShellContainer';
 import styles from './Section.module.css';
 
 interface SectionProps {
+  id?: string;
   title?: string;
   eyebrow?: string;
   description?: string;
@@ -11,6 +12,7 @@ interface SectionProps {
 }
 
 export function Section({
+  id,
   title,
   eyebrow,
   description,
@@ -18,7 +20,7 @@ export function Section({
   className,
 }: SectionProps) {
   return (
-    <section className={[styles.section, className || ''].join(' ')}>
+    <section id={id} className={[styles.section, className || ''].join(' ')}>
       <ShellContainer>
         {(title || eyebrow || description) && (
           <header className={styles.header}>

@@ -101,7 +101,8 @@ Razoes de derrota esperadas:
 
 ## Condicao de promocao (pre-producao -> implementacao)
 
-- T50 encerrado com espaco de capacidade liberado;
-- contract de vertical slice aprovado;
-- assets P0 mapeados com manifest pronto;
-- checklist de go-live atendido sem quebrar quick line/arcades live.
+## Histórico de Rebalanceamento
+
+### T64 (Pós-Amostragem T63)
+- **Hotspot Saúde**: Pressão inicial reduzida de 10 para 0. Fator de crescimento reduzido em 10% (0.9x) para evitar colapsos precoces injustos identificados em amostragem real.
+- **UX/Intro**: Sincronizado texto de cooldown (2s -> 1.5s) para transparência com o motor real.
