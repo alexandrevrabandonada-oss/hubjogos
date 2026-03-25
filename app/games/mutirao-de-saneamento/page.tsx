@@ -88,6 +88,3 @@ export default function MutiraoEntryPage() {
     />
   );
 }
-
-// Export for catalog integration
-export { MUTIRAO_GAME };
