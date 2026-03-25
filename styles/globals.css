@@ -15,6 +15,18 @@
   --success: #738f3d;
   --border: #3a342b;
 
+  /* Genres - Sub-identities */
+  --genre-arcade: #ef4444;
+  --genre-platform: #ec4899;
+  --genre-simulation: #0ea5e9;
+  --genre-management: #14b8a6;
+  --genre-strategy: #f59e0b;
+  --genre-narration: #8b5cf6;
+  --genre-quiz: #10b981;
+
+  /* Territory theme */
+  --territory-accent: #fcd34d;
+
   --noise-overlay: radial-gradient(
       circle at 1px 1px,
       rgba(255, 255, 255, 0.015) 1px,

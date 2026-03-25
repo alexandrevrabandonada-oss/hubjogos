@@ -1,0 +1,672 @@
+/* ResultScreen.module.css */
+/* T71 — Endgame Result Layer + Share Packs v1 */
+
+/* Base */
+.resultScreen {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Severity Variants */
+.severityTriumph {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+}
+
+.severitySuccess {
+  background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+}
+
+.severityNeutral {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.severityStruggle {
+  background: linear-gradient(135deg, #713f12 0%, #a16207 100%);
+}
+
+.severityCollapse {
+  background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%);
+}
+
+/* Header */
+.resultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.severityBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.severityIcon {
+  font-size: 1.2rem;
+}
+
+.genreLabel {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* Main Result Area */
+.mainResult {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.resultTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.resultSummary {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0 0 2rem 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* Main Metric */
+.mainMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  max-width: 300px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.metricValue {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.metricLabel {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.metricUnit {
+  font-size: 1.5rem;
+  opacity: 0.7;
+}
+
+/* Secondary Metrics */
+.secondaryMetrics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.secondaryMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+}
+
+.secondaryMetricValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.secondaryMetricLabel {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* Interpretation */
+.interpretation {
+  font-size: 1.1rem;
+  font-style: italic;
+  opacity: 0.85;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+  padding: 1rem;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Section Titles */
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+/* Why This Result Matters */
+.whyMatters {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.framingBlocks {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.framingBlock {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  border-left: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.framingBlock h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  margin: 0 0 0.5rem 0;
+}
+
+.framingBlock p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Share Section */
+.shareSection {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+/* Share Card */
+.shareCard {
+  background: white;
+  color: #1a1a1a;
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.shareCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  color: white;
+  font-weight: 600;
+}
+
+.shareCardIcon {
+  font-size: 1.5rem;
+}
+
+.shareCardSeverity {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.shareCardBody {
+  padding: 1.5rem;
+}
+
+.shareCardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #1a1a1a;
+}
+
+.shareCardDescription {
+  font-size: 1rem;
+  color: #4b5563;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.shareCardHashtags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hashtag {
+  padding: 0.25rem 0.75rem;
+  background: #e5e7eb;
+  color: #374151;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Share Actions */
+.shareActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.shareButton,
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shareButton {
+  background: white;
+  color: #1a1a1a;
+}
+
+.copyButton {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.shareButton:hover,
+.copyButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Next Steps */
+.nextSteps {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.nextStepsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.nextStepCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  text-decoration: none;
+  color: white;
+  transition: background 0.2s ease, transform 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.nextStepCard:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.nextStepIcon {
+  font-size: 2rem;
+}
+
+.nextStepCard h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.nextStepCard p {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.shareCardAction {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.shareCardAction:hover {
+  background: rgba(251, 191, 36, 0.3);
+}
+
+/* Footer */
+.resultFooter {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: white;
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  .resultScreen {
+    padding: 1rem 0.75rem;
+    gap: 1.5rem;
+  }
+
+  .resultHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .resultTitle {
+    font-size: 1.5rem;
+  }
+
+  .resultSummary {
+    font-size: 1rem;
+  }
+
+  .mainMetric {
+    padding: 1.5rem 1rem;
+  }
+
+  .metricValue {
+    font-size: 3rem;
+  }
+
+  .secondaryMetrics {
+    gap: 0.5rem;
+  }
+
+  .secondaryMetric {
+    padding: 0.75rem 1rem;
+  }
+
+  .interpretation {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+  }
+
+  .whyMatters,
+  .shareSection,
+  .nextSteps {
+    padding: 1rem;
+  }
+
+  .shareCardBody {
+    padding: 1rem;
+  }
+
+  .shareCardTitle {
+    font-size: 1.1rem;
+  }
+
+  .shareActions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .shareButton,
+  .copyButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nextStepsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .nextStepCard {
+    padding: 1rem 0.75rem;
+  }
+
+  .nextStepIcon {
+    font-size: 1.5rem;
+  }
+
+  .nextStepCard h3 {
+    font-size: 0.8rem;
+  }
+
+  .nextStepCard p {
+    font-size: 0.7rem;
+  }
+}
+
+/* Mobile Landscape */
+@media (min-width: 481px) and (max-width: 767px) {
+  .resultScreen {
+    padding: 1.5rem;
+  }
+
+  .resultTitle {
+    font-size: 1.75rem;
+  }
+
+  .mainMetric {
+    padding: 1.5rem;
+  }
+
+  .metricValue {
+    font-size: 3.5rem;
+  }
+
+  .nextStepsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .resultScreen {
+    padding: 2rem;
+    gap: 2.5rem;
+  }
+
+  .resultTitle {
+    font-size: 2.5rem;
+  }
+
+  .mainMetric {
+    max-width: 350px;
+    padding: 2.5rem;
+  }
+
+  .metricValue {
+    font-size: 5rem;
+  }
+
+  .framingBlocks {
+    flex-direction: row;
+  }
+
+  .framingBlock {
+    flex: 1;
+  }
+
+  .nextStepsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .resultScreen {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem;
+    gap: 3rem;
+    border-radius: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .resultTitle {
+    font-size: 3rem;
+  }
+
+  .resultSummary {
+    font-size: 1.25rem;
+    max-width: 600px;
+  }
+
+  .mainMetric {
+    max-width: 400px;
+    padding: 3rem;
+  }
+
+  .metricValue {
+    font-size: 6rem;
+  }
+
+  .metricLabel {
+    font-size: 1rem;
+  }
+
+  .interpretation {
+    font-size: 1.25rem;
+    max-width: 600px;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .whyMatters,
+  .shareSection,
+  .nextSteps {
+    padding: 2rem;
+  }
+
+  .framingBlocks {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .framingBlock {
+    flex: 1;
+    padding: 1.5rem;
+  }
+
+  .shareCard {
+    max-width: 500px;
+    margin: 0 auto 2rem auto;
+  }
+
+  .nextStepsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .nextStepCard {
+    padding: 1.5rem;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .shareButton,
+  .copyButton,
+  .nextStepCard,
+  .closeButton {
+    transition: none;
+  }
+
+  .shareButton:hover,
+  .copyButton:hover,
+  .nextStepCard:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .resultScreen {
+    background: #000;
+  }
+
+  .severityBadge,
+  .mainMetric,
+  .secondaryMetric,
+  .framingBlock,
+  .whyMatters,
+  .shareSection,
+  .nextSteps,
+  .nextStepCard {
+    border: 2px solid white;
+  }
+
+  .shareCard {
+    border: 2px solid #000;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .resultScreen {
+    background: white;
+    color: black;
+  }
+
+  .shareActions,
+  .nextSteps,
+  .resultFooter {
+    display: none;
+  }
+
+  .shareCard {
+    border: 2px solid #000;
+    page-break-inside: avoid;
+  }
+}

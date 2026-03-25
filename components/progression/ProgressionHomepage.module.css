@@ -1,0 +1,301 @@
+/* ProgressionHomepage.module.css */
+/* Progression-aware homepage styles */
+
+.homepage {
+  min-height: 100vh;
+  background: var(--surface-primary, #fafafa);
+  padding-bottom: 3rem;
+}
+
+/* Welcome Section */
+.welcomeSection {
+  padding: 3rem 1rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.welcomeTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.welcomeText {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.welcomeStats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.statNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #60a5fa;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Congratulations Section */
+.congratulationsSection {
+  padding: 2rem 1rem;
+  text-align: center;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-bottom: 1px solid #bbf7d0;
+  margin-bottom: 2rem;
+}
+
+.congratulationsIcon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.congratulationsTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #166534;
+  margin: 0 0 0.5rem 0;
+}
+
+.congratulationsText {
+  font-size: 0.95rem;
+  color: #15803d;
+  margin: 0;
+}
+
+/* Explorer Section */
+.explorerSection {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-radius: 0.75rem;
+  margin: 0 1rem 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0 0 0.5rem 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.9rem;
+  color: #3b82f6;
+  margin: 0;
+}
+
+/* Veteran Badge */
+.veteranBadge {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 2px solid #f59e0b;
+  border-radius: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  color: #92400e;
+  margin: 0 1rem 1.5rem;
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  .welcomeSection {
+    padding: 2rem 1rem 1.5rem;
+  }
+
+  .welcomeTitle {
+    font-size: 1.5rem;
+  }
+
+  .welcomeText {
+    font-size: 0.9rem;
+  }
+
+  .welcomeStats {
+    gap: 1.5rem;
+  }
+
+  .statNumber {
+    font-size: 1.25rem;
+  }
+
+  .congratulationsSection {
+    padding: 1.5rem 1rem;
+  }
+
+  .congratulationsIcon {
+    font-size: 2.5rem;
+  }
+
+  .congratulationsTitle {
+    font-size: 1.125rem;
+  }
+
+  .explorerSection {
+    margin: 0 0.75rem 1rem;
+    padding: 1rem;
+  }
+
+  .veteranBadge {
+    margin: 0 0.75rem 1rem;
+    padding: 0.875rem 1rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .welcomeSection {
+    padding: 4rem 2rem 3rem;
+  }
+
+  .welcomeTitle {
+    font-size: 2rem;
+  }
+
+  .welcomeText {
+    font-size: 1.1rem;
+  }
+
+  .welcomeStats {
+    gap: 3rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .homepage {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .welcomeSection {
+    padding: 5rem 2rem 4rem;
+    margin-bottom: 3rem;
+    border-radius: 0 0 1rem 1rem;
+  }
+
+  .welcomeTitle {
+    font-size: 2.5rem;
+  }
+
+  .welcomeText {
+    font-size: 1.2rem;
+    max-width: 700px;
+  }
+
+  .welcomeStats {
+    gap: 4rem;
+  }
+
+  .statNumber {
+    font-size: 2rem;
+  }
+
+  .statLabel {
+    font-size: 0.9rem;
+  }
+
+  .congratulationsSection {
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .congratulationsIcon {
+    font-size: 4rem;
+  }
+
+  .congratulationsTitle {
+    font-size: 1.5rem;
+  }
+
+  .congratulationsText {
+    font-size: 1.1rem;
+  }
+
+  .explorerSection {
+    margin: 0 2rem 2rem;
+    padding: 2rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .veteranBadge {
+    margin: 0 2rem 2rem;
+    padding: 1.25rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .homepage {
+    background: var(--surface-primary-dark, #0f172a);
+  }
+
+  .welcomeSection {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%);
+  }
+
+  .congratulationsSection {
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+    border-bottom-color: #059669;
+  }
+
+  .congratulationsTitle {
+    color: #6ee7b7;
+  }
+
+  .congratulationsText {
+    color: #34d399;
+  }
+
+  .explorerSection {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%);
+  }
+
+  .sectionTitle {
+    color: #93c5fd;
+  }
+
+  .sectionSubtitle {
+    color: #60a5fa;
+  }
+
+  .veteranBadge {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    border-color: #f59e0b;
+    color: #fcd34d;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .welcomeSection,
+  .congratulationsSection,
+  .explorerSection,
+  .veteranBadge {
+    background: none;
+    background-color: var(--surface-secondary, #f5f5f5);
+  }
+}

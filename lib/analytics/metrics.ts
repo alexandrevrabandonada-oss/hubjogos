@@ -1441,18 +1441,18 @@ function getQuickInsights(
   }
 
   for (const session of sessions) {
-    if (!quickSlugs.has(session.slug) || !rows[session.slug]) {
+    if (!session.slug || !quickSlugs.has(session.slug) || !rows[session.slug]) {
       continue;
     }
     rows[session.slug].sessions += 1;
-    if (session.status === 'completed') {
+    if (session.status === "completed" && session.slug) {
       rows[session.slug].completions += 1;
     }
   }
 
   for (const event of events) {
-    const slug = event.slug;
-    if (!quickSlugs.has(slug) || !rows[slug]) {
+    const slug = event.slug || "unknown";
+    if (slug === "unknown" || !quickSlugs.has(slug) || !rows[slug]) {
       continue;
     }
 
@@ -1573,7 +1573,7 @@ function getQuickInsights(
     }
     variantBySession[session.sessionId] = qrExperiment.variant;
     qrByVariant[qrExperiment.variant].sessions += 1;
-    if (session.status === 'completed') {
+    if (session.status === "completed") {
       qrByVariant[qrExperiment.variant].completions += 1;
     }
   }
@@ -2182,7 +2182,7 @@ export function collectLocalMetrics(
 
   const conclusionsByEngine: Record<string, number> = {};
   for (const result of filteredResults) {
-    conclusionsByEngine[result.engineKind] = (conclusionsByEngine[result.engineKind] || 0) + 1;
+    if (result.engineKind) conclusionsByEngine[result.engineKind] = (conclusionsByEngine[result.engineKind] || 0) + 1;
   }
 
   const sourceSessionsCount: Record<string, number> = {};
@@ -2197,19 +2197,19 @@ export function collectLocalMetrics(
     const source = resolveSource(session);
 
     sourceSessionsCount[source] = (sourceSessionsCount[source] || 0) + 1;
-    gameSessionsCount[session.slug] = (gameSessionsCount[session.slug] || 0) + 1;
-    engineSessionsCount[session.engineKind] = (engineSessionsCount[session.engineKind] || 0) + 1;
+    gameSessionsCount[session.slug || "hub"] = (gameSessionsCount[session.slug || "hub"] || 0) + 1;
+    engineSessionsCount[session.engineKind || "hub"] = (engineSessionsCount[session.engineKind || "hub"] || 0) + 1;
 
     if (!cohortsBySource[source]) {
       cohortsBySource[source] = { sessions: 0, starts: 0, completions: 0, shares: 0, completionRate: 0 };
     }
     cohortsBySource[source].sessions += 1;
-    if (session.status === 'completed') {
+    if (session.status === "completed" && session.slug) {
       cohortsBySource[source].completions += 1;
     }
 
-    if (!cohortsByGame[session.slug]) {
-      cohortsByGame[session.slug] = {
+    if (!cohortsByGame[session.slug || "hub"]) {
+      cohortsByGame[session.slug || "hub"] = {
         sessions: 0,
         starts: 0,
         completions: 0,
@@ -2220,16 +2220,16 @@ export function collectLocalMetrics(
         feedbackNegative: 0,
       };
     }
-    cohortsByGame[session.slug].sessions += 1;
-    if (session.status === 'completed') {
-      cohortsByGame[session.slug].completions += 1;
+    cohortsByGame[session.slug || "hub"].sessions += 1;
+    if (session.status === "completed" && session.slug) {
+      cohortsByGame[session.slug || "hub"].completions += 1;
     }
 
-    if (!cohortsByEngine[session.engineKind]) {
-      cohortsByEngine[session.engineKind] = { sessions: 0, starts: 0, completions: 0, shares: 0, completionRate: 0 };
+    if (!cohortsByEngine[session.engineKind || "hub"]) {
+      cohortsByEngine[session.engineKind || "hub"] = { sessions: 0, starts: 0, completions: 0, shares: 0, completionRate: 0 };
     }
-    cohortsByEngine[session.engineKind].sessions += 1;
-    if (session.status === 'completed') {
+    cohortsByEngine[session.engineKind || "hub"].sessions += 1;
+    if (session.status === "completed" && session.engineKind) {
       cohortsByEngine[session.engineKind].completions += 1;
     }
   }
@@ -2237,16 +2237,16 @@ export function collectLocalMetrics(
   const normalizedEvents: NormalizedEvent[] = filteredEvents.map((event) => ({
     sessionId: event.sessionId,
     eventName: event.event,
-    slug: event.slug,
-    engineKind: event.engineKind,
+    slug: event.slug || 'hub',
+    engineKind: event.engineKind || 'hub',
     ctaId: event.ctaId,
-    metadata: event.metadata,
+    metadata: event.metadata as Record<string, unknown>,
   }));
 
-  for (const event of filteredEvents) {
+  for (const event of normalizedEvents) {
     const source = resolveSource(filteredSessions.find((session) => session.sessionId === event.sessionId));
 
-    if (event.event === 'game_start') {
+    if (event.eventName === 'game_start') {
       if (cohortsBySource[source]) {
         cohortsBySource[source].starts += 1;
       }
@@ -2258,7 +2258,7 @@ export function collectLocalMetrics(
       }
     }
 
-    if (event.event === 'result_copy' || event.event === 'link_copy') {
+    if (event.eventName === 'result_copy' || event.eventName === 'link_copy') {
       if (cohortsBySource[source]) {
         cohortsBySource[source].shares += 1;
       }
@@ -2270,14 +2270,16 @@ export function collectLocalMetrics(
       }
     }
 
-    if (event.event === 'cta_click' && event.metadata?.type === 'micro_feedback') {
+    if (event.eventName === 'cta_click' && event.metadata?.type === 'micro_feedback') {
       const rating = String(event.metadata.rating || '');
-      if (rating === 'positive') {
-        cohortsByGame[event.slug].feedbackPositive += 1;
-      } else if (rating === 'neutral') {
-        cohortsByGame[event.slug].feedbackNeutral += 1;
-      } else if (rating === 'negative') {
-        cohortsByGame[event.slug].feedbackNegative += 1;
+      if (cohortsByGame[event.slug]) {
+        if (rating === 'positive') {
+          cohortsByGame[event.slug].feedbackPositive += 1;
+        } else if (rating === 'neutral') {
+          cohortsByGame[event.slug].feedbackNeutral += 1;
+        } else if (rating === 'negative') {
+          cohortsByGame[event.slug].feedbackNegative += 1;
+        }
       }
     }
   }
@@ -2310,7 +2312,7 @@ export function collectLocalMetrics(
 
       const variant = experimentsData[exp.key].variants[exp.variant];
       variant.sessions += 1;
-      if (session.status === 'completed') {
+      if (session.status === "completed") {
         variant.completions += 1;
       }
     }
@@ -2595,8 +2597,8 @@ async function collectRemoteMetrics(
     for (const session of sessions) {
       const source = resolveSource(session);
       sourceSessionsCount[source] = (sourceSessionsCount[source] || 0) + 1;
-      gameSessionsCount[session.slug] = (gameSessionsCount[session.slug] || 0) + 1;
-      engineSessionsCount[session.engineKind] = (engineSessionsCount[session.engineKind] || 0) + 1;
+      gameSessionsCount[session.slug || "hub"] = (gameSessionsCount[session.slug || "hub"] || 0) + 1;
+      engineSessionsCount[session.engineKind || "hub"] = (engineSessionsCount[session.engineKind || "hub"] || 0) + 1;
     }
 
     const rawEventRows = (rawEventsRes.data || []) as RemoteRawEventRow[];

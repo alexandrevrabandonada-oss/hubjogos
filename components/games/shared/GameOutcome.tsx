@@ -9,6 +9,9 @@ import { OutcomeCtaConfig } from '@/lib/games/ctas';
 import { MicroFeedback } from '@/components/ui/MicroFeedback';
 import { getNextGameRecommendations } from '@/lib/games/recommendations';
 import { getGameBySlug } from '@/lib/games/catalog';
+import { saveProgression, loadProgression } from '@/lib/hub/progression';
+import { trackProgressionEvent } from '@/lib/hub/analytics';
+import { recommendNextGame } from '@/lib/hub/recommendation';
 import {
   trackLinkCopy,
   trackCampaignMarkClick,
@@ -63,14 +66,44 @@ export function GameOutcome({
   useEffect(() => {
     if (resultId) {
       trackOutcomeView(game as any, resultId).catch(console.error);
+      // Progression: mark game as completed, update last session, fire analytics
+      try {
+        const progression = loadProgression();
+        // Add to completedGames (dedupe)
+        const updatedCompleted = progression.completedGames.includes(game.slug)
+          ? progression.completedGames
+          : [...progression.completedGames, game.slug];
+        saveProgression({
+          completedGames: updatedCompleted,
+          lastSession: Date.now(),
+        });
+        trackProgressionEvent('completion_state_seen', {
+          game_slug: game.slug,
+          progression_state: 'completed',
+        });
+      } catch (e) {
+        // ignore
+      }
     }
   }, [game, resultId]);
 
   useEffect(() => {
     const fullGame = getGameBySlug(game.slug);
     if (fullGame) {
-      const recommendations = getNextGameRecommendations(fullGame);
-      setNextGames(recommendations);
+      // Use new recommendation logic if available
+      // For demo: recommend one next game
+      // TODO: Replace with editorial logic as needed
+      const allGames = typeof window !== 'undefined' ? (window.__ALL_GAMES__ || []) : [];
+      let rec = null;
+      if (allGames.length > 0) {
+        rec = recommendNextGame(allGames, game.slug);
+      }
+      if (rec) {
+        setNextGames([{ game: rec, reason: 'Recomendado para você' }]);
+      } else {
+        const recommendations = getNextGameRecommendations(fullGame);
+        setNextGames(recommendations);
+      }
     }
   }, [game.slug]);
 

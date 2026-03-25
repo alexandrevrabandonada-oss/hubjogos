@@ -1,0 +1,102 @@
+.laneContainer {
+  margin-bottom: 48px;
+  width: 100%;
+}
+
+.laneHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category {
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-strong);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text);
+}
+
+.viewAll {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.viewAll:hover {
+  color: var(--accent);
+}
+
+.laneScroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 0 -20px;
+  padding: 10px 20px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.laneScroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.laneScroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.laneTracks {
+  display: flex;
+  gap: 20px;
+}
+
+.laneItem {
+  flex: 0 0 300px;
+  max-width: 300px;
+}
+
+.laneItemFeatured {
+  flex: 0 0 380px;
+  max-width: 380px;
+}
+
+.laneItemCompact {
+  flex: 0 0 240px;
+  max-width: 240px;
+}
+
+@media (max-width: 768px) {
+  .laneItem {
+    flex: 0 0 260px;
+    max-width: 260px;
+  }
+  .laneItemFeatured {
+    flex: 0 0 320px;
+    max-width: 320px;
+  }
+  .laneItemCompact {
+    flex: 0 0 200px;
+    max-width: 200px;
+  }
+  .title {
+    font-size: 1.25rem;
+  }
+}

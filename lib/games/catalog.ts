@@ -110,13 +110,42 @@ export const TERRITORY_SCOPE_LABELS: Record<TerritoryScope, string> = {
   'estado-rj': 'Estado do Rio de Janeiro',
 };
 
+export type GameGenre = 'arcade' | 'platform' | 'simulation' | 'management' | 'strategy' | 'narration' | 'quiz';
+export type PoliticalTheme = 'tarifa-zero' | 'trabalho' | 'moradia' | 'poluicao' | 'memoria' | 'servicos-publicos' | 'organizacao-popular' | 'cooperativismo' | 'cuidado' | 'transporte' | 'saude' | 'educacao';
+export type DeviceSupport = 'mobile' | 'desktop';
+
+export const GAME_GENRE_LABELS: Record<GameGenre, string> = {
+  arcade: 'Arcade',
+  platform: 'Plataforma',
+  simulation: 'Simulação',
+  management: 'Gestão / Tycoon',
+  strategy: 'Estratégia',
+  narration: 'Narrativa / RPG',
+  quiz: 'Quiz / Desafio',
+};
+
+export const POLITICAL_THEME_LABELS: Record<PoliticalTheme, string> = {
+  'tarifa-zero': 'Tarifa Zero',
+  trabalho: 'Trabalho',
+  moradia: 'Moradia',
+  poluicao: 'Poluição',
+  memoria: 'Memória',
+  'servicos-publicos': 'Serviços Públicos',
+  'organizacao-popular': 'Org. Popular',
+  cooperativismo: 'Cooperativismo',
+  cuidado: 'Cuidado',
+  transporte: 'Transporte',
+  saude: 'Saúde',
+  educacao: 'Educação',
+};
 export interface Game {
   id: string;
   slug: string;
   title: string;
   description: string;
   shortDescription: string;
-  theme: GameTheme;
+  theme: GameTheme; // UI theme
+  genre: GameGenre;
   icon: string;
   cover: string;
   status: GameStatus;
@@ -128,11 +157,13 @@ export interface Game {
   tags: string[];
   cta: string;
   color: string;
-  kind: GameKind;
+  kind: GameKind; // Engine kind
   engineId?: string;
   pace: GamePace;
   line: GameLine;
-  territoryScope: TerritoryScope;
+  territoryScope: TerritoryScope; // Primary territory
+  territories: TerritoryScope[]; // All relevant territories
+  politicalThemes: PoliticalTheme[];
   series: GameSeries;
   politicalAxis: PoliticalAxis;
   collectiveSolutionType: CollectiveSolutionType;
@@ -145,6 +176,10 @@ export interface Game {
   season: string;
   campaignRole: string;
   funRole: 'entrada' | 'retencao' | 'aprofundamento';
+  deviceSupport: DeviceSupport[];
+  isFeatured?: boolean;
+  isNew?: boolean;
+  priorityScore: number;
 }
 
 export interface PlannedGameCandidate {
@@ -165,9 +200,10 @@ export const games: Game[] = [
     id: 'bairro-resiste',
     slug: 'bairro-resiste',
     title: 'Bairro Resiste - Defesa Territorial',
-    description: 'Arcade hardcore de gestão de crise territorial. Administre o cooldown das brigadas, evite falhas em cascata de infraestrutura e segure a pressão sistêmica. O colapso de uma área puxa as demais.',
+    description: 'Arcade hardcore de gestão de crise territorial. Administre o cooldown das brigadas, evite falhas em cascata de infraestrutura e segure a pressão sistêmica.',
     shortDescription: 'Proteja o bairro contra o colapso sistêmico em um mutirão de alta pressão.',
     theme: 'city',
+    genre: 'arcade',
     icon: '🏘️',
     cover: '/arcade/bairro-resiste/bg/bg-bairro-base-v1.svg',
     status: 'live',
@@ -176,7 +212,7 @@ export const games: Game[] = [
     duration: '1-2 min',
     participants: 1,
     difficulty: 'hard',
-    tags: ['arcade', 'defesa territorial', 'crise', 'resistência', 'coletividade'],
+    tags: ['arcade', 'defesa territorial', 'crise', 'resistência'],
     cta: 'Resistir',
     color: '#0f172a',
     kind: 'arcade',
@@ -184,6 +220,8 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'organizacao-popular',
     territoryScope: 'baixada',
+    territories: ['baixada', 'sul-fluminense'],
+    politicalThemes: ['moradia', 'organizacao-popular', 'cuidado'],
     series: 'serie-rio-de-janeiro',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'ajuda-mutua',
@@ -193,17 +231,20 @@ export const games: Game[] = [
     assetSet: 'bairro-resiste-premium',
     premiumTheme: 'bairro-resiste-premium',
     season: 's1-verao-26',
-    campaignRole: 'Conectar defesa territorial com risco eminente e solidariedade.',
+    campaignRole: 'Conectar defesa territorial com risco eminente.',
     funRole: 'retencao',
+    deviceSupport: ['mobile', 'desktop'],
+    isFeatured: true,
+    priorityScore: 95
   },
   {
     id: 'tarifa-zero-corredor',
     slug: 'tarifa-zero-corredor',
     title: 'Tarifa Zero RJ - Corredor do Povo',
-    description:
-      'Arcade lane-based de corrida coletiva. Controle o avatar do Alexandre, libere o corredor do povo com mutirões, colete apoio e desvie bloqueios da tarifa. Sessões curtas com replay imediato para mobile e PC.',
+    description: 'Arcade lane-based de corrida coletiva. Controle o avatar do Alexandre, libere o corredor do povo com mutirões.',
     shortDescription: 'Arcade real de corrida coletiva com tarifa zero',
     theme: 'city',
+    genre: 'arcade',
     icon: '🚌',
     cover: '/games/tarifa-zero-corredor.jpg',
     status: 'live',
@@ -212,7 +253,7 @@ export const games: Game[] = [
     duration: '30s-3 min',
     participants: 1,
     difficulty: 'easy',
-    tags: ['arcade', 'tarifa zero', 'mobilidade', 'coletivo', 'quick replay'],
+    tags: ['arcade', 'tarifa zero', 'mobilidade'],
     cta: 'Correr',
     color: '#1F6E8C',
     kind: 'arcade',
@@ -220,6 +261,8 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'mobilidade',
     territoryScope: 'estado-rj',
+    territories: ['estado-rj', 'capital'],
+    politicalThemes: ['tarifa-zero', 'transporte', 'servicos-publicos'],
     series: 'serie-solucoes-coletivas',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'tarifa-zero',
@@ -232,15 +275,17 @@ export const games: Game[] = [
     season: 's1-verao-26',
     campaignRole: 'Distribuição da mensagem e fixação de marca.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 90
   },
   {
     id: 'mutirao-do-bairro',
     slug: 'mutirao-do-bairro',
     title: 'Mutirao do Bairro - Defesa do Comum',
-    description:
-      'Arcade de coordenacao territorial em sessao curta. Organize brigadas, repare hotspots e sustente o bairro em mutirao sob pressao.',
+    description: 'Arcade de coordenacao territorial em sessao curta. Organize brigadas, repare hotspots.',
     shortDescription: 'Arcade de coordenacao, reparo e defesa territorial',
     theme: 'city',
+    genre: 'arcade',
     icon: '🛠️',
     cover: '/games/mutirao-do-bairro.jpg',
     status: 'live',
@@ -249,7 +294,7 @@ export const games: Game[] = [
     duration: '1-2 min',
     participants: 1,
     difficulty: 'medium',
-    tags: ['arcade', 'mutirao', 'autogestao', 'bairro', 'defesa do comum'],
+    tags: ['arcade', 'mutirao', 'autogestao'],
     cta: 'Coordenar',
     color: '#2F5D50',
     kind: 'arcade',
@@ -257,6 +302,8 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'organizacao-popular',
     territoryScope: 'estado-rj',
+    territories: ['estado-rj'],
+    politicalThemes: ['organizacao-popular', 'cuidado', 'moradia'],
     series: 'serie-solucoes-coletivas',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'ajuda-mutua',
@@ -269,15 +316,17 @@ export const games: Game[] = [
     season: 's1-verao-26',
     campaignRole: 'Distribuição da mensagem e fixação de marca.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 80
   },
   {
     id: 'cooperativa-na-pressao',
     slug: 'cooperativa-na-pressao',
     title: 'Cooperativa na Pressao - Chao de Fabrica Coletivo',
-    description:
-      'Arcade de coordenacao produtiva em sessao curta. Organize celulas de trabalho, distribua esforco entre estacoes e segure a operacao coletiva sob pressao de mercado.',
-    shortDescription: 'Vertical slice arcade de cooperativismo, producao coletiva e ajuda mutua',
+    description: 'Arcade de coordenacao produtiva em sessao curta. Organize celulas de trabalho.',
+    shortDescription: 'Vertical slice arcade de cooperativismo e ajuda mutua',
     theme: 'labor',
+    genre: 'arcade',
     icon: '🏭',
     cover: '/games/cooperativa-na-pressao.jpg',
     status: 'beta',
@@ -286,7 +335,7 @@ export const games: Game[] = [
     duration: '1-2 min',
     participants: 1,
     difficulty: 'medium',
-    tags: ['arcade', 'cooperativa', 'trabalho coletivo', 'autogestao', 'vertical slice'],
+    tags: ['arcade', 'cooperativa', 'trabalho coletivo'],
     cta: 'Coordenar',
     color: '#356451',
     kind: 'arcade',
@@ -294,6 +343,8 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'trabalho',
     territoryScope: 'estado-rj',
+    territories: ['estado-rj'],
+    politicalThemes: ['cooperativismo', 'trabalho'],
     series: 'serie-trabalho-sobrevivencia',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'cooperativismo',
@@ -304,17 +355,19 @@ export const games: Game[] = [
     premiumTheme: 'cooperativa-slice',
     audioProfile: 'cooperativa-sfx-v1',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['desktop'],
+    priorityScore: 70
   },
   {
     id: 'passe-livre-nacional',
     slug: 'passe-livre-nacional',
     title: 'Passe Livre Nacional - Sindicato em Movimento',
-    description:
-      'Arcade de posicionamento coletivo. Coordene uma rede de transporte gratuita by moving between city stops, picking up passengers, and defending against privatization. Build solidarity through organization.',
+    description: 'Arcade de posicionamento coletivo. Coordene uma rede de transporte gratuita.',
     shortDescription: 'Arcade real de coordenação e defesa do transporte coletivo',
     theme: 'labor',
+    genre: 'arcade',
     icon: '⚡',
     cover: '/games/passe-livre-nacional.jpg',
     status: 'live',
@@ -323,7 +376,7 @@ export const games: Game[] = [
     duration: '1-3 min',
     participants: 1,
     difficulty: 'medium',
-    tags: ['arcade', 'passe livre', 'mobilidade', 'sindicato', 'coordenação'],
+    tags: ['arcade', 'passe livre', 'mobilidade'],
     cta: 'Organizar',
     color: '#1B6E0D',
     kind: 'arcade',
@@ -331,23 +384,27 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'organizacao-popular',
     territoryScope: 'estado-rj',
+    territories: ['estado-rj'],
+    politicalThemes: ['tarifa-zero', 'transporte'],
     series: 'serie-solucoes-coletivas',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'autogestao',
     commonVsMarket: 'comum',
     campaignFrame: 'comunidade-em-luta',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 75
   },
   {
     id: 'cidade-real',
     slug: 'cidade-real',
     title: 'Cidade Real',
-    description:
-      'Um simulador de decisões orçamentárias municipais. Você é responsável pelo cuidado: saúde, educação, transporte, moradia. Como distribuir recursos limitados? Quem ganha? Quem perde? Entenda as contradições da administração pública urbana.',
+    description: 'Um simulador de decisões orçamentárias municipais. Você é responsável pelo cuidado.',
     shortDescription: 'Simule o orçamento de uma cidade real',
     theme: 'city',
+    genre: 'simulation',
     icon: '🏙️',
     cover: '/games/cidade-real.jpg',
     status: 'live',
@@ -364,23 +421,28 @@ export const games: Game[] = [
     pace: 'deep',
     line: 'orcamento-cuidado',
     territoryScope: 'volta-redonda',
+    territories: ['volta-redonda'],
+    politicalThemes: ['servicos-publicos', 'saude', 'educacao'],
     series: 'serie-volta-redonda',
     politicalAxis: 'reforma-estatal',
     collectiveSolutionType: 'controle-popular',
     commonVsMarket: 'misto',
     campaignFrame: 'projeto-coletivo',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['desktop'],
+    isFeatured: true,
+    priorityScore: 85
   },
   {
     id: 'abandonado',
     slug: 'abandonado',
     title: 'Abandonado',
-    description:
-      'Explore um mapa interativo de edifícios abandonados em sua região. Cada prédio conta histórias: por que fechou? Quem viveu aqui? O que poderia voltar a existir? Mapeie memória, território e resistência urbana.',
+    description: 'Explore um mapa interativo de edifícios abandonados em sua região.',
     shortDescription: 'Mapeie memória e abandono na cidade',
     theme: 'abandonment',
+    genre: 'simulation',
     icon: '🏚️',
     cover: '/games/abandonado.jpg',
     status: 'live',
@@ -397,23 +459,27 @@ export const games: Game[] = [
     pace: 'deep',
     line: 'memoria-territorio',
     territoryScope: 'volta-redonda',
+    territories: ['volta-redonda'],
+    politicalThemes: ['memoria', 'moradia'],
     series: 'serie-cidade-abandonada',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'autogestao',
     commonVsMarket: 'comum',
     campaignFrame: 'comunidade-em-luta',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['desktop'],
+    priorityScore: 60
   },
   {
     id: 'trabalho-impossivel',
     slug: 'trabalho-impossivel',
     title: 'Escolhas Impossíveis',
-    description:
-      'Um jogo de dilemas do trabalhador urbano. Cada dia, você enfrenta escolhas reais sem respostas certas: trabalhar de madrugada ou cuidar da família? Comprar alimentação ou pagar aluguel?',
+    description: 'Um jogo de dilemas do trabalhador urbano. Escolhas reais sem respostas certas.',
     shortDescription: 'Escolhas impossíveis de um trabalhador',
     theme: 'labor',
+    genre: 'narration',
     icon: '⚖️',
     cover: '/games/trabalho-impossivel.jpg',
     status: 'coming',
@@ -430,23 +496,27 @@ export const games: Game[] = [
     pace: 'session',
     line: 'trabalho',
     territoryScope: 'sul-fluminense',
+    territories: ['sul-fluminense'],
+    politicalThemes: ['trabalho'],
     series: 'serie-trabalho-sobrevivencia',
     politicalAxis: 'mercado',
     collectiveSolutionType: 'nao-definido',
     commonVsMarket: 'mercado',
     campaignFrame: 'projeto-coletivo',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 50
   },
   {
     id: 'voto-consciente',
     slug: 'voto-consciente',
     title: 'Voto Consciente',
-    description:
-      'Um quiz que desvela suas posições políticas reais. Você responde sobre pautas concretas e ao final obtém leitura política acionável.',
+    description: 'Um quiz que desvela suas posições políticas reais.',
     shortDescription: 'Descubra suas posições políticas reais',
     theme: 'rights',
+    genre: 'quiz',
     icon: '🗳️',
     cover: '/games/voto-consciente.jpg',
     status: 'live',
@@ -463,23 +533,27 @@ export const games: Game[] = [
     pace: 'session',
     line: 'organizacao-popular',
     territoryScope: 'estado-rj',
+    territories: ['estado-rj'],
+    politicalThemes: ['organizacao-popular'],
     series: 'serie-campanha-missoes-estado',
     politicalAxis: 'reforma-estatal',
     collectiveSolutionType: 'controle-popular',
     commonVsMarket: 'misto',
     campaignFrame: 'defesa-dos-comuns',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 40
   },
   {
     id: 'memoria-coletiva',
     slug: 'memoria-coletiva',
     title: 'Memória Coletiva',
-    description:
-      'Um jogo de associação e descoberta. Visuais de momentos políticos e urbanos reais são revelados gradualmente para leitura de contexto.',
+    description: 'Um jogo de associação e descoberta. Visuais de momentos políticos reais.',
     shortDescription: 'Jogo de memória política e urbana',
     theme: 'memory',
+    genre: 'narration',
     icon: '🧩',
     cover: '/games/memoria-coletiva.jpg',
     status: 'coming',
@@ -496,23 +570,27 @@ export const games: Game[] = [
     pace: 'session',
     line: 'memoria-territorio',
     territoryScope: 'volta-redonda',
+    territories: ['volta-redonda'],
+    politicalThemes: ['memoria'],
     series: 'serie-cidade-abandonada',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'ajuda-mutua',
     commonVsMarket: 'comum',
     campaignFrame: 'comunidade-em-luta',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 45
   },
   {
     id: 'transporte-urgente',
     slug: 'transporte-urgente',
     title: 'Transporte Urgente',
-    description:
-      'Uma narrativa interativa sobre mobilidade urbana. Suas escolhas definem rota, risco, fadiga e renda, expondo o custo humano da logística urbana.',
+    description: 'Uma narrativa interativa sobre mobilidade urbana. Suas escolhas definem rota.',
     shortDescription: 'Narrativa sobre mobilidade urbana precária',
     theme: 'city',
+    genre: 'narration',
     icon: '🏃',
     cover: '/games/transporte-urgente.jpg',
     status: 'live',
@@ -529,23 +607,27 @@ export const games: Game[] = [
     pace: 'session',
     line: 'mobilidade',
     territoryScope: 'volta-redonda',
+    territories: ['volta-redonda'],
+    politicalThemes: ['transporte', 'trabalho'],
     series: 'serie-volta-redonda',
     politicalAxis: 'reforma-estatal',
     collectiveSolutionType: 'tarifa-zero',
     commonVsMarket: 'misto',
     campaignFrame: 'projeto-coletivo',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 55
   },
   {
     id: 'custo-de-viver',
     slug: 'custo-de-viver',
     title: 'Custo de Viver',
-    description:
-      'Um quiz relâmpago sobre realidade econômica. Quanto custa viver bem em Volta Redonda? Responda 5 perguntas rápidas e descubra qual é o seu "custo de viver" real.',
+    description: 'Um quiz relâmpago sobre realidade econômica em Volta Redonda.',
     shortDescription: 'Quiz sobre custo de vida em VR',
     theme: 'labor',
+    genre: 'quiz',
     icon: '💰',
     cover: '/games/custo-de-viver.jpg',
     status: 'beta',
@@ -554,7 +636,7 @@ export const games: Game[] = [
     duration: '1-2 min',
     participants: 1,
     difficulty: 'easy',
-    tags: ['custo de vida', 'economia', 'realidade', 'quick'],
+    tags: ['custo de vida', 'economia', 'quick'],
     cta: 'Calcular',
     color: '#C97E2F',
     kind: 'quiz',
@@ -562,23 +644,28 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'trabalho',
     territoryScope: 'volta-redonda',
+    territories: ['volta-redonda'],
+    politicalThemes: ['trabalho'],
     series: 'serie-trabalho-sobrevivencia',
     politicalAxis: 'reforma-estatal',
     collectiveSolutionType: 'cooperativismo',
     commonVsMarket: 'misto',
     campaignFrame: 'projeto-coletivo',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    isNew: true,
+    priorityScore: 65
   },
   {
     id: 'quem-paga-a-conta',
     slug: 'quem-paga-a-conta',
     title: 'Quem Paga a Conta?',
-    description:
-      'Um quiz relâmpago sobre responsabilidade fiscal. Quem deve pagar pelos serviços essenciais do RJ? Responda 5 perguntas rápidas sobre transporte, saúde, moradia, educação e segurança.',
+    description: 'Um quiz relâmpago sobre responsabilidade fiscal e serviços essenciais.',
     shortDescription: 'Quiz sobre quem deve pagar serviços públicos',
     theme: 'rights',
+    genre: 'quiz',
     icon: '💸',
     cover: '/games/quem-paga-a-conta.jpg',
     status: 'beta',
@@ -587,7 +674,7 @@ export const games: Game[] = [
     duration: '1-2 min',
     participants: 1,
     difficulty: 'easy',
-    tags: ['responsabilidade', 'serviços públicos', 'Estado', 'quick'],
+    tags: ['responsabilidade', 'Estado', 'quick'],
     cta: 'Responder',
     color: '#FFB81C',
     kind: 'quiz',
@@ -595,23 +682,28 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'organizacao-popular',
     territoryScope: 'estado-rj',
+    territories: ['estado-rj'],
+    politicalThemes: ['servicos-publicos'],
     series: 'serie-campanha-missoes-estado',
     politicalAxis: 'reforma-estatal',
     collectiveSolutionType: 'controle-popular',
     commonVsMarket: 'misto',
     campaignFrame: 'defesa-dos-comuns',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
+    deviceSupport: ['mobile', 'desktop'],
+    isNew: true,
+    priorityScore: 60
   },
   {
     id: 'cidade-em-comum',
     slug: 'cidade-em-comum',
     title: 'Cidade em Comum',
-    description:
-      'Quiz relampago sobre saidas coletivas para o cotidiano: tarifa zero, cooperativas, mutirao e autogestao. Em 5 perguntas, descubra qual caminho de organizacao popular mais combina com sua leitura da cidade.',
+    description: 'Quiz relampago sobre saidas coletivas para o cotidiano.',
     shortDescription: 'Qual solucao coletiva voce prioriza para a cidade?',
     theme: 'rights',
+    genre: 'quiz',
     icon: '🤝',
     cover: '/games/cidade-em-comum.jpg',
     status: 'beta',
@@ -620,7 +712,7 @@ export const games: Game[] = [
     duration: '1-2 min',
     participants: 1,
     difficulty: 'easy',
-    tags: ['organizacao popular', 'comum', 'quick', 'solucoes coletivas'],
+    tags: ['organizacao popular', 'comum', 'quick'],
     cta: 'Construir',
     color: '#2E7D5B',
     kind: 'quiz',
@@ -628,15 +720,20 @@ export const games: Game[] = [
     pace: 'quick',
     line: 'organizacao-popular',
     territoryScope: 'estado-rj',
+    territories: ['estado-rj'],
+    politicalThemes: ['organizacao-popular', 'cooperativismo'],
     series: 'serie-solucoes-coletivas',
     politicalAxis: 'poder-popular',
     collectiveSolutionType: 'autogestao',
     commonVsMarket: 'comum',
     campaignFrame: 'defesa-dos-comuns',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem e fixação de marca.',
+    campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
-  },
+    deviceSupport: ['mobile', 'desktop'],
+    isNew: true,
+    priorityScore: 70
+  }
 ];
 
 
@@ -656,9 +753,31 @@ export function getGamesBySeries(series: GameSeries): Game[] {
   return games.filter((game) => game.series === series);
 }
 
-export function getGamesByTerritory(scope: TerritoryScope): Game[] {
-  return games.filter((game) => game.territoryScope === scope);
+
+export function getGamesByGenre(genre: GameGenre): Game[] {
+  return games.filter((game) => game.genre === genre);
 }
+
+export function getGamesByTerritory(scope: TerritoryScope): Game[] {
+  return games.filter((game) => game.territories.includes(scope));
+}
+
+export function getGamesByPoliticalTheme(theme: PoliticalTheme): Game[] {
+  return games.filter((game) => game.politicalThemes.includes(theme));
+}
+
+export function getFeaturedGames(): Game[] {
+  return games.filter((game) => game.isFeatured).sort((a, b) => b.priorityScore - a.priorityScore);
+}
+
+export function getNewGames(): Game[] {
+  return games.filter((game) => game.isNew).sort((a, b) => b.priorityScore - a.priorityScore);
+}
+
+export function getGamesByDevice(device: DeviceSupport): Game[] {
+  return games.filter((game) => game.deviceSupport.includes(device));
+}
+
 
 export function getGamesByPoliticalAxis(axis: PoliticalAxis): Game[] {
   return games.filter((game) => game.politicalAxis === axis);

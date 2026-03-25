@@ -76,7 +76,13 @@ export type AnalyticsEventName =
   | 'replay_after_run_click'
   | 'next_game_after_run_click'
   | 'quick_to_arcade_click'
-  | 'arcade_to_quick_click';
+  | 'arcade_to_quick_click'
+  // Portfolio v1 (T67)
+  | 'portfolio_lane_impression'
+  | 'portfolio_card_click'
+  | 'hero_impression'
+  | 'hero_primary_cta_click'
+  | 'hero_secondary_cta_click';
 
 export interface AnalyticsEventPayload {
   sessionId: string;

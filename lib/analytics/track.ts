@@ -874,3 +874,29 @@ export async function trackHeroSecondaryCtaClick(game: Game, variant: string, ct
     }),
   );
 }
+
+export async function trackPortfolioLaneImpression(laneId: string, laneTitle: string) {
+  await trackEvent({
+    event: 'portfolio_lane_impression',
+    slug: 'hub',
+    engineKind: 'hub',
+    metadata: {
+      laneId,
+      laneTitle,
+      source_surface: 'hub_home'
+    }
+  });
+}
+
+export async function trackPortfolioCardClick(game: Game, laneId: string) {
+  await trackEvent(
+    withBaseMetadata(game, {
+      event: 'portfolio_card_click',
+      metadata: {
+        laneId,
+        game_slug: game.slug,
+        source_surface: 'hub_home'
+      }
+    })
+  );
+}

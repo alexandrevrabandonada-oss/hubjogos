@@ -1,0 +1,340 @@
+/* ProductionTracker.module.css */
+/* T73 — Game Production System */
+
+/* Tracker Container */
+.tracker {
+  background: #1e293b;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.progressBar {
+  position: relative;
+  width: 150px;
+  height: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* Status Badges */
+.completeBadge {
+  background: #22c55e;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.missingAlert {
+  background: rgba(234, 179, 8, 0.2);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #eab308;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+/* Sections */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Checklist */
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+}
+
+.checkItem.required {
+  font-weight: 500;
+}
+
+.checkItem.checked {
+  opacity: 0.7;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s ease;
+  flex: 1;
+}
+
+.label:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: #22c55e;
+}
+
+.itemLabel {
+  flex: 1;
+}
+
+.requiredBadge {
+  font-size: 0.65rem;
+  padding: 0.25rem 0.5rem;
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Footer */
+.footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.blueprintInfo {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+/* Status Badge Component */
+.statusBadge {
+  display: inline-flex;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusConcept {
+  background: #64748b;
+  color: white;
+}
+
+.statusPreProduction {
+  background: #8b5cf6;
+  color: white;
+}
+
+.statusPrototype {
+  background: #3b82f6;
+  color: white;
+}
+
+.statusVerticalSlice {
+  background: #06b6d4;
+  color: white;
+}
+
+.statusBeta {
+  background: #f59e0b;
+  color: white;
+}
+
+.statusRC {
+  background: #f97316;
+  color: white;
+}
+
+.statusLive {
+  background: #22c55e;
+  color: white;
+}
+
+.statusMaintenance {
+  background: #6b7280;
+  color: white;
+}
+
+/* Score Card Component */
+.scoreCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #1e293b;
+  border-radius: 0.75rem;
+  border: 2px solid transparent;
+  margin-bottom: 1rem;
+}
+
+.scoreCard.build_now {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.scoreCard.build_soon {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.scoreCard.build_later {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.scoreCard.hold {
+  border-color: #6b7280;
+  opacity: 0.7;
+}
+
+.rank {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #94a3b8;
+  min-width: 3rem;
+  text-align: center;
+}
+
+.scoreInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.scoreTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.scorePremise {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.scoreMeta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.trackBadge {
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.scoreValue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.scoreNumber {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #22c55e;
+}
+
+.recommendation {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .tracker {
+    padding: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .progressBar {
+    width: 100%;
+  }
+
+  .scoreCard {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .scoreMeta {
+    justify-content: center;
+  }
+}
