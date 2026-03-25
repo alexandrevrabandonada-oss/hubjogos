@@ -35,7 +35,8 @@ export type GameSeries =
   | 'serie-cidade-abandonada'
   | 'serie-rio-de-janeiro'
   | 'serie-campanha-missoes-estado'
-  | 'serie-solucoes-coletivas';
+  | 'serie-solucoes-coletivas'
+  | 'territorios-em-luta';
 
 export type PoliticalAxis = 'mercado' | 'reforma-estatal' | 'poder-popular';
 export type CollectiveSolutionType =
@@ -48,6 +49,18 @@ export type CollectiveSolutionType =
 export type CommonVsMarket = 'mercado' | 'misto' | 'comum';
 export type CampaignFrame = 'projeto-coletivo' | 'comunidade-em-luta' | 'defesa-dos-comuns';
 export type PortfolioStage = 'live' | 'validating' | 'coming' | 'pre-production' | 'cold-backlog';
+
+export const TERRITORY_SCOPE_LABELS: Record<TerritoryScope, string> = {
+  'volta-redonda': 'Volta Redonda',
+  'sul-fluminense': 'Sul Fluminense',
+  baixada: 'Baixada',
+  capital: 'Capital',
+  'estado-rj': 'Estado do Rio de Janeiro',
+};
+
+export type GameGenre = 'arcade' | 'platform' | 'simulation' | 'management' | 'strategy' | 'narration' | 'quiz';
+export type PoliticalTheme = 'tarifa-zero' | 'trabalho' | 'moradia' | 'poluicao' | 'memoria' | 'servicos-publicos' | 'organizacao-popular' | 'cooperativismo' | 'cuidado' | 'transporte' | 'saude' | 'educacao';
+export type DeviceSupport = 'mobile' | 'desktop';
 
 export const GAME_PACE_LABELS: Record<GamePace, string> = {
   quick: '30s-2min',
@@ -73,6 +86,7 @@ export const GAME_SERIES_LABELS: Record<GameSeries, string> = {
   'serie-rio-de-janeiro': 'Serie Rio de Janeiro',
   'serie-campanha-missoes-estado': 'Serie Campanha / Missoes do Estado',
   'serie-solucoes-coletivas': 'Serie Solucoes Coletivas',
+  'territorios-em-luta': 'Territórios em Luta',
 };
 
 export const POLITICAL_AXIS_LABELS: Record<PoliticalAxis, string> = {
@@ -95,24 +109,6 @@ export const COMMON_VS_MARKET_LABELS: Record<CommonVsMarket, string> = {
   misto: 'Misto',
   comum: 'Comum',
 };
-
-export const CAMPAIGN_FRAME_LABELS: Record<CampaignFrame, string> = {
-  'projeto-coletivo': 'Projeto Coletivo',
-  'comunidade-em-luta': 'Comunidade em Luta',
-  'defesa-dos-comuns': 'Defesa dos Comuns',
-};
-
-export const TERRITORY_SCOPE_LABELS: Record<TerritoryScope, string> = {
-  'volta-redonda': 'Volta Redonda',
-  'sul-fluminense': 'Sul Fluminense',
-  baixada: 'Baixada',
-  capital: 'Capital',
-  'estado-rj': 'Estado do Rio de Janeiro',
-};
-
-export type GameGenre = 'arcade' | 'platform' | 'simulation' | 'management' | 'strategy' | 'narration' | 'quiz';
-export type PoliticalTheme = 'tarifa-zero' | 'trabalho' | 'moradia' | 'poluicao' | 'memoria' | 'servicos-publicos' | 'organizacao-popular' | 'cooperativismo' | 'cuidado' | 'transporte' | 'saude' | 'educacao';
-export type DeviceSupport = 'mobile' | 'desktop';
 
 export const GAME_GENRE_LABELS: Record<GameGenre, string> = {
   arcade: 'Arcade',
