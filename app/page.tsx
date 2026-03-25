@@ -75,8 +75,6 @@ export default function Home() {
           games={featuredGames} 
           cardVariant="featured"
         />
-        {/* ...existing code... */}
-        />
 
         <PortfolioLane 
           laneId="theme-popular" 
