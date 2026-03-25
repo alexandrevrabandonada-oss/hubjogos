@@ -3,8 +3,6 @@
 import { 
   games, 
   getFeaturedGames, 
-  getGamesByGenre, 
-  getGamesByTerritory, 
   getGamesByPoliticalTheme
 } from '@/lib/games/catalog';
 import { BetaBanner } from '@/components/ui/BetaBanner';
