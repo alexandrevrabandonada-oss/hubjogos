@@ -110,6 +110,12 @@ export const COMMON_VS_MARKET_LABELS: Record<CommonVsMarket, string> = {
   comum: 'Comum',
 };
 
+export const CAMPAIGN_FRAME_LABELS: Record<CampaignFrame, string> = {
+  'projeto-coletivo': 'Projeto Coletivo',
+  'comunidade-em-luta': 'Comunidade em Luta',
+  'defesa-dos-comuns': 'Defesa dos Comuns',
+};
+
 export const GAME_GENRE_LABELS: Record<GameGenre, string> = {
   arcade: 'Arcade',
   platform: 'Plataforma',

@@ -4,7 +4,7 @@
 // T74 — Game wrapped with T72 PlayShell
 
 import { MutiraoGameWrapper } from '@/components/games/MutiraoGame';
-import { MUTIRAO_GAME } from '../page';
+import { MUTIRAO_GAME } from '../constants';
 
 export default function MutiraoPlayPage() {
   return <MutiraoGameWrapper game={MUTIRAO_GAME} />;
