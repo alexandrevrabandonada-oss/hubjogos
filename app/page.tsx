@@ -18,7 +18,6 @@ import styles from './page.module.css';
 // Progression surfaces and logic
 import { ContinueJogando, JogadosRecentemente, ProximoPasso, VocePodeGostar, VoltarParaLuta } from '@/components/hub/ProgressionSurfaces';
 import { loadProgression } from '@/lib/hub/progression';
-import { games } from '@/lib/games/catalog';
 
 export default function Home() {
   const featuredGames = getFeaturedGames();
