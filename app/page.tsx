@@ -1,6 +1,7 @@
 'use client';
 
 import { 
+  Game,
   games, 
   getFeaturedGames, 
   getGamesByPoliticalTheme
@@ -11,6 +12,10 @@ import { Section } from '@/components/ui/Section';
 import { EditorialMasthead } from '@/components/hub/EditorialMasthead';
 import { PortfolioLane } from '@/components/hub/PortfolioLane';
 import { CampaignAvatar } from '@/components/campaign/CampaignAvatar';
+import { 
+  RecommendationResult,
+  RecommendationReason,
+} from '@/lib/hub/recommendation';
 import styles from './page.module.css';
 
 // Progression surfaces and logic
@@ -31,15 +36,24 @@ export default function Home() {
   }
 
   // Helper to get games by slug
-  const getGamesBySlugs = (slugs) => games.filter(g => slugs.includes(g.slug));
+  const getGamesBySlugs = (slugs: string[]): Game[] => games.filter(g => slugs.includes(g.slug));
+
+  // Helper to wrap games for surfaces
+  const wrapGames = (games: Game[], reason: RecommendationReason): RecommendationResult[] => 
+    games.map(game => ({
+      game,
+      reason,
+      score: 100,
+      explanation: 'Recomendado'
+    }));
 
   // Surfaces data
   const recentlyPlayedGames = getGamesBySlugs(progression.recentlyPlayed || []);
   const completedGames = getGamesBySlugs(progression.completedGames || []);
-  // For demo: next step, recommendations, and related struggle can be editorial or based on progression logic
-  const proximoPassoGames = []; // TODO: fill with recommendation logic
-  const vocePodeGostarGames = []; // TODO: fill with recommendation logic
-  const voltarParaLutaGames = []; // TODO: fill with recommendation logic
+  
+  const proximoPassoGames: RecommendationResult[] = []; 
+  const vocePodeGostarGames: RecommendationResult[] = []; 
+  const voltarParaLutaGames: RecommendationResult[] = []; 
 
   return (
     <>
@@ -59,11 +73,11 @@ export default function Home() {
       />
 
       {/* Progression/return surfaces — only render if relevant */}
-      <ContinueJogando games={recentlyPlayedGames} />
-      <JogadosRecentemente games={completedGames} />
-      <ProximoPasso games={proximoPassoGames} />
-      <VocePodeGostar games={vocePodeGostarGames} />
-      <VoltarParaLuta games={voltarParaLutaGames} />
+      <ContinueJogando recommendations={wrapGames(recentlyPlayedGames, 'continue')} />
+      <JogadosRecentemente recommendations={wrapGames(completedGames, 'unplayed')} />
+      <ProximoPasso recommendations={proximoPassoGames} />
+      <VocePodeGostar recommendations={vocePodeGostarGames} />
+      <VoltarParaLuta recommendations={voltarParaLutaGames} />
 
       <section id="explorar" style={{ paddingTop: '40px' }}>
         <PortfolioLane 
