@@ -109,7 +109,7 @@ export function GameEntryPage({
       )}
 
       {/* Share Readiness */}
-      {shareData && <ShareSection data={shareData} game={game} />}
+      {shareData && <ShareSection data={shareData} />}
 
       {/* Back Navigation */}
       <BackSection />
@@ -504,10 +504,9 @@ function getRelatedReason(source: Game, target: Game): string {
 
 interface ShareSectionProps {
   data: NonNullable<GameEntryPageProps['shareData']>;
-  game: Game;
 }
 
-function ShareSection({ data, game }: ShareSectionProps) {
+function ShareSection({ data }: ShareSectionProps) {
   const handleShare = async () => {
     if (navigator.share) {
       try {
