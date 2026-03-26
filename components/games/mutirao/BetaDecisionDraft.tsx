@@ -19,8 +19,6 @@ interface BetaDecisionDraftProps {
 export function BetaDecisionDraft({ sessions, auditProgress }: BetaDecisionDraftProps) {
   const telemetry = useMemo(() => getTelemetryAggregate(), []);
 
-  const completedSessions = sessions.filter(s => s.status === 'completed');
-  
   // Device/browser coverage
   const deviceCoverage = useMemo(() => 
     Array.from(new Set(sessions.map(s => s.metadata.deviceType))),
