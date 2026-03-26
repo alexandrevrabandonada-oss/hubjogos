@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo, useRef } from 'react';
-import Head from 'next/head';
+import Link from 'next/link';
 import { type Game } from '@/lib/games/catalog';
 import { ResultCard } from '../share/ResultCard';
 import { useArcadeTelemetry } from '@/lib/games/arcade/useArcadeTelemetry';
@@ -13,6 +13,13 @@ import styles from './BairroResisteArcadeGame.module.css';
 
 type HotspotType = 'agua' | 'moradia' | 'mobilidade' | 'saude';
 type HotspotState = 'normal' | 'warning' | 'critical';
+
+const SECTOR_LABELS: Record<HotspotType, string> = {
+  agua: 'Água',
+  moradia: 'Moradia',
+  mobilidade: 'Transit',
+  saude: 'Saúde',
+};
 
 interface Hotspot {
   id: HotspotType;
@@ -47,6 +54,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
   const [score, setScore] = useState(0);
   const [phaseReached, setPhaseReached] = useState<number>(1);
   const [actionStats, setActionStats] = useState<Record<HotspotType, number>>({ agua: 0, moradia: 0, mobilidade: 0, saude: 0 });
+  const [flashingHotspot, setFlashingHotspot] = useState<HotspotType | null>(null);
   
   // Ref for the latest state to be used in outcome without closure traps
   const stateRef = useRef({ integrity, hotspots, score, actionStats });
@@ -55,9 +63,9 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
   const { trackStart, trackEnd, trackReplay } = useArcadeTelemetry(game);
 
   const getPhase = (timeMs: number) => {
-    if (timeMs < 30000) return 1; // Sondagem
-    if (timeMs < 60000) return 2; // Aceleração
-    return 3; // Caos
+    if (timeMs < 30000) return 1;
+    if (timeMs < 60000) return 2;
+    return 3;
   };
 
   const { ms: timeMs, start: startTimer, pause: stopTimer, reset: resetTimer } = useArcadeTimer(
@@ -73,18 +81,15 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
         let activeCriticalCount = 0;
         
         const nextHotspots = prev.map(h => {
-          // Decrement Cooldown
           const newCooldown = Math.max(0, h.cooldownMs - TICK_RATE_MS);
           
-          // Escalada de pressão baseada na fase
           let pressureIncrease = 0;
-          if (currentPhase === 1) pressureIncrease = Math.random() * 3; // 0 a 3 por seg
-          if (currentPhase === 2) pressureIncrease = 1 + Math.random() * 5; // 1 a 6 por seg
-          if (currentPhase === 3) pressureIncrease = 2 + Math.random() * 4; // 2 a 6 por seg
+          if (currentPhase === 1) pressureIncrease = Math.random() * 3;
+          if (currentPhase === 2) pressureIncrease = 1 + Math.random() * 5;
+          if (currentPhase === 3) pressureIncrease = 2 + Math.random() * 4;
           
-          // Evento de crise (burst estocástico de pressão em F2 e F3)
           if (currentPhase >= 2 && Math.random() < 0.05) {
-             pressureIncrease += 15; // burst de 15 de pressão súbita
+             pressureIncrease += 15;
           }
           
           const factor = h.id === 'saude' ? 0.9 : 1.0;
@@ -101,9 +106,8 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
           };
         });
         
-        // Se houver hotspots críticos, a integridade global é queimada
         if (activeCriticalCount > 0) {
-          const damage = activeCriticalCount * 2; // 2% por hotspot crítico
+          const damage = activeCriticalCount * 2;
           setIntegrity(int => {
              const newInt = Math.max(0, int - damage);
              if (newInt === 0) {
@@ -131,6 +135,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
     setPhaseReached(1);
     setHotspots(INITIAL_HOTSPOTS);
     setActionStats({ agua: 0, moradia: 0, mobilidade: 0, saude: 0 });
+    setFlashingHotspot(null);
     resetTimer(0);
     startTimer();
   }, [trackStart, startTimer, resetTimer]);
@@ -139,7 +144,6 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
     stopTimer();
     setGameState('outcome');
     
-    // Calcular o hotspot mais sofrido
     let worstHotspot = finalHotspots[0];
     for (const h of finalHotspots) {
        if (h.totalCriticalTime > worstHotspot.totalCriticalTime) {
@@ -166,22 +170,26 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
 
   const handleHotspotClick = (h: Hotspot) => {
     if (gameState !== 'playing') return;
-    if (h.cooldownMs > 0) return; // bloqueado por cooldown
+    if (h.cooldownMs > 0) return;
     
     setActionStats(prev => ({ ...prev, [h.id]: prev[h.id] + 1 }));
+    
+    // Trigger hit flash
+    setFlashingHotspot(h.id);
+    setTimeout(() => setFlashingHotspot(null), 350);
     
     setHotspots(prev => prev.map(item => {
       if (item.id === h.id) {
         return { 
           ...item, 
           pressure: Math.max(0, item.pressure - 35), 
-          cooldownMs: 1500 // 1.5s de cooldown para esse hotspot
+          cooldownMs: 1500
         };
       }
       return item;
     }));
     
-    setScore(s => s + (h.pressure >= 80 ? 50 : 20)); // Bônus por salvar no crítico
+    setScore(s => s + (h.pressure >= 80 ? 50 : 20));
   };
 
   const getHotspotState = (pressure: number): HotspotState => {
@@ -201,138 +209,181 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
     return 'critical';
   };
 
-  const getOutcomeSummary = () => {
-     let worstHotspot = hotspots[0];
-     for (const h of hotspots) {
-        if (h.totalCriticalTime > worstHotspot.totalCriticalTime) {
-           worstHotspot = h;
-        }
-     }
-     
-     if (integrity <= 0) {
-        return `Colapso na Fase ${phaseReached} | Setor Crítico: ${worstHotspot.id.toUpperCase()} (Ficou ${worstHotspot.totalCriticalTime / 1000}s na zona vermelha)`;
-     } else {
-        return `Resistência Completa! Integridade: ${integrity}% | Ameaça Maior: ${worstHotspot.id.toUpperCase()}`;
-     }
+  const getWorstHotspot = () => {
+    let worst = hotspots[0];
+    for (const h of hotspots) {
+      if (h.totalCriticalTime > worst.totalCriticalTime) worst = h;
+    }
+    return worst;
   };
+
+  // ─── INTRO SCREEN ─────────────────────────────────────────────────────────
+  if (gameState === 'intro') {
+    return (
+      <div className={styles.introCard}>
+        <div className={styles.introHeader}>
+          <span className={styles.introEyebrow}>Arcade de Defesa Territorial</span>
+          <h2 className={styles.introTitle}>Bairro Resiste</h2>
+          <p className={styles.introDesc}>
+            A pressão cresce em 3 fases. Clique nos pontos críticos para defender o bairro.
+            Se a integridade chegar a zero — o bairro colapsa.
+          </p>
+        </div>
+
+        <div className={styles.featureGrid}>
+          <div className={styles.feature}>
+            <strong>⚡ 3 Fases</strong>
+            <p>Sondagem → Aceleração → Caos. Cada fase aumenta a pressão territorial.</p>
+          </div>
+          <div className={styles.feature}>
+            <strong>🎯 4 Setores</strong>
+            <p>Água, Moradia, Mobilidade e Saúde. Todos precisam de atenção.</p>
+          </div>
+          <div className={styles.feature}>
+            <strong>🔴 Zona Crítica</strong>
+            <p>Pontos vermelhos drenam a integridade global. Priorize-os!</p>
+          </div>
+          <div className={styles.feature}>
+            <strong>⏱ Cooldown 1.5s</strong>
+            <p>Cada ação tem cooldown. Escolha com sabedoria onde agir.</p>
+          </div>
+        </div>
+
+        <div className={styles.actions}>
+          <button onClick={startGame} className={styles.playButton}>
+            Defender o Bairro
+          </button>
+          <Link href="/explorar" className={styles.linkGhost}>
+            ← Voltar ao catálogo
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── GAME BOARD ───────────────────────────────────────────────────────────
+  if (gameState === 'playing') {
+    return (
+      <ArcadeHUDContainer 
+        topLeft={
+          <div className="flex bg-slate-900/80 p-2 rounded-xl border border-slate-700 w-48 shadow-lg">
+            <ArcadeProgressBar value={integrity} max={100} colorState={getIntegrityState()} label="INTEGRIDADE" />
+          </div>
+        }
+        topRight={
+          <div className="flex flex-col items-end bg-slate-900/80 p-2 rounded-xl border border-slate-700 shadow-lg px-4">
+            <div className="text-white font-mono font-bold text-2xl">
+               {formattedTime}
+               {phaseReached >= 2 && <span className={`text-xs ml-2 uppercase ${phaseReached === 3 ? 'text-red-400 animate-pulse' : 'text-yellow-400'}`}>Fase {phaseReached}</span>}
+            </div>
+            <div className="text-xs text-slate-400 font-bold tracking-wider mt-1">SCORE: {score.toString().padStart(4, '0')}</div>
+          </div>
+        }
+      >
+        <div className={styles.mapBackground}>
+          {integrity <= 30 && <div className={styles.dangerOverlay} />}
+          {hotspots.map((h) => {
+            const state = getHotspotState(h.pressure);
+            const stateClass = state === 'critical' ? styles.hotspotCritical : state === 'warning' ? styles.hotspotWarning : styles.hotspotNormal;
+            const isOnCooldown = h.cooldownMs > 0;
+            const isFlashing = flashingHotspot === h.id;
+            
+            return (
+              <div 
+                key={h.id}
+                className={`${styles.hotspot} ${stateClass} ${isOnCooldown ? 'opacity-50 grayscale cursor-not-allowed' : ''} ${isFlashing ? styles.hitFlash : ''}`}
+                style={{ left: `${h.x}%`, top: `${h.y}%`, backgroundImage: `url('${h.assetBase}')` }}
+                onClick={() => handleHotspotClick(h)}
+              >
+                {/* Pressure bar */}
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-16">
+                   <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+                      <div 
+                         className={`h-full ${styles.smoothBar} ${state === 'critical' ? 'bg-red-500' : state === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'}`} 
+                         style={{ width: `${h.pressure}%` }}
+                      />
+                   </div>
+                </div>
+
+                {/* Sector label */}
+                <span className={styles.sectorLabel}>{SECTOR_LABELS[h.id]}</span>
+
+                {/* Cooldown spinner */}
+                {isOnCooldown && (
+                  <div className="absolute inset-0 rounded-full border-4 border-slate-400 border-t-white animate-spin" />
+                )}
+                {h.cooldownMs > 1000 && (
+                  <div className={styles.healingEffect} />
+                )}
+              </div>
+            );
+          })}
+          <div className={styles.playerIndicator} />
+        </div>
+      </ArcadeHUDContainer>
+    );
+  }
+
+  // ─── OUTCOME SCREEN ───────────────────────────────────────────────────────
+  const survived = integrity > 0;
+  const worstHotspot = getWorstHotspot();
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>{game.title} | Jogos Pela Cidade</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-      </Head>
+      <div className={styles.resultCard}>
+        {/* Title */}
+        <p className={`${styles.resultOutcome} ${survived ? styles.survived : styles.collapsed}`}>
+          {survived ? '🏘️ Bairro Resistiu!' : '💥 Colapso do Bairro'}
+        </p>
+        <p className={styles.resultSummary}>
+          {survived
+            ? `Você defendeu o território com ${integrity}% de integridade restante.`
+            : `O bairro colapsou na Fase ${phaseReached} sob pressão territorial.`}
+        </p>
 
-      {gameState === 'intro' && (
-        <div className="absolute inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center text-slate-100 p-6 text-center">
-          <h1 className="text-4xl font-black mb-4 uppercase tracking-tighter text-blue-400">{game.title}</h1>
-          <p className="text-xl max-w-lg mb-8 text-slate-300">{game.description}</p>
-          <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 max-w-sm w-full mb-8">
-            <h3 className="font-bold mb-2 text-slate-200">Como jogar:</h3>
-            <ul className="text-left text-sm text-slate-400 space-y-2">
-              <li>1. A pressão territorial crescerá em 3 fases (Aceleração e Caos).</li>
-              <li>2. Toque nos pontos Críticos (Vermelhos) para curar. Há um <strong>cooldown de 1.5s</strong> por ação!</li>
-              <li>3. Hotspots no Crítico deterioram ativamente a sua Integridade Global.</li>
-            </ul>
+        {/* Stats */}
+        <div className={styles.resultStats}>
+          <div className={styles.statItem}>
+            <span className={styles.statValue}>{score}</span>
+            <span className={styles.statLabel}>Score</span>
           </div>
-          <button 
-            onClick={startGame}
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full text-xl shadow-lg shadow-blue-900/50 transition-transform active:scale-95"
-          >
-            Iniciar Mutirão
-          </button>
+          <div className={styles.statItem}>
+            <span className={styles.statValue}>{phaseReached}</span>
+            <span className={styles.statLabel}>Fase</span>
+          </div>
+          <div className={styles.statItem}>
+            <span className={styles.statValue}>{integrity}%</span>
+            <span className={styles.statLabel}>Integridade</span>
+          </div>
         </div>
-      )}
 
-      {gameState === 'playing' && (
-        <ArcadeHUDContainer 
-          topLeft={
-            <div className="flex bg-slate-900/80 p-2 rounded-xl border border-slate-700 w-48 shadow-lg">
-              <ArcadeProgressBar value={integrity} max={100} colorState={getIntegrityState()} label="INTEGRIDADE" />
-            </div>
-          }
-          topRight={
-            <div className="flex flex-col items-end bg-slate-900/80 p-2 rounded-xl border border-slate-700 shadow-lg px-4">
-              <div className="text-white font-mono font-bold text-2xl">
-                 {formattedTime}
-                 {phaseReached >= 2 && <span className={`text-xs ml-2 uppercase ${phaseReached === 3 ? 'text-red-400 animate-pulse' : 'text-yellow-400'}`}>Fase {phaseReached}</span>}
-              </div>
-              <div className="text-xs text-slate-400 font-bold tracking-wider mt-1">SCORE: {score.toString().padStart(4, '0')}</div>
-            </div>
-          }
-        >
-          <div className={styles.mapBackground}>
-            {integrity <= 30 && <div className={styles.dangerOverlay} />}
-            {hotspots.map((h) => {
-              const state = getHotspotState(h.pressure);
-              const stateClass = state === 'critical' ? styles.hotspotCritical : state === 'warning' ? styles.hotspotWarning : styles.hotspotNormal;
-              const isOnCooldown = h.cooldownMs > 0;
-              
-              return (
-                <div 
-                  key={h.id}
-                  className={`${styles.hotspot} ${stateClass} ${isOnCooldown ? 'opacity-50 grayscale cursor-not-allowed' : ''}`}
-                  style={{ left: `${h.x}%`, top: `${h.y}%`, backgroundImage: `url('${h.assetBase}')` }}
-                  onClick={() => handleHotspotClick(h)}
-                >
-                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-16">
-                     <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden border border-slate-700">
-                        <div 
-                           className={`h-full ${styles.smoothBar} ${state === 'critical' ? 'bg-red-500' : state === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'}`} 
-                           style={{ width: `${h.pressure}%` }}
-                        />
-                     </div>
-                  </div>
-                  {/* Cooldown feedback overlay */}
-                  {isOnCooldown && (
-                    <div className="absolute inset-0 rounded-full border-4 border-slate-400 border-t-white animate-spin" />
-                  )}
-                  {h.cooldownMs > 1000 && (
-                    <div className={styles.healingEffect} />
-                  )}
-                </div>
-              );
-            })}
-            <div className={styles.playerIndicator} />
+        {/* Worst sector */}
+        {worstHotspot.totalCriticalTime > 0 && (
+          <div className={styles.threatLine}>
+            <div className={styles.threatDot} />
+            Setor crítico: {SECTOR_LABELS[worstHotspot.id]} ({Math.floor(worstHotspot.totalCriticalTime / 1000)}s na zona vermelha)
           </div>
-        </ArcadeHUDContainer>
-      )}
+        )}
 
-      {gameState === 'outcome' && (
-        <div className="absolute inset-0 bg-slate-900/95 z-50 flex flex-col items-center p-4 overflow-y-auto">
-          <ResultCard
-            gameSlug={game.slug}
-            resultTitle={integrity > 0 ? "Bairro Resistiu!" : "Colapso do Bairro"}
-            resultId={Date.now().toString()}
-            summary={getOutcomeSummary()}
-          />
-          <div className="mt-8 bg-slate-900/90 border border-slate-700 rounded-xl p-6 w-full max-w-sm mx-auto flex flex-col items-center shadow-2xl backdrop-blur-sm">
-            <span className="text-xs tracking-[0.2em] text-slate-400 uppercase font-semibold mb-1">Diagnóstico Final</span>
-            <div className="text-2xl font-black text-white mb-4 text-center">
-               <span className="opacity-50 text-xl font-normal">Sobreviveu até: </span>
-               Fase {phaseReached}
-            </div>
-            
-            <div className="w-full h-px bg-slate-800 mb-4" />
-            
-            <span className="text-xs tracking-[0.2em] text-red-500/80 uppercase font-bold mb-1">Maior Ameaça Local</span>
-            <div className="flex items-center space-x-2">
-               <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-               <span className="text-xl font-black text-red-400 capitalize">{(() => {
-                  let w = hotspots[0];
-                  for(const h of hotspots) if (h.totalCriticalTime > w.totalCriticalTime) w = h;
-                  return w.id;
-               })()}</span>
-            </div>
-          </div>
-          <button 
-            onClick={handleReplay}
-            className="mt-6 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full text-xl shadow-lg transition-transform active:scale-95"
-          >
-            Tentar Novamente
+        {/* ResultCard for share */}
+        <ResultCard
+          gameSlug={game.slug}
+          resultTitle={survived ? 'Bairro Resistiu!' : 'Colapso do Bairro'}
+          resultId={Date.now().toString()}
+          summary={survived
+            ? `Integridade: ${integrity}% | Score: ${score} | Fase máxima: ${phaseReached}`
+            : `Colapso na Fase ${phaseReached} | Setor mais crítico: ${SECTOR_LABELS[worstHotspot.id]}`}
+        />
+
+        <div className={styles.actions} style={{ marginTop: '1.25rem' }}>
+          <button onClick={handleReplay} className={styles.playButton}>
+            {survived ? 'Tentar Novamente' : 'Resistir de Novo'}
           </button>
+          <Link href="/explorar" className={styles.linkGhost}>
+            ← Voltar ao catálogo
+          </Link>
         </div>
-      )}
+      </div>
     </div>
   );
 }

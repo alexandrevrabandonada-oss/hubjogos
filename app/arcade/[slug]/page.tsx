@@ -87,7 +87,7 @@ export default function ArcadeGamePage({ params, searchParams }: ArcadePageProps
         actions={
           <div className="flex items-center space-x-4">
             <Link href="#missao" className={styles.ctaPrimary}>
-              🎯 Iniciar Missão
+              🎮 {game.cta}
             </Link>
             <Link href="/explorar" className={styles.backLink}>
               ← Voltar ao catálogo
