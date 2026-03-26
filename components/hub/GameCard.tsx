@@ -94,6 +94,10 @@ export function GameCard({ game, laneId, variant = 'standard' }: GameCardProps) 
             {game.icon}
           </span>
           <div className={styles.topBadges}>
+            {game.publicVisibility === 'flagship' && <span className={`${styles.visibilityBadge} ${styles.badgeFlagship}`}>Flagship</span>}
+            {game.publicVisibility === 'public_ready_beta' && <span className={`${styles.visibilityBadge} ${styles.badgeBeta}`}>Beta</span>}
+            {game.publicVisibility === 'lab' && <span className={`${styles.visibilityBadge} ${styles.badgeLab}`}>Lab</span>}
+            {game.publicVisibility === 'secondary_quickplay' && game.genre === 'quiz' && <span className={`${styles.visibilityBadge} ${styles.badgeQuick}`}>Quick</span>}
             <span className={styles.genreBadge}>{GAME_GENRE_LABELS[game.genre]}</span>
           </div>
         </div>

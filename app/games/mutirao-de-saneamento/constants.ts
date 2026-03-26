@@ -34,6 +34,7 @@ export const MUTIRAO_GAME: Game = {
   funRole: 'aprofundamento',
   deviceSupport: ['mobile', 'desktop'],
   priorityScore: 70,
+  publicVisibility: 'public_ready_beta',
   icon: '🚰',
   cover: '/images/games/mutirao-saneamento/cover.jpg',
 };

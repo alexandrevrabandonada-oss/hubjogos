@@ -25,12 +25,22 @@ export function createInitialSimulationState(
     budget[cat.key] = baseAllocation;
   });
 
+  const districtHealth: Record<string, number> = {};
+  if (definition.districts) {
+    definition.districts.forEach((d) => {
+      districtHealth[d.id] = d.initialHealth;
+    });
+  }
+
   return {
     budget,
     totalBudget: definition.totalBudget,
     step: 0,
     history: [],
     finalResult: undefined,
+    districtHealth: definition.districts ? districtHealth : undefined,
+    activeProjects: [],
+    politicalTrust: 50, // Começa no neutro
   };
 }
 
@@ -112,6 +122,77 @@ export function completeSimulation(
   return {
     ...state,
     finalResult: result,
+  };
+}
+
+/**
+ * V2 - Visual City Logic
+ */
+
+export function applyProject(
+  state: SimulationState,
+  projectId: string,
+  definition: SimulationDefinition
+): SimulationState {
+  const project = definition.projects?.find((p) => p.id === projectId);
+  if (!project) return state;
+
+  const newDistrictHealth = { ...(state.districtHealth || {}) };
+  const newBudget = { ...state.budget };
+  const newActiveProjects = [...(state.activeProjects || []), projectId];
+
+  project.impacts.forEach((impact) => {
+    // Impacto em distrito específico
+    if (impact.targetDistrictId && newDistrictHealth[impact.targetDistrictId] !== undefined) {
+      newDistrictHealth[impact.targetDistrictId] = Math.min(
+        100,
+        newDistrictHealth[impact.targetDistrictId] + (impact.healthValue || 0)
+      );
+    }
+
+    // Impacto em categoria de orçamento (legacy support/internal tracking)
+    if (impact.category) {
+      newBudget[impact.category] = (newBudget[impact.category] || 0) + (impact.healthValue || 5);
+    }
+  });
+
+  return {
+    ...state,
+    districtHealth: newDistrictHealth,
+    budget: newBudget,
+    activeProjects: newActiveProjects,
+    politicalTrust: Math.min(100, (state.politicalTrust || 50) + 5),
+  };
+}
+
+export function applyPressureToDistricts(
+  state: SimulationState,
+  definition: SimulationDefinition
+): SimulationState {
+  if (!state.districtHealth) return state;
+
+  const pressure = getNextPressure(state, definition);
+  const newDistrictHealth = { ...state.districtHealth };
+
+  // Decaimento natural (se não houver projeto ativo na área)
+  Object.keys(newDistrictHealth).forEach((id) => {
+    newDistrictHealth[id] = Math.max(0, newDistrictHealth[id] - 3);
+  });
+
+  // Impacto da pressão atual
+  if (pressure) {
+    // Se a pressão for de saúde, afeta distritos que precisam de saúde
+    definition.districts?.forEach((d) => {
+      if (d.needs.includes(pressure.demandCategory)) {
+        newDistrictHealth[d.id] = Math.max(0, newDistrictHealth[d.id] - 10);
+      }
+    });
+  }
+
+  return {
+    ...state,
+    districtHealth: newDistrictHealth,
+    politicalTrust: Math.max(0, (state.politicalTrust || 50) - 8),
   };
 }
 

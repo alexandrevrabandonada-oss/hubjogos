@@ -1,6 +1,6 @@
 /**
- * Types para engine de simulação
- * Permite decisões sob restrições numérico-políticas
+ * Types para engine de simulação (V2 - Visual/Tactical)
+ * Permite decisões sob restrições numérico-políticas e territoriais
  */
 
 export type BudgetCategory = 'saude' | 'educacao' | 'transporte' | 'moradia' | 'manutencao';
@@ -9,6 +9,29 @@ export interface BudgetImpact {
   category: BudgetCategory;
   consequence: string;
   severity: 'low' | 'medium' | 'high';
+}
+
+export interface CityDistrict {
+  id: string;
+  name: string;
+  flavor: string;
+  initialHealth: number; // 0-100
+  icon: string;
+  needs: BudgetCategory[];
+}
+
+export interface UrbanProject {
+  id: string;
+  label: string;
+  description: string;
+  cost: number;
+  icon?: string;
+  impacts: Array<{
+    category?: BudgetCategory;
+    targetDistrictId?: string; // Se afetar distrito específico
+    healthValue?: number; // Melhora de 0-100
+    politicalValue?: number; // Efeito no humor/confiança
+  }>;
 }
 
 export interface SimulationResult {
@@ -31,6 +54,10 @@ export interface SimulationState {
     decision: string;
   }>;
   finalResult?: SimulationResult;
+  // V2 fields
+  districtHealth?: Record<string, number>;
+  activeProjects?: string[];
+  politicalTrust?: number; // 0-100
 }
 
 export interface SimulationDefinition {
@@ -54,12 +81,35 @@ export interface SimulationDefinition {
     demandPercentage: number;
   }>;
   results: SimulationResult[];
+  // V2 fields
+  districts?: CityDistrict[];
+  projects?: UrbanProject[];
+  isVisualMode?: boolean; // Se deve usar o motor tático/visual
 }
 
 export function calculateSimulationResult(
   state: SimulationState,
   definition: SimulationDefinition
 ): SimulationResult {
+  // Se for modo visual, a lógica de resultado foca na saúde dos distritos
+  if (definition.isVisualMode && state.districtHealth) {
+    const healthValues = Object.values(state.districtHealth);
+    const avgHealth = healthValues.reduce((a, b) => a + b, 0) / healthValues.length;
+    
+    // Se a saúde média de todos os distritos for alta (> 65)
+    if (avgHealth > 65) {
+      return (
+        definition.results.find((r) => r.axis === 'orientacao-cuidado') ||
+        definition.results[0]
+      );
+    }
+    
+    return (
+      definition.results.find((r) => r.axis === 'contencao-ajuste') ||
+      definition.results[definition.results.length - 1]
+    );
+  }
+
   const budget = state.budget;
 
   // Contabiliza subinvestimentos

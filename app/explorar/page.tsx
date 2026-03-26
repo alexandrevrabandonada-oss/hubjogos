@@ -34,8 +34,14 @@ export default function ExplorarPage() {
   const [selectedTerritory, setSelectedTerritory] = useState<TerritoryScope | 'all'>('all');
   const [selectedKind, setSelectedKind] = useState<KindFilter>('all');
 
-  const playableGames = games.filter((g) => g.runtimeState === 'real' && (g.status === 'live' || g.status === 'beta'));
-  const liveGames = games.filter((g) => getPortfolioStage(g) === 'live');
+  const playableGames = games.filter((g) => 
+    g.runtimeState === 'real' && 
+    ['flagship', 'public_ready', 'public_ready_beta', 'secondary_quickplay'].includes(g.publicVisibility)
+  );
+  
+  const labGames = games.filter((g) => g.publicVisibility === 'lab');
+  
+  const liveGames = games.filter((g) => getPortfolioStage(g) === 'live' && g.publicVisibility !== 'lab');
   const validatingGames = games.filter((g) => getPortfolioStage(g) === 'validating');
   const comingGames = games.filter((g) => getPortfolioStage(g) === 'coming');
   const preProductionCandidates = plannedGameCandidates.filter((g) => g.status === 'pre-producao');
@@ -320,6 +326,19 @@ export default function ExplorarPage() {
               </div>
             </article>
           ))}
+        </div>
+      </Section>
+
+      <Section
+        eyebrow="Laboratório"
+        title="Experimentos e Protótipos"
+        description={`Controle de qualidade: ${labGames.length} experimentos em estágio inicial separados da trilha principal.`}
+      >
+        <div className={styles.labEntryBlock}>
+          <p>Experimentos de mecânica, simuladores complexos e rascunhos de narrativa que ainda não passaram pelo gate de qualidade pública.</p>
+          <Link href="/lab" className={styles.ctaSecondary}>
+            🔬 Acessar Laboratório →
+          </Link>
         </div>
       </Section>
 

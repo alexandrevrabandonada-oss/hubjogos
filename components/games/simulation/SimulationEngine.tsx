@@ -23,6 +23,7 @@ import {
   getProgressPercent,
 } from '@/lib/games/simulation/engine';
 import type { SimulationDefinition, SimulationState } from '@/lib/games/simulation/types';
+import { UrbanSimEngine } from './UrbanSimEngine';
 import styles from './SimulationEngine.module.css';
 
 interface SimulationEngineProps {
@@ -158,64 +159,74 @@ export function SimulationEngine({ definition, game }: SimulationEngineProps) {
         </p>
       </div>
 
-      <div className={styles.budgetGrid}>
-        {definition.categories.map((cat) => (
-          <div key={cat.key} className={styles.categoryCard}>
-            <div className={styles.categoryHeader}>
-              <span className={styles.categoryIcon} aria-hidden="true">{cat.icon}</span>
-              <h4 className={styles.categoryLabel}>{cat.label}</h4>
-            </div>
-            <p className={styles.categoryDesc}>{cat.description}</p>
+      {definition.isVisualMode ? (
+        <UrbanSimEngine 
+          definition={definition} 
+          state={state} 
+          onStateChange={(newState) => setState(newState)} 
+        />
+      ) : (
+        <>
+          <div className={styles.budgetGrid}>
+            {definition.categories.map((cat) => (
+              <div key={cat.key} className={styles.categoryCard}>
+                <div className={styles.categoryHeader}>
+                  <span className={styles.categoryIcon} aria-hidden="true">{cat.icon}</span>
+                  <h4 className={styles.categoryLabel}>{cat.label}</h4>
+                </div>
+                <p className={styles.categoryDesc}>{cat.description}</p>
 
-            <div className={styles.budgetControl}>
-              <input
-                type="range"
-                min="0"
-                max={definition.totalBudget}
-                value={state.budget[cat.key]}
-                onChange={(e) => handleAllocate(cat.key, Number(e.target.value))}
-                className={styles.budgetSlider}
-                aria-label={`${cat.label}: ${state.budget[cat.key]} de ${definition.totalBudget} milhões`}
-              />
-              <div className={styles.budgetDisplay} aria-live="polite" aria-atomic="true">
-                <span className={styles.budgetValue}>{state.budget[cat.key]}</span>
-                <span className={styles.budgetUnit}>M</span>
+                <div className={styles.budgetControl}>
+                  <input
+                    type="range"
+                    min="0"
+                    max={definition.totalBudget}
+                    value={state.budget[cat.key]}
+                    onChange={(e) => handleAllocate(cat.key, Number(e.target.value))}
+                    className={styles.budgetSlider}
+                    aria-label={`${cat.label}: ${state.budget[cat.key]} de ${definition.totalBudget} milhões`}
+                  />
+                  <div className={styles.budgetDisplay} aria-live="polite" aria-atomic="true">
+                    <span className={styles.budgetValue}>{state.budget[cat.key]}</span>
+                    <span className={styles.budgetUnit}>M</span>
+                  </div>
+                </div>
+
+                {state.budget[cat.key] < cat.criticalThreshold && (
+                  <p className={styles.warningText} role="alert">⚠️ Abaixo do crítico ({cat.criticalThreshold}M)</p>
+                )}
               </div>
-            </div>
-
-            {state.budget[cat.key] < cat.criticalThreshold && (
-              <p className={styles.warningText} role="alert">⚠️ Abaixo do crítico ({cat.criticalThreshold}M)</p>
-            )}
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className={styles.budgetSummary}>
-        <p>
-          <strong>Orçamento total:</strong> {definition.totalBudget}M
-        </p>
-        <p>
-          <strong>Alocado:</strong> {definition.totalBudget - remaining}M
-        </p>
-        <p className={remaining === 0 ? styles.remaining0 : styles.remainingPositive}>
-          <strong>Restante:</strong> {remaining}M
-        </p>
-      </div>
+          <div className={styles.budgetSummary}>
+            <p>
+              <strong>Orçamento total:</strong> {definition.totalBudget}M
+            </p>
+            <p>
+              <strong>Alocado:</strong> {definition.totalBudget - remaining}M
+            </p>
+            <p className={remaining === 0 ? styles.remaining0 : styles.remainingPositive}>
+              <strong>Restante:</strong> {remaining}M
+            </p>
+          </div>
 
-      {feedback && <p className={styles.feedback}>{feedback}</p>}
+          {feedback && <p className={styles.feedback}>{feedback}</p>}
 
-      <div className={styles.actions}>
-        <Button
-          variant={canContinue ? 'primary' : 'disabled'}
-          onClick={handleContinue}
-          disabled={!canContinue}
-          aria-disabled={!canContinue}
-        >
-          {!canContinue
-            ? `Distribua ${remaining > 0 ? remaining + 'M restante' : 'todo orçamento'}`
-            : 'Continuar →'}
-        </Button>
-      </div>
+          <div className={styles.actions}>
+            <Button
+              variant={canContinue ? 'primary' : 'disabled'}
+              onClick={handleContinue}
+              disabled={!canContinue}
+              aria-disabled={!canContinue}
+            >
+              {!canContinue
+                ? `Distribua ${remaining > 0 ? remaining + 'M restante' : 'todo orçamento'}`
+                : 'Continuar →'}
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

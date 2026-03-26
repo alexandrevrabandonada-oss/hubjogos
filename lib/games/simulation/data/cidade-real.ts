@@ -1,6 +1,6 @@
 /**
- * Simulação: Cidade Real
- * Orçamento municipal limitado sob pressões políticas reais
+ * Simulação: Cidade Real (V2 - Visual/Tactical Rescue)
+ * Foco em distritos, projetos e consequências urbanas visíveis.
  */
 
 import { SimulationDefinition } from '../types';
@@ -8,14 +8,126 @@ import { SimulationDefinition } from '../types';
 export const cidadeRealSimulation: SimulationDefinition = {
   id: 'cidade-real-v1',
   title: 'Cidade Real',
-  subtitle: 'Simule decisões orçamentárias de uma prefeitura',
-  totalBudget: 100, // unidade: milhões de reais (simulado)
+  subtitle: 'Guie o desenvolvimento e o cuidado de uma cidade sob pressão',
+  totalBudget: 100, // Pontos de Ação / Capacidade Coletiva
+  isVisualMode: true,
+  
+  districts: [
+    {
+      id: 'vila-popular',
+      name: 'Vila Popular',
+      flavor: 'Periferia histórica com serviços precários e alta densidade.',
+      initialHealth: 35,
+      icon: '🏘️',
+      needs: ['moradia', 'saude', 'manutencao'],
+    },
+    {
+      id: 'centro-velho',
+      name: 'Centro Histórico',
+      flavor: 'Coração administrativo com infraestrutura envelhecida.',
+      initialHealth: 55,
+      icon: '🏛️',
+      needs: ['manutencao', 'transporte'],
+    },
+    {
+      id: 'polo-industrial',
+      name: 'Polo Industrial',
+      flavor: 'Motor econômico com desafios de logística e poluição.',
+      initialHealth: 45,
+      icon: '🏭',
+      needs: ['transporte', 'manutencao'],
+    },
+    {
+      id: 'parque-das-aguas',
+      name: 'Residencial Nobre',
+      flavor: 'Área valorizada com demandas por segurança e estética.',
+      initialHealth: 70,
+      icon: '🏡',
+      needs: ['manutencao'],
+    },
+  ],
+
+  projects: [
+    {
+      id: 'upa-24h',
+      label: 'UPA 24h na Vila',
+      description: 'Garante atendimento emergencial onde a carência é crítica.',
+      cost: 25,
+      icon: '🏥',
+      impacts: [
+        { targetDistrictId: 'vila-popular', healthValue: 20 },
+        { category: 'saude' }
+      ]
+    },
+    {
+      id: 'tarifa-zero',
+      label: 'Tarifa Zero Municipal',
+      description: 'Ônibus gratuitos garantem o direito de circular para todos.',
+      cost: 45,
+      icon: '🚌',
+      impacts: [
+        { targetDistrictId: 'vila-popular', healthValue: 10 },
+        { targetDistrictId: 'centro-velho', healthValue: 10 },
+        { targetDistrictId: 'polo-industrial', healthValue: 15 },
+        { category: 'transporte' }
+      ]
+    },
+    {
+      id: 'reforma-escolas',
+      label: 'Reforma de Escolas',
+      description: 'Infraestrutura digna para o aprendizado das crianças.',
+      cost: 20,
+      icon: '📚',
+      impacts: [
+        { targetDistrictId: 'vila-popular', healthValue: 10 },
+        { targetDistrictId: 'centro-velho', healthValue: 5 },
+        { category: 'educacao' }
+      ]
+    },
+    {
+      id: 'saneamento-vila',
+      label: 'Saneamento na Vila',
+      description: 'Água limpa e esgoto tratado: o básico que salva vidas.',
+      cost: 30,
+      icon: '🚰',
+      impacts: [
+        { targetDistrictId: 'vila-popular', healthValue: 25 },
+        { category: 'manutencao' }
+      ]
+    },
+    {
+      id: 'iluminacao-led',
+      label: 'Iluminação em LED',
+      description: 'Ruas claras aumentam a segurança e reduzem custos.',
+      cost: 15,
+      icon: '💡',
+      impacts: [
+        { targetDistrictId: 'parque-das-aguas', healthValue: 5 },
+        { targetDistrictId: 'centro-velho', healthValue: 5 },
+        { targetDistrictId: 'vila-popular', healthValue: 10 },
+        { category: 'manutencao' }
+      ]
+    },
+    {
+      id: 'habitacao-centro',
+      label: 'Habitação no Centro',
+      description: 'Ocupar prédios vazios com aluguel social e moradia popular.',
+      cost: 35,
+      icon: '🏠',
+      impacts: [
+        { targetDistrictId: 'centro-velho', healthValue: 15 },
+        { targetDistrictId: 'vila-popular', healthValue: 5 },
+        { category: 'moradia' }
+      ]
+    }
+  ],
+
   categories: [
     {
       key: 'saude',
       label: 'Saúde',
       icon: '🏥',
-      description: 'Hospitais, UBS, atendimento emergencial',
+      description: 'Hospitais, unidades básicas e prevenção.',
       minBudget: 15,
       criticalThreshold: 25,
     },
@@ -23,7 +135,7 @@ export const cidadeRealSimulation: SimulationDefinition = {
       key: 'educacao',
       label: 'Educação',
       icon: '📚',
-      description: 'Escolas, professores, infraestrutura escolar',
+      description: 'Educação pública e infraestrutura educacional.',
       minBudget: 20,
       criticalThreshold: 30,
     },
@@ -31,169 +143,84 @@ export const cidadeRealSimulation: SimulationDefinition = {
       key: 'transporte',
       label: 'Transporte',
       icon: '🚌',
-      description: 'Ônibus, manutenção de vias, mobilidade',
+      description: 'Mobilidade urbana e direito à cidade.',
       minBudget: 15,
       criticalThreshold: 25,
     },
     {
       key: 'moradia',
-      label: 'Moradia e Cuidado',
+      label: 'Moradia',
       icon: '🏠',
-      description: 'Habitação, assistência social, acolhimento',
+      description: 'Habitação popular e regularização.',
       minBudget: 10,
       criticalThreshold: 18,
     },
     {
       key: 'manutencao',
-      label: 'Manutenção Urbana',
+      label: 'Cuidado Urbano',
       icon: '🛣️',
-      description: 'Infraestrutura, limpeza, serviços essenciais',
+      description: 'Zeladoria, saneamento e serviços básicos.',
       minBudget: 10,
       criticalThreshold: 15,
     },
   ],
+
   pressures: [
     {
       step: 1,
-      title: 'Crise de Saúde',
+      title: 'Crise Sanitária na Vila',
       description:
-        'Epidemia respiratória nas periferias. Demanda urgente por leitos hospitalares e testes.',
+        'Surtos de doenças por falta de saneamento básico na Vila Popular.',
       demandCategory: 'saude',
-      demandPercentage: 30,
+      demandPercentage: 20,
     },
     {
       step: 2,
-      title: 'Protesto de Transportistas',
+      title: 'Caos no Transporte',
       description:
-        'Frota de ônibus envelhecida causa greves. Cidade paralisa sem transporte público.',
+        'Empresas de ônibus retiram frota do Polo Industrial. Trabalhadores isolados.',
       demandCategory: 'transporte',
       demandPercentage: 25,
     },
     {
       step: 3,
-      title: 'Defict de Professores',
+      title: 'Ocupação no Centro',
       description:
-        'Mais de 200 salas sem professores por atraso salarial. Pais ameaçam ocupar secretaria.',
-      demandCategory: 'educacao',
-      demandPercentage: 20,
-    },
-    {
-      step: 4,
-      title: 'Ocupações e Moradia',
-      description:
-        'Famílias ocupam prédios vazios. Mídia sensacionalista vs. demanda real por casa.',
+        'Movimentos populares ocupam imoveis vazios no Centro Histórico exigindo moradia.',
       demandCategory: 'moradia',
-      demandPercentage: 25,
+      demandPercentage: 30,
     },
   ],
+
   results: [
     {
-      id: 'austeridade-extrema',
-      title: 'Austeridade Extrema',
-      axis: 'austeridade-extrema',
-      description: 'Cortes indiscriminados em todas as áreas',
-      revelation:
-        'Você cortou tudo. Saúde colapsa, educação fecha, transporte paralisa, moradia piora. A cidade não funciona, mas o déficit diminui. Emergências multiplicam-se. Próxima administração herda caos.',
-      nextAction: 'Estudar economia política e limite do ajuste fiscal',
-      impacts: [
-        {
-          category: 'saude',
-          consequence: 'Hospitais fecham, epidemia avança',
-          severity: 'high',
-        },
-        {
-          category: 'educacao',
-          consequence: 'Escolas operando com 30% da capacidade',
-          severity: 'high',
-        },
-        {
-          category: 'transporte',
-          consequence: 'Cidade paralisa, economia encolhe',
-          severity: 'high',
-        },
-      ],
-    },
-    {
-      id: 'colapso-estrutural',
-      title: 'Colapso Estrutural',
-      axis: 'colapso-estrutural',
-      description: 'Sacrifício de saúde e moradia em favor de outras áreas',
-      revelation:
-        'Sem saúde e moradia, tudo desaba. População migrante (se pode), serviços privados pioram desigualdade. Você manteve transporte e educação, mas para quem? A cidade esvazia seus fundamentos.',
-      nextAction: 'Entender interdependência de bem-estar básico',
-      impacts: [
-        {
-          category: 'saude',
-          consequence: 'Mortalidade infantil sobe 25%',
-          severity: 'high',
-        },
-        {
-          category: 'moradia',
-          consequence: 'Favelas crescem, ocupações aumentam',
-          severity: 'high',
-        },
-      ],
-    },
-    {
-      id: 'tecnocracia-circuladora',
-      title: 'Tecnocracia de Movimento',
-      axis: 'tecnocracia-circuladora',
-      description:
-        'Ônibus novos, ruas consertadas. Mas quem paga aluguel? Quem fica doente?',
-      revelation:
-        'Você criou uma cidade para circular, não para viver. Transporte funciona, infraestrutura brilha. Mas crise de moradia explode, hospitais apagam. Executivos voltam para casa. Trabalhadores? Longe, em lotação, pagas propinas à polícia.',
-      nextAction: 'Questionar conforto para quem é feito o planejamento urbano',
-      impacts: [
-        {
-          category: 'moradia',
-          consequence: 'Gentrificação de bairros bem conectados',
-          severity: 'medium',
-        },
-        {
-          category: 'saude',
-          consequence: 'Atendimento colapsado em periferias',
-          severity: 'high',
-        },
-      ],
-    },
-    {
-      id: 'orientacao-cuidado',
-      title: 'Orientação ao Cuidado',
+      id: 'cidade-viva',
+      title: 'Cidade Viva e Resiliente',
       axis: 'orientacao-cuidado',
-      description: 'Saúde, educação e moradia bem financiadas',
+      description: 'Você priorizou o cuidado territorial e a dignidade básica.',
       revelation:
-        'Você prioriza vidas. Hospitais atendem, crianças aprendem, famílias têm teto. Transporte funciona, ruas precisam de mais ação. Ainda há conflito (sempre há), mas a população respira. Próxima administração herda uma base de cuidado, não colapso.',
-      nextAction: 'Expandir cuidado, resolver débit de manutenção urbana',
+        'A Vila Popular está estabilizada e o Centro voltou a ser habitado. O Polo Industrial flui melhor com o transporte gratuito. A cidade não é perfeita, mas as bases do comum estão sólidas.',
+      nextAction: 'Expandir o modelo para toda a região metropolitana.',
       impacts: [
         {
           category: 'saude',
-          consequence: 'Cobertura de atendimento acima de 80%',
-          severity: 'low',
-        },
-        {
-          category: 'moradia',
-          consequence: 'Ocupações reduzem, política habitacional avança',
+          consequence: 'Redução drástica em internações básicas.',
           severity: 'low',
         },
       ],
     },
     {
-      id: 'contencao-ajuste',
-      title: 'Contenção com Ajuste',
+      id: 'cidade-partida',
+      title: 'Cidade Partida',
       axis: 'contencao-ajuste',
-      description: 'Sem solução mágica, sem total abandono',
+      description: 'Equilíbrio precário entre as pressões da elite e da periferia.',
       revelation:
-        'Você fez escolhas pragmáticas. Alguns setores respiram, outros precisam de mais. Emergências explodiram, mas não simultaneamente. Gestão reativa, não preventiva. É o cotidiano real de muitas prefeituras: sempre em crise, nunca em colapso total, nunca realmente bem.',
-      nextAction: 'Reconhecer que falta recurso. Exigir transfer federal.',
+        'Você apagou incêndios, mas os problemas estruturais permanecem. A Vila ainda sofre, o Centro está estagnado. A prefeitura sobrevive, mas a cidade apenas resiste.',
+      nextAction: 'Buscar financiamento coletivo e imposto progressivo.',
       impacts: [
         {
-          category: 'transporte',
-          consequence: 'Ônibus velho mas rodando',
-          severity: 'medium',
-        },
-        {
-          category: 'educacao',
-          consequence: 'Escolas funcionando, professores desmoralizados',
+          category: 'moradia',
+          consequence: 'Déficit habitacional ainda alto.',
           severity: 'medium',
         },
       ],

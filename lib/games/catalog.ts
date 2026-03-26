@@ -13,6 +13,15 @@ export type GameKind =
   | 'map'
   | 'arcade';
 
+export type PublicVisibility = 
+  | 'flagship'           // Destaque principal, maior peso visual
+  | 'public_ready'       // Pronto para trilhas principais/descoberta
+  | 'public_ready_beta'  // Funcional mas marcado como beta
+  | 'secondary_quickplay'// Quizzes/respostas curtas, rails secundários
+  | 'lab'                // Experimental, apenas em /lab
+  | 'internal_only'      // Apenas via link direto para teste
+  | 'hidden';            // Escondido de todas as listas
+
 export type RuntimeState = 'real' | 'shell';
 export type GamePace = 'quick' | 'session' | 'deep' | 'future-flagship';
 export type GameLine =
@@ -185,6 +194,7 @@ export interface Game {
   isFeatured?: boolean;
   isNew?: boolean;
   priorityScore: number;
+  publicVisibility: PublicVisibility;
 }
 
 export interface PlannedGameCandidate {
@@ -240,7 +250,8 @@ export const games: Game[] = [
     funRole: 'retencao',
     deviceSupport: ['mobile', 'desktop'],
     isFeatured: true,
-    priorityScore: 95
+    priorityScore: 95,
+    publicVisibility: 'flagship'
   },
   {
     id: 'tarifa-zero-corredor',
@@ -281,7 +292,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem e fixação de marca.',
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
-    priorityScore: 90
+    priorityScore: 90,
+    publicVisibility: 'flagship'
   },
   {
     id: 'mutirao-do-bairro',
@@ -322,7 +334,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem e fixação de marca.',
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
-    priorityScore: 80
+    priorityScore: 80,
+    publicVisibility: 'flagship'
   },
   {
     id: 'cooperativa-na-pressao',
@@ -363,7 +376,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
     deviceSupport: ['desktop'],
-    priorityScore: 70
+    priorityScore: 70,
+    publicVisibility: 'public_ready_beta'
   },
   {
     id: 'passe-livre-nacional',
@@ -400,25 +414,26 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
-    priorityScore: 75
+    priorityScore: 75,
+    publicVisibility: 'flagship'
   },
   {
     id: 'cidade-real',
     slug: 'cidade-real',
     title: 'Cidade Real',
-    description: 'Um simulador de decisões orçamentárias municipais. Você é responsável pelo cuidado.',
-    shortDescription: 'Simule o orçamento de uma cidade real',
+    description: 'Um simulador tático de decisões urbanas e desenvolvimento territorial. Guie o crescimento de 4 distritos sob pressão e crises reais.',
+    shortDescription: 'Simulação tática de orçamento e território',
     theme: 'city',
     genre: 'simulation',
     icon: '🏙️',
     cover: '/games/cidade-real.jpg',
-    status: 'live',
+    status: 'beta',
     runtimeState: 'real',
     estimatedMinutes: 7,
     duration: '5-8 min',
     participants: 1,
     difficulty: 'medium',
-    tags: ['orçamento', 'política', 'simulação'],
+    tags: ['orçamento', 'política', 'simulação', 'território'],
     cta: 'Governar',
     color: '#C97E2F',
     kind: 'simulation',
@@ -427,18 +442,18 @@ export const games: Game[] = [
     line: 'orcamento-cuidado',
     territoryScope: 'volta-redonda',
     territories: ['volta-redonda'],
-    politicalThemes: ['servicos-publicos', 'saude', 'educacao'],
+    politicalThemes: ['servicos-publicos', 'saude', 'educacao', 'orcamento'],
     series: 'serie-volta-redonda',
     politicalAxis: 'reforma-estatal',
     collectiveSolutionType: 'controle-popular',
     commonVsMarket: 'misto',
     campaignFrame: 'projeto-coletivo',
     season: 's1-verao-26',
-    campaignRole: 'Distribuição da mensagem.',
+    campaignRole: 'Decidir sob pressão e ver consequências urbanas.',
     funRole: 'aprofundamento',
-    deviceSupport: ['desktop'],
-    isFeatured: true,
-    priorityScore: 85
+    deviceSupport: ['mobile', 'desktop'],
+    priorityScore: 80,
+    publicVisibility: 'public_ready_beta'
   },
   {
     id: 'abandonado',
@@ -475,7 +490,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
     deviceSupport: ['desktop'],
-    priorityScore: 60
+    priorityScore: 60,
+    publicVisibility: 'secondary_quickplay'
   },
   {
     id: 'trabalho-impossivel',
@@ -512,7 +528,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
-    priorityScore: 50
+    priorityScore: 50,
+    publicVisibility: 'lab' // Shell/coming
   },
   {
     id: 'voto-consciente',
@@ -549,7 +566,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
-    priorityScore: 40
+    priorityScore: 40,
+    publicVisibility: 'secondary_quickplay'
   },
   {
     id: 'memoria-coletiva',
@@ -586,7 +604,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
-    priorityScore: 45
+    priorityScore: 45,
+    publicVisibility: 'lab' // Shell/coming
   },
   {
     id: 'transporte-urgente',
@@ -623,7 +642,8 @@ export const games: Game[] = [
     campaignRole: 'Distribuição da mensagem.',
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
-    priorityScore: 55
+    priorityScore: 55,
+    publicVisibility: 'secondary_quickplay'
   },
   {
     id: 'custo-de-viver',
@@ -661,7 +681,8 @@ export const games: Game[] = [
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
     isNew: true,
-    priorityScore: 65
+    priorityScore: 65,
+    publicVisibility: 'secondary_quickplay'
   },
   {
     id: 'quem-paga-a-conta',
@@ -699,7 +720,8 @@ export const games: Game[] = [
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
     isNew: true,
-    priorityScore: 60
+    priorityScore: 60,
+    publicVisibility: 'secondary_quickplay'
   },
   {
     id: 'cidade-em-comum',
@@ -737,10 +759,10 @@ export const games: Game[] = [
     funRole: 'aprofundamento',
     deviceSupport: ['mobile', 'desktop'],
     isNew: true,
-    priorityScore: 70
+    priorityScore: 50,
+    publicVisibility: 'secondary_quickplay'
   }
 ];
-
 
 export function getGameBySlug(slug: string): Game | undefined {
   return games.find((game) => game.slug === slug);
@@ -772,7 +794,19 @@ export function getGamesByPoliticalTheme(theme: PoliticalTheme): Game[] {
 }
 
 export function getFeaturedGames(): Game[] {
-  return games.filter((game) => game.isFeatured).sort((a, b) => b.priorityScore - a.priorityScore);
+  return games.filter((game) => game.publicVisibility === 'flagship').sort((a, b) => b.priorityScore - a.priorityScore);
+}
+
+export function getGamesByVisibility(states: PublicVisibility[]): Game[] {
+  return games.filter((game) => states.includes(game.publicVisibility)).sort((a, b) => b.priorityScore - a.priorityScore);
+}
+
+export function getQuickplayLaneGames(): Game[] {
+  return getGamesByVisibility(['secondary_quickplay']);
+}
+
+export function getLabGames(): Game[] {
+  return getGamesByVisibility(['lab']);
 }
 
 export function getNewGames(): Game[] {

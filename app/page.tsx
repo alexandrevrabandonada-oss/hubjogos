@@ -1,10 +1,13 @@
 'use client';
 
-import { 
+import Link from 'next/link';
+import {
   Game,
-  games, 
-  getFeaturedGames, 
-  getGamesByPoliticalTheme
+  games,
+  getFeaturedGames,
+  getGamesByPoliticalTheme,
+  getQuickplayLaneGames,
+  getGamesByVisibility
 } from '@/lib/games/catalog';
 import { BetaBanner } from '@/components/ui/BetaBanner';
 import { ShellContainer } from '@/components/ui/ShellContainer';
@@ -24,8 +27,18 @@ import { loadProgression } from '@/lib/hub/progression';
 
 export default function Home() {
   const featuredGames = getFeaturedGames();
-  const quickGames = games.filter(g => g.pace === 'quick');
-  const deepGames = games.filter(g => g.pace === 'deep' || g.pace === 'session');
+  
+  // High-immersion games (Flagship or Public Ready, non-quiz)
+  const readyGames = getGamesByVisibility(['flagship', 'public_ready', 'public_ready_beta']);
+  
+  const quickGames = readyGames.filter(g => g.pace === 'quick');
+  const deepGames = readyGames.filter(g => g.pace === 'deep' || g.pace === 'session');
+  
+  // Secondary response format (Quizzes, etc.)
+  const quickResponseGames = getQuickplayLaneGames();
+
+  // Helper for theme lane (filtering out lab)
+  const getThemeGames = (theme: any) => getGamesByPoliticalTheme(theme).filter(g => ['flagship', 'public_ready', 'public_ready_beta'].includes(g.publicVisibility));
 
   // Load progression state (client-side only)
   let progression;
@@ -92,14 +105,22 @@ export default function Home() {
           laneId="theme-popular" 
           category="Tema: Poder Popular" 
           title="Organização e Autogestão" 
-          games={getGamesByPoliticalTheme('organizacao-popular').concat(getGamesByPoliticalTheme('cooperativismo'))} 
+          games={getThemeGames('organizacao-popular').concat(getThemeGames('cooperativismo'))} 
         />
 
         <PortfolioLane 
           laneId="quick-play" 
-          category="Sessões Curtas" 
-          title="Quick-play (1-3 min)" 
+          category="Sessões Arcade" 
+          title="Play Instantâneo (1-3 min)" 
           games={quickGames} 
+          cardVariant="compact"
+        />
+
+        <PortfolioLane 
+          laneId="quick-responses" 
+          category="Respostas Rápidas" 
+          title="Quizzes e Testes" 
+          games={quickResponseGames} 
           cardVariant="compact"
         />
 
@@ -137,7 +158,8 @@ export default function Home() {
           <div className={styles.footerBottom}>
             <p>© 2026 Hub de Jogos Pré-Campanha. Rio em Comum.</p>
             <div className={styles.footerMisc}>
-              <span>v1.2.0-portfolio</span>
+              <span>v1.2.5-curated</span>
+              <Link href="/lab" className={styles.footerLink}>Laboratório (Labs)</Link>
               <a href="/estado">Dashboard Operacional</a>
             </div>
           </div>
