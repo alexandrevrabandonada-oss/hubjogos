@@ -79,7 +79,6 @@ export function GameOutcome({
         });
         trackProgressionEvent('completion_state_seen', {
           game_slug: game.slug,
-          progression_state: 'completed',
         });
       } catch (e) {
         // ignore
@@ -93,13 +92,13 @@ export function GameOutcome({
       // Use new recommendation logic if available
       // For demo: recommend one next game
       // TODO: Replace with editorial logic as needed
-      const allGames = typeof window !== 'undefined' ? (window.__ALL_GAMES__ || []) : [];
+      const allGames = typeof window !== 'undefined' ? ((window as any).__ALL_GAMES__ || []) : [];
       let rec = null;
       if (allGames.length > 0) {
         rec = recommendNextGame(allGames, game.slug);
       }
       if (rec) {
-        setNextGames([{ game: rec, reason: 'Recomendado para você' }]);
+        setNextGames([{ game: rec as any, reason: 'Recomendado para você', priority: 1 }]);
       } else {
         const recommendations = getNextGameRecommendations(fullGame);
         setNextGames(recommendations);
