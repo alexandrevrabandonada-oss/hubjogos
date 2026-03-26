@@ -46,7 +46,7 @@ export function useGameLifecycle(options: UseGameLifecycleOptions): UseGameLifec
   const { game, config, onComplete, onFail, onExit } = options;
   
   const [runtimeState, setRuntimeState] = useState<RuntimeState>(() =>
-    createInitialRuntimeState(config, typeof window !== 'undefined' ? (window.innerWidth < 768 ? 'mobile' : 'desktop') : 'desktop')
+    createInitialRuntimeState(config)
   );
   
   const [events, setEvents] = useState<LifecycleEvent[]>([]);
@@ -140,9 +140,9 @@ export function useGameLifecycle(options: UseGameLifecycleOptions): UseGameLifec
   // Restart game
   const restartGame = useCallback(() => {
     setRuntimeState(prev => ({
-      ...createInitialRuntimeState(config, typeof window !== 'undefined' ? (window.innerWidth < 768 ? 'mobile' : 'desktop') : 'desktop'),
+      ...createInitialRuntimeState(config),
       sessionStats: {
-        ...createInitialRuntimeState(config, typeof window !== 'undefined' ? (window.innerWidth < 768 ? 'mobile' : 'desktop') : 'desktop').sessionStats,
+        ...createInitialRuntimeState(config).sessionStats,
         restartCount: prev.sessionStats.restartCount + 1,
       },
     }));
@@ -294,7 +294,7 @@ export function useSaveSystem(options: UseSaveSystemOptions): UseSaveSystemRetur
     return loadFromLocal(gameSlug) !== null;
   });
 
-  const saveGame = useCallback((gameState: any, label?: string) => {
+  const saveGame = useCallback((gameState: any) => {
     if (!config.supportsSave) return;
     
     const savePayload: SavePayload = {
@@ -314,7 +314,6 @@ export function useSaveSystem(options: UseSaveSystemOptions): UseSaveSystemRetur
     setHasSave(true);
     
     // Analytics
-    const { trackSaveWritten } = require('@/lib/hub/analytics');
     trackSaveWritten(gameSlug, config.genre);
   }, [gameSlug, config.supportsSave, config.genre, config.runtimeType, runtimeState]);
 

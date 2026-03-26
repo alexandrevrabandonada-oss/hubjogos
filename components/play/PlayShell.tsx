@@ -53,7 +53,7 @@ export function PlayShell({
   
   // Initialize runtime state
   const [runtimeState, setRuntimeState] = useState<RuntimeState>(() =>
-    createInitialRuntimeState(config, typeof window !== 'undefined' ? (window.innerWidth < 768 ? 'mobile' : 'desktop') : 'desktop')
+    createInitialRuntimeState(config)
   );
 
   // Lifecycle management

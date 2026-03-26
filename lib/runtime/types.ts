@@ -75,6 +75,7 @@ export interface GameRuntimeConfig {
   supportsReducedMotion: boolean;
   supportsHighContrast: boolean;
   scalableText: boolean;
+  inputHints: InputHints;
 }
 
 export interface HudZoneConfig {
@@ -461,13 +462,10 @@ function inferInputHints(genre: GameGenre): InputHints {
 }
 
 export function createInitialRuntimeState(
-  config: GameRuntimeConfig,
-  deviceType: string
+  config: GameRuntimeConfig
 ): RuntimeState {
+  // Initialization logic for session stats
   const now = Date.now();
-  
-  // Use deviceType for future device-specific initialization
-  const _deviceContext = deviceType;
   
   return {
     sessionStatus: 'initializing',

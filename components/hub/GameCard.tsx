@@ -9,7 +9,7 @@ import {
 } from '@/lib/games/catalog';
 import { Card } from '@/components/ui/Card';
 import { trackSeriesClick, trackPortfolioCardClick } from '@/lib/analytics/track';
-import { ProgressionBadge, ProgressionBadgeType } from '@/components/hub/ProgressionBadge';
+import { ProgressionBadge } from '@/components/hub/ProgressionBadge';
 import { loadProgression, saveProgression } from '@/lib/hub/progression';
 import { trackProgressionEvent } from '@/lib/hub/analytics';
 import styles from './GameCard.module.css';
@@ -47,7 +47,7 @@ export function GameCard({ game, laneId, variant = 'standard' }: GameCardProps) 
         source_surface: laneId,
         genre: game.genre,
         territory: game.territoryScope,
-        progression_state: 'card_click',
+        click_context: 'card_click',
       });
     } catch (e) {
       // ignore

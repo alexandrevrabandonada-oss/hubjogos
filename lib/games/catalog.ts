@@ -59,7 +59,7 @@ export const TERRITORY_SCOPE_LABELS: Record<TerritoryScope, string> = {
 };
 
 export type GameGenre = 'arcade' | 'platform' | 'simulation' | 'management' | 'strategy' | 'narration' | 'quiz';
-export type PoliticalTheme = 'tarifa-zero' | 'trabalho' | 'moradia' | 'poluicao' | 'memoria' | 'servicos-publicos' | 'organizacao-popular' | 'cooperativismo' | 'cuidado' | 'transporte' | 'saude' | 'educacao';
+export type PoliticalTheme = 'tarifa-zero' | 'trabalho' | 'moradia' | 'poluicao' | 'memoria' | 'servicos-publicos' | 'organizacao-popular' | 'cooperativismo' | 'cuidado' | 'transporte' | 'saude' | 'educacao' | 'orcamento' | 'controle-popular' | 'democracia-direta';
 export type DeviceSupport = 'mobile' | 'desktop';
 
 export const GAME_PACE_LABELS: Record<GamePace, string> = {
@@ -139,6 +139,9 @@ export const POLITICAL_THEME_LABELS: Record<PoliticalTheme, string> = {
   transporte: 'Transporte',
   saude: 'Saúde',
   educacao: 'Educação',
+  orcamento: 'Orçamento',
+  'controle-popular': 'Controle Popular',
+  'democracia-direta': 'Democracia Direta',
 };
 export interface Game {
   id: string;

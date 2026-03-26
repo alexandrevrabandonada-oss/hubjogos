@@ -41,7 +41,6 @@ const STORAGE_KEY = 'hub_progression_v1';
 const MAX_RECENTLY_PLAYED = 8;
 const MAX_SESSION_HISTORY = 50;
 const AFFINITY_INCREMENT = 10;
-const AFFINITY_DECAY = 2; // per different game played
 
 export function getDefaultProgression(): HubProgression {
   return {

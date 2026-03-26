@@ -2,7 +2,6 @@
 // T74 — Vertical Slice Build
 
 import { GameProductionBlueprint } from '@/lib/production/types';
-import { GAME_GENRE_LABELS, TERRITORY_SCOPE_LABELS, POLITICAL_THEME_LABELS } from '@/lib/games/catalog';
 
 export const MUTIRAO_SANEAMENTO_BLUEPRINT: GameProductionBlueprint = {
   // Basic Info

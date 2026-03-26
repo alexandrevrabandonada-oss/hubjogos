@@ -1,0 +1,27 @@
+components/hub/GameCard.tsx(12,28): error TS6133: 'ProgressionBadgeType' is declared but its value is never read.
+components/hub/GameCard.tsx(50,9): error TS2322: Type '"card_click"' is not assignable to type 'ProgressionState | undefined'.
+components/result/ResultScreen.tsx(8,1): error TS6133: 'Image' is declared but its value is never read.
+components/result/ResultScreen.tsx(10,1): error TS6192: All imports in import declaration are unused.
+components/result/ResultScreen.tsx(90,26): error TS2345: Argument of type 'Game' is not assignable to parameter of type 'string'.
+components/result/ResultScreen.tsx(393,9): error TS6133: 'shareText' is declared but its value is never read.
+lib/hub/progression.ts(44,7): error TS6133: 'AFFINITY_DECAY' is declared but its value is never read.
+lib/production/blueprints/mutirao-saneamento.ts(5,1): error TS6192: All imports in import declaration are unused.
+lib/production/types.ts(321,13): error TS6133: 'bp' is declared but its value is never read.
+lib/production/types.ts(329,13): error TS6133: 'bp' is declared but its value is never read.
+lib/production/types.ts(345,13): error TS6133: 'bp' is declared but its value is never read.
+lib/production/types.ts(353,13): error TS6133: 'bp' is declared but its value is never read.
+lib/production/types.ts(361,13): error TS6133: 'bp' is declared but its value is never read.
+lib/production/types.ts(369,13): error TS6133: 'bp' is declared but its value is never read.
+lib/production/types.ts(377,13): error TS6133: 'bp' is declared but its value is never read.
+lib/production/types.ts(528,23): error TS2322: Type '"orcamento"' is not assignable to type 'PoliticalTheme'.
+lib/production/types.ts(624,46): error TS2322: Type '"controle-popular"' is not assignable to type 'PoliticalTheme'.
+lib/production/types.ts(624,66): error TS2322: Type '"democracia-direta"' is not assignable to type 'PoliticalTheme'.
+lib/runtime/hooks.ts(17,163): error TS6133: 'trackSaveWritten' is declared but its value is never read.
+lib/runtime/hooks.ts(297,49): error TS6133: 'label' is declared but its value is never read.
+lib/runtime/hooks.ts(400,29): error TS2339: Property 'inputHints' does not exist on type 'GameRuntimeConfig'.
+lib/runtime/hooks.ts(401,12): error TS2339: Property 'inputHints' does not exist on type 'GameRuntimeConfig'.
+lib/runtime/hooks.ts(402,12): error TS2339: Property 'inputHints' does not exist on type 'GameRuntimeConfig'.
+lib/runtime/hooks.ts(403,12): error TS2339: Property 'inputHints' does not exist on type 'GameRuntimeConfig'.
+lib/runtime/hooks.ts(404,12): error TS2339: Property 'inputHints' does not exist on type 'GameRuntimeConfig'.
+lib/runtime/hooks.ts(405,16): error TS2339: Property 'inputHints' does not exist on type 'GameRuntimeConfig'.
+lib/runtime/types.ts(470,9): error TS6133: '_deviceContext' is declared but its value is never read.

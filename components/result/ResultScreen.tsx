@@ -5,9 +5,7 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Game, GameGenre, GAME_GENRE_LABELS, TERRITORY_SCOPE_LABELS, POLITICAL_THEME_LABELS } from '@/lib/games/catalog';
-import { recommendAfterGame, getVocêPodeGostar, RecommendationResult } from '@/lib/hub/recommendation';
 import { recordGameCompletion } from '@/lib/hub/progression';
 import { 
   trackResultScreenView, 
@@ -87,7 +85,7 @@ export interface ResultScreenProps {
 export function ResultScreen({ game, result, onReplay, onClose }: ResultScreenProps) {
   // Record completion and track view on mount
   useEffect(() => {
-    recordGameCompletion(game);
+    recordGameCompletion(game.slug);
     trackResultScreenView(game, result.outcomeType, result.outcomeSeverity);
   }, [game, result]);
 
@@ -389,8 +387,6 @@ const GENRE_RESULT_CONFIG: Record<GameGenre, {
 
 async function shareResult(shareData?: ResultData['shareData']) {
   if (!shareData) return;
-
-  const shareText = `${shareData.title}\n${shareData.description}\n${shareData.hashtags?.map(h => `#${h}`).join(' ') || ''}`;
 
   if (navigator.share) {
     try {
