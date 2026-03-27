@@ -1,0 +1,185 @@
+.gameContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  min-height: 100vh;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  background: linear-gradient(135deg, #FF6B35 0%, #FFD93D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.header p {
+  color: #888;
+  margin: 5px 0 0 0;
+  font-size: 0.9rem;
+}
+
+.instructions {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  max-width: 600px;
+  position: relative;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  color: #FF6B35;
+}
+
+.instructions h3 {
+  margin: 0 0 15px 0;
+  color: #FFD93D;
+}
+
+.instructions p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.gameCanvas {
+  border: 3px solid #FF6B35;
+  border-radius: 8px;
+  background: #000;
+  box-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+  max-width: 100%;
+  height: auto;
+}
+
+.mobileControls {
+  display: none;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .mobileControls {
+    display: flex;
+  }
+}
+
+.controlBtn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 107, 53, 0.2);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: all 0.1s;
+}
+
+.controlBtn:active {
+  background: rgba(255, 107, 53, 0.5);
+  transform: scale(0.95);
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.resetBtn, .helpBtn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.resetBtn {
+  background: #FF6B35;
+  color: white;
+}
+
+.resetBtn:hover {
+  background: #E55A2B;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+}
+
+.helpBtn {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.helpBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+.feedback {
+  margin-top: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.feedback p {
+  margin: 5px 0;
+}
+
+/* CRT effect overlay */
+.gameContainer::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.1) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  z-index: 100;
+  opacity: 0.3;
+}

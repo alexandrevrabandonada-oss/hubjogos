@@ -1,0 +1,1 @@
+export { CorredorLivreGame } from './CorredorLivreGame';
