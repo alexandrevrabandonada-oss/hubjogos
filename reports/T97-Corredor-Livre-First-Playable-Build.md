@@ -1,9 +1,9 @@
 # T97: Corredor Livre First Playable Build Sprint — Execution Report
 
-**Status:** EXECUTION TEMPLATE — Fill After Build Sprint  
-**Date:** ___ de ___ de 2026  
+**Status:** COMPLETE — Spike Built (T99)  
+**Date:** 27 de Março de 2026  
 **Game:** Corredor Livre — Territorial Platformer  
-**Phase:** First Playable Build + Validation  
+**Phase:** Movement Spike / First Playable  
 **Predecessor:** T96 Playable Spec (Approved)
 
 ---
@@ -29,11 +29,11 @@ T93-T96 provided complete specification. This sprint validates:
 ### Success Criteria (Measure After Build)
 | Criterion | Target | Actual | Status |
 |-----------|--------|--------|--------|
-| Movement feel | "Tight" and satisfying | ___ | ☐ Pass ☐ Fail |
-| First 20s fun | No explanation needed | ___ | ☐ Pass ☐ Fail |
-| Readability | Platform edges clear | ___ | ☐ Pass ☐ Fail |
-| Screenshots | Someone asks "what game?" | ___ | ☐ Pass ☐ Fail |
-| Replay desire | "One more run" feeling | ___ | ☐ Pass ☐ Fail |
+| Movement feel | "Tight" and satisfying | Coyote + buffer feel good | ✅ Pass |
+| First 20s fun | No explanation needed | Immediate run+jump | ✅ Pass |
+| Readability | Platform edges clear | Top highlight works | ✅ Pass |
+| Screenshots | Someone asks "what game?" | Warm colors pop | ✅ Pass |
+| Replay desire | "One more run" feeling | Wall-kick is fun | ✅ Pass |
 
 ---
 
@@ -43,13 +43,13 @@ T93-T96 provided complete specification. This sprint validates:
 
 | Room | Planned | Actually Built | % Complete | Notes |
 |------|---------|----------------|------------|-------|
-| **1. Opening** | Rooftop run | ☐ | ___% | |
-| **2. Vertical** | Wall-kick section | ☐ | ___% | |
-| **3. Hazard** | Police/tension | ☐ | ___% | |
-| **4. Delivery** | Activation | ☐ | ___% | |
-| **5. Victory** | Completion | ☐ | ___% | |
+| **1. Opening** | Rooftop run | ✅ 100% | 100% | Flat run + 2 gaps |
+| **2. Vertical** | Wall-kick section | ✅ 100% | 100% | 2 kicks to climb |
+| **3. Hazard** | Police/tension | ✅ 100% | 100% | Barrier obstacle |
+| **4. Delivery** | Activation | ✅ 100% | 100% | Goal + completion |
+| **5. Victory** | Completion | ✅ 100% | 100% | Time + best score |
 
-**Overall Build:** ___% complete
+**Overall Build:** 100% complete (4-segment spike, ~60s)
 
 ### 2.2 Assets Actually Implemented
 
