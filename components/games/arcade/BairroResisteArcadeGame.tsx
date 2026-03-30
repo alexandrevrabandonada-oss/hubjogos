@@ -13,12 +13,54 @@ import styles from './BairroResisteArcadeGame.module.css';
 
 type HotspotType = 'agua' | 'moradia' | 'mobilidade' | 'saude';
 type HotspotState = 'normal' | 'warning' | 'critical';
+type SectorGroup = 'vale-cachoeira' | 'morro-povo';
+
+interface BlockIdentity {
+  name: string;
+  sector: SectorGroup;
+  density: number; // 1-10
+  infrastructure: ('power' | 'water' | 'comms')[];
+}
 
 const SECTOR_LABELS: Record<HotspotType, string> = {
-  agua: 'Rede de Água',
+  agua: 'Estação de Tratamento',
   moradia: 'Conjunto Habitacional',
-  mobilidade: 'Corredor de Ônibus',
+  mobilidade: 'Terminal de Ônibus',
   saude: 'Posto de Saúde',
+};
+
+const SECTOR_NEIGHBORHOODS: Record<HotspotType, string> = {
+  agua: 'Vale da Cachoeira',
+  moradia: 'Morro do Povo',
+  mobilidade: 'Morro do Povo',
+  saude: 'Vale da Cachoeira',
+};
+
+const BLOCK_IDENTITIES: Record<HotspotType, BlockIdentity> = {
+  agua: {
+    name: 'Estação Norte',
+    sector: 'vale-cachoeira',
+    density: 3,
+    infrastructure: ['power', 'water', 'comms'],
+  },
+  moradia: {
+    name: 'Laje Comunitária',
+    sector: 'morro-povo',
+    density: 9,
+    infrastructure: ['power', 'water'],
+  },
+  mobilidade: {
+    name: 'Terminal Central',
+    sector: 'morro-povo',
+    density: 5,
+    infrastructure: ['power', 'comms'],
+  },
+  saude: {
+    name: 'UBS Vale',
+    sector: 'vale-cachoeira',
+    density: 4,
+    infrastructure: ['power', 'water', 'comms'],
+  },
 };
 
 const SECTOR_ICONS: Record<HotspotType, string> = {
@@ -35,22 +77,26 @@ const SECTOR_COLORS: Record<HotspotType, string> = {
   saude: '#44c47a',
 };
 
-const HOTSPOT_BRIEFS: Record<HotspotType, { watch: string; response: string }> = {
+const HOTSPOT_BRIEFS: Record<HotspotType, { watch: string; response: string; neighborhood: string }> = {
   agua: {
     watch: 'Adutoras estouram, reservatorios perdem pressao e o bairro começa a falhar em cadeia.',
     response: 'Despache a brigada cedo para conter o vazamento antes que a crise avance para os outros sistemas.',
+    neighborhood: 'Vale da Cachoeira',
   },
   moradia: {
     watch: 'Blocos habitacionais entram em sobrecarga e puxam o resto do territorio para o limite.',
     response: 'Moradia exige presença constante: alivie a pressão e abra margem para o restante do mapa respirar.',
+    neighborhood: 'Morro do Povo',
   },
   mobilidade: {
     watch: 'O corredor trava, ambulancias atrasam e a cidade perde capacidade de resposta.',
     response: 'Estabilize a circulação para manter a brigada chegando a tempo nos setores vizinhos.',
+    neighborhood: 'Morro do Povo',
   },
   saude: {
     watch: 'O posto entra em saturação, piscam alarmes e o risco social sobe rápido.',
     response: 'Se a saúde desaba, a janela de recuperação encurta. Reforce antes do colapso crítico.',
+    neighborhood: 'Vale da Cachoeira',
   },
 };
 
@@ -628,6 +674,22 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
             const isOnCooldown = h.cooldownMs > 0;
             const isSelected = selectedHotspotId === h.id;
             const isStabilized = stabilizedHotspot === h.id;
+            const blockInfo = BLOCK_IDENTITIES[h.id];
+            
+            // Calculate infrastructure health based on pressure
+            const getInfrastructureState = (pressure: number) => {
+              if (pressure >= 80) return 'broken';
+              if (pressure >= 50) return 'stressed';
+              return 'healthy';
+            };
+            
+            // Check if this hotspot has cascade risk (connected to critical neighbor)
+            const hasCascadeRisk = HOTSPOT_CONNECTIONS.some(conn => {
+              const neighborId = conn.from === h.id ? conn.to : conn.to === h.id ? conn.from : null;
+              if (!neighborId) return false;
+              const neighbor = hotspots.find(hs => hs.id === neighborId);
+              return neighbor && neighbor.pressure >= 80 && h.pressure >= 50 && h.pressure < 80;
+            });
 
             return (
               <div
@@ -648,6 +710,14 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
                 data-hotspot-id={h.id}
               >
                 {isSelected && <div className={styles.focusRing} />}
+                
+                {/* Recovery glow effect when stabilized */}
+                {isStabilized && <div className={styles.recoveryGlow} />}
+
+                {/* Neighborhood label */}
+                <span className={styles.neighborhoodLabel}>
+                  {SECTOR_NEIGHBORHOODS[h.id]}
+                </span>
 
                 {/* Sector Specific Stress FX */}
                 {state === 'critical' && (
@@ -661,6 +731,19 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
                   </>
                 )}
 
+                {/* Pressure ripple animation when pressure increases */}
+                {state === 'warning' && (
+                  <div 
+                    className={styles.pressureRipple} 
+                    style={{ color: SECTOR_COLORS[h.id] }}
+                  />
+                )}
+
+                {/* Cascade warning */}
+                {hasCascadeRisk && state !== 'critical' && (
+                  <div className={styles.cascadeWarning}>Cascata!</div>
+                )}
+
                 {/* Sector type icon badge */}
                 <div style={{
                   position: 'absolute',
@@ -671,6 +754,13 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
                   userSelect: 'none',
                 }}>
                   {SECTOR_ICONS[h.id]}
+                </div>
+
+                {/* Density indicator dots */}
+                <div className={styles.densityDots}>
+                  {Array.from({ length: Math.min(4, Math.ceil(blockInfo.density / 2)) }).map((_, i) => (
+                    <div key={i} className={styles.densityDot} />
+                  ))}
                 </div>
 
                 {/* Pressure bar */}
@@ -698,6 +788,32 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
                 >
                   {SECTOR_LABELS[h.id]}
                 </span>
+
+                {/* Infrastructure indicators */}
+                <div className={styles.infrastructureRow}>
+                  {blockInfo.infrastructure.map((infra, i) => {
+                    const infraState = getInfrastructureState(h.pressure);
+                    const icons: Record<string, string> = {
+                      power: '⚡',
+                      water: '💧',
+                      comms: '📡'
+                    };
+                    return (
+                      <div 
+                        key={i} 
+                        className={`${styles.infrastructureIcon} ${styles[infraState]}`}
+                        title={`${infra}: ${infraState}`}
+                      >
+                        {icons[infra]}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Save text popup */}
+                {isStabilized && (
+                  <div className={styles.saveTextPopup}>SALVO!</div>
+                )}
 
                 {/* Cooldown ring */}
                 {isOnCooldown && <div className={styles.cooldownRing} />}
