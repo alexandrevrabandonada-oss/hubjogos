@@ -243,9 +243,11 @@ export function UrbanSimEngine({ definition, state, onStateChange }: UrbanSimEng
           const isInterventionFlash = interventionFlashIds.includes(district.id);
           const districtProjectIcons = (state.activeProjects || [])
             .map((projectId) => projects.find((project) => project.id === projectId))
-            .filter(
-              (project): project is NonNullable<(typeof projects)[number]> =>
-                Boolean(project) && project.impacts.some((impact) => impact.targetDistrictId === district.id)
+            .filter((project): project is NonNullable<(typeof projects)[number]> =>
+              project !== undefined && project !== null
+            )
+            .filter((project) =>
+              project.impacts.some((impact) => impact.targetDistrictId === district.id)
             )
             .slice(0, 3);
           
