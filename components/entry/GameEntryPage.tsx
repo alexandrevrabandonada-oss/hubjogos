@@ -9,7 +9,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Game, GameGenre, GAME_GENRE_LABELS, GAME_PACE_LABELS, TERRITORY_SCOPE_LABELS, POLITICAL_THEME_LABELS } from '@/lib/games/catalog';
 import { trackEntryPageView, trackEntryPrimaryPlayClick } from '@/lib/hub/analytics';
-import { ProgressionBadge } from '@/components/hub/ProgressionBadge';
 import styles from './GameEntryPage.module.css';
 
 // --- Types ---
@@ -160,7 +159,14 @@ function HeroSection({ game, media, onPlayClick, secondaryCta }: HeroSectionProp
       <div className={styles.heroContent}>
         {/* Title + Premise */}
         <div className={styles.titleGroup}>
-          <ProgressionBadge type="novo" />
+          <div className={styles.entryBadges}>
+            {game.publicVisibility === 'flagship' && (
+              <span className={`${styles.entryBadge} ${styles.entryBadgeFlagship}`}>Flagship</span>
+            )}
+            <span className={`${styles.entryBadge} ${game.status === 'beta' ? styles.entryBadgeBeta : styles.entryBadgeLive}`}>
+              {game.status === 'beta' ? 'Public Beta' : 'Live'}
+            </span>
+          </div>
           <h1 className={styles.gameTitle}>{game.title}</h1>
           <p className={styles.gamePremise}>{game.shortDescription}</p>
         </div>
@@ -231,7 +237,12 @@ function TrustRow({ game }: TrustRowProps) {
     {
       icon: game.isNew ? '✨' : game.isFeatured ? '⭐' : '🎮',
       label: 'Status',
-      value: game.isNew ? 'Novo' : game.isFeatured ? 'Destaque' : 'Disponível',
+      value:
+        game.publicVisibility === 'flagship'
+          ? `Flagship • ${game.status === 'beta' ? 'Public Beta' : 'Live'}`
+          : game.status === 'beta'
+            ? 'Public Beta'
+            : 'Live',
     },
     {
       icon: '🔓',

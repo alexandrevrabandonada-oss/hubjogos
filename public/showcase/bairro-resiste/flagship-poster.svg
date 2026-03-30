@@ -1,0 +1,63 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="167" y1="61" x2="1351" y2="866" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07111D"/>
+      <stop offset="0.54" stop-color="#0B1F35"/>
+      <stop offset="1" stop-color="#140D14"/>
+    </linearGradient>
+    <linearGradient id="scan" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4BB0FF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22C55E" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="alert" x1="544" y1="170" x2="1189" y2="577" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EF4444" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#F59E0B" stop-opacity="0.08"/>
+    </linearGradient>
+    <filter id="glow" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" rx="36" fill="url(#bg)"/>
+  <rect x="46" y="46" width="1508" height="808" rx="28" stroke="rgba(75,176,255,0.24)" stroke-width="2"/>
+  <g opacity="0.32">
+    <path d="M130 146H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 216H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 286H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 356H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 426H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 496H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 566H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 636H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M130 706H1470" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M250 120V780" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M430 120V780" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M610 120V780" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M790 120V780" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M970 120V780" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M1150 120V780" stroke="url(#scan)" stroke-width="1"/>
+    <path d="M1330 120V780" stroke="url(#scan)" stroke-width="1"/>
+  </g>
+  <g filter="url(#glow)">
+    <circle cx="1158" cy="296" r="112" fill="url(#alert)"/>
+    <circle cx="936" cy="522" r="86" fill="#4BB0FF" fill-opacity="0.24"/>
+    <circle cx="1278" cy="612" r="72" fill="#22C55E" fill-opacity="0.2"/>
+  </g>
+  <path d="M420 585L612 370L864 428L1047 287L1276 363" stroke="#EF4444" stroke-width="8" stroke-linecap="round" stroke-dasharray="18 18"/>
+  <path d="M420 585L612 370L864 428L1047 287L1276 363" stroke="#FCA5A5" stroke-opacity="0.28" stroke-width="20" stroke-linecap="round"/>
+  <rect x="347" y="520" width="146" height="146" rx="26" fill="#101D2D" stroke="#4BB0FF" stroke-opacity="0.35" stroke-width="4"/>
+  <rect x="542" y="309" width="166" height="166" rx="28" fill="#1C2332" stroke="#E0884A" stroke-opacity="0.48" stroke-width="4"/>
+  <rect x="797" y="364" width="144" height="144" rx="26" fill="#11283A" stroke="#4A88CC" stroke-opacity="0.4" stroke-width="4"/>
+  <rect x="972" y="215" width="150" height="150" rx="28" fill="#1A202F" stroke="#EF4444" stroke-opacity="0.72" stroke-width="4"/>
+  <rect x="1196" y="290" width="136" height="136" rx="24" fill="#102D22" stroke="#44C47A" stroke-opacity="0.42" stroke-width="4"/>
+  <circle cx="1038" cy="281" r="78" stroke="#EF4444" stroke-opacity="0.78" stroke-width="6" stroke-dasharray="10 14"/>
+  <circle cx="1038" cy="281" r="112" stroke="#EF4444" stroke-opacity="0.22" stroke-width="22"/>
+  <circle cx="800" cy="708" r="92" fill="#0E1B25" stroke="#22C55E" stroke-opacity="0.62" stroke-width="5"/>
+  <path d="M764 712H836" stroke="#BBF7D0" stroke-width="8" stroke-linecap="round"/>
+  <path d="M800 676V748" stroke="#BBF7D0" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="800" cy="708" r="126" stroke="#22C55E" stroke-opacity="0.18" stroke-width="18"/>
+  <text x="122" y="124" fill="#93C5FD" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="7">FLAGSHIP RTS-LITE DO HUB</text>
+  <text x="118" y="724" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="118" font-weight="900">Bairro Resiste</text>
+  <text x="122" y="786" fill="#CBD5E1" font-family="Arial, sans-serif" font-size="34" font-weight="700">Defesa territorial em tempo real com brigadas, cascata de crise e resposta comunitária.</text>
+  <rect x="122" y="170" width="268" height="56" rx="28" fill="#0E2236" stroke="#4BB0FF" stroke-opacity="0.34"/>
+  <text x="164" y="206" fill="#F8FAFC" font-family="Arial, sans-serif" font-size="24" font-weight="700">90 segundos de cerco</text>
+</svg>

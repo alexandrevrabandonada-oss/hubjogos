@@ -1,4 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#3b82f6" stroke="#f8fafc" stroke-width="4"/>
-  <text x="100" y="100" font-family="monospace" font-size="16" fill="#f8fafc" text-anchor="middle" dominant-baseline="middle">Player Brigada</text>
+  <defs>
+    <radialGradient id="baseBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0d2a1a"/>
+      <stop offset="100%" stop-color="#040e08"/>
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="hexGlow">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Ambient glow base -->
+  <circle cx="100" cy="100" r="90" fill="url(#coreGlow)"/>
+
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="10,8" opacity="0.4"/>
+  <!-- Inner ring -->
+  <circle cx="100" cy="100" r="64" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.3"/>
+
+  <!-- Hexagonal base shape -->
+  <polygon points="100,28 160,62 160,130 100,164 40,130 40,62" fill="url(#baseBg)" stroke="#22c55e" stroke-width="2.5" filter="url(#hexGlow)" opacity="0.95"/>
+
+  <!-- Hex fill interior accent -->
+  <polygon points="100,44 148,72 148,128 100,156 52,128 52,72" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.25"/>
+
+  <!-- Brigade symbol: fist/shield shape as minimal icon -->
+  <!-- Shield body -->
+  <path d="M100 58 L130 70 L130 104 Q130 128 100 140 Q70 128 70 104 L70 70 Z" fill="#0d3a20" stroke="#44cc78" stroke-width="2" opacity="0.9"/>
+  <!-- Shield highlight -->
+  <path d="M100 64 L124 74 L124 104 Q124 122 100 132" fill="none" stroke="#7ce0ae" stroke-width="1" opacity="0.4"/>
+  <!-- Star / core mark -->
+  <circle cx="100" cy="100" r="14" fill="#1a5a30" stroke="#22c55e" stroke-width="2" opacity="0.9"/>
+  <!-- Solidarity hand design inside shield -->
+  <text x="100" y="106" font-family="serif" font-size="18" fill="#7ce0ae" text-anchor="middle" opacity="0.9">✊</text>
+
+  <!-- Corner beacon dots -->
+  <circle cx="100" cy="30" r="4" fill="#22c55e" opacity="0.8"/>
+  <circle cx="158" cy="63" r="4" fill="#22c55e" opacity="0.7"/>
+  <circle cx="158" cy="129" r="4" fill="#22c55e" opacity="0.7"/>
+  <circle cx="100" cy="162" r="4" fill="#22c55e" opacity="0.8"/>
+  <circle cx="42" cy="129" r="4" fill="#22c55e" opacity="0.7"/>
+  <circle cx="42" cy="63" r="4" fill="#22c55e" opacity="0.7"/>
+
+  <!-- Label under hex -->
+  <rect x="62" y="144" width="76" height="18" rx="5" fill="#04100a" opacity="0.88"/>
+  <text x="100" y="157" font-family="monospace" font-size="9" font-weight="bold" fill="#22c55e" text-anchor="middle" letter-spacing="2">BRIGADA</text>
 </svg>

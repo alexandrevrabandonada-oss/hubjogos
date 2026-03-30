@@ -127,6 +127,20 @@
   overflow: hidden;
 }
 
+.flagshipThumbWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--card-accent, var(--accent)) 35%, transparent);
+  background: color-mix(in srgb, var(--surface) 75%, var(--card-accent, var(--accent)) 25%);
+}
+
+.flagshipThumb {
+  object-fit: cover;
+}
+
 .genreBadge {
   font-size: 0.65rem;
   font-weight: 900;
@@ -234,4 +248,4 @@
   .title {
     font-size: 1.15rem;
   }
-}
+}

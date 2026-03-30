@@ -1,4 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#d946ef" stroke="#f8fafc" stroke-width="4"/>
-  <text x="100" y="100" font-family="monospace" font-size="16" fill="#f8fafc" text-anchor="middle" dominant-baseline="middle">Hotspot Moradia</text>
+  <defs>
+    <radialGradient id="moradiaBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6b3520"/>
+      <stop offset="100%" stop-color="#2a1408"/>
+    </radialGradient>
+    <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c8824a"/>
+      <stop offset="100%" stop-color="#8a4e28"/>
+    </linearGradient>
+    <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e09050"/>
+      <stop offset="100%" stop-color="#a05a28"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" rx="14" fill="url(#moradiaBg)"/>
+  <rect width="200" height="200" rx="14" fill="none" stroke="#e0884a" stroke-width="2.5" opacity="0.7"/>
+
+  <!-- Community Courtyard (Scenic Detail) -->
+  <rect x="25" y="145" width="150" height="30" rx="4" fill="#3a1a10" opacity="0.5"/>
+  <circle cx="100" cy="155" r="8" fill="#5a2a18" opacity="0.6"/> <!-- Small community area -->
+
+  <!-- Laundry Lines (Scenic Detail) -->
+  <g stroke="#e0884a" stroke-width="0.5" opacity="0.6">
+    <line x1="85" y1="85" x2="110" y2="85"/>
+    <rect x="88" y="85" width="4" height="6" fill="#c8824a"/>
+    <rect x="96" y="85" width="4" height="7" fill="#e09050"/>
+  </g>
+
+  <!-- Main housing block — left -->
+  <rect x="30" y="100" width="55" height="72" rx="3" fill="url(#wallGrad)"/>
+  <polygon points="24,100 92,100 92,88 58,72 24,88" fill="url(#roofGrad)"/>
+
+  <!-- Main housing block — right (taller) -->
+  <rect x="108" y="80" width="65" height="92" rx="3" fill="url(#wallGrad)"/>
+  <polygon points="102,80 180,80 180,66 140,48 102,66" fill="url(#roofGrad)"/>
+  
+  <!-- Windows & Street Life Hints -->
+  <g opacity="0.8">
+    <rect x="40" y="115" width="12" height="12" rx="1" fill="#d4a870" opacity="0.9"/>
+    <rect x="120" y="95" width="12" height="12" rx="1" fill="#d4a870" opacity="0.9"/>
+    <circle cx="50" cy="165" r="3" fill="#5c2f10"/> <!-- Silhouette hint -->
+  </g>
+
+  <!-- Bottom label -->
+  <rect x="34" y="178" width="132" height="20" rx="5" fill="#1a0a05" opacity="0.85"/>
+  <text x="100" y="193" font-family="monospace" font-size="10" font-weight="bold" fill="#e0884a" text-anchor="middle" letter-spacing="2">MORADIA</text>
 </svg>

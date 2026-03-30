@@ -36,6 +36,12 @@ describe('simulation engine', () => {
         moradia: 18,
         manutencao: 2,
       },
+      districtHealth: {
+        'vila-popular': 80,
+        'centro-velho': 80,
+        'polo-industrial': 80,
+        'parque-das-aguas': 80,
+      }
     };
 
     const result = calculateSimulationResult(custom, cidadeRealSimulation);

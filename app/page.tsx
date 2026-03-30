@@ -95,8 +95,8 @@ export default function Home() {
       <section id="explorar" style={{ paddingTop: '40px' }}>
         <PortfolioLane 
           laneId="featured" 
-          category="Curadoria" 
-          title="Experiências em Foco" 
+          category="Flagship do Hub" 
+          title="Showpieces Públicos do Hub" 
           games={featuredGames} 
           cardVariant="featured"
         />

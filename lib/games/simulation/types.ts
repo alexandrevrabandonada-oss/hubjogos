@@ -96,8 +96,8 @@ export function calculateSimulationResult(
     const healthValues = Object.values(state.districtHealth);
     const avgHealth = healthValues.reduce((a, b) => a + b, 0) / healthValues.length;
     
-    // Se a saúde média de todos os distritos for alta (> 65)
-    if (avgHealth > 65) {
+    // Em um arco curto de 3 crises, a rota boa precisa ser exigente, mas alcançável.
+    if (avgHealth >= 56) {
       return (
         definition.results.find((r) => r.axis === 'orientacao-cuidado') ||
         definition.results[0]

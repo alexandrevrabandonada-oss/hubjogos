@@ -18,13 +18,33 @@ interface PlayerState {
   jumpBufferTimer: number;
 }
 
+interface Platform {
+  x: number; y: number; w: number; h: number;
+  id?: string;
+  isFragile?: boolean;
+}
+
+interface Prop {
+  x: number; y: number; type: 'caixa' | 'antena' | 'varal'; width: number; height: number;
+  w?: number; h?: number;
+}
+
+interface Wall {
+  x: number; y: number; w: number; h: number; kickable: boolean;
+}
+
+interface Hazard {
+  x: number; y: number; w: number; h: number; type: 'pit' | 'barrier'; active?: boolean;
+}
+
 interface GameState {
   player: PlayerState;
   camera: { x: number; y: number };
-  segment: number; // 0-3 for the 4 segments
+  segment: number;
   completed: boolean;
   completionTime: number;
   attempts: number;
+  fragileStates: Record<string, { touchedAt: number, yOffset: number }>;
 }
 
 // Movement Constants (Tuned for Feel)
@@ -39,69 +59,186 @@ const MOVEMENT = {
   JUMP_BUFFER: 8,        // frames
   WALL_KICK_FORCE_X: 12, // horizontal push
   WALL_KICK_FORCE_Y: -14, // vertical push
-  WALL_KICK_WINDOW: 10,  // frames to input kick
+  WALL_KICK_WINDOW: 20,  // frames to input kick (increased for 1.0 fairness)
   WALL_SLIDE_GRAVITY: 0.3, // slower fall on wall
 } as const;
 
-// 4-Segment Level Data (1-minute spike)
-const LEVEL_SEGMENTS = [
-  // Segment 0: Opening Run (15s) - Flat run with 2 small gaps
+// Audio Baseline (Synthesis for Vertical Slice)
+const playSound = (type: 'jump' | 'land' | 'wallkick' | 'complete' | 'crumble' | 'checkpoint', soundTimeRef: React.MutableRefObject<Record<string, number>>) => {
+  const now = Date.now();
+  if (now - (soundTimeRef.current[type] || 0) < 100) return;
+  soundTimeRef.current[type] = now;
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    if (type === 'jump') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.1);
+    } else if (type === 'wallkick') {
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(400, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
+    } else if (type === 'land') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(150, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.5, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
+    } else if (type === 'complete') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+      osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.3); // C6
+      gain.gain.setValueAtTime(0.5, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.6);
+    } else if (type === 'crumble') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(100, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.3);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    } else if (type === 'checkpoint') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    }
+  } catch (e) {
+    // Ignore audio errors
+  }
+};
+
+// 7-Segment Level Data (Full Vertical Slice - ~2 mins)
+const LEVEL_SEGMENTS: {
+  id: string; length: number; endX: number;
+  platforms: Platform[]; walls: Wall[]; hazards: Hazard[]; props: Prop[];
+  goal?: {x: number; y: number; w: number; h: number;};
+}[] = [
+  // Segment 0: Opening Run
   {
-    id: 'opening',
-    length: 1600,
+    id: 'opening', length: 1800, endX: 1750,
     platforms: [
-      { x: 0, y: 400, w: 400, h: 40 },    // Start platform
-      { x: 480, y: 400, w: 300, h: 40 },  // After gap 1
-      { x: 880, y: 400, w: 300, h: 40 },  // After gap 2
-      { x: 1280, y: 400, w: 320, h: 40 }, // End
+      { x: 0, y: 400, w: 500, h: 40 },
+      { x: 550, y: 400, w: 400, h: 40 },
+      { x: 1050, y: 380, w: 300, h: 60 },
+      { x: 1450, y: 380, w: 400, h: 60 },
+    ],
+    walls: [], hazards: [],
+    props: [
+      { x: 200, y: 340, w: 80, h: 60, type: 'caixa', width: 60, height: 60 },
+      { x: 700, y: 200, w: 0, h: 0, type: 'varal', width: 100, height: 20 }
+    ],
+  },
+  // Segment 1: The Gap (Max speed check)
+  {
+    id: 'gap', length: 1400, endX: 1350,
+    platforms: [
+      { x: 0, y: 380, w: 300, h: 60 },
+      { x: 520, y: 400, w: 250, h: 40 },
+      { x: 950, y: 350, w: 450, h: 90 },
     ],
     walls: [],
-    hazards: [],
-    endX: 1550,
+    hazards: [{ x: 0, y: 550, w: 1400, h: 100, type: 'pit' }],
+    props: [{ x: 550, y: 300, w: 0, h: 0, type: 'antena', width: 20, height: 100 }],
   },
-  // Segment 1: Vertical Kick (20s) - Wall-kick section
+  // Segment 2: Tower Climb (Double Wall-kick)
   {
-    id: 'vertical',
-    length: 600,
+    id: 'tower', length: 800, endX: 750,
     platforms: [
-      { x: 0, y: 400, w: 150, h: 40 },    // Start
-      { x: 450, y: 250, w: 150, h: 40 },  // Mid platform
-      { x: 200, y: 100, w: 200, h: 40 },  // Top platform (goal)
+      { x: 0, y: 350, w: 150, h: 100 },
+      { x: 450, y: 250, w: 100, h: 40 },
+      { x: 150, y: 150, w: 100, h: 40 },
+      { x: 400, y: 50, w: 400, h: 40 }, // Top
     ],
     walls: [
-      { x: 300, y: 100, w: 40, h: 300, kickable: true }, // Main wall
+      { x: 250, y: 180, w: 40, h: 220, kickable: true }, // Left pillar
+      { x: 400, y: 50, w: 50, h: 200, kickable: true },  // Right pillar
     ],
-    hazards: [
-      { x: 0, y: 500, w: 600, h: 100, type: 'pit' }, // Bottom pit
-    ],
-    endX: 550,
+    hazards: [{ x: 0, y: 600, w: 800, h: 100, type: 'pit' }],
+    props: [{ x: 450, y: -10, w: 0, h: 0, type: 'caixa', width: 60, height: 60 }],
   },
-  // Segment 2: Hazard Pass (15s) - One obstacle
+  // Segment 3: Safehouse (Checkpoint)
   {
-    id: 'hazard',
-    length: 800,
+    id: 'checkpoint', length: 1200, endX: 1150,
     platforms: [
-      { x: 0, y: 300, w: 250, h: 40 },    // Start
-      { x: 350, y: 300, w: 200, h: 40 },  // After hazard
-      { x: 650, y: 300, w: 150, h: 40 },  // End
+      { x: 0, y: 300, w: 600, h: 150 },
+      { x: 650, y: 350, w: 600, h: 100 },
+    ],
+    walls: [], hazards: [],
+    props: [
+      { x: 300, y: 200, w: 0, h: 0, type: 'varal', width: 120, height: 20 },
+      { x: 800, y: 180, w: 0, h: 0, type: 'antena', width: 20, height: 120 }
+    ],
+  },
+  // Segment 4: The Run-Down (Pressure Beat, fragile blocks)
+  {
+    id: 'fragile', length: 1500, endX: 1450,
+    platforms: [
+      { x: 0, y: 350, w: 150, h: 100 },
+      { id: 'f1', x: 250, y: 350, w: 100, h: 20, isFragile: true },
+      { id: 'f2', x: 400, y: 300, w: 100, h: 20, isFragile: true },
+      { id: 'f3', x: 550, y: 250, w: 100, h: 20, isFragile: true },
+      { x: 700, y: 300, w: 200, h: 40 },
+      { id: 'f4', x: 950, y: 300, w: 150, h: 20, isFragile: true },
+      { x: 1150, y: 300, w: 400, h: 40 },
     ],
     walls: [],
     hazards: [
-      { x: 250, y: 240, w: 100, h: 60, type: 'barrier', active: true }, // Low barrier
+      { x: 0, y: 600, w: 1600, h: 100, type: 'pit' },
+      { x: 750, y: 240, w: 80, h: 60, type: 'barrier', active: true } // Police barrier mid-run
     ],
-    endX: 750,
+    props: [],
   },
-  // Segment 3: Delivery (10s) - Final run to goal
+  // Segment 5: The Drop (Precision Descent)
   {
-    id: 'delivery',
-    length: 400,
+    id: 'descent', length: 600, endX: 550,
     platforms: [
-      { x: 0, y: 300, w: 400, h: 40 },    // Final platform
+      { x: 0, y: 300, w: 150, h: 800 }, // Left building edge
+      { x: 450, y: 300, w: 150, h: 800 }, // Right building edge
+      { x: 250, y: 500, w: 100, h: 20 }, // Mid buffer
+      { x: 0, y: 800, w: 600, h: 200 },  // Bottom catching floor
     ],
-    walls: [],
+    walls: [
+      { x: 110, y: 300, w: 40, h: 500, kickable: true }, // Slide surface left
+      { x: 450, y: 300, w: 40, h: 500, kickable: true }  // Slide surface right
+    ],
     hazards: [],
-    goal: { x: 350, y: 240, w: 50, h: 60 },
-    endX: 400,
+    props: [{ x: 200, y: 400, w: 0, h: 0, type: 'varal', width: 200, height: 20 }],
+  },
+  // Segment 6: Delivery
+  {
+    id: 'delivery', length: 800, endX: 800,
+    platforms: [
+      { x: 0, y: 400, w: 800, h: 50 },
+    ],
+    walls: [], hazards: [],
+    props: [{ x: 500, y: 300, w: 0, h: 0, type: 'antena', width: 20, height: 100 }],
+    goal: { x: 600, y: 340, w: 120, h: 60 },
   },
 ];
 
@@ -109,8 +246,9 @@ export function CorredorLivreGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
   const keysRef = useRef<Set<string>>(new Set());
+  const soundTimeRef = useRef<Record<string, number>>({});
   
-  const [gameState, setGameState] = useState<GameState>({
+  const [, setGameState] = useState<GameState>({
     player: {
       x: 50,
       y: 360,
@@ -129,6 +267,7 @@ export function CorredorLivreGame() {
     completed: false,
     completionTime: 0,
     attempts: 0,
+    fragileStates: {},
   });
 
   const [showInstructions, setShowInstructions] = useState(true);
@@ -177,7 +316,6 @@ export function CorredorLivreGame() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let lastTime = 0;
     let segmentStartTime = Date.now();
 
     const checkCollision = (x: number, y: number, w: number, h: number, 
@@ -185,10 +323,7 @@ export function CorredorLivreGame() {
       return x < px + pw && x + w > px && y < py + ph && y + h > py;
     };
 
-    const gameLoop = (currentTime: number) => {
-      const _deltaTime = currentTime - lastTime;
-      lastTime = currentTime;
-
+    const gameLoop = () => {
       setGameState(prev => {
         const state = { ...prev };
         const player = { ...state.player };
@@ -199,6 +334,12 @@ export function CorredorLivreGame() {
         const left = keys.has('ArrowLeft') || keys.has('a');
         const right = keys.has('ArrowRight') || keys.has('d');
         const jumpPressed = keys.has(' ') || keys.has('ArrowUp') || keys.has('w');
+
+        // Debug Warps
+        if (keys.has('1')) { state.segment = 0; player.x = 50; player.y = 360; player.vx = 0; player.vy = 0; keys.delete('1'); }
+        if (keys.has('2')) { state.segment = 1; player.x = 50; player.y = 360; player.vx = 0; player.vy = 0; keys.delete('2'); }
+        if (keys.has('3')) { state.segment = 2; player.x = 50; player.y = 260; player.vx = 0; player.vy = 0; keys.delete('3'); }
+        if (keys.has('4')) { state.segment = 3; player.x = 50; player.y = 260; player.vx = 0; player.vy = 0; keys.delete('4'); }
 
         // --- HORIZONTAL MOVEMENT ---
         if (left) {
@@ -240,6 +381,7 @@ export function CorredorLivreGame() {
           player.onGround = false;
           player.jumpBufferTimer = 0;
           player.coyoteTimer = 0;
+          playSound('jump', soundTimeRef);
         }
 
         // Variable jump height (release early = lower)
@@ -252,8 +394,9 @@ export function CorredorLivreGame() {
         let wallX = 0;
         
         for (const wall of segment.walls) {
+          // Expanded hit box for wall detection (T102 fairness pass: 12px)
           if (checkCollision(wall.x, wall.y, wall.w, wall.h, 
-                           player.x, player.y, 48, 64)) {
+                           player.x - 12, player.y, 72, 64)) {
             onWall = true;
             wallX = wall.x;
             break;
@@ -266,14 +409,15 @@ export function CorredorLivreGame() {
           
           // Wall kick input
           const kickDirection = wallX > player.x ? -1 : 1; // Kick away from wall
-          const towardWall = (wallX > player.x && right) || (wallX < player.x && left);
           
-          if (jumpPressed && !player.isWallKicking && !towardWall) {
+          // Forgiveness: removed towardWall constraint to trigger more easily
+          if (jumpPressed && !player.isWallKicking) {
             player.vx = MOVEMENT.WALL_KICK_FORCE_X * kickDirection;
             player.vy = MOVEMENT.WALL_KICK_FORCE_Y;
             player.isWallKicking = true;
             player.wallKickTimer = MOVEMENT.WALL_KICK_WINDOW;
             player.facingRight = kickDirection > 0;
+            playSound('wallkick', soundTimeRef);
           }
         } else {
           player.isWallKicking = false;
@@ -296,16 +440,40 @@ export function CorredorLivreGame() {
         player.x += player.vx;
         player.y += player.vy;
 
+        // --- FRAGILE PLATFORMS CALCULATION ---
+        const now = Date.now();
+        const activePlatforms = [...segment.platforms];
+        for (let i = 0; i < activePlatforms.length; i++) {
+          const plat = activePlatforms[i];
+          if (plat.isFragile && plat.id && state.fragileStates[plat.id]) {
+            const age = now - state.fragileStates[plat.id].touchedAt;
+            if (age > 500) {
+              activePlatforms[i] = { ...plat, y: plat.y + 1000 };
+            } else if (age > 250) {
+              const drop = Math.pow(age - 250, 2) * 0.005;
+              activePlatforms[i] = { ...plat, y: plat.y + drop };
+            }
+          }
+        }
+
         // --- PLATFORM COLLISION ---
         player.onGround = false;
         
-        for (const platform of segment.platforms) {
+        for (const platform of activePlatforms) {
           // Check landing on top
           const wasAbove = (player.y + 64 - player.vy) <= platform.y;
           const nowInside = checkCollision(platform.x, platform.y, platform.w, platform.h,
                                          player.x, player.y, 48, 64);
           
           if (wasAbove && nowInside && player.vy >= 0) {
+            if (platform.isFragile && platform.id && !state.fragileStates[platform.id]) {
+              state.fragileStates[platform.id] = { touchedAt: Date.now(), yOffset: 0 };
+              playSound('crumble', soundTimeRef);
+            }
+            if (!player.onGround && player.vy > 5) {
+              playSound('land', soundTimeRef);
+              player.vx *= 0.5; // Landing impact friction
+            }
             player.y = platform.y - 64;
             player.vy = 0;
             player.onGround = true;
@@ -367,6 +535,7 @@ export function CorredorLivreGame() {
               state.completionTime = time;
               state.completed = true;
               setRunTimes(times => [...times, time]);
+              playSound('complete', soundTimeRef);
             }
           }
         }
@@ -375,10 +544,15 @@ export function CorredorLivreGame() {
         if (player.x > segment.endX && state.segment < LEVEL_SEGMENTS.length - 1) {
           state.segment++;
           player.x = 50;
-          player.y = state.segment === 1 ? 360 : 260;
+          player.y = 260; // default start y for most segments
+          if (state.segment === 1) player.y = 360;
+          if (state.segment === 2) player.y = 300;
+          if (state.segment === 5) player.y = 200;
+          
           player.vx = 0;
           player.vy = 0;
           segmentStartTime = Date.now();
+          playSound('checkpoint', soundTimeRef);
         }
 
         // --- CAMERA FOLLOW ---
@@ -404,10 +578,17 @@ export function CorredorLivreGame() {
 
         // Draw parallax background
         // Far layer (sky gradient)
+        const isSunset = segment >= 4;
         const gradient = ctx.createLinearGradient(0, 0, 0, 450);
-        gradient.addColorStop(0, '#87CEEB');
-        gradient.addColorStop(0.5, '#FFE4B5');
-        gradient.addColorStop(1, '#FF8C69');
+        if (isSunset) {
+          gradient.addColorStop(0, '#2b1b3d');
+          gradient.addColorStop(0.5, '#bd4b4b');
+          gradient.addColorStop(1, '#ff9a44');
+        } else {
+          gradient.addColorStop(0, '#87CEEB');
+          gradient.addColorStop(0.5, '#FFE4B5');
+          gradient.addColorStop(1, '#FF8C69');
+        }
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, 800, 450);
 
@@ -431,15 +612,67 @@ export function CorredorLivreGame() {
         ctx.fillStyle = '#F6AD55';
 
         // Draw platforms
-        ctx.fillStyle = '#A0A0A0';
         for (const plat of segData.platforms) {
           const screenX = plat.x - camera.x;
+          let renderY = plat.y - camera.y;
+
+          if (plat.isFragile && plat.id && currentState.fragileStates[plat.id]) {
+            const age = Date.now() - currentState.fragileStates[plat.id].touchedAt;
+            if (age > 500) continue; // Don't render if it fell
+            if (age > 250) {
+              renderY += Math.pow(age - 250, 2) * 0.005;
+            } else {
+              renderY += Math.sin(age * 0.5) * 3; // Aggressive shake
+              // Flicker logic for T102 fairness
+              if (Math.floor(age / 50) % 2 === 0) {
+                ctx.fillStyle = '#FFFFFF'; // Flash white
+                ctx.fillRect(screenX, renderY, plat.w, plat.h);
+                continue;
+              }
+            }
+          }
+
           if (screenX > -plat.w && screenX < 800) {
-            ctx.fillRect(screenX, plat.y - camera.y, plat.w, plat.h);
+            ctx.fillStyle = plat.isFragile ? '#C53030' : '#A0A0A0';
+            ctx.fillRect(screenX, renderY, plat.w, plat.h);
             // Top highlight
-            ctx.fillStyle = '#B8B8B8';
-            ctx.fillRect(screenX, plat.y - camera.y, plat.w, 4);
-            ctx.fillStyle = '#A0A0A0';
+            ctx.fillStyle = plat.isFragile ? '#E53E3E' : '#B8B8B8';
+            ctx.fillRect(screenX, renderY, plat.w, 4);
+          }
+        }
+
+        // Draw Props
+        for (const prop of segData.props) {
+          const screenX = prop.x - camera.x;
+          if (screenX > -prop.width && screenX < 800) {
+            if (prop.type === 'caixa') {
+              ctx.fillStyle = '#3182CE';
+              ctx.fillRect(screenX, prop.y - camera.y, prop.width, prop.height);
+              ctx.fillStyle = '#2B6CB0';
+              ctx.fillRect(screenX, prop.y - camera.y, prop.width, 10);
+            } else if (prop.type === 'antena') {
+              ctx.strokeStyle = '#CBD5E0';
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(screenX + prop.width/2, prop.y - camera.y + prop.height);
+              ctx.lineTo(screenX + prop.width/2, prop.y - camera.y);
+              ctx.moveTo(screenX, prop.y - camera.y + 20);
+              ctx.lineTo(screenX + prop.width, prop.y - camera.y + 10);
+              ctx.moveTo(screenX + 5, prop.y - camera.y + 40);
+              ctx.lineTo(screenX + prop.width - 5, prop.y - camera.y + 35);
+              ctx.stroke();
+            } else if (prop.type === 'varal') {
+              ctx.strokeStyle = '#CBD5E0';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(screenX, prop.y - camera.y);
+              ctx.quadraticCurveTo(screenX + prop.width/2, prop.y - camera.y + 20, screenX + prop.width, prop.y - camera.y);
+              ctx.stroke();
+              ctx.fillStyle = '#FC8181';
+              ctx.fillRect(screenX + 20, prop.y - camera.y + 5, 15, 20);
+              ctx.fillStyle = '#63B3ED';
+              ctx.fillRect(screenX + 50, prop.y - camera.y + 10, 20, 20);
+            }
           }
         }
 
@@ -527,7 +760,7 @@ export function CorredorLivreGame() {
         // HUD
         ctx.fillStyle = '#FFFFFF';
         ctx.font = '16px Arial';
-        ctx.fillText(`Segment: ${segment + 1}/4`, 10, 30);
+        ctx.fillText(`Segment: ${segment + 1}/7`, 10, 30);
         ctx.fillText(`Attempts: ${currentState.attempts}`, 10, 55);
         if (completed) {
           ctx.fillStyle = '#FFD93D';
@@ -576,6 +809,7 @@ export function CorredorLivreGame() {
       completed: false,
       completionTime: 0,
       attempts: 0,
+      fragileStates: {},
     });
     setRunTimes([]);
   };
@@ -584,7 +818,7 @@ export function CorredorLivreGame() {
     <div className={styles.gameContainer}>
       <div className={styles.header}>
         <h1>CORREDOR LIVRE</h1>
-        <p>T99 Movement Spike — 1-Minute Prototype</p>
+        <p>T102 Surgical Polish — Flagship Candidate Final Retest</p>
       </div>
       
       {showInstructions && (
@@ -606,26 +840,28 @@ export function CorredorLivreGame() {
       />
 
       <div className={styles.mobileControls}>
+        <div className={styles.dirControls}>
+          <button 
+            className={styles.controlBtn}
+            onTouchStart={() => handleTouch('left')}
+            onMouseDown={() => handleTouch('left')}
+          >
+            ←
+          </button>
+          <button 
+            className={styles.controlBtn}
+            onTouchStart={() => handleTouch('right')}
+            onMouseDown={() => handleTouch('right')}
+          >
+            →
+          </button>
+        </div>
         <button 
-          className={styles.controlBtn}
-          onTouchStart={() => handleTouch('left')}
-          onMouseDown={() => handleTouch('left')}
-        >
-          ←
-        </button>
-        <button 
-          className={styles.controlBtn}
+          className={`${styles.controlBtn} ${styles.jumpBtn}`}
           onTouchStart={() => handleTouch('jump')}
           onMouseDown={() => handleTouch('jump')}
         >
           JUMP
-        </button>
-        <button 
-          className={styles.controlBtn}
-          onTouchStart={() => handleTouch('right')}
-          onMouseDown={() => handleTouch('right')}
-        >
-          →
         </button>
       </div>
 

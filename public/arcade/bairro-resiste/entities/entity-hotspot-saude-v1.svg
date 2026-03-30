@@ -1,4 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#10b981" stroke="#f8fafc" stroke-width="4"/>
-  <text x="100" y="100" font-family="monospace" font-size="16" fill="#f8fafc" text-anchor="middle" dominant-baseline="middle">Hotspot Saude</text>
+  <defs>
+    <radialGradient id="saudeBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a4a35"/>
+      <stop offset="100%" stop-color="#081a10"/>
+    </radialGradient>
+    <linearGradient id="buildGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a8a5c"/>
+      <stop offset="100%" stop-color="#1e5a38"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" rx="14" fill="url(#saudeBg)"/>
+  <rect width="200" height="200" rx="14" fill="none" stroke="#44c47a" stroke-width="2.5" opacity="0.7"/>
+
+  <!-- Ambulance Bay (Scenic Detail) -->
+  <rect x="20" y="150" width="160" height="30" rx="4" fill="#0d2a1a" opacity="0.6"/>
+  <path d="M40 155h40M120 155h40" stroke="#1a4a35" stroke-width="1" opacity="0.8"/>
+
+  <!-- Medical Signage (Scenic Detail) -->
+  <rect x="160" y="40" width="25" height="40" rx="2" fill="#1a4a35" opacity="0.9"/>
+  <path d="M165 52h14M172 45v14" stroke="#7ce0ae" stroke-width="2" opacity="0.8"/>
+
+  <!-- Clinic building body -->
+  <rect x="38" y="90" width="124" height="82" rx="4" fill="url(#buildGrad)"/>
+  <rect x="38" y="82" width="124" height="12" rx="3" fill="#2e7048"/>
+
+  <!-- Big cross on building facade — glowing -->
+  <g>
+    <rect x="90" y="96" width="20" height="52" rx="4" fill="#7ce0ae" opacity="0.95"/>
+    <rect x="72" y="114" width="56" height="18" rx="4" fill="#7ce0ae" opacity="0.95"/>
+  </g>
+
+  <!-- Small ambulance silhouette -->
+  <rect x="28" y="140" width="34" height="18" rx="4" fill="#1e5a38" opacity="0.9"/>
+  <rect x="28" y="136" width="24" height="8" rx="2" fill="#2a7048"/>
+  <circle cx="36" cy="158" r="5" fill="#0d2a18"/>
+  <circle cx="55" cy="158" r="5" fill="#0d2a18"/>
+
+  <!-- Bottom label -->
+  <rect x="40" y="178" width="120" height="20" rx="5" fill="#04100a" opacity="0.85"/>
+  <text x="100" y="193" font-family="monospace" font-size="10" font-weight="bold" fill="#44c47a" text-anchor="middle" letter-spacing="2">SAÚDE</text>
 </svg>

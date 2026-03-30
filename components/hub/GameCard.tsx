@@ -2,6 +2,7 @@
 
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Game,
   GAME_GENRE_LABELS,
@@ -21,7 +22,16 @@ interface GameCardProps {
 }
 
 export function GameCard({ game, laneId, variant = 'standard' }: GameCardProps) {
-  const destination = game.kind === 'arcade' ? `/arcade/${game.slug}` : `/play/${game.slug}`;
+  const destination =
+    game.slug === 'tarifa-zero-corredor'
+      ? '/games/corredor-livre'
+      : game.slug === 'cidade-real'
+        ? '/games/cidade-real'
+      : game.slug === 'bairro-resiste'
+        ? '/games/bairro-resiste'
+      : game.kind === 'arcade'
+        ? `/arcade/${game.slug}`
+        : `/play/${game.slug}`;
   
 
   async function handleCardClick() {
@@ -103,6 +113,17 @@ export function GameCard({ game, laneId, variant = 'standard' }: GameCardProps) 
         </div>
 
         <h3 className={styles.title}>{game.title}</h3>
+        {game.publicVisibility === 'flagship' && (
+          <div className={styles.flagshipThumbWrap}>
+            <Image
+              src={game.cover}
+              alt={`${game.title} poster oficial`}
+              fill
+              className={styles.flagshipThumb}
+              sizes="(max-width: 768px) 100vw, 420px"
+            />
+          </div>
+        )}
         <p className={styles.description}>{game.shortDescription}</p>
 
         <div className={styles.meta}>

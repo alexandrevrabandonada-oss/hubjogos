@@ -127,18 +127,18 @@ export default function ExplorarPage() {
         actions={
           <CTACluster>
             <Link
-              href="/arcade/tarifa-zero-corredor"
+              href="/games/corredor-livre"
               className={styles.ctaPrimary}
               onClick={() => handleArcadeClick('tarifa-zero-corredor')}
             >
               🎮 Jogar Arcade
             </Link>
             <Link
-              href="/play/custo-de-viver"
+              href="/games/cidade-real"
               className={styles.ctaSecondary}
-              onClick={() => handleQuickClick('custo-de-viver')}
+              onClick={() => handleQuickClick('cidade-real')}
             >
-              ⚡ Jogar Quick
+              🏙️ Ver Simulação Flagship
             </Link>
           </CTACluster>
         }
@@ -189,7 +189,7 @@ export default function ExplorarPage() {
           {arcadeGames.map((game) => (
             <Link
               key={game.id}
-              href={`/arcade/${game.slug}`}
+              href={game.slug === 'tarifa-zero-corredor' ? '/games/corredor-livre' : game.slug === 'bairro-resiste' ? '/games/bairro-resiste' : `/arcade/${game.slug}`}
               className={styles.arcadeSpotlightCard}
               onClick={() => handleArcadeClick(game.slug)}
             >

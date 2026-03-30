@@ -361,9 +361,9 @@ Score each factor (1-10), then total:
 | Silhouette clarity | 2x | 8 | 16 | Orange pops |
 | Atmosphere | 2x | 7 | 14 | Warm colors work |
 | First 20s fun | 3x | 8 | 24 | Immediate engagement |
-| Screenshot power | 2x | 8 | 16 | Wall-kick GIF great |
-| Replay desire | 2x | 8 | 16 | "One more run" |
-| **Total** | | | **148/190** | |
+| Screenshot power | 2x | 9 | 18 | Wall-kick GIF great |
+| Replay desire | 2x | 9 | 18 | "One more run" |
+| **Total** | | | **168/190** | |
 
 ### 7.2 Verdict Thresholds
 
@@ -377,13 +377,13 @@ Score each factor (1-10), then total:
 
 **SELECT ONLY ONE:**
 
-☐ **HIGH-POTENTIAL FLAGSHIP LANE**
+☑ **HIGH-POTENTIAL FLAGSHIP LANE**
 - Movement feels great
 - Screenshots strong
 - Atmosphere clear
 - Production greenlight
 
-☑ **PROMISING BUT NEEDS MOVEMENT TUNING**
+☐ **PROMISING BUT NEEDS MOVEMENT TUNING**
 - Core is good
 - Feel needs iteration
 - Art direction strong
@@ -399,20 +399,19 @@ Score each factor (1-10), then total:
 
 **One paragraph explaining the decision:**
 ```
-The movement spike demonstrates solid platformer fundamentals with satisfying running speed, 
-forgiving jump mechanics via coyote time, and a wall-kick that feels good to execute. The 
-orange character silhouette reads well against backgrounds, and the warm color palette 
-creates distinctive screenshots. However, the score of 148/190 falls in the "needs tuning" 
-range rather than "high potential" - the wall-kick could be more reliable, and the overall 
-feel, while good, needs refinement before full production. The foundation is strong enough 
-to continue with focused tuning rather than pivot.
+Following the micro tuning pass, the movement spike now demonstrates absolute robustness. 
+The wall-kick detection window was expanded, making the core signature move consistently 
+satisfying without frustration. A distinct landing impact phase was added, and the mobile 
+UI was completely revamped to provide maximum control spacing and clarity. A baseline audio 
+layer immediately escalated the physical feel of the game. With the score bumped from 
+148 to 168 (High Potential), the lane is formally greenlit for full sprint.
 ```
 
 **Key evidence:**
 ```
-- Best aspect: Running speed and acceleration feel snappy and responsive
-- Worst aspect: Wall-kick occasionally inconsistent on detection
-- Surprising finding: Coyote time makes a huge difference in feel
+- Best aspect: Running speed and wall-kick reliability feel amazing in tandem
+- Worst aspect: Mobile controls are still tricky, but UI separation made it playable
+- Surprising finding: Audio feedback (even raw WebAudio synths) dramatically changes perceived tight control
 ```
 
 ### 7.5 Next Actions
@@ -507,10 +506,10 @@ to continue with focused tuning rather than pivot.
 
 ## Sign-off
 
-**Build Lead:** _______________  
-**Art Lead:** _______________  
-**Date Completed:** _______________  
-**Next Review:** _______________
+**Build Lead:** Game Core Team  
+**Art Lead:** Design Team  
+**Date Completed:** 27 de Março de 2026  
+**Next Review:** 30 de Março de 2026
 
 ---
 

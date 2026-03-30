@@ -1,0 +1,40 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#042F2E"/>
+      <stop offset="0.45" stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#14532D"/>
+    </linearGradient>
+    <linearGradient id="road" x1="800" y1="300" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#164E63" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#082F49" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="lane" x1="580" y1="850" x2="1010" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#22D3EE" stop-opacity="0"/>
+      <stop offset="0.55" stop-color="#34D399" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#BBF7D0" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1240" cy="180" r="180" fill="#A7F3D0" fill-opacity="0.12"/>
+  <circle cx="320" cy="140" r="140" fill="#67E8F9" fill-opacity="0.1"/>
+
+  <path d="M640 900L760 260H860L980 900H640Z" fill="url(#road)"/>
+  <path d="M650 900L810 210L850 210L1010 900H650Z" fill="url(#lane)"/>
+
+  <g opacity="0.7">
+    <rect x="250" y="540" width="140" height="70" rx="14" fill="#0F172A" fill-opacity="0.45"/>
+    <rect x="1150" y="500" width="170" height="84" rx="16" fill="#0F172A" fill-opacity="0.42"/>
+    <rect x="980" y="620" width="120" height="62" rx="12" fill="#0F172A" fill-opacity="0.45"/>
+  </g>
+
+  <g>
+    <rect x="86" y="84" width="240" height="42" rx="21" fill="#052E2B" fill-opacity="0.7" stroke="#6EE7B7" stroke-opacity="0.5"/>
+    <text x="206" y="112" text-anchor="middle" fill="#BBF7D0" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="1">FLAGSHIP DO HUB</text>
+  </g>
+
+  <text x="90" y="690" fill="#E6FFFA" font-family="Segoe UI, Arial, sans-serif" font-size="86" font-weight="800">CORREDOR LIVRE</text>
+  <text x="90" y="750" fill="#A7F3D0" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="600">Tarifa Zero RJ • Platformer territorial speedrun</text>
+  <text x="90" y="804" fill="#D1FAE5" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="500">Runs curtas, leitura imediata, alto poder de screenshot.</text>
+</svg>

@@ -1,4 +1,108 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-  <rect width="200" height="200" fill="#0f172a" stroke="#f8fafc" stroke-width="4"/>
-  <text x="100" y="100" font-family="monospace" font-size="16" fill="#f8fafc" text-anchor="middle" dominant-baseline="middle">BG Base</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a1a2e"/>
+      <stop offset="60%" stop-color="#0f2230"/>
+      <stop offset="100%" stop-color="#071524"/>
+    </linearGradient>
+    <linearGradient id="streetH" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a3045" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#1a3045" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#1a3045" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#1a3045" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="streetV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3045" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#1a3045" stop-opacity="0.8"/>
+      <stop offset="70%" stop-color="#1a3045" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#1a3045" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="vignet" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="#020c18" stop-opacity="0.7"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Base background -->
+  <rect width="1600" height="900" fill="url(#bgGrad)"/>
+
+  <!-- City blocks — dense texture -->
+  <g opacity="0.4">
+    <!-- NW quadrant -->
+    <rect x="40" y="40" width="280" height="160" rx="4" fill="#132233"/>
+    <path d="M60 60h240M60 100h240M60 140h240M100 40v160M180 40v160M260 40v160" stroke="#1a3045" stroke-width="1"/>
+    
+    <!-- NE quadrant -->
+    <rect x="900" y="40" width="300" height="160" rx="4" fill="#132233"/>
+    <path d="M920 60h260M920 100h260M920 140h260M960 40v160M1040 40v160M1120 40v160" stroke="#1a3045" stroke-width="1"/>
+    
+    <!-- SW quadrant -->
+    <rect x="40" y="700" width="360" height="160" rx="4" fill="#112030"/>
+    <path d="M60 720h320M60 760h320M60 800h320M120 700v160M200 700v160M280 700v160" stroke="#1a3045" stroke-width="1"/>
+    
+    <!-- SE quadrant -->
+    <rect x="1100" y="750" width="460" height="110" rx="4" fill="#112030"/>
+    <path d="M1120 770h420M1120 810h420M1180 750v110M1260 750v110M1340 750v110M1420 750v110" stroke="#1a3045" stroke-width="1"/>
+  </g>
+
+  <!-- Avenues -->
+  <rect x="0" y="460" width="1600" height="30" fill="url(#streetH)"/>
+  <rect x="350" y="0" width="22" height="900" fill="url(#streetV)"/>
+  <rect x="860" y="0" width="22" height="900" fill="url(#streetV)"/>
+
+  <!-- Street Markings -->
+  <line x1="0" y1="475" x2="1600" y2="475" stroke="#2a4a65" stroke-width="1.5" stroke-dasharray="20,15" opacity="0.6"/>
+  <line x1="361" y1="0" x2="361" y2="900" stroke="#2a4a65" stroke-width="1" stroke-dasharray="15,12" opacity="0.5"/>
+  <line x1="871" y1="0" x2="871" y2="900" stroke="#2a4a65" stroke-width="1" stroke-dasharray="15,12" opacity="0.5"/>
+
+  <!-- Utility Lines (Environmental Storytelling) -->
+  <g stroke="#4bb0ff" stroke-width="0.8" opacity="0.2" fill="none">
+    <path d="M400 315 L1120 360 L1280 675 L480 720 Z" stroke-dasharray="5,10"/>
+    <path d="M400 315 L480 720" stroke-dasharray="2,5"/>
+    <path d="M1120 360 L1280 675" stroke-dasharray="2,5"/>
+  </g>
+
+  <!-- Mini Power Poles -->
+  <g fill="#4bb0ff" opacity="0.3">
+    <circle cx="400" cy="315" r="3"/>
+    <circle cx="1120" cy="360" r="3"/>
+    <circle cx="1280" cy="675" r="3"/>
+    <circle cx="480" cy="720" r="3"/>
+  </g>
+
+  <!-- Street Names -->
+  <g font-family="monospace" font-size="10" fill="#2a5a7a" opacity="0.7" font-weight="bold">
+    <text x="500" y="455" letter-spacing="2">AV. RESISTÊNCIA</text>
+    <text x="345" y="250" transform="rotate(-90 345,250)" letter-spacing="2">RUA DO MUTIRÃO</text>
+    <text x="855" y="250" transform="rotate(-90 855,250)" letter-spacing="2">CORREDOR POPULAR</text>
+  </g>
+
+  <!-- Urban Silhouettes (Background) -->
+  <g fill="#071524" opacity="0.8">
+    <rect x="400" y="800" width="80" height="100" rx="2"/>
+    <rect x="500" y="820" width="60" height="80" rx="2"/>
+    <rect x="580" y="810" width="100" height="90" rx="2"/>
+    <rect x="1000" y="820" width="90" height="80" rx="2"/>
+  </g>
+
+  <!-- District Labels -->
+  <g font-family="monospace" font-size="12" font-weight="bold" fill="#3a6a8a" opacity="0.8" letter-spacing="4">
+    <text x="150" y="100" text-anchor="middle">ZONA NORTE</text>
+    <text x="1450" y="100" text-anchor="middle">ZONA LESTE</text>
+    <text x="150" y="800" text-anchor="middle">ZONA OESTE</text>
+    <text x="1450" y="800" text-anchor="middle">ZONA SUL</text>
+  </g>
+
+  <!-- Vignette -->
+  <rect width="1600" height="900" fill="url(#vignet)"/>
+
+  <!-- Tactical Grid -->
+  <g opacity="0.08" stroke="#4bb0ff" stroke-width="0.5">
+    <path d="M0 100h1600M0 200h1600M0 300h1600M0 400h1600M0 500h1600M0 600h1600M0 700h1600M0 800h1600"/>
+    <path d="M100 0v900M200 0v900M300 0v900M400 0v900M500 0v900M600 0v900M700 0v900M800 0v900M900 0v900M1000 0v900M1100 0v900M1200 0v900M1300 0v900M1400 0v900M1500 0v900"/>
+  </g>
 </svg>
