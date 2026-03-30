@@ -57,11 +57,13 @@
     "@types/node": "^25.3.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "cannon-es": "^0.20.0",
     "html-to-image": "^1.11.13",
     "next": "^14.2.35",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "three": "^0.183.2",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
@@ -70,6 +72,7 @@
     "@supabase/supabase-js": "^2.98.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@types/three": "^0.183.1",
     "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",

@@ -1,44 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
   <defs>
-    <radialGradient id="saudeBg" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1a4a35"/>
-      <stop offset="100%" stop-color="#081a10"/>
+    <radialGradient id="saudeBg" cx="50%" cy="34%" r="74%">
+      <stop offset="0%" stop-color="#1f6a46"/>
+      <stop offset="100%" stop-color="#08190f"/>
     </radialGradient>
-    <linearGradient id="buildGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#3a8a5c"/>
-      <stop offset="100%" stop-color="#1e5a38"/>
+    <linearGradient id="clinicWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#76d6a7"/>
+      <stop offset="100%" stop-color="#2c8357"/>
     </linearGradient>
   </defs>
 
-  <!-- Background -->
   <rect width="200" height="200" rx="14" fill="url(#saudeBg)"/>
-  <rect width="200" height="200" rx="14" fill="none" stroke="#44c47a" stroke-width="2.5" opacity="0.7"/>
+  <rect width="200" height="200" rx="14" fill="none" stroke="#44c47a" stroke-width="3" opacity="0.78"/>
 
-  <!-- Ambulance Bay (Scenic Detail) -->
-  <rect x="20" y="150" width="160" height="30" rx="4" fill="#0d2a1a" opacity="0.6"/>
-  <path d="M40 155h40M120 155h40" stroke="#1a4a35" stroke-width="1" opacity="0.8"/>
+  <rect x="20" y="146" width="160" height="30" rx="6" fill="#0f2f1f" opacity="0.9"/>
 
-  <!-- Medical Signage (Scenic Detail) -->
-  <rect x="160" y="40" width="25" height="40" rx="2" fill="#1a4a35" opacity="0.9"/>
-  <path d="M165 52h14M172 45v14" stroke="#7ce0ae" stroke-width="2" opacity="0.8"/>
+  <rect x="34" y="86" width="132" height="78" rx="6" fill="url(#clinicWall)"/>
+  <rect x="34" y="76" width="132" height="14" rx="4" fill="#3aa06c"/>
 
-  <!-- Clinic building body -->
-  <rect x="38" y="90" width="124" height="82" rx="4" fill="url(#buildGrad)"/>
-  <rect x="38" y="82" width="124" height="12" rx="3" fill="#2e7048"/>
-
-  <!-- Big cross on building facade — glowing -->
-  <g>
-    <rect x="90" y="96" width="20" height="52" rx="4" fill="#7ce0ae" opacity="0.95"/>
-    <rect x="72" y="114" width="56" height="18" rx="4" fill="#7ce0ae" opacity="0.95"/>
+  <g opacity="0.95">
+    <rect x="88" y="94" width="24" height="56" rx="4" fill="#c9fbe0"/>
+    <rect x="72" y="110" width="56" height="24" rx="4" fill="#c9fbe0"/>
+    <rect x="90" y="96" width="20" height="52" rx="4" fill="#7ce0ae"/>
+    <rect x="74" y="112" width="52" height="20" rx="4" fill="#7ce0ae"/>
   </g>
 
-  <!-- Small ambulance silhouette -->
-  <rect x="28" y="140" width="34" height="18" rx="4" fill="#1e5a38" opacity="0.9"/>
-  <rect x="28" y="136" width="24" height="8" rx="2" fill="#2a7048"/>
-  <circle cx="36" cy="158" r="5" fill="#0d2a18"/>
-  <circle cx="55" cy="158" r="5" fill="#0d2a18"/>
+  <g opacity="0.88">
+    <rect x="42" y="100" width="16" height="14" rx="2" fill="#c9fbe0"/>
+    <rect x="142" y="100" width="16" height="14" rx="2" fill="#c9fbe0"/>
+    <rect x="42" y="122" width="16" height="14" rx="2" fill="#c9fbe0"/>
+    <rect x="142" y="122" width="16" height="14" rx="2" fill="#c9fbe0"/>
+  </g>
 
-  <!-- Bottom label -->
-  <rect x="40" y="178" width="120" height="20" rx="5" fill="#04100a" opacity="0.85"/>
-  <text x="100" y="193" font-family="monospace" font-size="10" font-weight="bold" fill="#44c47a" text-anchor="middle" letter-spacing="2">SAÚDE</text>
+  <g opacity="0.95">
+    <rect x="20" y="36" width="22" height="62" rx="3" fill="#14532d"/>
+    <rect x="23" y="42" width="16" height="18" rx="3" fill="#22c55e"/>
+    <path d="M27 51h8M31 47v8" stroke="#dcfce7" stroke-width="2"/>
+    <rect x="29" y="98" width="4" height="28" fill="#14532d"/>
+  </g>
+
+  <g opacity="0.92">
+    <rect x="145" y="144" width="36" height="18" rx="4" fill="#15803d"/>
+    <rect x="147" y="139" width="20" height="8" rx="2" fill="#34d399"/>
+    <circle cx="154" cy="162" r="5" fill="#052e16"/>
+    <circle cx="173" cy="162" r="5" fill="#052e16"/>
+  </g>
+
+  <rect x="30" y="174" width="140" height="20" rx="5" fill="#07150d" opacity="0.92"/>
+  <text x="100" y="188" font-family="monospace" font-size="10" font-weight="bold" fill="#86efac" text-anchor="middle" letter-spacing="2">SAUDE</text>
 </svg>

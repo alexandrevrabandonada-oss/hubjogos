@@ -6,6 +6,8 @@ import { Game, getGameBySlug } from '@/lib/games/catalog';
 const GAME_SLUG = 'bairro-resiste';
 
 const ENTRY_COPY = {
+  shortPremise:
+    'RTS-lite de defesa territorial em 90 segundos: despache brigadas, corte cascatas e salve o bairro antes do colapso.',
   whyItMatters: {
     struggle:
       'Bairro Resiste transforma defesa territorial em ação direta: cada clique envia brigadas para segurar água, moradia, saúde e mobilidade antes que a crise se espalhe.',
@@ -30,12 +32,22 @@ export default function BairroResistePage() {
 
   return (
     <GameEntryPage
-      game={game}
+      game={{
+        ...game,
+        shortDescription: ENTRY_COPY.shortPremise,
+      }}
       heroMedia={{
         type: 'video',
         src: '/showcase/bairro-resiste/motion/bairro-resiste-official-clip-01.webm',
         alt: 'Clip oficial de gameplay de Bairro Resiste',
       }}
+      trustIndicators={[
+        { icon: '🧭', label: 'Formato', value: 'RTS-lite territorial' },
+        { icon: '⏱️', label: 'Sessão', value: '90s reais' },
+        { icon: '⚡', label: 'Fantasia', value: 'Pressão + resgate' },
+        { icon: '🎬', label: 'Captação', value: 'Showpiece runtime real' },
+        { icon: '📱', label: 'Suporte', value: 'Mobile + Desktop' },
+      ]}
       secondaryCta={{
         label: 'Jogar direto no RTS-lite',
         href: '/arcade/bairro-resiste',
@@ -52,14 +64,13 @@ export default function BairroResistePage() {
         objectives:
           'Manter o maior nível possível de controle territorial até o fim da contagem, proteger os sistemas críticos e fechar a rodada com o bairro ainda de pé.',
         screenshots: [
-          { src: '/showcase/bairro-resiste/motion/gif-01-opening-pressure.gif', alt: 'GIF oficial - abertura do território sob pressão' },
-          { src: '/showcase/bairro-resiste/motion/gif-02-brigade-dispatch.gif', alt: 'GIF oficial - despacho da brigada e estabilização' },
-          { src: '/showcase/bairro-resiste/motion/gif-03-near-collapse-network.gif', alt: 'GIF oficial - rede territorial perto do colapso' },
-          { src: '/showcase/bairro-resiste/screenshot-01-opening-board.png', alt: 'Bairro Resiste - abertura oficial' },
-          { src: '/showcase/bairro-resiste/screenshot-02-mid-crisis.png', alt: 'Bairro Resiste - crise intermediária oficial' },
-          { src: '/showcase/bairro-resiste/screenshot-03-brigade-response.png', alt: 'Bairro Resiste - resposta da brigada oficial' },
-          { src: '/showcase/bairro-resiste/screenshot-04-near-collapse.png', alt: 'Bairro Resiste - pressão máxima oficial' },
-          { src: '/showcase/bairro-resiste/screenshot-05-final-result.png', alt: 'Bairro Resiste - resultado final oficial' },
+          { src: '/showcase/bairro-resiste/motion/gif-01-pressure-spread.gif', alt: 'GIF oficial - spread de pressão territorial' },
+          { src: '/showcase/bairro-resiste/motion/gif-02-brigade-dispatch-save.gif', alt: 'GIF oficial - despacho da brigada e salvamento' },
+          { src: '/showcase/bairro-resiste/motion/gif-03-critical-hero.gif', alt: 'GIF oficial - hero moment crítico' },
+          { src: '/showcase/bairro-resiste/screenshot-01-calm-board.png', alt: 'Bairro Resiste - calm board oficial' },
+          { src: '/showcase/bairro-resiste/screenshot-02-mid-pressure.png', alt: 'Bairro Resiste - pressão intermediária oficial' },
+          { src: '/showcase/bairro-resiste/screenshot-03-critical-state.png', alt: 'Bairro Resiste - estado crítico oficial' },
+          { src: '/showcase/bairro-resiste/screenshot-04-save-recovery.png', alt: 'Bairro Resiste - save/recovery oficial' },
         ],
       }}
       relatedGames={relatedGames}

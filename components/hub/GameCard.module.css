@@ -141,6 +141,27 @@
   object-fit: cover;
 }
 
+.flagshipProofRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: -2px;
+}
+
+.flagshipProofChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--card-accent, var(--accent)) 22%, transparent);
+  background: color-mix(in srgb, var(--surface) 78%, var(--card-accent, var(--accent)) 22%);
+  color: var(--text-muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 .genreBadge {
   font-size: 0.65rem;
   font-weight: 900;

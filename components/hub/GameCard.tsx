@@ -114,15 +114,22 @@ export function GameCard({ game, laneId, variant = 'standard' }: GameCardProps) 
 
         <h3 className={styles.title}>{game.title}</h3>
         {game.publicVisibility === 'flagship' && (
-          <div className={styles.flagshipThumbWrap}>
-            <Image
-              src={game.cover}
-              alt={`${game.title} poster oficial`}
-              fill
-              className={styles.flagshipThumb}
-              sizes="(max-width: 768px) 100vw, 420px"
-            />
-          </div>
+          <>
+            <div className={styles.flagshipThumbWrap}>
+              <Image
+                src={game.cover}
+                alt={`${game.title} poster oficial`}
+                fill
+                className={styles.flagshipThumb}
+                sizes="(max-width: 768px) 100vw, 420px"
+              />
+            </div>
+            <div className={styles.flagshipProofRow}>
+              <span className={styles.flagshipProofChip}>{game.runtimeState === 'real' ? 'Runtime real' : 'Captura guiada'}</span>
+              <span className={styles.flagshipProofChip}>{game.duration}</span>
+              <span className={styles.flagshipProofChip}>{game.deviceSupport.length === 2 ? 'Mobile + Desktop' : game.deviceSupport[0] === 'mobile' ? 'Mobile' : 'Desktop'}</span>
+            </div>
+          </>
         )}
         <p className={styles.description}>{game.shortDescription}</p>
 

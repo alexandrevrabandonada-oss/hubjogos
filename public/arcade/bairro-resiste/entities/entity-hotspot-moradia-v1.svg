@@ -1,50 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
   <defs>
-    <radialGradient id="moradiaBg" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#6b3520"/>
-      <stop offset="100%" stop-color="#2a1408"/>
+    <radialGradient id="moradiaBg" cx="48%" cy="35%" r="76%">
+      <stop offset="0%" stop-color="#7b3f22"/>
+      <stop offset="100%" stop-color="#2a1308"/>
     </radialGradient>
-    <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#c8824a"/>
-      <stop offset="100%" stop-color="#8a4e28"/>
+    <linearGradient id="housingWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e6a064"/>
+      <stop offset="100%" stop-color="#a35b32"/>
     </linearGradient>
-    <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#e09050"/>
-      <stop offset="100%" stop-color="#a05a28"/>
+    <linearGradient id="housingRoof" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f4b170"/>
+      <stop offset="100%" stop-color="#b76835"/>
     </linearGradient>
   </defs>
 
-  <!-- Background -->
   <rect width="200" height="200" rx="14" fill="url(#moradiaBg)"/>
-  <rect width="200" height="200" rx="14" fill="none" stroke="#e0884a" stroke-width="2.5" opacity="0.7"/>
+  <rect width="200" height="200" rx="14" fill="none" stroke="#e0884a" stroke-width="3" opacity="0.78"/>
 
-  <!-- Community Courtyard (Scenic Detail) -->
-  <rect x="25" y="145" width="150" height="30" rx="4" fill="#3a1a10" opacity="0.5"/>
-  <circle cx="100" cy="155" r="8" fill="#5a2a18" opacity="0.6"/> <!-- Small community area -->
+  <rect x="16" y="144" width="168" height="30" rx="5" fill="#3b1a0e" opacity="0.92"/>
 
-  <!-- Laundry Lines (Scenic Detail) -->
-  <g stroke="#e0884a" stroke-width="0.5" opacity="0.6">
-    <line x1="85" y1="85" x2="110" y2="85"/>
-    <rect x="88" y="85" width="4" height="6" fill="#c8824a"/>
-    <rect x="96" y="85" width="4" height="7" fill="#e09050"/>
+  <g opacity="0.97">
+    <rect x="20" y="102" width="34" height="58" rx="3" fill="url(#housingWall)"/>
+    <polygon points="16,102 58,102 58,92 37,80 16,92" fill="url(#housingRoof)"/>
+    <rect x="58" y="94" width="40" height="66" rx="3" fill="url(#housingWall)"/>
+    <polygon points="54,94 102,94 102,82 78,68 54,82" fill="url(#housingRoof)"/>
+    <rect x="104" y="86" width="42" height="74" rx="3" fill="url(#housingWall)"/>
+    <polygon points="100,86 150,86 150,72 126,56 100,72" fill="url(#housingRoof)"/>
+    <rect x="148" y="98" width="34" height="62" rx="3" fill="url(#housingWall)"/>
+    <polygon points="144,98 186,98 186,88 165,76 144,88" fill="url(#housingRoof)"/>
   </g>
 
-  <!-- Main housing block — left -->
-  <rect x="30" y="100" width="55" height="72" rx="3" fill="url(#wallGrad)"/>
-  <polygon points="24,100 92,100 92,88 58,72 24,88" fill="url(#roofGrad)"/>
-
-  <!-- Main housing block — right (taller) -->
-  <rect x="108" y="80" width="65" height="92" rx="3" fill="url(#wallGrad)"/>
-  <polygon points="102,80 180,80 180,66 140,48 102,66" fill="url(#roofGrad)"/>
-  
-  <!-- Windows & Street Life Hints -->
-  <g opacity="0.8">
-    <rect x="40" y="115" width="12" height="12" rx="1" fill="#d4a870" opacity="0.9"/>
-    <rect x="120" y="95" width="12" height="12" rx="1" fill="#d4a870" opacity="0.9"/>
-    <circle cx="50" cy="165" r="3" fill="#5c2f10"/> <!-- Silhouette hint -->
+  <g opacity="0.9">
+    <rect x="28" y="116" width="8" height="8" rx="1" fill="#fde68a"/>
+    <rect x="68" y="110" width="8" height="8" rx="1" fill="#fde68a"/>
+    <rect x="116" y="102" width="8" height="8" rx="1" fill="#fde68a"/>
+    <rect x="158" y="116" width="8" height="8" rx="1" fill="#fde68a"/>
+    <rect x="82" y="146" width="32" height="6" rx="3" fill="#5b2a16"/>
   </g>
 
-  <!-- Bottom label -->
-  <rect x="34" y="178" width="132" height="20" rx="5" fill="#1a0a05" opacity="0.85"/>
-  <text x="100" y="193" font-family="monospace" font-size="10" font-weight="bold" fill="#e0884a" text-anchor="middle" letter-spacing="2">MORADIA</text>
+  <g opacity="0.88">
+    <line x1="60" y1="74" x2="128" y2="74" stroke="#fbbf24" stroke-width="1"/>
+    <rect x="72" y="74" width="4" height="7" fill="#f59e0b"/>
+    <rect x="86" y="74" width="4" height="6" fill="#f97316"/>
+    <rect x="104" y="74" width="4" height="7" fill="#fb923c"/>
+  </g>
+
+  <rect x="26" y="174" width="148" height="20" rx="5" fill="#1b0b05" opacity="0.92"/>
+  <text x="100" y="188" font-family="monospace" font-size="10" font-weight="bold" fill="#fb923c" text-anchor="middle" letter-spacing="2">MORADIA</text>
 </svg>

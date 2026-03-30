@@ -1,0 +1,175 @@
+/* T117A Post-session micro-feedback overlay for validation wave */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(2, 8, 20, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  animation: fadeIn 0.4s ease-out;
+  padding: 16px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.card {
+  width: min(420px, 100%);
+  background: rgba(8, 22, 42, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 16px;
+  padding: 20px 20px 18px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e0f2fe;
+  letter-spacing: 0.3px;
+}
+
+.subtitle {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: #7dd3fc;
+  opacity: 0.85;
+}
+
+/* Star rating */
+.starsRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.star {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 28px;
+  cursor: pointer;
+  color: rgba(148, 163, 184, 0.35);
+  transition: color 0.12s ease, transform 0.1s ease;
+  line-height: 1;
+}
+
+.star:hover,
+.starActive {
+  color: #fbbf24;
+  transform: scale(1.15);
+}
+
+/* Cluster chips */
+.sectionLabel {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.clusters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.chip {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid rgba(75, 176, 255, 0.3);
+  background: rgba(15, 30, 50, 0.7);
+  color: #94a3b8;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  user-select: none;
+}
+
+.chip:hover {
+  border-color: rgba(75, 176, 255, 0.6);
+  color: #e0f2fe;
+}
+
+.chipSelected {
+  background: rgba(56, 132, 220, 0.25);
+  border-color: #38bdf8;
+  color: #e0f2fe;
+}
+
+/* Open note */
+.noteInput {
+  width: 100%;
+  background: rgba(2, 8, 20, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #cbd5e1;
+  resize: none;
+  font-family: inherit;
+  margin-bottom: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.noteInput:focus {
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.noteInput::placeholder {
+  color: rgba(148, 163, 184, 0.4);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.submitButton {
+  flex: 1;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  border: none;
+  border-radius: 8px;
+  color: #f0f9ff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  letter-spacing: 0.4px;
+}
+
+.submitButton:hover {
+  opacity: 0.88;
+}
+
+.skipButton {
+  padding: 10px 14px;
+  background: none;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.skipButton:hover {
+  border-color: rgba(148, 163, 184, 0.5);
+  color: #94a3b8;
+}

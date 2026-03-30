@@ -33,6 +33,7 @@ export interface GameEntryPageProps {
     description: string;
     url: string;
   };
+  trustIndicators?: TrustIndicator[];
 }
 
 export interface WhyItMattersContent {
@@ -65,6 +66,7 @@ export function GameEntryPage({
   whyItMatters,
   howItWorks,
   shareData,
+  trustIndicators,
 }: GameEntryPageProps) {
   // Track page view on mount
   useEffect(() => {
@@ -86,7 +88,7 @@ export function GameEntryPage({
       />
 
       {/* Trust / Expectation Row */}
-      <TrustRow game={game} />
+      <TrustRow game={game} indicators={trustIndicators} />
 
       {/* Why It Matters */}
       {whyItMatters && (
@@ -166,6 +168,9 @@ function HeroSection({ game, media, onPlayClick, secondaryCta }: HeroSectionProp
             <span className={`${styles.entryBadge} ${game.status === 'beta' ? styles.entryBadgeBeta : styles.entryBadgeLive}`}>
               {game.status === 'beta' ? 'Public Beta' : 'Live'}
             </span>
+            {game.runtimeState === 'real' && (
+              <span className={`${styles.entryBadge} ${styles.entryBadgeRuntime}`}>Runtime real</span>
+            )}
           </div>
           <h1 className={styles.gameTitle}>{game.title}</h1>
           <p className={styles.gamePremise}>{game.shortDescription}</p>
@@ -215,10 +220,11 @@ function HeroSection({ game, media, onPlayClick, secondaryCta }: HeroSectionProp
 
 interface TrustRowProps {
   game: Game;
+  indicators?: TrustIndicator[];
 }
 
-function TrustRow({ game }: TrustRowProps) {
-  const indicators: TrustIndicator[] = [
+function TrustRow({ game, indicators: customIndicators }: TrustRowProps) {
+  const indicators: TrustIndicator[] = customIndicators ?? [
     {
       icon: '⏱️',
       label: 'Duração',
@@ -239,7 +245,7 @@ function TrustRow({ game }: TrustRowProps) {
       label: 'Status',
       value:
         game.publicVisibility === 'flagship'
-          ? `Flagship • ${game.status === 'beta' ? 'Public Beta' : 'Live'}`
+          ? `Flagship • ${game.runtimeState === 'real' ? 'Runtime real' : game.status === 'beta' ? 'Public Beta' : 'Live'}`
           : game.status === 'beta'
             ? 'Public Beta'
             : 'Live',

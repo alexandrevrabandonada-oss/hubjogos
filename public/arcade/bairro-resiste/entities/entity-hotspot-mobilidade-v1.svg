@@ -1,46 +1,54 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
   <defs>
-    <radialGradient id="mobBg" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#1a3a5c"/>
-      <stop offset="100%" stop-color="#0a1a2e"/>
+    <radialGradient id="mobBg" cx="50%" cy="34%" r="75%">
+      <stop offset="0%" stop-color="#1f4c7a"/>
+      <stop offset="100%" stop-color="#09172a"/>
     </radialGradient>
-    <linearGradient id="busGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#4a7aaa"/>
-      <stop offset="100%" stop-color="#1e4878"/>
+    <linearGradient id="terminalWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7eb7eb"/>
+      <stop offset="100%" stop-color="#346aa2"/>
     </linearGradient>
   </defs>
 
-  <!-- Background -->
   <rect width="200" height="200" rx="14" fill="url(#mobBg)"/>
-  <rect width="200" height="200" rx="14" fill="none" stroke="#4a88cc" stroke-width="2.5" opacity="0.7"/>
+  <rect width="200" height="200" rx="14" fill="none" stroke="#4a88cc" stroke-width="3" opacity="0.8"/>
 
-  <!-- Route corridor line -->
-  <rect x="14" y="118" width="172" height="18" rx="4" fill="#0f1f2f" opacity="0.9"/>
-  <!-- BUS Pavement Marking (Scenic Detail) -->
-  <text x="50" y="132" font-family="monospace" font-size="10" font-weight="bold" fill="#2a4a60" opacity="0.8">BUS</text>
-  <text x="140" y="132" font-family="monospace" font-size="10" font-weight="bold" fill="#2a4a60" opacity="0.8">BUS</text>
-
-  <!-- Traffic Light (Scenic Detail) -->
-  <g transform="translate(160, 50)">
-    <rect width="10" height="30" rx="2" fill="#1e3a50"/>
-    <circle cx="5" cy="8" r="3" fill="#ef4444" opacity="0.9"/> <!-- Red light -->
-    <circle cx="5" cy="15" r="3" fill="#f59e0b" opacity="0.4"/>
-    <circle cx="5" cy="22" r="3" fill="#22c55e" opacity="0.4"/>
-    <rect x="4" y="30" width="2" height="40" fill="#1a3045"/>
+  <rect x="12" y="140" width="176" height="26" rx="6" fill="#0d1e31" opacity="0.92"/>
+  <rect x="18" y="150" width="164" height="6" rx="3" fill="#1e3f63"/>
+  <g opacity="0.75" fill="#fbbf24">
+    <rect x="30" y="152" width="14" height="2" rx="1"/>
+    <rect x="54" y="152" width="14" height="2" rx="1"/>
+    <rect x="78" y="152" width="14" height="2" rx="1"/>
+    <rect x="102" y="152" width="14" height="2" rx="1"/>
+    <rect x="126" y="152" width="14" height="2" rx="1"/>
+    <rect x="150" y="152" width="14" height="2" rx="1"/>
   </g>
 
-  <!-- Bus shell (right side) -->
-  <rect x="142" y="80" width="34" height="42" rx="3" fill="#1e3a5c" opacity="0.8"/>
-  <rect x="142" y="76" width="34" height="7" rx="2" fill="#3a6a9a" opacity="0.9"/>
+  <g opacity="0.95">
+    <rect x="24" y="88" width="152" height="44" rx="8" fill="url(#terminalWall)"/>
+    <rect x="24" y="80" width="152" height="10" rx="4" fill="#6ea6db"/>
+    <rect x="34" y="96" width="16" height="14" rx="2" fill="#dbeafe"/>
+    <rect x="58" y="96" width="16" height="14" rx="2" fill="#dbeafe"/>
+    <rect x="82" y="96" width="16" height="14" rx="2" fill="#dbeafe"/>
+    <rect x="106" y="96" width="16" height="14" rx="2" fill="#dbeafe"/>
+    <rect x="130" y="96" width="16" height="14" rx="2" fill="#dbeafe"/>
+  </g>
 
-  <!-- Bus body -->
-  <rect x="24" y="76" width="108" height="54" rx="8" fill="url(#busGrad)"/>
-  
-  <!-- Windows & Lights -->
-  <rect x="100" y="82" width="22" height="22" rx="3" fill="#9dd4f8" opacity="0.75"/>
-  <ellipse cx="134" cy="93" rx="5" ry="4" fill="#f9cf4a" opacity="0.85"/>
+  <g opacity="0.9">
+    <rect x="56" y="56" width="88" height="8" rx="3" fill="#93c5fd"/>
+    <rect x="66" y="64" width="6" height="20" rx="2" fill="#6ea6db"/>
+    <rect x="128" y="64" width="6" height="20" rx="2" fill="#6ea6db"/>
+    <rect x="82" y="70" width="36" height="6" rx="3" fill="#bfdbfe"/>
+  </g>
 
-  <!-- Bottom label -->
-  <rect x="26" y="156" width="148" height="20" rx="5" fill="#060e1a" opacity="0.85"/>
-  <text x="100" y="171" font-family="monospace" font-size="10" font-weight="bold" fill="#4a88cc" text-anchor="middle" letter-spacing="2">MOBILIDADE</text>
+  <g opacity="0.9">
+    <rect x="164" y="48" width="12" height="30" rx="2" fill="#1e3a5c"/>
+    <circle cx="170" cy="56" r="3" fill="#ef4444"/>
+    <circle cx="170" cy="63" r="3" fill="#f59e0b" opacity="0.7"/>
+    <circle cx="170" cy="70" r="3" fill="#22c55e" opacity="0.5"/>
+    <rect x="168" y="78" width="4" height="22" fill="#1e3a5c"/>
+  </g>
+
+  <rect x="22" y="174" width="156" height="20" rx="5" fill="#060f1d" opacity="0.92"/>
+  <text x="100" y="188" font-family="monospace" font-size="10" font-weight="bold" fill="#93c5fd" text-anchor="middle" letter-spacing="2">MOBILIDADE</text>
 </svg>

@@ -22,6 +22,28 @@ interface BlockIdentity {
   infrastructure: ('power' | 'water' | 'comms')[];
 }
 
+interface Landmark {
+  id: string;
+  x: number;
+  y: number;
+  label: string;
+  kind: 'water' | 'health' | 'transport' | 'neighborhood';
+  tone: HotspotType;
+  anchorTo: HotspotType;
+  prominence: 'major' | 'support';
+}
+
+interface TerritoryStage {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  tone: HotspotType;
+  shape: 'plate' | 'column' | 'corridor';
+  title: string;
+}
+
 const SECTOR_LABELS: Record<HotspotType, string> = {
   agua: 'Estação de Tratamento',
   moradia: 'Conjunto Habitacional',
@@ -108,6 +130,21 @@ const HOTSPOT_CONNECTIONS: Array<{ from: HotspotType; to: HotspotType }> = [
   { from: 'moradia', to: 'saude' },
 ];
 
+const LANDMARKS: Landmark[] = [
+  { id: 'water-box', x: 18, y: 47, label: 'Caixa Dagua Torre Norte', kind: 'water', tone: 'agua', anchorTo: 'agua', prominence: 'major' },
+  { id: 'health-sign', x: 37, y: 68, label: 'Totem UBS Vale', kind: 'health', tone: 'saude', anchorTo: 'saude', prominence: 'support' },
+  { id: 'overpass', x: 65, y: 63, label: 'Passarela do Corredor', kind: 'transport', tone: 'mobilidade', anchorTo: 'mobilidade', prominence: 'support' },
+  { id: 'terminal-gate', x: 85, y: 58, label: 'Portico Terminal Popular', kind: 'transport', tone: 'mobilidade', anchorTo: 'mobilidade', prominence: 'major' },
+  { id: 'community-plaza', x: 57, y: 31, label: 'Praca do Morro', kind: 'neighborhood', tone: 'moradia', anchorTo: 'moradia', prominence: 'major' },
+];
+
+const TERRITORY_STAGES: TerritoryStage[] = [
+  { id: 'stage-agua', x: 23, y: 36, width: 26, height: 27, tone: 'agua', shape: 'column', title: 'Bacia da Água' },
+  { id: 'stage-saude', x: 31, y: 76, width: 24, height: 24, tone: 'saude', shape: 'plate', title: 'Faixa de Cuidado' },
+  { id: 'stage-moradia', x: 69, y: 39, width: 31, height: 34, tone: 'moradia', shape: 'plate', title: 'Encosta do Morro' },
+  { id: 'stage-mobilidade', x: 79, y: 73, width: 28, height: 26, tone: 'mobilidade', shape: 'corridor', title: 'Corredor Terminal' },
+];
+
 type CommandFeedTone = 'alert' | 'dispatch' | 'stabilized' | 'phase';
 
 interface CommandFeedItem {
@@ -163,6 +200,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
   const [isShaking, setIsShaking] = useState(false);
   const [selectedHotspotId, setSelectedHotspotId] = useState<HotspotType>('moradia');
   const [stabilizedHotspot, setStabilizedHotspot] = useState<HotspotType | null>(null);
+  const [recoveredHotspot, setRecoveredHotspot] = useState<HotspotType | null>(null);
   const [commandFeed, setCommandFeed] = useState<CommandFeedItem[]>([
     { id: 1, tone: 'phase', text: 'Central da brigada pronta. Escolha o primeiro setor e segure o bairro.' },
   ]);
@@ -338,6 +376,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
     setIsShaking(false);
     setSelectedHotspotId('moradia');
     setStabilizedHotspot(null);
+    setRecoveredHotspot(null);
     setCommandFeed([{ id: Date.now(), tone: 'phase', text: 'Brigada posicionada. Moradia abre a crise e o resto do bairro vem junto.' }]);
     previousCriticalIdsRef.current = [];
     integrityAlertRef.current = 'none';
@@ -396,6 +435,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
     setActionStats(prev => ({ ...prev, [h.id]: prev[h.id] + 1 }));
     setFlashingHotspot(h.id);
     setStabilizedHotspot(h.id);
+    setRecoveredHotspot(h.id);
     setDispatchPos({ x: h.x, y: h.y });
     pushCommandFeed('dispatch', `Brigada despachada para ${SECTOR_LABELS[h.id]}. ${HOTSPOT_BRIEFS[h.id].response}`);
     
@@ -409,6 +449,9 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
       setDispatchPos(null);
       setStabilizedHotspot(null);
     }, 650);
+    setTimeout(() => {
+      setRecoveredHotspot(null);
+    }, 2600);
     setTimeout(() => {
       pushCommandFeed('stabilized', `${SECTOR_LABELS[h.id]} recebeu reforço comunitário e abriu nova janela de respiro.`);
     }, 320);
@@ -449,6 +492,12 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
   );
   const criticalCount = hotspots.filter((hotspot) => hotspot.pressure >= 80).length;
   const activeHotspot = hotspots.find((hotspot) => hotspot.id === selectedHotspotId) ?? hotspots[0];
+  const activeHotspotState = getHotspotState(activeHotspot.pressure);
+  const heroFocusStyle = {
+    left: `${activeHotspot.x}%`,
+    top: `${activeHotspot.y}%`,
+    ['--hero-focus-color' as string]: SECTOR_COLORS[activeHotspot.id],
+  } as React.CSSProperties;
   const relatedHotspots = HOTSPOT_CONNECTIONS
     .filter((connection) => connection.from === activeHotspot.id || connection.to === activeHotspot.id)
     .map((connection) => connection.from === activeHotspot.id ? connection.to : connection.from);
@@ -555,6 +604,46 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
             <span className={styles.communitySignal} style={{ left: '74%', top: '28%' }} />
             <span className={styles.communitySignal} style={{ left: '82%', top: '66%' }} />
             <span className={styles.communitySignal} style={{ left: '45%', top: '82%' }} />
+          </div>
+
+          <div className={styles.territoryStageLayer}>
+            {TERRITORY_STAGES.map((stage) => (
+              <div
+                key={stage.id}
+                className={`${styles.territoryStage} ${styles[`territoryStage${stage.tone.charAt(0).toUpperCase()}${stage.tone.slice(1)}`]} ${styles[`territoryStage${stage.shape.charAt(0).toUpperCase()}${stage.shape.slice(1)}`]}`}
+                style={{
+                  left: `${stage.x}%`,
+                  top: `${stage.y}%`,
+                  width: `${stage.width}%`,
+                  height: `${stage.height}%`,
+                }}
+                aria-hidden="true"
+              >
+                <span className={styles.territoryStageLabel}>{stage.title}</span>
+              </div>
+            ))}
+          </div>
+
+          <div
+            className={`${styles.heroCompositionFocus} ${activeHotspotState === 'critical' ? styles.heroCompositionCritical : activeHotspotState === 'warning' ? styles.heroCompositionWarning : styles.heroCompositionStable}`}
+            style={heroFocusStyle}
+            aria-hidden="true"
+          />
+
+          <div className={styles.landmarksLayer}>
+            {LANDMARKS.map((landmark) => (
+              <div
+                key={landmark.id}
+                className={`${styles.landmark} ${styles[`landmark${landmark.kind.charAt(0).toUpperCase()}${landmark.kind.slice(1)}`]} ${styles[`landmarkTone${landmark.tone.charAt(0).toUpperCase()}${landmark.tone.slice(1)}`]} ${landmark.prominence === 'major' ? styles.landmarkMajor : styles.landmarkSupport}`}
+                style={{ left: `${landmark.x}%`, top: `${landmark.y}%` }}
+                aria-hidden="true"
+              >
+                <span className={styles.landmarkBeacon} />
+                <span className={styles.landmarkSilhouette} />
+                <span className={`${styles.landmarkTether} ${styles[`landmarkTether${landmark.anchorTo.charAt(0).toUpperCase()}${landmark.anchorTo.slice(1)}`]}`} />
+                <span className={styles.landmarkLabel}>{landmark.label}</span>
+              </div>
+            ))}
           </div>
           
           {/* CRT Glitch on critical integrity */}
@@ -674,6 +763,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
             const isOnCooldown = h.cooldownMs > 0;
             const isSelected = selectedHotspotId === h.id;
             const isStabilized = stabilizedHotspot === h.id;
+            const isRecovered = recoveredHotspot === h.id;
             const blockInfo = BLOCK_IDENTITIES[h.id];
             
             // Calculate infrastructure health based on pressure
@@ -698,7 +788,7 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
                   state === 'critical' ? styles.hotspotCritical :
                   state === 'warning'  ? styles.hotspotWarning :
                   styles.hotspotNormal
-                } ${isFlashing ? styles.hitFlash : ''} ${isSelected ? styles.hotspotSelected : ''} ${isStabilized ? styles.hotspotStabilized : ''}`}
+                } ${styles[`hotspot${h.id.charAt(0).toUpperCase()}${h.id.slice(1)}`]} ${isFlashing ? styles.hitFlash : ''} ${isSelected ? styles.hotspotSelected : ''} ${isStabilized ? styles.hotspotStabilized : ''} ${isRecovered ? styles.hotspotRecovered : ''}`}
                 style={{
                   left: `${h.x}%`,
                   top: `${h.y}%`,
@@ -710,9 +800,17 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
                 data-hotspot-id={h.id}
               >
                 {isSelected && <div className={styles.focusRing} />}
+
+                <div className={`${styles.sectorAura} ${styles[`sectorAura${h.id.charAt(0).toUpperCase()}${h.id.slice(1)}`]}`} />
                 
                 {/* Recovery glow effect when stabilized */}
-                {isStabilized && <div className={styles.recoveryGlow} />}
+                {isStabilized && (
+                  <>
+                    <div className={styles.recoveryGlow} />
+                    <div className={styles.recoveryRelight} />
+                    <div className={styles.recoveryParticleBurst} />
+                  </>
+                )}
 
                 {/* Neighborhood label */}
                 <span className={styles.neighborhoodLabel}>
@@ -813,6 +911,10 @@ export function BairroResisteArcadeGame({ game }: { game: Game }) {
                 {/* Save text popup */}
                 {isStabilized && (
                   <div className={styles.saveTextPopup}>SALVO!</div>
+                )}
+
+                {isRecovered && !isStabilized && (
+                  <div className={styles.savedMemoryTag}>Setor Recuperado</div>
                 )}
 
                 {/* Cooldown ring */}

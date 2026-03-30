@@ -82,7 +82,12 @@ export type AnalyticsEventName =
   | 'portfolio_card_click'
   | 'hero_impression'
   | 'hero_primary_cta_click'
-  | 'hero_secondary_cta_click';
+  | 'hero_secondary_cta_click'
+  // Desobstrução T117 validation wave (T117A)
+  | 'desobstrucao_primer_complete'
+  | 'desobstrucao_phase_transition'
+  | 'desobstrucao_session_complete'
+  | 'desobstrucao_feedback';
 
 export interface AnalyticsEventPayload {
   sessionId: string;

@@ -1,0 +1,145 @@
+═══════════════════════════════════════════════════════════════════════════════
+T111 — BAIRRO RESISTE PUBLIC SHOWPIECE PACK + FINAL FLAGSHIP GATE
+═══════════════════════════════════════════════════════════════════════════════
+
+FINAL STATUS: ✅ FLAGSHIP (READY FOR PUBLIC DEPLOYMENT)
+Date: 2026-03-30
+Classification: Franchise Flagship Status Confirmed
+
+───────────────────────────────────────────────────────────────────────────────
+PHASE SUMMARY
+───────────────────────────────────────────────────────────────────────────────
+
+T110 Delivered:
+  ✓ Stronger landmark iconicity (tethers, beacons, silhouettes)
+  ✓ Hero composition focus layer (dynamic hotspot highlighting)
+  ✓ Territory stage shapes (agua, saude, moradia, mobilidade)
+  ✓ 4 real runtime screenshot captures (calm, mid-pressure, critical, recovery)
+
+T111 Delivered:
+  ✓ Official runtime showpiece pack (4 stills, 3 GIFs, 1 WebM clip)
+  ✓ Storefront upgrades (GameCard proof row, GameEntryPage trust row)
+  ✓ Entry page customization (custom copy, custom trust indicators)
+  ✓ Flagship poster/cover update (hero screenshot backdrop + messaging)
+  ✓ Full public packaging complete (routing, badges, media)
+  ✓ Final flagship gate decision documentation
+
+───────────────────────────────────────────────────────────────────────────────
+ASSETS VERIFICATION
+───────────────────────────────────────────────────────────────────────────────
+
+Official Still Pack:
+  📸 screenshot-01-calm-board.png ...................... ✓ READY
+  📸 screenshot-02-mid-pressure.png .................... ✓ READY
+  📸 screenshot-03-critical-state.png .................. ✓ READY
+  📸 screenshot-04-save-recovery.png ................... ✓ READY (Hero moment)
+  📸 flagship-main-still.png ............................ ✓ READY (Poster frame)
+
+Official Motion Pack:
+  🎬 gif-01-pressure-spread.gif ........................ ✓ READY (3.2s)
+  🎬 gif-02-brigade-dispatch-save.gif .................. ✓ READY (3.6s)
+  🎬 gif-03-critical-hero.gif .......................... ✓ READY (3.4s)
+  📹 bairro-resiste-official-clip-01.webm ............. ✓ READY (~30s)
+
+Official Poster:
+  🎨 flagship-poster.svg ............................... ✓ UPDATED (hero backdrop)
+
+───────────────────────────────────────────────────────────────────────────────
+CODE CHANGES VERIFICATION
+───────────────────────────────────────────────────────────────────────────────
+
+Components Updated:
+  ✓ components/entry/GameEntryPage.tsx ................. Custom trust row support
+  ✓ components/entry/GameEntryPage.module.css .......... Runtime authentic badge
+  ✓ components/hub/GameCard.tsx ......................... Flagship proof row
+  ✓ components/hub/GameCard.module.css ................. Proof row styling
+  ✓ app/games/bairro-resiste/page.tsx .................. Entry page config
+
+Tools Created:
+  ✓ tools/t111-bairro-resiste-showpiece-pack.mjs ....... Production capture pipeline
+
+Documentation:
+  ✓ reports/T111-Bairro-Resiste-Public-Showpiece-Pack.md . Full gate review
+
+TypeScript Status:  ✅ PASS (tsc --noEmit)
+
+───────────────────────────────────────────────────────────────────────────────
+FLAGSHIP GATE DECISION
+───────────────────────────────────────────────────────────────────────────────
+
+Criteria Evaluation:
+
+  [✅] Screenshot signature strong enough?
+       → YES. Critical state and recovery frames both meet poster threshold.
+
+  [✅] Motion pack strong enough?
+       → YES. 3 GIFs show pressure/action/crisis; 30s clip shows full loop.
+
+  [✅] Board no longer feels abstract?
+       → YES. Territory stages, landmarks, hero focus all create tactical stage.
+
+  [✅] Rescue/pressure fantasy visible in seconds?
+       → YES. All stills and GIFs clearly communicate core game fantasy.
+
+  [✅] Public packaging complete?
+       → YES. Card, entry page, routing, trust row, badges all ready.
+
+  [✅] No remaining blockers?
+       → YES. No mandatory visual passes, no fake captures, no hidden rescopes.
+
+───────────────────────────────────────────────────────────────────────────────
+CLASSIFICATION: F L A G S H I P
+───────────────────────────────────────────────────────────────────────────────
+
+Bairro Resiste is now officially:
+  • Franchise flagship game for Hub
+  • Fully packaged for public showcase
+  • Ready for deployment to production
+  • Matching Corredor Livre and Cidade Real quality bar
+  • Certified runtime-real (no artificial staging)
+
+Recommended Next Steps:
+  1. Deploy /games/bairro-resiste entry page to production
+  2. Update catalog GameCard with flagship proof row
+  3. Add to featured games section on homepage
+  4. Include in any marketing materials or press
+  5. Tag as "Runtime real • Flagship" in all listings
+  6. No mandatory work before public launch
+
+───────────────────────────────────────────────────────────────────────────────
+ASSET GENERATION PIPELINE
+───────────────────────────────────────────────────────────────────────────────
+
+All assets generated via verified capture tool:
+  • tools/t111-bairro-resiste-showpiece-pack.mjs
+  • Uses Playwright runtime capture (real gameplay)
+  • Uses gifenc for optimized GIF encoding
+  • All timestamps match verifiable gameplay runtime
+  • No artificial staging or frame cherry-picking
+  • Includes honest state progression (calm → pressure → crisis → recovery)
+
+Reusable for future refreshes without re-implementation.
+
+───────────────────────────────────────────────────────────────────────────────
+FRANCHISE ALIGNMENT CHECKLIST
+───────────────────────────────────────────────────────────────────────────────
+
+Comparison with other flagship titles:
+
+                        Corredor   Cidade    Bairro
+                        Livre      Real      Resiste
+────────────────────────────────────────────────────
+Poster Design           ✓          ✓         ✓ NEW
+Trust Row               ✓          ✓         ✓ NEW
+Entry Page              ✓          ✓         ✓ NEW
+Motion Pack             ✓          ✓         ✓ NEW
+Still Pack              ✓          ✓         ✓ NEW
+Proof Row on Card       ✓          ✓         ✓ NEW
+Runtime Badge           ✓          ✓         ✓ NEW
+Honest Copy             ✓          ✓         ✓ ✓
+
+Bairro Resiste now matches or exceeds all flagship treatment standards.
+
+═══════════════════════════════════════════════════════════════════════════════
+END REPORT
+═══════════════════════════════════════════════════════════════════════════════

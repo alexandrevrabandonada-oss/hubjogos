@@ -129,12 +129,32 @@
   border-radius: 12px;
 }
 
+.hotspotAgua {
+  --sector-glow: rgba(75, 176, 255, 0.45);
+}
+
+.hotspotSaude {
+  --sector-glow: rgba(68, 196, 122, 0.45);
+}
+
+.hotspotMoradia {
+  --sector-glow: rgba(224, 136, 74, 0.45);
+}
+
+.hotspotMobilidade {
+  --sector-glow: rgba(74, 136, 204, 0.45);
+}
+
 .hotspotSelected {
   z-index: 14;
 }
 
 .hotspotStabilized {
   filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.95)) drop-shadow(0 0 45px rgba(34, 197, 94, 0.35));
+}
+
+.hotspotRecovered {
+  filter: drop-shadow(0 0 12px rgba(134, 239, 172, 0.7)) drop-shadow(0 0 30px rgba(34, 197, 94, 0.3));
 }
 
 /* Animated territorial ring — rectangular approach per art direction */
@@ -168,6 +188,31 @@
 @keyframes haloFade {
   0%, 100% { opacity: 0; transform: scale(0.9); }
   50%       { opacity: 0.15; transform: scale(1.1); }
+}
+
+.sectorAura {
+  position: absolute;
+  inset: -16px;
+  border-radius: 24px;
+  pointer-events: none;
+  opacity: 0.45;
+  z-index: 1;
+}
+
+.sectorAuraAgua {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(14, 116, 144, 0.08) 48%, transparent 72%);
+}
+
+.sectorAuraSaude {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.24) 0%, rgba(5, 150, 105, 0.1) 48%, transparent 72%);
+}
+
+.sectorAuraMoradia {
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.22) 0%, rgba(180, 83, 9, 0.1) 48%, transparent 72%);
+}
+
+.sectorAuraMobilidade {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, rgba(30, 64, 175, 0.1) 48%, transparent 72%);
 }
 
 .hotspot:hover:not([style*="opacity: 0.5"]) {
@@ -464,6 +509,25 @@
   z-index: 11;
 }
 
+.savedMemoryTag {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.48rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #dcfce7;
+  background: rgba(20, 83, 45, 0.88);
+  border: 1px solid rgba(134, 239, 172, 0.45);
+  border-radius: 999px;
+  padding: 2px 6px;
+  pointer-events: none;
+  z-index: 16;
+}
+
 /* ─── RECOVERY GLOW ──────────────────────────────────────────── */
 .recoveryGlow {
   position: absolute;
@@ -479,6 +543,46 @@
   0% { opacity: 0; transform: scale(0.8); }
   30% { opacity: 1; transform: scale(1.1); }
   100% { opacity: 0; transform: scale(1.5); }
+}
+
+.recoveryRelight {
+  position: absolute;
+  inset: -26px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 52% 35%, rgba(220, 252, 231, 0.9) 0%, rgba(134, 239, 172, 0.45) 34%, rgba(34, 197, 94, 0.08) 58%, transparent 76%);
+  pointer-events: none;
+  z-index: 6;
+  mix-blend-mode: screen;
+  animation: recoveryRelightPulse 0.95s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes recoveryRelightPulse {
+  0% { opacity: 0; transform: scale(0.55); }
+  35% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0; transform: scale(1.75); }
+}
+
+.recoveryParticleBurst {
+  position: absolute;
+  inset: -24px;
+  border-radius: 26px;
+  pointer-events: none;
+  z-index: 7;
+  background-image:
+    radial-gradient(2px 2px at 14% 40%, rgba(220, 252, 231, 0.92) 98%, transparent 100%),
+    radial-gradient(2px 2px at 30% 22%, rgba(134, 239, 172, 0.9) 98%, transparent 100%),
+    radial-gradient(2px 2px at 42% 72%, rgba(187, 247, 208, 0.85) 98%, transparent 100%),
+    radial-gradient(2px 2px at 62% 16%, rgba(240, 253, 244, 0.9) 98%, transparent 100%),
+    radial-gradient(2px 2px at 74% 66%, rgba(134, 239, 172, 0.9) 98%, transparent 100%),
+    radial-gradient(2px 2px at 86% 42%, rgba(220, 252, 231, 0.9) 98%, transparent 100%);
+  animation: recoveryParticles 0.9s ease-out forwards;
+}
+
+@keyframes recoveryParticles {
+  0% { opacity: 0.2; transform: scale(0.65); }
+  40% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(1.8); }
 }
 
 /* ─── DANGER OVERLAY ─────────────────────────────────────────────*/
@@ -740,6 +844,137 @@
   50% { opacity: 0.95; transform: scale(1.2); }
 }
 
+/* ─── HERO COMPOSITION ───────────────────────────────────────── */
+.territoryStageLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.territoryStage {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: inset 0 0 48px rgba(15, 23, 42, 0.28), 0 18px 32px rgba(2, 6, 23, 0.18);
+  opacity: 0.9;
+}
+
+.territoryStage::before {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  border-radius: inherit;
+  border: 1px solid rgba(226, 232, 240, 0.08);
+  opacity: 0.75;
+}
+
+.territoryStage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, transparent 28%, transparent 72%, rgba(255, 255, 255, 0.08) 100%);
+  mix-blend-mode: screen;
+}
+
+.territoryStagePlate {
+  transform: translate(-50%, -50%) rotate(-6deg);
+}
+
+.territoryStageColumn {
+  transform: translate(-50%, -50%) rotate(4deg);
+}
+
+.territoryStageCorridor {
+  transform: translate(-50%, -50%) rotate(8deg);
+  border-radius: 32px;
+}
+
+.territoryStageAgua {
+  background: radial-gradient(circle at 28% 35%, rgba(125, 211, 252, 0.32) 0%, rgba(14, 116, 144, 0.12) 48%, transparent 82%);
+}
+
+.territoryStageSaude {
+  background: radial-gradient(circle at 48% 42%, rgba(134, 239, 172, 0.32) 0%, rgba(22, 101, 52, 0.14) 46%, transparent 82%);
+}
+
+.territoryStageMoradia {
+  background: radial-gradient(circle at 52% 42%, rgba(251, 146, 60, 0.34) 0%, rgba(154, 52, 18, 0.16) 48%, transparent 84%);
+}
+
+.territoryStageMobilidade {
+  background: linear-gradient(90deg, rgba(96, 165, 250, 0.08) 0%, rgba(59, 130, 246, 0.22) 18%, rgba(191, 219, 254, 0.14) 50%, rgba(59, 130, 246, 0.22) 82%, rgba(96, 165, 250, 0.08) 100%);
+}
+
+.territoryStageLabel {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  font-size: 0.46rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.heroCompositionFocus {
+  position: absolute;
+  width: 32%;
+  height: 44%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 36px;
+  opacity: 0.9;
+}
+
+.heroCompositionFocus::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--hero-focus-color) 28%, transparent) 0%, transparent 68%);
+  filter: blur(8px);
+}
+
+.heroCompositionFocus::after {
+  content: '';
+  position: absolute;
+  inset: 10% 8%;
+  border-radius: 30px;
+  border: 1px solid color-mix(in srgb, var(--hero-focus-color) 52%, rgba(255, 255, 255, 0.2));
+  opacity: 0.36;
+}
+
+.heroCompositionStable::after {
+  animation: heroHoldPulse 4.2s ease-in-out infinite;
+}
+
+.heroCompositionWarning::after {
+  animation: heroWarningPulse 1.8s ease-in-out infinite;
+}
+
+.heroCompositionCritical::after {
+  animation: heroCriticalPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes heroHoldPulse {
+  0%, 100% { opacity: 0.22; transform: scale(0.96); }
+  50% { opacity: 0.42; transform: scale(1.02); }
+}
+
+@keyframes heroWarningPulse {
+  0%, 100% { opacity: 0.28; transform: scale(0.98); }
+  50% { opacity: 0.65; transform: scale(1.04); }
+}
+
+@keyframes heroCriticalPulse {
+  0%, 100% { opacity: 0.34; transform: scale(1); }
+  50% { opacity: 0.84; transform: scale(1.08); }
+}
+
 /* ─── SECTOR STRESS FX ────────────────────────────────────────── */
 .aguaStress {
   position: absolute;
@@ -791,21 +1026,212 @@
 /* ─── CONTAGION / SPREAD ──────────────────────────────────────── */
 .contagionLine {
   position: absolute;
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.4), transparent);
+  width: 52px;
+  height: 52px;
   transform-origin: left center;
-  pointer-events: none;
+  border-radius: 14px;
   z-index: 1;
-  animation: contagionPulse 2s ease-in-out infinite alternate;
-}
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.52), inset 0 0 22px rgba(2, 6, 23, 0.48);
+  opacity: 0.96;
 
 @keyframes contagionPulse {
   from { opacity: 0.1; filter: blur(2px); }
   to { opacity: 0.6; filter: blur(0px); }
 }
-
-.contagionLineCritical {
+  inset: -3px;
+  border-radius: 16px;
   filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.8));
+}
+
+
+.landmarkMajor {
+  z-index: 6;
+}
+
+.landmarkSupport {
+  width: 40px;
+  height: 40px;
+  opacity: 0.84;
+}
+
+.landmarkToneAgua {
+  color: #7dd3fc;
+  box-shadow: 0 18px 34px rgba(2, 132, 199, 0.2), inset 0 0 18px rgba(2, 6, 23, 0.42);
+}
+
+.landmarkToneSaude {
+  color: #86efac;
+  box-shadow: 0 18px 34px rgba(34, 197, 94, 0.18), inset 0 0 18px rgba(2, 6, 23, 0.42);
+}
+
+.landmarkToneMoradia {
+  color: #fb923c;
+  box-shadow: 0 18px 34px rgba(249, 115, 22, 0.18), inset 0 0 18px rgba(2, 6, 23, 0.42);
+}
+
+.landmarkToneMobilidade {
+  color: #93c5fd;
+  box-shadow: 0 18px 34px rgba(59, 130, 246, 0.18), inset 0 0 18px rgba(2, 6, 23, 0.42);
+}
+
+.landmarkSilhouette,
+.landmarkBeacon,
+.landmarkTether {
+  position: absolute;
+  pointer-events: none;
+}
+
+.landmarkBeacon {
+  inset: -10px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, transparent 68%);
+  filter: blur(6px);
+}
+
+.landmarkSilhouette {
+  inset: 0;
+}
+
+.landmarkTether {
+  left: 50%;
+  top: calc(100% + 2px);
+  width: 2px;
+  height: 42px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(226, 232, 240, 0.55) 0%, transparent 100%);
+  opacity: 0.7;
+}
+
+.landmarkTetherAgua,
+.landmarkTetherSaude,
+.landmarkTetherMoradia,
+.landmarkTetherMobilidade {
+  box-shadow: 0 0 10px currentColor;
+}
+
+.landmarkWater {
+  background: linear-gradient(180deg, rgba(8, 47, 73, 0.95) 0%, rgba(14, 116, 144, 0.84) 100%);
+}
+
+.landmarkWater .landmarkSilhouette::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 6px;
+  width: 16px;
+  height: 34px;
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(180deg, #b6f0ff 0%, #38bdf8 100%);
+  box-shadow: 0 0 14px rgba(125, 211, 252, 0.45);
+}
+
+.landmarkWater .landmarkSilhouette::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  bottom: 7px;
+  width: 28px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1d4ed8 0%, #7dd3fc 55%, #1d4ed8 100%);
+}
+
+.landmarkHealth {
+  background: linear-gradient(180deg, rgba(20, 83, 45, 0.96) 0%, rgba(22, 101, 52, 0.82) 100%);
+}
+
+.landmarkHealth .landmarkSilhouette::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 8px;
+  width: 12px;
+  height: 30px;
+  border-radius: 4px;
+  background: #dcfce7;
+}
+
+.landmarkHealth .landmarkSilhouette::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 17px;
+  width: 28px;
+  height: 12px;
+  border-radius: 4px;
+  background: #86efac;
+}
+
+.landmarkTransport {
+  background: linear-gradient(180deg, rgba(30, 58, 138, 0.96) 0%, rgba(30, 64, 175, 0.8) 100%);
+}
+
+.landmarkTransport .landmarkSilhouette::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.8) 0%, rgba(191, 219, 254, 0.9) 50%, rgba(251, 191, 36, 0.8) 100%);
+}
+
+.landmarkTransport .landmarkSilhouette::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  height: 18px;
+  border-radius: 6px;
+  border: 2px solid rgba(191, 219, 254, 0.85);
+  border-top-width: 6px;
+}
+
+.landmarkNeighborhood {
+  background: linear-gradient(180deg, rgba(127, 29, 29, 0.9) 0%, rgba(154, 52, 18, 0.8) 100%);
+}
+
+.landmarkNeighborhood .landmarkSilhouette::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  width: 24px;
+  height: 24px;
+  transform: rotate(45deg);
+  border-radius: 6px;
+  background: linear-gradient(135deg, #fbbf24 0%, #fb923c 100%);
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.4);
+}
+
+.landmarkNeighborhood .landmarkSilhouette::after {
+  content: '';
+  position: absolute;
+  left: 23px;
+  bottom: 8px;
+  width: 6px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(254, 215, 170, 0.95);
+}
+
+.landmarkLabel {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.48rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #bfdbfe;
+  background: rgba(15, 23, 42, 0.84);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 999px;
+  padding: 3px 7px;
 }
 
 .contagionLineFocused {
@@ -1279,6 +1705,26 @@
     height: 64px;
   }
 
+  .sectorAura,
+  .territoryStageLabel,
+  .heroCompositionFocus,
+  .landmarkLabel,
+  .savedMemoryTag,
+  .neighborhoodLabel {
+    display: none;
+  }
+
+  .landmark {
+    width: 26px;
+    height: 26px;
+    opacity: 0.72;
+  }
+
+  .landmarkTether,
+  .landmarkBeacon {
+    display: none;
+  }
+
   .introCard,
   .resultCard {
     padding: 1.5rem;
@@ -1329,6 +1775,11 @@
 
   .commandFeed {
     bottom: 10px;
+  }
+
+  .infrastructureRow,
+  .densityDots {
+    display: none;
   }
 
   .resultTerritoryGrid {

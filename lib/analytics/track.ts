@@ -900,3 +900,79 @@ export async function trackPortfolioCardClick(game: Game, laneId: string) {
     })
   );
 }
+
+// ─── Desobstrução T117A Validation Wave Tracking ─────────────────────────────
+
+export async function trackDesobstrucaoPrimerComplete(metadata: {
+  timeToCompletePrimerMs: number;
+  dragsRequired: number;
+  completedOnFirstAttempt: boolean;
+  isTouchDevice: boolean;
+}) {
+  await trackEvent({
+    event: 'desobstrucao_primer_complete',
+    slug: 'desobstrucao',
+    engineKind: 'physics-arcade',
+    metadata: {
+      timeToCompletePrimerMs: Math.round(metadata.timeToCompletePrimerMs),
+      dragsRequired: metadata.dragsRequired,
+      completedOnFirstAttempt: metadata.completedOnFirstAttempt,
+      isTouchDevice: metadata.isTouchDevice,
+    },
+  });
+}
+
+  export async function trackDesobstrucaoPhaseTransition(metadata: {
+    phase1Attempts: number;
+    phase1DurationMs: number;
+  }) {
+    await trackEvent({
+      event: 'desobstrucao_phase_transition',
+      slug: 'desobstrucao',
+      engineKind: 'physics-arcade',
+      metadata: {
+        phase1Attempts: metadata.phase1Attempts,
+        phase1DurationMs: Math.round(metadata.phase1DurationMs),
+      },
+    });
+  }
+
+  export async function trackDesobstrucaoSessionComplete(metadata: {
+    phase1Attempts: number;
+    phase2Attempts: number;
+    totalDurationMs: number;
+    primerCompleted: boolean;
+    isTouchDevice: boolean;
+  }) {
+    await trackEvent({
+      event: 'desobstrucao_session_complete',
+      slug: 'desobstrucao',
+      engineKind: 'physics-arcade',
+      metadata: {
+        phase1Attempts: metadata.phase1Attempts,
+        phase2Attempts: metadata.phase2Attempts,
+        totalDurationMs: Math.round(metadata.totalDurationMs),
+        primerCompleted: metadata.primerCompleted,
+        isTouchDevice: metadata.isTouchDevice,
+      },
+    });
+  }
+
+  export async function trackDesobstrucaoFeedback(metadata: {
+    satisfactionRating: number;
+    clusters: string[];
+    openNote: string;
+    isTouchDevice: boolean;
+  }) {
+    await trackEvent({
+      event: 'desobstrucao_feedback',
+      slug: 'desobstrucao',
+      engineKind: 'physics-arcade',
+      metadata: {
+        satisfactionRating: metadata.satisfactionRating,
+        clusters: metadata.clusters.join(','),
+        openNote: metadata.openNote.slice(0, 280),
+        isTouchDevice: metadata.isTouchDevice,
+      },
+    });
+  }

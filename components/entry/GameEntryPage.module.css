@@ -111,6 +111,12 @@
   border-color: rgba(147, 197, 253, 0.4);
 }
 
+.entryBadgeRuntime {
+  background: rgba(148, 163, 184, 0.18);
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.34);
+}
+
 .gameTitle {
   font-size: 2rem;
   font-weight: 700;
