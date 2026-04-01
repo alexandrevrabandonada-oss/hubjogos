@@ -146,7 +146,7 @@ export const FrotaPopularPrototype: React.FC = () => {
 
   
   const [time, setTime] = useState(6 * 60); 
-  const [tickCounter, setTickCounter] = useState(0); // T136: Track ticks for time stretching
+  const tickCounterRef = useRef(0); // T136: Track ticks for time stretching (ref avoids unused-state error)
 
   // T139: Session telemetry — written imperatively to avoid stale-closure issues inside nested updaters
   const telemetryRef = useRef({
@@ -169,37 +169,34 @@ export const FrotaPopularPrototype: React.FC = () => {
 
     const interval = setInterval(() => {
       // T136: Time Stretching - Increment time every 2nd tick (400ms/min)
-      setTickCounter(tc => {
-        const nextTc = tc + 1;
-        if (nextTc % 2 === 0) {
-          setTime(t => {
-            const nextTime = t + 1;
-            if (nextTime === 6 * 60 + 5) {
-              setQueues(q => ({
-                ...q,
-                lote_xv: q.lote_xv + 16,
-                heliopolis: q.heliopolis + 14,
-                bom_pastor: q.bom_pastor + 12,
-              }));
-            }
-            if (nextTime === 8 * 60) {
-              setQueues(q => ({
-                ...q,
-                lote_xv: q.lote_xv + 6, // T138: Compressed 08:00 rush from +10 to +6
-                upa: q.upa + 8,
-              }));
-            }
-            if (nextTime >= 10 * 60) {
-              telemetryRef.current.sessionDurationSeconds = Math.round((Date.now() - telemetryRef.current.startedAt) / 1000); // T139
-              const total = Object.values(queues).reduce((a, b) => a + b, 0);
-              if (total < 50) setGameState('won'); 
-              else setGameState('failed');
-            }
-            return nextTime;
-          });
-        }
-        return nextTc;
-      });
+      tickCounterRef.current += 1;
+      if (tickCounterRef.current % 2 === 0) {
+        setTime(t => {
+          const nextTime = t + 1;
+          if (nextTime === 6 * 60 + 5) {
+            setQueues(q => ({
+              ...q,
+              lote_xv: q.lote_xv + 16,
+              heliopolis: q.heliopolis + 14,
+              bom_pastor: q.bom_pastor + 12,
+            }));
+          }
+          if (nextTime === 8 * 60) {
+            setQueues(q => ({
+              ...q,
+              lote_xv: q.lote_xv + 6, // T138: Compressed 08:00 rush from +10 to +6
+              upa: q.upa + 8,
+            }));
+          }
+          if (nextTime >= 10 * 60) {
+            telemetryRef.current.sessionDurationSeconds = Math.round((Date.now() - telemetryRef.current.startedAt) / 1000); // T139
+            const total = Object.values(queues).reduce((a, b) => a + b, 0);
+            if (total < 50) setGameState('won'); 
+            else setGameState('failed');
+          }
+          return nextTime;
+        });
+      }
 
       if (Math.random() < 0.04) { // T136: Reduced from 0.05 to 0.04
         const nodes: NodeId[] = ['lote_xv', 'bom_pastor', 'heliopolis', 'upa'];
