@@ -845,7 +845,7 @@ export const games: Game[] = [
     deviceSupport: ['mobile', 'desktop'],
     isNew: true,
     priorityScore: 72,
-    publicVisibility: 'internal_only' // T139: awaiting live human fairness recheck before public listing
+    publicVisibility: 'public_ready_beta' // T139: visible in hub listings as beta
   }
 ];
 
