@@ -29,6 +29,8 @@ export function GameCard({ game, laneId, variant = 'standard' }: GameCardProps) 
         ? '/games/cidade-real'
       : game.slug === 'bairro-resiste'
         ? '/games/bairro-resiste'
+      : game.slug === 'frota-popular-spike'
+        ? '/games/frota-popular-spike'
       : game.kind === 'arcade'
         ? `/arcade/${game.slug}`
         : `/play/${game.slug}`;
