@@ -976,3 +976,22 @@ export async function trackDesobstrucaoPrimerComplete(metadata: {
       },
     });
   }
+
+  export async function trackDesobstrucaoFailure(metadata: {
+    type: string;
+    flightTimeMs?: number;
+    rammerVelocity?: number;
+    phase?: string;
+  }) {
+    await trackEvent({
+      event: 'desobstrucao_failure',
+      slug: 'desobstrucao',
+      engineKind: 'physics-arcade',
+      metadata: {
+        failureType: metadata.type,
+        flightTimeMs: metadata.flightTimeMs ? Math.round(metadata.flightTimeMs) : null,
+        rammerVelocity: metadata.rammerVelocity ? Number(metadata.rammerVelocity.toFixed(4)) : null,
+        recordedPhase: metadata.phase || null,
+      },
+    });
+  }

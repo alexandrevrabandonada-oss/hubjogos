@@ -21,6 +21,7 @@ import {
   trackDesobstrucaoPrimerComplete,
   trackDesobstrucaoPhaseTransition,
   trackDesobstrucaoSessionComplete,
+  trackDesobstrucaoFailure,
 } from '@/lib/analytics/track';
 
 type BlockageVariant = 'concrete' | 'steel';
@@ -36,12 +37,15 @@ interface GameState {
   maxAttempts: number;
   startTime: number;
   endTime: number | null;
+  flightTimeMs: number;
+  physicsActive: boolean;
 }
 
 export const DesobstrucaoPhysicsSlice: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const physicsRef = useRef<CannonBoard | null>(null);
   const audioRef = useRef<DesobstrucaoAudio | null>(null);
   const trajectoryLinesRef = useRef<THREE.LineSegments[]>([]);
@@ -57,6 +61,8 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
   const phase1AttemptsRef = useRef<number>(0);
   const feedbackTimerRef = useRef<number | null>(null);
 
+  const [phase, setPhase] = useState<'aiming' | 'flying' | 'impact' | 'resolved'>('aiming');
+
   const gameStateRef = useRef<GameState>({
     phase: 'aiming',
     barrier: null,
@@ -65,6 +71,8 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     maxAttempts: 8,
     startTime: Date.now(),
     endTime: null,
+    flightTimeMs: 0,
+    physicsActive: true,
   });
 
   // UI State
@@ -78,12 +86,16 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
   const [primerState, setPrimerState] = useState<PrimerState>('done');
   const [primerProgress, setPrimerProgress] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
-  const [captureStage] = useState<CaptureStage>(() => {
-    if (typeof window === 'undefined') return 'none';
-    const stage = new URLSearchParams(window.location.search).get('captureStage');
-    if (stage === 'steel' || stage === 'cleared') return stage;
-    return 'none';
-  });
+  const [captureStage, setCaptureStage] = useState<CaptureStage>('none');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stage = new URLSearchParams(window.location.search).get('captureStage');
+      if (stage === 'steel' || stage === 'cleared') {
+        setCaptureStage(stage as CaptureStage);
+      }
+    }
+  }, []);
 
   const createBarrierForVariant = (
     variant: BlockageVariant,
@@ -131,9 +143,11 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     scene.background = new THREE.Color(0x0a1628);
     sceneRef.current = scene;
 
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-    camera.position.set(0, 2, 3);
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.set(-2, 3, 8);
     camera.lookAt(0, 0, 0);
+    sceneRef.current = scene;
+    cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(width, height);
@@ -171,6 +185,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
 
     if (captureStage === 'cleared') {
       gameStateRef.current.phase = 'resolved';
+      setPhase('resolved');
       gameStateRef.current.endTime = Date.now();
       setRestorationActive(true);
     }
@@ -180,31 +195,87 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
 
     // Render loop
     let animationId: number;
+    let lastTime = performance.now();
 
-    const animate = () => {
+    const animate = (time: number) => {
       animationId = requestAnimationFrame(animate);
-      physicsRef.current?.step(1 / 60);
 
-      if (gameStateRef.current.rammer && gameStateRef.current.phase === 'flying') {
-        gameStateRef.current.rammer.updateFromPhysics();
-        if (gameStateRef.current.rammer.isOutOfBounds({ minY: -5, maxDistance: 20 })) {
-          gameStateRef.current.phase =
-            gameStateRef.current.attempt >= gameStateRef.current.maxAttempts
-              ? 'resolved'
-              : 'aiming';
-          gameStateRef.current.rammer.dispose(board.world);
-          gameStateRef.current.rammer = null;
+      // Survive visibility throttling: if document is hidden, pause everything
+      if (document.hidden) {
+        lastTime = time; // maintain timestamp but don't advance
+        return;
+      }
+
+      // Decoupled time stepping
+      const rawDelta = (time - lastTime) / 1000;
+      lastTime = time;
+      const cappedDelta = Math.min(rawDelta, 0.1); // prevent death spiral on resume
+
+      try {
+        const physics = physicsRef.current;
+        const renderer = rendererRef.current;
+        const scene = sceneRef.current;
+        const camera = cameraRef.current;
+
+        if (!physics || !renderer || !scene || !camera) return;
+
+        // Deterministic stepping robust against framerate dips
+        physics.world.step(1 / 60, cappedDelta, 3);
+
+        const gameState = gameStateRef.current;
+
+        if (gameState.rammer && gameState.phase === 'flying') {
+          gameState.rammer.updateFromPhysics();
+          
+          gameState.flightTimeMs += cappedDelta * 1000;
+
+          const rammerPos = gameState.rammer.state.position;
+          const barrierPos = gameState.barrier?.state.targetPosition;
+          const velocitySq = gameState.rammer.state.cannonBody.velocity.lengthSquared();
+
+          // 1. Proximity Check
+          if (barrierPos && rammerPos.distanceTo(barrierPos) < 2.5) {
+            triggerImpact(rammerPos);
+          }
+          // 2. Out of Bounds Check
+          else if (gameState.rammer.isOutOfBounds({ minY: -5, maxDistance: 25 })) {
+            gameState.phase = gameState.attempt >= gameState.maxAttempts ? 'resolved' : 'aiming';
+            setPhase(gameState.phase);
+            gameState.rammer.dispose(physics.world);
+            gameState.rammer = null;
+          }
+          // 3. Watchdog: Stuck/Frozen Recovery (Low velocity mid-flight without impact)
+          else if (gameState.flightTimeMs > 1500 && velocitySq < 0.1) {
+            console.warn('Rammer watchdog reset — stuck in flight');
+            trackDesobstrucaoFailure({ type: 'runtime_stuck', flightTimeMs: gameState.flightTimeMs, rammerVelocity: Math.sqrt(velocitySq), phase: gameState.phase }).catch(() => {});
+            gameState.phase = gameState.attempt >= gameState.maxAttempts ? 'resolved' : 'aiming';
+            setPhase(gameState.phase);
+            gameState.rammer.dispose(physics.world);
+            gameState.rammer = null;
+          }
+          // 4. Fail-safe reset (Flight timeout safely decoupled from Date.now)
+          else if (gameState.flightTimeMs > 8000) {
+            console.warn('Rammer flight timeout (8s) — auto-resetting');
+            trackDesobstrucaoFailure({ type: 'flight_timeout', flightTimeMs: gameState.flightTimeMs, phase: gameState.phase }).catch(() => {});
+            gameState.phase = gameState.attempt >= gameState.maxAttempts ? 'resolved' : 'aiming';
+            setPhase(gameState.phase);
+            gameState.rammer.dispose(physics.world);
+            gameState.rammer = null;
+          }
+        } else {
+          gameState.flightTimeMs = 0;
         }
-      }
 
-      if (gameStateRef.current.barrier) {
-        gameStateRef.current.barrier.getPiecePositions();
-      }
+        if (gameState.barrier) {
+          gameState.barrier.getPiecePositions();
+        }
 
-      renderer.render(scene, camera);
+        renderer.render(scene, camera);
+      } catch (err) {
+        console.error('Animation loop error:', err);
+      }
     };
-
-    animate();
+    animationId = requestAnimationFrame(animate);
 
     const handleResize = () => {
       const newWidth = canvas.clientWidth;
@@ -262,6 +333,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     nextBarrier.registerWithWorld(physics.world);
     gameStateRef.current.barrier = nextBarrier;
     gameStateRef.current.phase = 'aiming';
+    setPhase('aiming');
     gameStateRef.current.rammer = null;
     // Reset attempt counter so steel phase gets a full independent attempt budget.
     gameStateRef.current.attempt = 0;
@@ -272,12 +344,72 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     stageSwapTimerRef.current = window.setTimeout(() => setBlockageSwapFlash(false), 1200);
   };
 
+  const triggerImpact = (impactPos: CANNON.Vec3) => {
+    const gameState = gameStateRef.current;
+    const barrier = gameState.barrier;
+    const rammer = gameState.rammer;
+    if (!barrier || !rammer || gameState.phase !== 'flying') return;
+
+    const force = rammer.getImpactForce(barrier.pieces[0].body);
+    barrier.applyImpact(impactPos, force);
+    rammer.recordImpact(barrier.state.id, force, impactPos);
+
+    audioRef.current?.playImpactCrunch(force / 100);
+    const piecesBroken = Math.floor(force / 30);
+    if (piecesBroken > 0) {
+      audioRef.current?.playCascadeRattle(piecesBroken);
+      triggerHaptic([30, 50, 20]);
+    } else {
+      triggerHaptic(40);
+    }
+
+    setImpactData({
+      force,
+      gForce: force / rammer.state.cannonBody.mass,
+    });
+
+    gameState.phase = 'impact';
+    setPhase('impact');
+
+    // Transition from impact to next state after a short "juice" delay
+    setTimeout(() => {
+      const currentGameState = gameStateRef.current;
+      if (currentGameState.barrier?.isFullyCleared()) {
+        if (currentBlockage === 'concrete') {
+          activateNextBlockage();
+        } else {
+          // Steel phase cleared — full two-phase session complete
+          currentGameState.phase = 'resolved';
+          setPhase('resolved');
+          audioRef.current?.playRestorationChime();
+          triggerHaptic([50, 100, 50]);
+          setRestorationActive(true);
+          const endTime = Date.now();
+          currentGameState.endTime = endTime;
+
+          if (captureStage === 'none') {
+            trackDesobstrucaoSessionComplete({
+              phase1Attempts: phase1AttemptsRef.current,
+              phase2Attempts: currentGameState.attempt,
+              totalDurationMs: endTime - mountTimeRef.current,
+              primerCompleted: isTouchDevice,
+              isTouchDevice,
+            }).catch(() => {});
+            feedbackTimerRef.current = window.setTimeout(() => setShowFeedback(true), 1600);
+          }
+        }
+      } else {
+        currentGameState.phase =
+          currentGameState.attempt >= currentGameState.maxAttempts ? 'resolved' : 'aiming';
+        setPhase(currentGameState.phase);
+      }
+      currentGameState.rammer = null;
+    }, 800);
+  };
+
   const handleFire = async () => {
     if (gameStateRef.current.phase !== 'aiming') return;
-    if (
-      !gameStateRef.current.barrier ||
-      gameStateRef.current.attempt >= gameStateRef.current.maxAttempts
-    )
+    if (!gameStateRef.current.barrier || gameStateRef.current.attempt >= gameStateRef.current.maxAttempts)
       return;
     if (isTouchDevice && primerState !== 'done') return;
 
@@ -297,79 +429,10 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     gameStateRef.current.rammer = rammer;
 
     gameStateRef.current.phase = 'flying';
+    setPhase('flying');
+    gameStateRef.current.startTime = Date.now();
     gameStateRef.current.attempt += 1;
     setAttempt(gameStateRef.current.attempt);
-
-    setTimeout(() => {
-      if (gameStateRef.current.rammer && gameStateRef.current.phase === 'flying') {
-        const rammerPos = gameStateRef.current.rammer.state.position;
-        const barrierPos = gameStateRef.current.barrier?.state.targetPosition;
-
-        if (barrierPos && rammerPos.distanceTo(barrierPos) < 1.5) {
-          const barrier = gameStateRef.current.barrier;
-          if (!barrier) return;
-
-          const force = gameStateRef.current.rammer.getImpactForce(barrier.pieces[0].body);
-          barrier.applyImpact(rammerPos, force);
-          gameStateRef.current.rammer.recordImpact(barrier.state.id, force, rammerPos);
-
-          audioRef.current?.playImpactCrunch(force / 100);
-          const piecesBroken = Math.floor(force / 30);
-          if (piecesBroken > 0) {
-            audioRef.current?.playCascadeRattle(piecesBroken);
-            triggerHaptic([30, 50, 20]);
-          } else {
-            triggerHaptic(40);
-          }
-
-          setImpactData({
-            force,
-            gForce: force / gameStateRef.current.rammer.state.cannonBody.mass,
-          });
-
-          gameStateRef.current.phase = 'impact';
-
-          setTimeout(() => {
-            if (gameStateRef.current.barrier?.isFullyCleared()) {
-              if (currentBlockage === 'concrete') {
-                activateNextBlockage();
-              } else {
-                // Steel phase cleared — full two-phase session complete
-                gameStateRef.current.phase = 'resolved';
-                audioRef.current?.playRestorationChime();
-                triggerHaptic([50, 100, 50]);
-                setRestorationActive(true);
-                const endTime = Date.now();
-                gameStateRef.current.endTime = endTime;
-                // T117A: session complete tracking (skip for deterministic capture routes)
-                if (captureStage === 'none') {
-                  trackDesobstrucaoSessionComplete({
-                    phase1Attempts: phase1AttemptsRef.current,
-                    phase2Attempts: gameStateRef.current.attempt,
-                    totalDurationMs: endTime - mountTimeRef.current,
-                    primerCompleted: isTouchDevice,
-                    isTouchDevice,
-                  }).catch(() => {});
-                  feedbackTimerRef.current = window.setTimeout(() => setShowFeedback(true), 1600);
-                }
-              }
-            } else {
-              gameStateRef.current.phase =
-                gameStateRef.current.attempt >= gameStateRef.current.maxAttempts
-                  ? 'resolved'
-                  : 'aiming';
-            }
-            gameStateRef.current.rammer = null;
-          }, 800);
-        } else {
-          gameStateRef.current.phase =
-            gameStateRef.current.attempt >= gameStateRef.current.maxAttempts
-              ? 'resolved'
-              : 'aiming';
-          gameStateRef.current.rammer = null;
-        }
-      }
-    }, 800);
   };
 
   const triggerHaptic = (pattern: number | number[] = 30): void => {
@@ -443,7 +506,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
 
       <canvas ref={canvasRef} className={styles.canvas} width={1440} height={810} />
 
-      {isTouchDevice && primerState !== 'done' && gameStateRef.current.phase === 'aiming' && (
+      {isTouchDevice && primerState !== 'done' && phase === 'aiming' && (
         <div className={styles.primerOverlay}>
           <div className={styles.primerCard}>
             {primerState === 'guiding' ? (
@@ -476,7 +539,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
         </div>
       )}
 
-      {gameStateRef.current.phase === 'aiming' && (
+      {phase === 'aiming' && (
         <div
           className={styles.aimingUI}
           onTouchStart={handleTouchStartAiming}
@@ -540,7 +603,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
         </div>
       )}
 
-      {gameStateRef.current.phase === 'impact' && (
+      {phase === 'impact' && (
         <div className={styles.impactOverlay}>
           <div className={styles.impactFlash} />
         </div>
@@ -555,15 +618,15 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
 
       <div className={styles.footer}>
         <p className={styles.instruction}>
-          {gameStateRef.current.phase === 'aiming' && isTouchDevice && primerState !== 'done'
+          {phase === 'aiming' && isTouchDevice && primerState !== 'done'
             ? 'Follow the primer swipe once to unlock control'
-            : gameStateRef.current.phase === 'aiming'
+            : phase === 'aiming'
             ? currentBlockage === 'concrete'
               ? 'Break the concrete barrier to expose the steel grate'
               : 'Punch through the steel grate to finish restoration'
-            : gameStateRef.current.phase === 'flying'
+            : phase === 'flying'
             ? 'Rammer en route...'
-            : gameStateRef.current.phase === 'impact'
+            : phase === 'impact'
             ? 'IMPACT!'
             : 'Barrier cleared!'}
         </p>
@@ -575,6 +638,38 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
           isTouchDevice={isTouchDevice}
           onDismiss={() => setShowFeedback(false)}
         />
+      )}
+
+      {/* Debug Overlay (visible when session is stuck or in development) */}
+      {(phase === 'flying' || typeof window !== 'undefined' && window.location.search.includes('debug')) && (
+        <div style={{
+          position: 'absolute',
+          top: 80,
+          right: 20,
+          padding: '10px',
+          background: 'rgba(0,0,0,0.7)',
+          color: '#fff',
+          fontSize: '10px',
+          fontFamily: 'monospace',
+          pointerEvents: 'none',
+          zIndex: 100,
+          borderRadius: '4px',
+          border: '1px solid #4bb0ff'
+        }}>
+          <div>Phase: {gameStateRef.current.phase}</div>
+          <div>Attempts: {attempt}/{gameStateRef.current.maxAttempts}</div>
+          {gameStateRef.current.rammer && (
+            <>
+              <div>Rammer X: {gameStateRef.current.rammer.state.position.x.toFixed(2)}</div>
+              <div>Rammer Y: {gameStateRef.current.rammer.state.position.y.toFixed(2)}</div>
+              <div>Dist: {gameStateRef.current.barrier ? gameStateRef.current.rammer.state.position.distanceTo(gameStateRef.current.barrier.state.targetPosition).toFixed(2) : 'N/A'}</div>
+            </>
+          )}
+          <div>World Bodies: {physicsRef.current?.world.bodies.length || 0}</div>
+          {gameStateRef.current.startTime && (
+            <div>Flight Time: {((Date.now() - gameStateRef.current.startTime) / 1000).toFixed(1)}s</div>
+          )}
+        </div>
       )}
     </div>
   );

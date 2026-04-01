@@ -87,7 +87,8 @@ export type AnalyticsEventName =
   | 'desobstrucao_primer_complete'
   | 'desobstrucao_phase_transition'
   | 'desobstrucao_session_complete'
-  | 'desobstrucao_feedback';
+  | 'desobstrucao_feedback'
+  | 'desobstrucao_failure';
 
 export interface AnalyticsEventPayload {
   sessionId: string;
