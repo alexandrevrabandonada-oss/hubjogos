@@ -33,7 +33,7 @@ interface Vehicle {
   position: { x: number; y: number };
   state: 'moving' | 'boarding' | 'unboarding';
   timer: number;
-  direction: 1 | -1; 
+  direction: 1 | -1;
 }
 
 const NODES: MapNode[] = [
@@ -45,12 +45,12 @@ const NODES: MapNode[] = [
 ];
 
 const JUNCTIONS: Waypoint[] = [
-  { id: 'j1', x: 50, y: 65 }, 
-  { id: 'j2', x: 15, y: 65 }, 
-  { id: 'j3', x: 85, y: 45 }, 
+  { id: 'j1', x: 50, y: 65 },
+  { id: 'j2', x: 15, y: 65 },
+  { id: 'j3', x: 85, y: 45 },
 ];
 
-// Visual Components - Silhouettes
+// Visual Components
 const KombiIcon = ({ passengers }: { passengers: number }) => (
   <svg width="32" height="18" viewBox="0 0 32 18" className="drop-shadow-md">
     <rect x="2" y="4" width="28" height="12" rx="2" fill="white" />
@@ -73,35 +73,35 @@ const VanIcon = ({ passengers }: { passengers: number }) => (
   </svg>
 );
 
-const NodeVisual = ({ type, isHub, label }: { type?: string, isHub?: boolean, label: string }) => {
+const NodeVisual = ({ type, isHub, label }: { type?: string; isHub?: boolean; label: string }) => {
   if (isHub) return (
     <div className="relative flex flex-col items-center">
-      <svg width="100" height="80" viewBox="0 0 100 80">
+      <svg width="80" height="64" viewBox="0 0 100 80">
         <rect x="10" y="40" width="80" height="35" rx="4" fill="#1E3A8A" stroke="#3B82F6" strokeWidth="2" />
         <rect x="20" y="20" width="60" height="25" rx="2" fill="#2563EB" />
         <path d="M10 40 L50 10 L90 40 Z" fill="#1E3A8A" stroke="#3B82F6" strokeWidth="2" />
       </svg>
-      <span className="text-[10px] font-black uppercase tracking-tighter mt-1 bg-blue-900/80 px-2 py-0.5 rounded shadow-sm">{label}</span>
+      <span className="text-[9px] font-black uppercase tracking-tighter mt-0.5 bg-blue-900/80 px-2 py-0.5 rounded shadow-sm">{label}</span>
     </div>
   );
   if (type === 'upa') return (
     <div className="relative flex flex-col items-center">
-      <svg width="60" height="50" viewBox="0 0 60 50">
+      <svg width="50" height="42" viewBox="0 0 60 50">
         <rect x="5" y="15" width="50" height="30" rx="2" fill="#4B5563" stroke="#9CA3AF" strokeWidth="2" />
         <rect x="25" y="10" width="10" height="15" fill="#EF4444" />
         <rect x="20" y="25" width="20" height="10" fill="white" opacity="0.3" />
       </svg>
-      <span className="text-[9px] font-bold uppercase mt-1 bg-gray-800/80 px-1 rounded">{label}</span>
+      <span className="text-[8px] font-bold uppercase mt-0.5 bg-gray-800/80 px-1 rounded">{label}</span>
     </div>
   );
   return (
     <div className="relative flex flex-col items-center">
-      <svg width="50" height="40" viewBox="0 0 50 40">
+      <svg width="42" height="34" viewBox="0 0 50 40">
         <rect x="15" y="25" width="20" height="10" rx="1" fill="#374151" />
         <path d="M10 25 L40 25 L50 20 L0 20 Z" fill="#6B7280" />
         <rect x="22" y="10" width="6" height="15" fill="#9CA3AF" />
       </svg>
-      <span className="text-[9px] font-medium uppercase mt-1 text-gray-300">{label}</span>
+      <span className="text-[8px] font-medium uppercase mt-0.5 text-gray-300">{label}</span>
     </div>
   );
 };
@@ -126,7 +126,6 @@ const getPath = (start: NodeId, end: NodeId): Waypoint[] => {
   return [s, e];
 };
 
-
 export const FrotaPopularPrototype: React.FC = () => {
   const [queues, setQueues] = useState<Record<NodeId, number>>({
     hub_belford: 0,
@@ -135,34 +134,20 @@ export const FrotaPopularPrototype: React.FC = () => {
     heliopolis: 8,
     upa: 5,
   });
-  
+
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [fleetPool, setFleetPool] = useState(24); // T138: Last Fairness Pass buffer from 22 to 24
+  const [fleetPool, setFleetPool] = useState(24);
   const [dispatchCooldown, setDispatchCooldown] = useState(0);
   const [selectedNode, setSelectedNode] = useState<NodeId | null>(null);
-  const [lastDispatchTarget, setLastDispatchTarget] = useState<NodeId | null>(null); // T131: Flash feedback
+  const [lastDispatchTarget, setLastDispatchTarget] = useState<NodeId | null>(null);
   const [gameState, setGameState] = useState<'playing' | 'won' | 'failed'>('playing');
-  const [segmentHeat, setSegmentHeat] = useState<Record<string, number>>({}); // T131: Congestion visibility
+  const [segmentHeat, setSegmentHeat] = useState<Record<string, number>>({});
+  const [time, setTime] = useState(6 * 60);
 
-  
-  // T145: State-to-Ref synchronization for high-frequency game loop stability
-  const gameStateRef = useRef(gameState);
+  const tickCounterRef = useRef(0);
   const queuesRef = useRef(queues);
-  const vehiclesRef = useRef(vehicles);
-  const dispatchCooldownRef = useRef(dispatchCooldown);
-  const fleetPoolRef = useRef(fleetPool);
-
-  useEffect(() => { gameStateRef.current = gameState; }, [gameState]);
   useEffect(() => { queuesRef.current = queues; }, [queues]);
-  useEffect(() => { vehiclesRef.current = vehicles; }, [vehicles]);
-  useEffect(() => { dispatchCooldownRef.current = dispatchCooldown; }, [dispatchCooldown]);
-  useEffect(() => { fleetPoolRef.current = fleetPool; }, [fleetPool]);
 
-
-  const [time, setTime] = useState(6 * 60); 
-  const tickCounterRef = useRef(0); // T136: Track ticks for time stretching (ref avoids unused-state error)
-
-  // T139: Session telemetry — written imperatively to avoid stale-closure issues inside nested updaters
   const telemetryRef = useRef({
     startedAt: Date.now(),
     totalDispatches: 0,
@@ -182,37 +167,27 @@ export const FrotaPopularPrototype: React.FC = () => {
     if (gameState !== 'playing') return;
 
     const interval = setInterval(() => {
-      // T136: Time Stretching - Increment time every 2nd tick (400ms/min)
       tickCounterRef.current += 1;
       if (tickCounterRef.current % 2 === 0) {
         setTime(t => {
           const nextTime = t + 1;
           if (nextTime === 6 * 60 + 5) {
-            setQueues(q => ({
-              ...q,
-              lote_xv: q.lote_xv + 16,
-              heliopolis: q.heliopolis + 14,
-              bom_pastor: q.bom_pastor + 12,
-            }));
+            setQueues(q => ({ ...q, lote_xv: q.lote_xv + 16, heliopolis: q.heliopolis + 14, bom_pastor: q.bom_pastor + 12 }));
           }
           if (nextTime === 8 * 60) {
-            setQueues(q => ({
-              ...q,
-              lote_xv: q.lote_xv + 6, // T138: Compressed 08:00 rush from +10 to +6
-              upa: q.upa + 8,
-            }));
+            setQueues(q => ({ ...q, lote_xv: q.lote_xv + 6, upa: q.upa + 8 }));
           }
           if (nextTime >= 10 * 60) {
-            telemetryRef.current.sessionDurationSeconds = Math.round((Date.now() - telemetryRef.current.startedAt) / 1000); // T139
+            telemetryRef.current.sessionDurationSeconds = Math.round((Date.now() - telemetryRef.current.startedAt) / 1000);
             const total = Object.values(queuesRef.current).reduce((a, b) => a + b, 0);
-            if (total < 50) setGameState('won'); 
+            if (total < 50) setGameState('won');
             else setGameState('failed');
           }
           return nextTime;
         });
       }
 
-      if (Math.random() < 0.04) { // T136: Reduced from 0.05 to 0.04
+      if (Math.random() < 0.04) {
         const nodes: NodeId[] = ['lote_xv', 'bom_pastor', 'heliopolis', 'upa'];
         const r = nodes[Math.floor(Math.random() * nodes.length)];
         setQueues(q => ({ ...q, [r]: q[r] + 1 }));
@@ -221,29 +196,28 @@ export const FrotaPopularPrototype: React.FC = () => {
       setDispatchCooldown(d => d > 0 ? d - 1 : 0);
 
       const counts: Record<string, number> = {};
-      
+
       setVehicles(prev => {
         const nextVehicles = prev.map(v => {
           const next = { ...v };
           const targetWp = v.pathWaypoints[v.waypointIndex];
-          
+
           if (v.state === 'moving') {
             const dx = targetWp.x - v.position.x;
             const dy = targetWp.y - v.position.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            
+
             const segId = `${v.waypointIndex}-${v.direction}-${v.baseRoute[1]}`;
             counts[segId] = (counts[segId] || 0) + 1;
-            const speedMult = 1.0 / (1 + Math.max(0, counts[segId] - 1) * 0.15); // T136: Penalty halved from 0.3 to 0.15
-            const speed = (v.type === 'kombi' ? 2.2 : 1.5) * speedMult; // T136: Buffed from 1.8/1.2
+            const speedMult = 1.0 / (1 + Math.max(0, counts[segId] - 1) * 0.15);
+            const speed = (v.type === 'kombi' ? 2.2 : 1.5) * speedMult;
 
             if (dist < speed) {
               next.position = { x: targetWp.x, y: targetWp.y };
               const isLast = v.waypointIndex === (v.direction === 1 ? v.pathWaypoints.length - 1 : 0);
-              
               if (isLast) {
                 next.state = v.direction === 1 ? 'boarding' : 'unboarding';
-                next.timer = v.direction === 1 ? 6 : 4; // T136: Reduced from 10/6 to accelerate turnaround
+                next.timer = v.direction === 1 ? 6 : 4;
               } else {
                 next.waypointIndex += v.direction;
               }
@@ -251,8 +225,7 @@ export const FrotaPopularPrototype: React.FC = () => {
               next.position.x += (dx / dist) * speed;
               next.position.y += (dy / dist) * speed;
             }
-          } 
-          else if (v.state === 'boarding' || v.state === 'unboarding') {
+          } else if (v.state === 'boarding' || v.state === 'unboarding') {
             next.timer--;
             if (next.timer <= 0) {
               const currNodeId = v.baseRoute[v.direction === 1 ? 1 : 0];
@@ -265,9 +238,8 @@ export const FrotaPopularPrototype: React.FC = () => {
                 next.state = 'moving';
                 next.waypointIndex += next.direction;
               } else {
-                // T136: Dynamic Return to Pool logic
                 setFleetPool(fp => fp + 1);
-                return null; // Mark for removal
+                return null;
               }
             }
           }
@@ -279,14 +251,11 @@ export const FrotaPopularPrototype: React.FC = () => {
       setSegmentHeat(counts);
     }, 200);
 
-
     return () => clearInterval(interval);
   }, [gameState]);
 
   const handleNodeClick = (id: NodeId) => {
     if (gameState !== 'playing') return;
-    
-    // T136: Optimized One-Click Dispatch
     if (id !== 'hub_belford') {
       setSelectedNode(id);
       if (fleetPool > 0 && dispatchCooldown <= 0) {
@@ -306,7 +275,6 @@ export const FrotaPopularPrototype: React.FC = () => {
           direction: 1,
         }]);
         setFleetPool(p => p - 1);
-        // T139: Telemetry tracking
         telemetryRef.current.totalDispatches++;
         if (telemetryRef.current.firstDispatchOffsetSeconds === null) {
           telemetryRef.current.firstDispatchOffsetSeconds = Math.round((Date.now() - telemetryRef.current.startedAt) / 1000);
@@ -315,202 +283,101 @@ export const FrotaPopularPrototype: React.FC = () => {
           telemetryRef.current.drainEvents++;
           if (time >= 8 * 60 && time < 9 * 60) telemetryRef.current.drainDuring0800Band = true;
         }
-        setDispatchCooldown(2); // T136: Burst dispatch from 6 to 2 (0.4s)
+        setDispatchCooldown(2);
         setLastDispatchTarget(id);
-        setTimeout(() => {
-          setLastDispatchTarget(null);
-          setSelectedNode(null);
-        }, 500); // T136: Faster visual feedback clear
+        setTimeout(() => { setLastDispatchTarget(null); setSelectedNode(null); }, 500);
       }
     } else {
       setSelectedNode(null);
     }
   };
+
   return (
-    <div className="w-full h-[calc(100dvh-130px)] md:h-screen bg-[#0F172A] text-white overflow-hidden relative font-sans select-none">
-      {/* HUD Layer - Fixed positioning for reachability on all viewports */}
-      <div className="w-full p-2 md:p-4 z-[60] absolute top-0 left-0 md:top-4 md:left-4 md:w-auto gap-2 pointer-events-none">
+    <div style={{ position: 'fixed', inset: 0, background: '#0F172A', overflow: 'hidden', userSelect: 'none', fontFamily: 'sans-serif' }}>
 
+      {/* ── GAME CANVAS: single absolute container for ALL game elements ── */}
+      <div style={{ position: 'absolute', inset: 0 }}>
 
-        <div className="bg-[#1E293B]/80 p-3 md:p-5 rounded-2xl backdrop-blur-xl border border-white/5 shadow-2xl pointer-events-auto">
-          <div className="flex justify-between items-start md:block">
-            <div>
-              <p className="hidden md:block text-[10px] md:text-xs font-bold text-blue-300 tracking-tighter uppercase whitespace-break-spaces">MISSÃO: Clique nas comunidades para despachar vans e esvaziar as filas.</p>
-              <h1 className="text-sm md:text-xl font-black text-blue-400 uppercase tracking-widest leading-none">Frota Popular</h1>
-              <p className="text-[7px] md:text-[10px] text-blue-300/60 uppercase font-bold mt-0.5">Belford Roxo V1</p>
-            </div>
-            <div className="md:mt-4 flex items-baseline gap-1 md:gap-2">
-              <div className="text-xl md:text-4xl font-mono font-black text-white leading-none">{formatTime(time)}</div>
-              <div className={`text-[8px] md:text-xs font-bold px-2 py-0.5 rounded ${time < 8*60 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400 animate-pulse'}`}>
-                {time < 9*60 ? 'RUSH DA MANHÃ' : 'HORA CRÍTICA'}
-              </div>
-            </div>
-          </div>
+        {/* Road Network SVG — stretched to fill parent */}
+        <svg
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: 0.4 }}
+        >
+          <path d="M 50,85 L 50,65 L 15,65 L 15,15" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
+          <path d="M 50,65 L 50,40" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
+          <path d="M 50,65 L 85,45 L 85,25" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
+          <path d="M 85,45 L 85,65" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
 
-          <div className="mt-2 md:mt-6 grid grid-cols-2 gap-2 md:gap-4">
-            <div className="bg-white/5 p-1.5 md:p-3 rounded-xl border border-white/5">
-              <p className="text-[7px] md:text-[10px] text-gray-400 font-bold uppercase mb-0.5">Frota</p>
-              <div className="text-sm md:text-2xl font-mono font-bold flex items-center gap-1 md:gap-2">
-                <span className={fleetPool === 0 ? 'text-red-500' : 'text-blue-400'}>{fleetPool}</span>
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <div key={i} className={`w-1 h-2 md:w-1.5 md:h-3 rounded-full ${i < Math.ceil(fleetPool / 2) ? 'bg-blue-500 shadow-[0_0_5px_rgba(59,130,246,0.5)]' : 'bg-white/10'}`} />
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="bg-white/5 p-2 md:p-3 rounded-xl border border-white/5">
-              <p className="text-[8px] md:text-[10px] text-gray-400 font-bold uppercase mb-1">Despacho</p>
-              <div className={`h-1.5 md:h-2 rounded-full bg-white/10 mt-2 overflow-hidden`}>
-                <div className="h-full bg-blue-500 transition-all shadow-[0_0_10px_rgba(59,130,246,0.8)]" style={{ width: `${(1 - dispatchCooldown/12) * 100}%` }} />
-              </div>
-            </div>
-          </div>
+          {/* Congestion heat */}
+          {Object.entries(segmentHeat).map(([segId, count]) => {
+            if ((count as number) < 2) return null;
+            const [wpIdxStr, dirStr, targetId] = segId.split('-');
+            const wpIdx = parseInt(wpIdxStr);
+            const dir = parseInt(dirStr);
+            const v = vehicles.find(veh => veh.baseRoute[1] === targetId && veh.direction === dir);
+            if (!v || !v.pathWaypoints) return null;
+            const startWp = v.pathWaypoints[wpIdx - (dir === 1 ? 1 : 0)];
+            const endWp = v.pathWaypoints[wpIdx + (dir === -1 ? 1 : 0)];
+            if (!startWp || !endWp) return null;
+            return (
+              <path key={`heat-${segId}`}
+                d={`M ${startWp.x},${startWp.y} L ${endWp.x},${endWp.y}`}
+                stroke={(count as number) >= 4 ? '#EF4444' : '#F59E0B'}
+                strokeWidth="2" strokeLinecap="round" opacity={0.8} />
+            );
+          })}
 
-          <p className="hidden md:block mt-4 text-[10px] text-gray-400 max-w-[220px] leading-relaxed">
-            <span className="text-blue-400 font-bold">MISSÃO:</span> Evite o colapso nos pontos.{' '}
-            <span className="text-white font-bold">Clique numa comunidade</span> para despachar imediatamente.
-          </p>
-        </div>
-      </div>
+          {/* Active route dotted lines */}
+          {vehicles.map(v => (
+            <path key={`path-${v.id}`}
+              d={`M ${v.pathWaypoints.map(p => `${p.x},${p.y}`).join(' L ')}`}
+              stroke={lastDispatchTarget === v.baseRoute[1] ? '#60A5FA' : '#3B82F6'}
+              strokeWidth={lastDispatchTarget === v.baseRoute[1] ? "0.6" : "0.2"}
+              fill="none" strokeDasharray="0.5 0.5" />
+          ))}
+        </svg>
 
-
-      {/* Result Overlay */}
-      {gameState !== 'playing' && (
-        <div className="absolute inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-6 text-center">
-          <div className="bg-[#1E293B] p-10 rounded-3xl border border-white/10 shadow-2xl max-w-md">
-            <h2 className={`text-5xl font-black uppercase mb-4 ${gameState === 'won' ? 'text-green-400' : 'text-red-500'}`}>
-              {gameState === 'won' ? 'Fluxo Estabilizado' : 'Sistema em Colapso'}
-            </h2>
-            <p className="text-gray-400 mb-6 leading-relaxed">
-              {gameState === 'won' 
-                ? 'Você conseguiu conter o surto da manhã. A população chegou ao trabalho sem grandes atrasos.' 
-                : 'As filas superaram a capacidade da frota popular. Belford Roxo parou hoje.'}
-            </p>
-            {/* T139: Session telemetry panel */}
-            <div className="mb-6 text-left bg-black/30 rounded-xl p-4 text-xs font-mono text-gray-400 space-y-1 border border-white/5">
-              <div className="text-gray-500 text-[10px] uppercase font-bold mb-2 tracking-widest">Dados da sessão</div>
-              <div>Despachos: <span className="text-white">{telemetryRef.current.totalDispatches}</span></div>
-              <div>Drenos de frota: <span className={telemetryRef.current.drainEvents > 0 ? 'text-red-400' : 'text-green-400'}>{telemetryRef.current.drainEvents}</span></div>
-              <div>Dreno às 08:00: <span className={telemetryRef.current.drainDuring0800Band ? 'text-red-400' : 'text-gray-500'}>{telemetryRef.current.drainDuring0800Band ? 'SIM' : 'NÃO'}</span></div>
-              <div>1º despacho: <span className="text-white">{telemetryRef.current.firstDispatchOffsetSeconds !== null ? `${telemetryRef.current.firstDispatchOffsetSeconds}s` : '—'}</span></div>
-              <div>Duração: <span className="text-white">{telemetryRef.current.sessionDurationSeconds}s</span></div>
-            </div>
-            <button
-              onClick={() => {
-                const d = telemetryRef.current;
-                navigator.clipboard.writeText(JSON.stringify({
-                  build: 'T138',
-                  outcome: gameState,
-                  totalDispatches: d.totalDispatches,
-                  firstDispatchOffsetSeconds: d.firstDispatchOffsetSeconds,
-                  drainEvents: d.drainEvents,
-                  drainDuring0800Band: d.drainDuring0800Band,
-                  sessionDurationSeconds: d.sessionDurationSeconds,
-                  recordedAt: new Date().toISOString(),
-                }, null, 2));
-              }}
-              className="mb-4 w-full bg-white/5 hover:bg-white/10 text-gray-300 font-bold px-4 py-2 rounded-xl transition-all text-xs uppercase tracking-widest border border-white/10"
-            >
-              Copiar dados da sessão
-            </button>
-            <button 
-              onClick={() => window.location.reload()}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black px-8 py-4 rounded-xl transition-all uppercase tracking-widest"
-            >
-              Tentar Novamente
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Road Network with Congestion Feedback */}
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full pointer-events-none opacity-40">
-        <path d="M 50,85 L 50,65 L 15,65 L 15,15" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
-        <path d="M 50,65 L 50,40" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
-        <path d="M 50,65 L 85,45 L 85,25" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
-        <path d="M 85,45 L 85,65" stroke="white" strokeWidth="0.5" fill="none" strokeLinejoin="round" opacity="0.3" />
-        
-        {/* Congestion Glow Segments */}
-        {Object.entries(segmentHeat).map(([segId, count]) => {
-          if (count < 2) return null;
-          const [wpIdxStr, dirStr, targetId] = segId.split('-');
-          const wpIdx = parseInt(wpIdxStr);
-          const dir = parseInt(dirStr);
-          
-          // Find a vehicle on this specific segment to get the path
-          const v = vehicles.find(veh => veh.baseRoute[1] === targetId && veh.direction === dir);
-          if (!v || !v.pathWaypoints) return null;
-          
-          const startWp = v.pathWaypoints[wpIdx - (dir === 1 ? 1 : 0)];
-          const endWp = v.pathWaypoints[wpIdx + (dir === -1 ? 1 : 0)];
-          
-          if (!startWp || !endWp) return null;
-
-          return (
-            <path 
-              key={`heat-${segId}`}
-              d={`M ${startWp.x},${startWp.y} L ${endWp.x},${endWp.y}`}
-              stroke={count >= 4 ? '#EF4444' : '#F59E0B'}
-              strokeWidth="2"
-              strokeLinecap="round"
-              className="animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]"
-              opacity={0.8}
-            />
-          );
-        })}
-
-
-        {/* Dotted lines for active routes */}
-        {vehicles.map(v => (
-          <path 
-            key={`path-${v.id}`}
-            d={`M ${v.pathWaypoints.map(p => `${p.x},${p.y}`).join(' L ')}`}
-            stroke={lastDispatchTarget === v.baseRoute[1] ? '#60A5FA' : '#3B82F6'}
-            strokeWidth={lastDispatchTarget === v.baseRoute[1] ? "0.6" : "0.2"}
-            fill="none"
-            strokeDasharray="0.5 0.5"
-            className="transition-all duration-500"
-          />
-        ))}
-      </svg>
-
-
-
-      {/* Nodes Map - T145: Layout hardened for mobile aspect ratios */}
-      <div className="relative w-full h-full max-w-[1200px] mx-auto overflow-hidden pb-20 md:pb-0">
-
-
+        {/* Nodes — positioned with % matching SVG coordinate space */}
         {NODES.map(node => (
           <div
             key={node.id}
             onClick={() => handleNodeClick(node.id)}
-            className={`absolute flex flex-col items-center justify-center transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-300
-              ${selectedNode === node.id ? 'scale-110 drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] z-50' : 'hover:scale-105'}
-              ${lastDispatchTarget === node.id ? 'animate-ping brightness-150' : ''}`}
-
-            style={{ left: `${node.x}%`, top: `${node.y}%` }}
+            style={{
+              position: 'absolute',
+              left: `${node.x}%`,
+              top: `${node.y}%`,
+              transform: 'translate(-50%, -50%)',
+              zIndex: 20,
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              transition: 'transform 0.2s, filter 0.2s',
+              filter: selectedNode === node.id ? 'drop-shadow(0 0 12px rgba(59,130,246,0.9))' : 'none',
+            }}
           >
-            {/* Peeps Crowd (Density-based) */}
-            {/* Peeps Crowd (Density-based) - T136: Guaranteed hitbox transparency */}
-            <div className="relative mb-2 w-32 h-16 pointer-events-none select-none flex flex-wrap-reverse justify-center content-start gap-[1px]">
-               {Array.from({ length: Math.min(queues[node.id], 100) }).map((_, i) => (
-                 <div 
-                   key={i} 
-                   className={`w-1.5 h-1.5 rounded-full transition-all duration-700 ${queues[node.id] > 50 ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]' : queues[node.id] > 25 ? 'bg-yellow-400' : 'bg-blue-400/40'}`} 
-                   style={{ 
-                     opacity: 1 - (i * 0.005),
-                     transform: `translate(${(Math.random()-0.5)*15}px, ${(Math.random()-0.5)*15}px)` 
-                   }}
-                 />
-               ))}
+            {/* Queue crowd dots */}
+            <div style={{ width: 72, height: 36, marginBottom: 4, pointerEvents: 'none', display: 'flex', flexWrap: 'wrap-reverse', justifyContent: 'center', alignContent: 'flex-start', gap: 1 }}>
+              {Array.from({ length: Math.min(queues[node.id], 54) }).map((_, i) => (
+                <div key={i} style={{
+                  width: 6, height: 6, borderRadius: '50%',
+                  background: queues[node.id] > 50 ? '#EF4444' : queues[node.id] > 25 ? '#FBBF24' : '#60A5FA',
+                  opacity: 1 - i * 0.01,
+                }} />
+              ))}
             </div>
 
-
             <NodeVisual label={node.label} type={node.type} isHub={node.isHub} />
-            
+
             {queues[node.id] > 0 && (
-              <div className={`absolute -top-4 -right-2 font-mono font-black text-xs px-2 py-1 rounded shadow-lg ${queues[node.id] > 40 ? 'bg-red-600 text-white' : 'bg-white text-black'}`}>
+              <div style={{
+                position: 'absolute', top: -8, right: -4,
+                background: queues[node.id] > 40 ? '#DC2626' : 'white',
+                color: queues[node.id] > 40 ? 'white' : 'black',
+                fontFamily: 'monospace', fontWeight: 900, fontSize: 11,
+                padding: '1px 6px', borderRadius: 4, boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
+              }}>
                 {queues[node.id]}
               </div>
             )}
@@ -519,23 +386,85 @@ export const FrotaPopularPrototype: React.FC = () => {
 
         {/* Vehicles */}
         {vehicles.map(v => (
-          <div
-            key={v.id}
-            className="absolute z-40 transition-all duration-200"
-            style={{ 
-              left: `${v.position.x}%`, 
-              top: `${v.position.y}%`,
-              scale: lastDispatchTarget === v.baseRoute[1] ? 1.5 : 1,
-              transform: `translate(-50%, -50%) rotate(${v.direction === -1 ? 180 : 0}deg)`,
-              transition: 'scale 0.5s ease-out, left 0.2s linear, top 0.2s linear'
-            }}
-
-          >
+          <div key={v.id} style={{
+            position: 'absolute',
+            left: `${v.position.x}%`,
+            top: `${v.position.y}%`,
+            transform: `translate(-50%, -50%) rotate(${v.direction === -1 ? 180 : 0}deg)`,
+            zIndex: 40,
+            transition: 'left 0.2s linear, top 0.2s linear',
+          }}>
             {v.type === 'van' ? <VanIcon passengers={v.passengers} /> : <KombiIcon passengers={v.passengers} />}
           </div>
         ))}
       </div>
+
+      {/* ── RESULT OVERLAY ── */}
+      {gameState !== 'playing' && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+          <div style={{ background: '#1E293B', padding: 40, borderRadius: 24, border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 25px 50px rgba(0,0,0,0.6)', maxWidth: 420, width: '100%', textAlign: 'center' }}>
+            <h2 style={{ fontSize: 36, fontWeight: 900, textTransform: 'uppercase', marginBottom: 16, color: gameState === 'won' ? '#4ADE80' : '#EF4444' }}>
+              {gameState === 'won' ? 'Fluxo Estabilizado' : 'Sistema em Colapso'}
+            </h2>
+            <p style={{ color: '#9CA3AF', marginBottom: 24, lineHeight: 1.6, fontSize: 14 }}>
+              {gameState === 'won'
+                ? 'Você conseguiu conter o surto da manhã. A população chegou ao trabalho sem grandes atrasos.'
+                : 'As filas superaram a capacidade da frota popular. Belford Roxo parou hoje.'}
+            </p>
+            <div style={{ textAlign: 'left', background: 'rgba(0,0,0,0.3)', borderRadius: 12, padding: 16, fontSize: 11, fontFamily: 'monospace', color: '#9CA3AF', marginBottom: 20, border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div style={{ fontSize: 9, textTransform: 'uppercase', fontWeight: 700, color: '#6B7280', marginBottom: 8, letterSpacing: 2 }}>Dados da sessão</div>
+              <div>Despachos: <span style={{ color: 'white' }}>{telemetryRef.current.totalDispatches}</span></div>
+              <div>Drenos de frota: <span style={{ color: telemetryRef.current.drainEvents > 0 ? '#F87171' : '#4ADE80' }}>{telemetryRef.current.drainEvents}</span></div>
+              <div>1º despacho: <span style={{ color: 'white' }}>{telemetryRef.current.firstDispatchOffsetSeconds !== null ? `${telemetryRef.current.firstDispatchOffsetSeconds}s` : '—'}</span></div>
+              <div>Duração: <span style={{ color: 'white' }}>{telemetryRef.current.sessionDurationSeconds}s</span></div>
+            </div>
+            <button
+              onClick={() => window.location.reload()}
+              style={{ width: '100%', background: '#2563EB', color: 'white', fontWeight: 900, padding: '16px 32px', borderRadius: 12, border: 'none', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: 2, fontSize: 14 }}
+            >
+              Tentar Novamente
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── HUD: compact floating panel, top-left ── */}
+      <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 80, maxWidth: 'min(90vw, 260px)', pointerEvents: 'none' }}>
+        <div style={{ background: 'rgba(13,27,46,0.92)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, padding: '12px 14px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)', pointerEvents: 'auto' }}>
+
+          {/* Title + clock */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 900, color: '#60A5FA', textTransform: 'uppercase', letterSpacing: 2, lineHeight: 1 }}>Frota Popular</div>
+              <div style={{ fontSize: 8, color: 'rgba(147,197,253,0.5)', textTransform: 'uppercase', fontWeight: 700, marginTop: 3 }}>Clique nos bairros!</div>
+            </div>
+            <div style={{ textAlign: 'right', flexShrink: 0 }}>
+              <div style={{ fontSize: 22, fontFamily: 'monospace', fontWeight: 900, color: 'white', lineHeight: 1 }}>{formatTime(time)}</div>
+              <div style={{ fontSize: 7, fontWeight: 700, padding: '2px 4px', borderRadius: 3, marginTop: 3, textAlign: 'center', background: time < 8 * 60 ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)', color: time < 8 * 60 ? '#4ADE80' : '#F87171' }}>
+                {time < 9 * 60 ? 'RUSH MANHÃ' : 'HORA CRÍTICA'}
+              </div>
+            </div>
+          </div>
+
+          {/* Fleet indicator */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 10 }}>
+            <span style={{ fontSize: 8, color: '#6B7280', fontWeight: 700, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Frota</span>
+            <span style={{ fontSize: 14, fontFamily: 'monospace', fontWeight: 900, color: fleetPool === 0 ? '#EF4444' : '#60A5FA' }}>{fleetPool}</span>
+            <div style={{ display: 'flex', gap: 2, flex: 1 }}>
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} style={{ flex: 1, height: 6, borderRadius: 3, background: i < Math.ceil(fleetPool / 2) ? '#3B82F6' : 'rgba(255,255,255,0.1)' }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Dispatch cooldown bar */}
+          <div style={{ height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2, overflow: 'hidden', marginTop: 6 }}>
+            <div style={{ height: '100%', background: '#3B82F6', width: `${(1 - dispatchCooldown / 12) * 100}%`, transition: 'width 0.2s' }} />
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 };
-
