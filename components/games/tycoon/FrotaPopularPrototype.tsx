@@ -295,6 +295,221 @@ export const FrotaPopularPrototype: React.FC = () => {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#0F172A', overflow: 'hidden', userSelect: 'none', fontFamily: 'sans-serif' }}>
 
+      {/* ── BELFORD ROXO BACKGROUND CITYSCAPE ── */}
+      <svg
+        viewBox="0 0 1000 560"
+        preserveAspectRatio="xMidYMid slice"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="bgSky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#050c1a" />
+            <stop offset="50%" stopColor="#0a1428" />
+            <stop offset="80%" stopColor="#1a1230" />
+            <stop offset="92%" stopColor="#2a1508" />
+            <stop offset="100%" stopColor="#3d1e04" />
+          </linearGradient>
+          <radialGradient id="sunriseGlow" cx="72%" cy="100%" r="55%">
+            <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.35" />
+            <stop offset="35%" stopColor="#ea580c" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#050c1a" stopOpacity="0" />
+          </radialGradient>
+          <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0c1520" />
+            <stop offset="100%" stopColor="#080e17" />
+          </linearGradient>
+          <filter id="bgBlur"><feGaussianBlur stdDeviation="1.5" /></filter>
+          <filter id="bgBlurHeavy"><feGaussianBlur stdDeviation="3" /></filter>
+        </defs>
+
+        {/* Sky */}
+        <rect width="1000" height="560" fill="url(#bgSky)" />
+        <rect width="1000" height="560" fill="url(#sunriseGlow)" />
+
+        {/* Stars (early morning, some still visible) */}
+        {[
+          [48,38],[115,22],[203,55],[298,18],[392,42],[488,28],[573,15],[641,48],[718,32],
+          [832,20],[921,45],[965,28],[75,85],[162,72],[345,65],[530,80],[770,68],[880,78],
+          [22,62],[440,10],[680,55],[810,38]
+        ].map(([cx,cy],i) => (
+          <circle key={i} cx={cx} cy={cy} r={i%3===0?1.1:0.7} fill="white" opacity={0.35+Math.sin(i)*0.15} />
+        ))}
+
+        {/* Far mountains — Serra do Mar silhouette */}
+        <path
+          d="M0,320 Q60,258 130,272 Q195,258 260,228 Q320,205 385,218 Q445,232 510,205 Q568,178 630,192 Q695,208 755,178 Q815,152 875,168 Q930,182 985,172 L1000,172 L1000,560 L0,560 Z"
+          fill="#0c1725" opacity="0.95"
+        />
+        {/* Closer hills */}
+        <path
+          d="M0,345 Q80,308 165,318 Q240,328 315,305 Q380,288 450,308 Q512,328 580,308 Q645,288 710,305 Q775,322 845,308 Q905,295 965,312 L1000,318 L1000,560 L0,560 Z"
+          fill="#0f1d2c" opacity="0.98"
+        />
+
+        {/* Distant building layer (blurred, behind main cityscape) */}
+        <g filter="url(#bgBlur)" opacity="0.6">
+          {[
+            [10,298,16,72],[28,310,12,60],[46,290,20,80],[68,305,14,65],[84,295,18,75],
+            [104,308,10,62],[116,292,22,78],[140,300,16,70],[160,285,24,95],[187,295,18,75],
+            [208,282,26,98],[238,292,20,88],[262,298,14,72],[278,285,28,95],[310,275,22,105],
+            [335,288,16,82],[354,278,20,92],[378,290,18,80],[399,272,30,108],[432,280,22,100],
+            [457,268,26,112],[486,278,20,102],[509,274,24,96],[536,282,18,88],[558,268,28,112],
+            [590,275,22,105],[615,265,30,115],[648,272,26,108],[676,260,32,120],[712,270,24,110],
+            [740,278,20,102],[763,272,26,108],[790,268,22,112],[815,280,18,100],[836,274,24,106],
+            [862,270,20,110],[884,278,16,102],[904,268,24,112],[930,275,18,105],[952,270,22,110],
+            [976,280,16,100]
+          ].map(([x,y,w,h],i) => (
+            <rect key={i} x={x} y={y} width={w} height={h} fill="#111d2e" />
+          ))}
+        </g>
+
+        {/* MAIN BUILDING LAYER — Belford Roxo urban fabric */}
+
+        {/* Cluster 1: Left side (Lote XV area) */}
+        <rect x="0" y="290" width="22" height="110" fill="#14202e" />
+        <rect x="24" y="278" width="28" height="122" fill="#16232f" />
+        {/* Water tank */}
+        <rect x="30" y="270" width="16" height="8" fill="#192840" />
+        <rect x="34" y="262" width="8" height="8" fill="#192840" />
+        <rect x="54" y="285" width="24" height="115" fill="#14202e" />
+        <rect x="80" y="295" width="18" height="105" fill="#16232f" />
+        <rect x="100" y="282" width="26" height="118" fill="#14202e" />
+        <rect x="105" y="274" width="16" height="8" fill="#192840" />
+        <rect x="108" y="266" width="10" height="8" fill="#192840" />
+        <rect x="128" y="292" width="20" height="108" fill="#16232f" />
+
+        {/* Church tower — left-center */}
+        <rect x="155" y="240" width="32" height="160" fill="#13202e" />
+        <polygon points="171,210 155,245 187,245" fill="#13202e" />
+        <rect x="167" y="200" width="8" height="15" fill="#13202e" />
+        {/* Cross */}
+        <rect x="169" y="196" width="4" height="20" fill="#1a2d40" />
+        <rect x="164" y="202" width="14" height="3" fill="#1a2d40" />
+        {/* Church window */}
+        <rect x="166" y="255" width="10" height="14" rx="5" fill="#f0a020" opacity="0.5" />
+
+        {/* Cluster 2: Center-left */}
+        <rect x="192" y="275" width="22" height="125" fill="#14202e" />
+        <rect x="216" y="265" width="30" height="135" fill="#172330" />
+        <rect x="224" y="255" width="14" height="10" fill="#1c2d42" />
+        <rect x="228" y="247" width="6" height="8" fill="#1c2d42" />
+        <rect x="248" y="272" width="24" height="128" fill="#14202e" />
+        <rect x="274" y="268" width="28" height="132" fill="#172330" />
+        <rect x="280" y="260" width="16" height="8" fill="#1c2d42" />
+        <rect x="305" y="278" width="20" height="122" fill="#14202e" />
+        <rect x="327" y="270" width="26" height="130" fill="#172330" />
+
+        {/* Cluster 3: Center (Heliópolis area) */}
+        <rect x="356" y="260" width="30" height="140" fill="#14202e" />
+        <rect x="364" y="252" width="14" height="8" fill="#192840" />
+        <rect x="388" y="268" width="24" height="132" fill="#172330" />
+        <rect x="414" y="255" width="32" height="145" fill="#14202e" />
+        <rect x="423" y="245" width="14" height="10" fill="#192840" />
+        <rect x="427" y="237" width="6" height="8" fill="#192840" />
+        <rect x="448" y="265" width="26" height="135" fill="#172330" />
+        <rect x="476" y="258" width="28" height="142" fill="#14202e" />
+
+        {/* Cluster 4: Center-right (Bom Pastor area) */}
+        <rect x="507" y="262" width="24" height="138" fill="#172330" />
+        <rect x="534" y="255" width="30" height="145" fill="#14202e" />
+        <rect x="542" y="245" width="14" height="10" fill="#192840" />
+        <rect x="566" y="265" width="22" height="135" fill="#172330" />
+        <rect x="590" y="258" width="28" height="142" fill="#14202e" />
+        <rect x="598" y="248" width="12" height="10" fill="#192840" />
+        <rect x="601" y="240" width="6" height="8" fill="#192840" />
+        <rect x="621" y="268" width="24" height="132" fill="#172330" />
+        <rect x="647" y="260" width="26" height="140" fill="#14202e" />
+
+        {/* Cluster 5: Right side (UPA / Bom Pastor) */}
+        <rect x="676" y="255" width="32" height="145" fill="#172330" />
+        <rect x="684" y="245" width="16" height="10" fill="#192840" />
+        <rect x="688" y="237" width="8" height="8" fill="#192840" />
+        <rect x="710" y="262" width="24" height="138" fill="#14202e" />
+        <rect x="736" y="268" width="26" height="132" fill="#172330" />
+        <rect x="764" y="258" width="22" height="142" fill="#14202e" />
+        <rect x="772" y="248" width="6" height="10" fill="#192840" />
+        <rect x="788" y="265" width="28" height="135" fill="#172330" />
+        <rect x="819" y="272" width="20" height="128" fill="#14202e" />
+        <rect x="841" y="260" width="26" height="140" fill="#172330" />
+        <rect x="869" y="268" width="22" height="132" fill="#14202e" />
+        <rect x="893" y="262" width="28" height="138" fill="#172330" />
+        <rect x="923" y="270" width="24" height="130" fill="#14202e" />
+        <rect x="949" y="265" width="20" height="135" fill="#172330" />
+        <rect x="971" y="272" width="29" height="128" fill="#14202e" />
+
+        {/* Lit windows — warm yellow dots in buildings */}
+        {[
+          // Building x, y
+          [26,295],[26,315],[26,335],[42,305],[42,325],
+          [56,298],[56,318],[56,338],
+          [102,290],[102,310],[118,300],[118,320],
+          [168,258], // church
+          [194,285],[194,305],[220,278],[220,298],[220,318],
+          [249,285],[249,305],[277,280],[277,300],
+          [357,270],[357,290],[357,310],[393,278],[393,298],
+          [416,265],[416,285],[416,305],[450,275],[450,295],
+          [478,270],[478,290],[478,310],
+          [509,272],[509,292],[537,268],[537,288],[537,308],
+          [568,275],[568,295],[592,265],[592,285],[592,305],
+          [623,278],[623,298],[649,272],[649,292],
+          [678,268],[678,288],[678,308],[713,275],[713,295],
+          [738,278],[738,298],[766,265],[766,285],
+          [791,278],[791,298],[842,272],[842,292],[842,312],
+          [871,280],[895,270],[895,290],[926,282],[926,302],
+        ].map(([x,y],i) => (
+          <rect key={i} x={x} y={y} width={4} height={3} fill="#fbbf24" opacity={0.45+Math.sin(i*1.7)*0.2} />
+        ))}
+
+        {/* Occasional blue-white window (fluorescent light) */}
+        {[[58,342],[225,338],[420,325],[539,328],[680,328],[768,305],[897,310]].map(([x,y],i) => (
+          <rect key={i} x={x} y={y} width={5} height={3} fill="#bae6fd" opacity={0.35} />
+        ))}
+
+        {/* Power line poles — iconic Baixada Fluminense */}
+        {[110, 310, 510, 710, 910].map((px, i) => (
+          <g key={i}>
+            <line x1={px} y1="400" x2={px} y2="268" stroke="#0e1c2c" strokeWidth="3" />
+            <line x1={px-22} y1="278" x2={px+22} y2="278" stroke="#0e1c2c" strokeWidth="2.5" />
+            <line x1={px-18} y1="289" x2={px+18} y2="289" stroke="#0e1c2c" strokeWidth="2" />
+            {/* Insulators */}
+            <circle cx={px-22} cy="278" r="2" fill="#0f2035" />
+            <circle cx={px+22} cy="278" r="2" fill="#0f2035" />
+          </g>
+        ))}
+        {/* Power cables between poles */}
+        {[[110,278,310,280],[110,289,310,291],[310,280,510,278],[310,291,510,289],
+          [510,278,710,282],[510,289,710,293],[710,282,910,280],[710,293,910,291]
+        ].map(([x1,y1,x2,y2],i) => (
+          <path key={i} d={`M${x1},${y1} Q${(x1+x2)/2},${(y1+y2)/2+8} ${x2},${y2}`}
+            stroke="#0b1928" strokeWidth="1.2" fill="none" opacity="0.8" />
+        ))}
+
+        {/* SuperVia rail line — runs across the lower third */}
+        <rect x="0" y="390" width="1000" height="8" fill="#0c1928" />
+        <rect x="0" y="393" width="1000" height="2" fill="#0a1520" />
+        {/* Rail sleepers */}
+        {Array.from({length:52}).map((_,i) => (
+          <rect key={i} x={i*20} y="390" width="10" height="8" fill="#0b1826" />
+        ))}
+        {/* Platform hint at center (Hub Belford Roxo) */}
+        <rect x="420" y="386" width="160" height="5" fill="#132035" />
+        <rect x="440" y="382" width="120" height="4" rx="1" fill="#1a2d42" />
+
+        {/* Ground / street level */}
+        <rect x="0" y="398" width="1000" height="162" fill="url(#groundGrad)" />
+
+        {/* Street texture — horizontal lines suggesting asphalt */}
+        <rect x="0" y="400" width="1000" height="1" fill="#0a1018" opacity="0.6" />
+        <rect x="0" y="415" width="1000" height="1" fill="#0a1018" opacity="0.3" />
+
+        {/* Atmospheric ground haze */}
+        <rect x="0" y="360" width="1000" height="60" fill="#1a2535" opacity="0.15" filter="url(#bgBlurHeavy)" />
+
+        {/* Horizon glow bleed */}
+        <rect x="0" y="340" width="1000" height="60" fill="#c2410c" opacity="0.04" filter="url(#bgBlurHeavy)" />
+      </svg>
+
       {/* ── GAME CANVAS: single absolute container for ALL game elements ── */}
       <div style={{ position: 'absolute', inset: 0 }}>
 
