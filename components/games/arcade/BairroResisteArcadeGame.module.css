@@ -3,7 +3,7 @@
 .container {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: clamp(480px, calc(100svh - 160px), 860px);
   background: radial-gradient(ellipse at 50% 60%, #0a1a2e 0%, #020c18 100%);
   display: flex;
   justify-content: center;
@@ -1755,26 +1755,64 @@
     font-size: 1rem;
   }
 
-  .boardIntel,
-  .focusPanel,
-  .commandFeed {
-    width: calc(100% - 24px);
-    left: 12px;
-    right: 12px;
+  /* Mobile panel layout: compact corner cards so hotspots remain accessible */
+  .boardIntel {
+    top: 8px;
+    left: 8px;
+    right: auto;
+    width: min(196px, 46%);
+    padding: 0.5rem 0.6rem;
   }
 
-  .boardIntel {
-    top: 12px;
-    padding-right: 0.85rem;
+  .boardIntelTitle {
+    font-size: 0.8rem;
+  }
+
+  .boardIntelText {
+    font-size: 0.68rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .boardIntelMeta {
+    display: none;
   }
 
   .focusPanel {
-    top: auto;
-    bottom: 118px;
+    top: 8px;
+    right: 8px;
+    left: auto;
+    bottom: auto;
+    width: min(176px, 43%);
+    padding: 0.5rem 0.6rem;
+  }
+
+  .focusPanelText {
+    font-size: 0.68rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .focusSupportRow {
+    display: none;
   }
 
   .commandFeed {
-    bottom: 10px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .commandFeedItem + .commandFeedItem {
+    display: none;
   }
 
   .infrastructureRow,
