@@ -145,6 +145,20 @@ export const FrotaPopularPrototype: React.FC = () => {
   const [segmentHeat, setSegmentHeat] = useState<Record<string, number>>({}); // T131: Congestion visibility
 
   
+  // T145: State-to-Ref synchronization for high-frequency game loop stability
+  const gameStateRef = useRef(gameState);
+  const queuesRef = useRef(queues);
+  const vehiclesRef = useRef(vehicles);
+  const dispatchCooldownRef = useRef(dispatchCooldown);
+  const fleetPoolRef = useRef(fleetPool);
+
+  useEffect(() => { gameStateRef.current = gameState; }, [gameState]);
+  useEffect(() => { queuesRef.current = queues; }, [queues]);
+  useEffect(() => { vehiclesRef.current = vehicles; }, [vehicles]);
+  useEffect(() => { dispatchCooldownRef.current = dispatchCooldown; }, [dispatchCooldown]);
+  useEffect(() => { fleetPoolRef.current = fleetPool; }, [fleetPool]);
+
+
   const [time, setTime] = useState(6 * 60); 
   const tickCounterRef = useRef(0); // T136: Track ticks for time stretching (ref avoids unused-state error)
 
@@ -190,7 +204,7 @@ export const FrotaPopularPrototype: React.FC = () => {
           }
           if (nextTime >= 10 * 60) {
             telemetryRef.current.sessionDurationSeconds = Math.round((Date.now() - telemetryRef.current.startedAt) / 1000); // T139
-            const total = Object.values(queues).reduce((a, b) => a + b, 0);
+            const total = Object.values(queuesRef.current).reduce((a, b) => a + b, 0);
             if (total < 50) setGameState('won'); 
             else setGameState('failed');
           }
@@ -204,7 +218,7 @@ export const FrotaPopularPrototype: React.FC = () => {
         setQueues(q => ({ ...q, [r]: q[r] + 1 }));
       }
 
-      if (dispatchCooldown > 0) setDispatchCooldown(d => d - 1);
+      setDispatchCooldown(d => d > 0 ? d - 1 : 0);
 
       const counts: Record<string, number> = {};
       
@@ -244,7 +258,7 @@ export const FrotaPopularPrototype: React.FC = () => {
               const currNodeId = v.baseRoute[v.direction === 1 ? 1 : 0];
               if (v.state === 'boarding') {
                 const space = v.capacity - v.passengers;
-                const taking = Math.min(space, queues[currNodeId]);
+                const taking = Math.min(space, queuesRef.current[currNodeId]);
                 setQueues(q => ({ ...q, [currNodeId]: q[currNodeId] - taking }));
                 next.passengers += taking;
                 next.direction = -1;
@@ -267,7 +281,7 @@ export const FrotaPopularPrototype: React.FC = () => {
 
 
     return () => clearInterval(interval);
-  }, [gameState, queues, dispatchCooldown]);
+  }, [gameState]);
 
   const handleNodeClick = (id: NodeId) => {
     if (gameState !== 'playing') return;
@@ -313,30 +327,30 @@ export const FrotaPopularPrototype: React.FC = () => {
     }
   };
   return (
-    <div className="w-full h-screen bg-[#0F172A] text-white overflow-hidden relative font-sans flex flex-col md:block">
-      {/* HUD Layer - Responsive for Desktop/Mobile */}
-      <div className="w-full p-4 z-50 flex flex-col md:absolute md:top-4 md:left-4 md:w-auto gap-2 pointer-events-none">
+    <div className="w-full h-[calc(100dvh-130px)] md:h-screen bg-[#0F172A] text-white overflow-hidden relative font-sans select-none">
+      {/* HUD Layer - Fixed positioning for reachability on all viewports */}
+      <div className="w-full p-2 md:p-4 z-[60] absolute top-0 left-0 md:top-4 md:left-4 md:w-auto gap-2 pointer-events-none">
 
 
-        <div className="bg-[#1E293B]/90 p-4 md:p-5 rounded-2xl backdrop-blur-xl border border-white/5 shadow-2xl pointer-events-auto">
+        <div className="bg-[#1E293B]/80 p-3 md:p-5 rounded-2xl backdrop-blur-xl border border-white/5 shadow-2xl pointer-events-auto">
           <div className="flex justify-between items-start md:block">
             <div>
-              <p className="text-[10px] md:text-xs font-bold text-blue-300 tracking-tighter uppercase whitespace-break-spaces">MISSÃO: Clique nas comunidades para despachar vans e esvaziar as filas.</p>
-              <h1 className="text-lg md:text-xl font-black text-blue-400 uppercase tracking-widest leading-none">Frota Popular</h1>
-              <p className="text-[8px] md:text-[10px] text-blue-300/60 uppercase font-bold mt-1">Belford Roxo V1 Slice</p>
+              <p className="hidden md:block text-[10px] md:text-xs font-bold text-blue-300 tracking-tighter uppercase whitespace-break-spaces">MISSÃO: Clique nas comunidades para despachar vans e esvaziar as filas.</p>
+              <h1 className="text-sm md:text-xl font-black text-blue-400 uppercase tracking-widest leading-none">Frota Popular</h1>
+              <p className="text-[7px] md:text-[10px] text-blue-300/60 uppercase font-bold mt-0.5">Belford Roxo V1</p>
             </div>
-            <div className="md:mt-4 flex items-baseline gap-2">
-              <div className="text-2xl md:text-4xl font-mono font-black text-white leading-none">{formatTime(time)}</div>
+            <div className="md:mt-4 flex items-baseline gap-1 md:gap-2">
+              <div className="text-xl md:text-4xl font-mono font-black text-white leading-none">{formatTime(time)}</div>
               <div className={`text-[8px] md:text-xs font-bold px-2 py-0.5 rounded ${time < 8*60 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400 animate-pulse'}`}>
                 {time < 9*60 ? 'RUSH DA MANHÃ' : 'HORA CRÍTICA'}
               </div>
             </div>
           </div>
 
-          <div className="mt-4 md:mt-6 grid grid-cols-2 gap-2 md:gap-4">
-            <div className="bg-white/5 p-2 md:p-3 rounded-xl border border-white/5">
-              <p className="text-[8px] md:text-[10px] text-gray-400 font-bold uppercase mb-1">Frota</p>
-              <div className="text-lg md:text-2xl font-mono font-bold flex items-center gap-1 md:gap-2">
+          <div className="mt-2 md:mt-6 grid grid-cols-2 gap-2 md:gap-4">
+            <div className="bg-white/5 p-1.5 md:p-3 rounded-xl border border-white/5">
+              <p className="text-[7px] md:text-[10px] text-gray-400 font-bold uppercase mb-0.5">Frota</p>
+              <div className="text-sm md:text-2xl font-mono font-bold flex items-center gap-1 md:gap-2">
                 <span className={fleetPool === 0 ? 'text-red-500' : 'text-blue-400'}>{fleetPool}</span>
                 <div className="flex gap-0.5">
                   {Array.from({ length: 12 }).map((_, i) => (
@@ -463,8 +477,8 @@ export const FrotaPopularPrototype: React.FC = () => {
 
 
 
-      {/* Nodes Map */}
-      <div className="relative w-full max-w-[1000px] h-full mx-auto mt-4 md:mt-0">
+      {/* Nodes Map - T145: Layout hardened for mobile aspect ratios */}
+      <div className="relative w-full h-full max-w-[1200px] mx-auto overflow-hidden pb-20 md:pb-0">
 
 
         {NODES.map(node => (
