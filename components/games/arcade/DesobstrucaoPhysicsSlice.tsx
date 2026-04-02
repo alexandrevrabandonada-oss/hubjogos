@@ -5,6 +5,11 @@
  * T116: interactive mobile gesture primer + steel grate second blockage variant
  * T117A: validation wave instrumentation (primer timing, phase transition, session complete, feedback overlay)
  * Unchanged: core gravity, rammer identity, audio stack, haptic patterns
+ *
+ * RENDER BRIDGE: physics bodies (cannon-es) ↔ Three.js meshes
+ *   barrierMeshesRef tracks one Mesh per ConcreteBarrier/SteelGrateBarrier piece.
+ *   rammerMeshRef tracks the single rammer projectile mesh.
+ *   Each animate() frame: mesh.position/quaternion is copied from body.position/quaternion.
  */
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -41,6 +46,103 @@ interface GameState {
   physicsActive: boolean;
 }
 
+// ─── Mesh helpers ───────────────────────────────────────────────────────────
+
+function buildBarrierMeshes(
+  barrier: BarrierInstance,
+  scene: THREE.Scene,
+  variant: BlockageVariant
+): THREE.Mesh[] {
+  const isConcrete = variant === 'concrete';
+  const mat = isConcrete
+    ? new THREE.MeshStandardMaterial({ color: 0xa8b0bc, roughness: 0.92, metalness: 0.08, emissive: 0x3a4050, emissiveIntensity: 0.18 })
+    : new THREE.MeshStandardMaterial({ color: 0x7a8fa0, roughness: 0.22, metalness: 0.92, emissive: 0x1e3a6a, emissiveIntensity: 0.3 });
+
+  return barrier.pieces.map((piece) => {
+    const { w, h, d } = piece.size;
+    const geo = new THREE.BoxGeometry(w, h, d);
+    const mesh = new THREE.Mesh(geo, mat.clone());
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    // Sync initial position from physics body
+    mesh.position.set(
+      piece.body.position.x,
+      piece.body.position.y,
+      piece.body.position.z
+    );
+    mesh.quaternion.set(
+      piece.body.quaternion.x,
+      piece.body.quaternion.y,
+      piece.body.quaternion.z,
+      piece.body.quaternion.w
+    );
+    scene.add(mesh);
+    return mesh;
+  });
+}
+
+function buildRammerMesh(scene: THREE.Scene): THREE.Mesh {
+  // Bold, readable shape: elongated octahedron-like box tipped forward
+  const geo = new THREE.BoxGeometry(0.38, 0.20, 0.20);
+  const mat = new THREE.MeshStandardMaterial({
+    color: 0x1d4ed8,
+    roughness: 0.3,
+    metalness: 0.85,
+    emissive: 0x1e3a8a,
+    emissiveIntensity: 0.4,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.castShadow = true;
+  // Glow ring
+  const ringGeo = new THREE.TorusGeometry(0.18, 0.025, 8, 24);
+  const ringMat = new THREE.MeshStandardMaterial({
+    color: 0x60a5fa,
+    emissive: 0x3b82f6,
+    emissiveIntensity: 1.2,
+    roughness: 0.2,
+    metalness: 0.6,
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.y = Math.PI / 2;
+  mesh.add(ring);
+  scene.add(mesh);
+  return mesh;
+}
+
+function purgeMeshes(meshes: THREE.Mesh[], scene: THREE.Scene): void {
+  meshes.forEach((m) => {
+    scene.remove(m);
+    m.geometry.dispose();
+    if (Array.isArray(m.material)) {
+      m.material.forEach((mat) => mat.dispose());
+    } else {
+      (m.material as THREE.Material).dispose();
+    }
+    m.children.forEach((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.geometry.dispose();
+        (child.material as THREE.Material).dispose();
+      }
+    });
+  });
+}
+
+function purgeRammerMesh(meshRef: React.MutableRefObject<THREE.Mesh | null>, scene: THREE.Scene): void {
+  if (!meshRef.current) return;
+  scene.remove(meshRef.current);
+  meshRef.current.geometry.dispose();
+  (meshRef.current.material as THREE.Material).dispose();
+  meshRef.current.children.forEach((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.geometry.dispose();
+      (child.material as THREE.Material).dispose();
+    }
+  });
+  meshRef.current = null;
+}
+
+// ─── Component ──────────────────────────────────────────────────────────────
+
 export const DesobstrucaoPhysicsSlice: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -52,6 +154,10 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
   const primerStartRef = useRef<{ x: number; y: number } | null>(null);
   const primerSuccessTimerRef = useRef<number | null>(null);
   const stageSwapTimerRef = useRef<number | null>(null);
+
+  // Render bridge refs
+  const barrierMeshesRef = useRef<THREE.Mesh[]>([]);
+  const rammerMeshRef = useRef<THREE.Mesh | null>(null);
 
   // T117A instrumentation refs
   const mountTimeRef = useRef<number>(0);
@@ -138,43 +244,61 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
 
-    // Three.js Setup
+    // ── Three.js setup ─────────────────────────────────────────────
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0a1628);
+    scene.fog = new THREE.Fog(0x0a1628, 12, 30);
     sceneRef.current = scene;
 
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.set(-2, 3, 8);
-    camera.lookAt(0, 0, 0);
-    sceneRef.current = scene;
+    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
+    camera.position.set(-1.5, 2.8, 7.5);
+    camera.lookAt(0, 0.5, 0);
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
 
-    // Lighting
-    const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // ── Lighting ────────────────────────────────────────────────────
+    const ambLight = new THREE.AmbientLight(0xb0c8e8, 0.75);
     scene.add(ambLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(3, 4, 3);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 512;
-    dirLight.shadow.mapSize.height = 512;
-    scene.add(dirLight);
+    const keyLight = new THREE.DirectionalLight(0xffeedd, 1.1);
+    keyLight.position.set(4, 7, 5);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
+    keyLight.shadow.camera.near = 0.5;
+    keyLight.shadow.camera.far = 30;
+    keyLight.shadow.camera.left = -6;
+    keyLight.shadow.camera.right = 6;
+    keyLight.shadow.camera.top = 6;
+    keyLight.shadow.camera.bottom = -6;
+    scene.add(keyLight);
 
-    // Physics Setup
+    const fillLight = new THREE.DirectionalLight(0x4488bb, 0.4);
+    fillLight.position.set(-4, 2, -3);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.PointLight(0x0ea5e9, 2.5, 8);
+    rimLight.position.set(0, 3, -3);
+    scene.add(rimLight);
+
+    // ── Physics ─────────────────────────────────────────────────────
     const board = new CannonBoard();
     physicsRef.current = board;
 
-    // Audio Setup
+    // ── Audio ───────────────────────────────────────────────────────
     const audio = new DesobstrucaoAudio({ masterVolume: 0.5, sfxVolume: 0.7 });
     audioRef.current = audio;
 
-    // Create first blockage variant (capture routes can override start stage).
+    // ── Environment meshes ──────────────────────────────────────────
+    createEnvironmentMeshes(scene);
+
+    // ── First barrier (physics + meshes) ────────────────────────────
     const barrierStartPos = new CANNON.Vec3(0, 0.5, 0);
     const startVariant: BlockageVariant =
       captureStage === 'steel' || captureStage === 'cleared' ? 'steel' : 'concrete';
@@ -183,6 +307,9 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     gameStateRef.current.barrier = barrier;
     setCurrentBlockage(startVariant);
 
+    // RENDER BRIDGE: create Three.js meshes for barrier pieces
+    barrierMeshesRef.current = buildBarrierMeshes(barrier, scene, startVariant);
+
     if (captureStage === 'cleared') {
       gameStateRef.current.phase = 'resolved';
       setPhase('resolved');
@@ -190,26 +317,21 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
       setRestorationActive(true);
     }
 
-    // Add environment meshes
-    createEnvironmentMeshes(scene);
-
-    // Render loop
+    // ── Render loop ─────────────────────────────────────────────────
     let animationId: number;
     let lastTime = performance.now();
 
     const animate = (time: number) => {
       animationId = requestAnimationFrame(animate);
 
-      // Survive visibility throttling: if document is hidden, pause everything
       if (document.hidden) {
-        lastTime = time; // maintain timestamp but don't advance
+        lastTime = time;
         return;
       }
 
-      // Decoupled time stepping
       const rawDelta = (time - lastTime) / 1000;
       lastTime = time;
-      const cappedDelta = Math.min(rawDelta, 0.1); // prevent death spiral on resume
+      const cappedDelta = Math.min(rawDelta, 0.1);
 
       try {
         const physics = physicsRef.current;
@@ -219,44 +341,67 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
 
         if (!physics || !renderer || !scene || !camera) return;
 
-        // Deterministic stepping robust against framerate dips
         physics.world.step(1 / 60, cappedDelta, 3);
 
         const gameState = gameStateRef.current;
 
+        // ── Sync barrier meshes from physics ──
+        const bMeshes = barrierMeshesRef.current;
+        const currentBarrier = gameState.barrier;
+        if (currentBarrier && bMeshes.length === currentBarrier.pieces.length) {
+          currentBarrier.pieces.forEach((piece, i) => {
+            const mesh = bMeshes[i];
+            if (!mesh) return;
+            mesh.position.set(
+              piece.body.position.x,
+              piece.body.position.y,
+              piece.body.position.z
+            );
+            mesh.quaternion.set(
+              piece.body.quaternion.x,
+              piece.body.quaternion.y,
+              piece.body.quaternion.z,
+              piece.body.quaternion.w
+            );
+          });
+        }
+
+        // ── Sync rammer mesh from physics ──
+        if (gameState.rammer && rammerMeshRef.current) {
+          const rp = gameState.rammer.state;
+          rammerMeshRef.current.position.set(rp.position.x, rp.position.y, rp.position.z);
+          rammerMeshRef.current.quaternion.set(rp.rotation.x, rp.rotation.y, rp.rotation.z, rp.rotation.w);
+        }
+
+        // ── Flight state checks ──
         if (gameState.rammer && gameState.phase === 'flying') {
           gameState.rammer.updateFromPhysics();
-          
           gameState.flightTimeMs += cappedDelta * 1000;
 
           const rammerPos = gameState.rammer.state.position;
           const barrierPos = gameState.barrier?.state.targetPosition;
           const velocitySq = gameState.rammer.state.cannonBody.velocity.lengthSquared();
 
-          // 1. Proximity Check
           if (barrierPos && rammerPos.distanceTo(barrierPos) < 2.5) {
             triggerImpact(rammerPos);
-          }
-          // 2. Out of Bounds Check
-          else if (gameState.rammer.isOutOfBounds({ minY: -5, maxDistance: 25 })) {
+          } else if (gameState.rammer.isOutOfBounds({ minY: -5, maxDistance: 25 })) {
+            purgeRammerMesh(rammerMeshRef, scene);
             gameState.phase = gameState.attempt >= gameState.maxAttempts ? 'resolved' : 'aiming';
             setPhase(gameState.phase);
             gameState.rammer.dispose(physics.world);
             gameState.rammer = null;
-          }
-          // 3. Watchdog: Stuck/Frozen Recovery (Low velocity mid-flight without impact)
-          else if (gameState.flightTimeMs > 1500 && velocitySq < 0.1) {
+          } else if (gameState.flightTimeMs > 1500 && velocitySq < 0.1) {
             console.warn('Rammer watchdog reset — stuck in flight');
             trackDesobstrucaoFailure({ type: 'runtime_stuck', flightTimeMs: gameState.flightTimeMs, rammerVelocity: Math.sqrt(velocitySq), phase: gameState.phase }).catch(() => {});
+            purgeRammerMesh(rammerMeshRef, scene);
             gameState.phase = gameState.attempt >= gameState.maxAttempts ? 'resolved' : 'aiming';
             setPhase(gameState.phase);
             gameState.rammer.dispose(physics.world);
             gameState.rammer = null;
-          }
-          // 4. Fail-safe reset (Flight timeout safely decoupled from Date.now)
-          else if (gameState.flightTimeMs > 8000) {
+          } else if (gameState.flightTimeMs > 8000) {
             console.warn('Rammer flight timeout (8s) — auto-resetting');
             trackDesobstrucaoFailure({ type: 'flight_timeout', flightTimeMs: gameState.flightTimeMs, phase: gameState.phase }).catch(() => {});
+            purgeRammerMesh(rammerMeshRef, scene);
             gameState.phase = gameState.attempt >= gameState.maxAttempts ? 'resolved' : 'aiming';
             setPhase(gameState.phase);
             gameState.rammer.dispose(physics.world);
@@ -291,7 +436,10 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
       cancelAnimationFrame(animationId);
       renderer.dispose();
       audioRef.current?.dispose();
-      trajectoryLinesRef.current.forEach(line => scene.remove(line));
+      trajectoryLinesRef.current.forEach((line) => scene.remove(line));
+      purgeMeshes(barrierMeshesRef.current, scene);
+      barrierMeshesRef.current = [];
+      purgeRammerMesh(rammerMeshRef, scene);
       gameStateRef.current.barrier?.dispose(board.world);
       gameStateRef.current.rammer?.dispose(board.world);
       if (primerSuccessTimerRef.current) window.clearTimeout(primerSuccessTimerRef.current);
@@ -299,13 +447,13 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
       if (feedbackTimerRef.current) window.clearTimeout(feedbackTimerRef.current);
       board.dispose();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [captureStage]);
 
   const completePrimer = () => {
     if (!isTouchDevice || primerState === 'done') return;
     setPrimerState('success');
     setPrimerProgress(100);
-    // T117B: primer attempt telemetry uses discrete attempts and first-attempt boolean.
     trackDesobstrucaoPrimerComplete({
       timeToCompletePrimerMs: Date.now() - primerStartTimeRef.current,
       dragsRequired: primerDragCountRef.current,
@@ -313,29 +461,34 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
       isTouchDevice: true,
     }).catch(() => {});
     if (primerSuccessTimerRef.current) window.clearTimeout(primerSuccessTimerRef.current);
-    if (primerSuccessTimerRef.current) window.clearTimeout(primerSuccessTimerRef.current);
     primerSuccessTimerRef.current = window.setTimeout(() => setPrimerState('done'), 700);
   };
 
   const activateNextBlockage = () => {
     const physics = physicsRef.current;
+    const scene = sceneRef.current;
     const currentBarrier = gameStateRef.current.barrier;
-    if (!physics || !currentBarrier) return;
+    if (!physics || !currentBarrier || !scene) return;
 
-    // T117A: record phase 1 stats before resetting
     const phase1Attempts = gameStateRef.current.attempt;
     const phase1DurationMs = Date.now() - phase1StartRef.current;
     phase1AttemptsRef.current = phase1Attempts;
     trackDesobstrucaoPhaseTransition({ phase1Attempts, phase1DurationMs }).catch(() => {});
 
+    // Remove old barrier physics + meshes
     currentBarrier.dispose(physics.world);
+    purgeMeshes(barrierMeshesRef.current, scene);
+    barrierMeshesRef.current = [];
+
+    // Create new steel barrier physics + meshes
     const nextBarrier = createBarrierForVariant('steel', new CANNON.Vec3(0, 0.5, 0));
     nextBarrier.registerWithWorld(physics.world);
     gameStateRef.current.barrier = nextBarrier;
+    barrierMeshesRef.current = buildBarrierMeshes(nextBarrier, scene, 'steel');
+
     gameStateRef.current.phase = 'aiming';
     setPhase('aiming');
     gameStateRef.current.rammer = null;
-    // Reset attempt counter so steel phase gets a full independent attempt budget.
     gameStateRef.current.attempt = 0;
     setAttempt(0);
     setCurrentBlockage('steel');
@@ -348,6 +501,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     const gameState = gameStateRef.current;
     const barrier = gameState.barrier;
     const rammer = gameState.rammer;
+    const scene = sceneRef.current;
     if (!barrier || !rammer || gameState.phase !== 'flying') return;
 
     const force = rammer.getImpactForce(barrier.pieces[0].body);
@@ -371,14 +525,15 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     gameState.phase = 'impact';
     setPhase('impact');
 
-    // Transition from impact to next state after a short "juice" delay
+    // Remove rammer mesh immediately on impact
+    if (scene) purgeRammerMesh(rammerMeshRef, scene);
+
     setTimeout(() => {
       const currentGameState = gameStateRef.current;
       if (currentGameState.barrier?.isFullyCleared()) {
         if (currentBlockage === 'concrete') {
           activateNextBlockage();
         } else {
-          // Steel phase cleared — full two-phase session complete
           currentGameState.phase = 'resolved';
           setPhase('resolved');
           audioRef.current?.playRestorationChime();
@@ -414,7 +569,8 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     if (isTouchDevice && primerState !== 'done') return;
 
     const physics = physicsRef.current;
-    if (!physics) return;
+    const scene = sceneRef.current;
+    if (!physics || !scene) return;
 
     if (audioRef.current && !audioRef.current['audioContext']) {
       await audioRef.current.initialize();
@@ -423,10 +579,15 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     audioRef.current?.playLaunchSound();
     triggerHaptic(20);
 
-    const launchPos = new CANNON.Vec3(-3, 0.5, 0);
+    const launchPos = new CANNON.Vec3(-4, 0.5, 0);
     const rammer = new RammerTool(launchPos, aim);
     rammer.registerWithWorld(physics.world);
     gameStateRef.current.rammer = rammer;
+
+    // RENDER BRIDGE: create visual mesh for rammer
+    purgeRammerMesh(rammerMeshRef, scene);
+    rammerMeshRef.current = buildRammerMesh(scene);
+    rammerMeshRef.current.position.set(launchPos.x, launchPos.y, launchPos.z);
 
     gameStateRef.current.phase = 'flying';
     setPhase('flying');
@@ -443,7 +604,6 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
     if (gameStateRef.current.phase !== 'aiming') return;
     const touch = e.touches[0];
     primerStartRef.current = { x: touch.clientX, y: touch.clientY };
-    // T117B: count discrete attempts on touchstart while primer is guiding.
     if (isTouchDevice && primerState === 'guiding') {
       primerDragCountRef.current += 1;
     }
@@ -475,14 +635,10 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
 
     if (isTouchDevice && primerState !== 'done') return;
 
-    // Normalize to 0-1
     const normalizedX = x / rect.width;
     const normalizedY = y / rect.height;
 
-    // Angle: bottom-left = 0°, top-right = 90°
     const angle = Math.min(normalizedY * 90, 90);
-
-    // Power with easing curve (ease-out for responsive feel)
     const linearPower = Math.min(normalizedX, 1);
     const easedPower = linearPower * linearPower;
 
@@ -496,7 +652,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3>Desobstrução • Rammer Proof</h3>
+        <h3>Desobstrução • Rammer</h3>
         <span className={styles.stats}>
           Attempt {attempt}/{gameStateRef.current.maxAttempts} • Blockage{' '}
           {currentBlockage === 'concrete' ? '1/2' : '2/2'}
@@ -632,7 +788,6 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
         </p>
       </div>
 
-      {/* T117A post-session micro-feedback overlay */}
       {showFeedback && (
         <DesobstrucaoValidationFeedback
           isTouchDevice={isTouchDevice}
@@ -640,8 +795,7 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
         />
       )}
 
-      {/* Debug Overlay (visible when session is stuck or in development) */}
-      {(phase === 'flying' || typeof window !== 'undefined' && window.location.search.includes('debug')) && (
+      {(phase === 'flying' || (typeof window !== 'undefined' && window.location.search.includes('debug'))) && (
         <div style={{
           position: 'absolute',
           top: 80,
@@ -665,32 +819,92 @@ export const DesobstrucaoPhysicsSlice: React.FC = () => {
               <div>Dist: {gameStateRef.current.barrier ? gameStateRef.current.rammer.state.position.distanceTo(gameStateRef.current.barrier.state.targetPosition).toFixed(2) : 'N/A'}</div>
             </>
           )}
-          <div>World Bodies: {physicsRef.current?.world.bodies.length || 0}</div>
-          {gameStateRef.current.startTime && (
-            <div>Flight Time: {((Date.now() - gameStateRef.current.startTime) / 1000).toFixed(1)}s</div>
-          )}
+          <div>Bodies: {physicsRef.current?.world.bodies.length || 0}</div>
         </div>
       )}
     </div>
   );
 };
 
-function createEnvironmentMeshes(scene: THREE.Scene): void {
-  const pipeGeometry = new THREE.CylinderGeometry(0.1, 0.1, 3, 8);
-  const pipeMaterial = new THREE.MeshStandardMaterial({ color: 0x0ea5e9 });
-  const pipe = new THREE.Mesh(pipeGeometry, pipeMaterial);
-  pipe.position.set(0, -0.5, -2);
-  pipe.rotation.z = Math.PI / 2;
-  pipe.visible = false;
-  scene.add(pipe);
+// ─── Scene environment ──────────────────────────────────────────────────────
 
-  const groundGeo = new THREE.PlaneGeometry(10, 5);
-  const groundMat = new THREE.MeshStandardMaterial({ color: 0x1a2332 });
+function createEnvironmentMeshes(scene: THREE.Scene): void {
+  // Ground: worn concrete slab
+  const groundGeo = new THREE.PlaneGeometry(16, 8);
+  const groundMat = new THREE.MeshStandardMaterial({
+    color: 0x1e2d3d,
+    roughness: 0.98,
+    metalness: 0.0,
+  });
   const ground = new THREE.Mesh(groundGeo, groundMat);
   ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -0.8;
+  ground.position.y = -0.25;
   ground.receiveShadow = true;
   scene.add(ground);
+
+  // Back wall: dark tunnel wall
+  const wallGeo = new THREE.PlaneGeometry(16, 6);
+  const wallMat = new THREE.MeshStandardMaterial({ color: 0x0f1e2d, roughness: 0.95 });
+  const wall = new THREE.Mesh(wallGeo, wallMat);
+  wall.position.set(0, 2.5, -3);
+  wall.receiveShadow = true;
+  scene.add(wall);
+
+  // Pipe (infrastructure — visible this time)
+  const pipeGeo = new THREE.CylinderGeometry(0.12, 0.12, 8, 12);
+  const pipeMat = new THREE.MeshStandardMaterial({
+    color: 0x0ea5e9,
+    roughness: 0.4,
+    metalness: 0.7,
+    emissive: 0x0369a1,
+    emissiveIntensity: 0.3,
+  });
+  const pipe = new THREE.Mesh(pipeGeo, pipeMat);
+  pipe.rotation.z = Math.PI / 2;
+  pipe.position.set(0, 0.5, -1.5);
+  pipe.castShadow = true;
+  scene.add(pipe);
+
+  // Pipe cap left
+  const capGeo = new THREE.CylinderGeometry(0.16, 0.16, 0.12, 12);
+  const capMat = new THREE.MeshStandardMaterial({ color: 0x1e40af, metalness: 0.9, roughness: 0.2 });
+  const capL = new THREE.Mesh(capGeo, capMat);
+  capL.rotation.z = Math.PI / 2;
+  capL.position.set(-4.1, 0.5, -1.5);
+  scene.add(capL);
+
+  const capR = capL.clone();
+  capR.position.set(4.1, 0.5, -1.5);
+  scene.add(capR);
+
+  // Struts holding pipe
+  for (const xPos of [-2.5, 0, 2.5]) {
+    const strutGeo = new THREE.BoxGeometry(0.06, 0.6, 0.06);
+    const strutMat = new THREE.MeshStandardMaterial({ color: 0x374151, metalness: 0.6, roughness: 0.5 });
+    const strut = new THREE.Mesh(strutGeo, strutMat);
+    strut.position.set(xPos, 0.05, -1.5);
+    scene.add(strut);
+  }
+
+  // Side walls (tunnel feel)
+  for (const side of [-1, 1]) {
+    const sideWallGeo = new THREE.PlaneGeometry(8, 6);
+    const sideWallMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.97 });
+    const sideWall = new THREE.Mesh(sideWallGeo, sideWallMat);
+    sideWall.rotation.y = -side * Math.PI / 2;
+    sideWall.position.set(side * 5.5, 2.5, 0);
+    sideWall.receiveShadow = true;
+    scene.add(sideWall);
+  }
+
+  // Ambient hazard lights
+  const hazardLight = new THREE.PointLight(0xff6600, 1.2, 5);
+  hazardLight.position.set(-4.5, 2.5, 0);
+  scene.add(hazardLight);
+
+  const hazardLight2 = new THREE.PointLight(0x0088ff, 0.8, 6);
+  hazardLight2.position.set(4, 2, 1);
+  scene.add(hazardLight2);
 }
 
 export default DesobstrucaoPhysicsSlice;
